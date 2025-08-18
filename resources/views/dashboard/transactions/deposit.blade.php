@@ -89,7 +89,6 @@
             <table class="min-w-full divide-y divide-gray-700">
                 <thead class="bg-gray-700">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">ID</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Amount</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Wallet</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Payment Method</th>
@@ -101,7 +100,6 @@
                 <tbody class="bg-gray-800 divide-y divide-gray-700">
                     @forelse($deposits as $deposit)
                         <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#{{ $deposit->id }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-white">${{ number_format($deposit->amount, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                                 @if($deposit->wallet_type == 'trading')
