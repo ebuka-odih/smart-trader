@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ env('APP_NAME') }} - Sign Up</title>
     <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     
@@ -174,7 +174,7 @@
                         I agree to the 
                         <a href="#" class="text-blue-400 hover:text-blue-300 transition-colors">Terms & Conditions</a>
                     </label>
-                </div>
+        </div>
 
                 <!-- Create Account Button -->
                 <button 
@@ -193,7 +193,7 @@
                         Sign In
                     </a>
                 </p>
-            </div>
+        </div>
         </div>
 
         <!-- Back to Home Link -->

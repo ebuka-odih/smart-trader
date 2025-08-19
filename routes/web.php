@@ -7,6 +7,7 @@ use App\Http\Controllers\TradeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WithdrawalController;
+use App\Http\Controllers\UserPlanController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('index');
@@ -37,6 +38,26 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
 
     Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');
+
+    // Plan routes
+    Route::get('plan/trading', [SubscriptionController::class, 'trading'])->name('plan.trading');
+    Route::get('plan/signal', [SubscriptionController::class, 'signal'])->name('plan.signal');
+    Route::get('plan/mining', [SubscriptionController::class, 'mining'])->name('plan.mining');
+    Route::get('plan/staking', [SubscriptionController::class, 'staking'])->name('plan.staking');
+
+    // User Plan Management Routes
+    Route::get('plans', [UserPlanController::class, 'index'])->name('plans.index');
+    Route::get('plans/create', [UserPlanController::class, 'create'])->name('plans.create');
+    Route::post('plans', [UserPlanController::class, 'store'])->name('plans.store');
+    Route::get('plans/{userPlan}', [UserPlanController::class, 'show'])->name('plans.show');
+    Route::get('plans/{userPlan}/edit', [UserPlanController::class, 'edit'])->name('plans.edit');
+    Route::put('plans/{userPlan}', [UserPlanController::class, 'update'])->name('plans.update');
+    Route::delete('plans/{userPlan}', [UserPlanController::class, 'destroy'])->name('plans.destroy');
+    Route::post('plans/{userPlan}/cancel', [UserPlanController::class, 'cancel'])->name('plans.cancel');
+    Route::post('plans/{userPlan}/reactivate', [UserPlanController::class, 'reactivate'])->name('plans.reactivate');
+    Route::post('plans/subscribe/{plan}', [UserPlanController::class, 'subscribe'])->name('plans.subscribe');
+    Route::get('my-plans', [UserPlanController::class, 'myPlans'])->name('plans.my-plans');
+    Route::get('plans/history', [UserPlanController::class, 'history'])->name('plans.history');
 
     Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
     Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');

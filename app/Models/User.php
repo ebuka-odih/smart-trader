@@ -30,7 +30,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'role',
         'status',
-        'balance',
+        'balance', // Holding account
+        'trading_balance',
+        'mining_balance',
+        'referral_balance',
         'holding_balance',
         'staking_balance',
         'profit',
@@ -63,6 +66,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'balance' => 'decimal:2',
+            'trading_balance' => 'decimal:2',
+            'mining_balance' => 'decimal:2',
+            'referral_balance' => 'decimal:2',
+            'holding_balance' => 'decimal:2',
+            'staking_balance' => 'decimal:2',
+            'profit' => 'decimal:2',
         ];
     }
     protected $dates = ['last_login_at'];
@@ -106,7 +116,132 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Package::class);
     }
 
+    /**
+     * Get the user's plan subscriptions
+     */
+    public function userPlans()
+    {
+        return $this->hasMany(UserPlan::class);
+    }
 
+    /**
+     * Get the user's active plan subscriptions
+     */
+    public function activeUserPlans()
+    {
+        return $this->hasMany(UserPlan::class)->where('status', 'active');
+    }
 
+    /**
+     * Get the user's current trading plan subscription
+     */
+    public function currentTradingPlan()
+    {
+        return $this->hasMany(UserPlan::class)
+            ->whereHas('plan', function($query) {
+                $query->where('type', 'trading');
+            })
+            ->where('status', 'active')
+            ->latest();
+    }
 
+    /**
+     * Get total balance across all accounts
+     */
+    public function getTotalBalanceAttribute()
+    {
+        return $this->balance + $this->trading_balance + $this->mining_balance + $this->referral_balance + $this->holding_balance + $this->staking_balance;
+    }
+
+    /**
+     * Get formatted balance for display
+     */
+    public function getFormattedBalanceAttribute()
+    {
+        return '$' . number_format($this->balance, 2);
+    }
+
+    public function getFormattedTradingBalanceAttribute()
+    {
+        return '$' . number_format($this->trading_balance, 2);
+    }
+
+    public function getFormattedMiningBalanceAttribute()
+    {
+        return '$' . number_format($this->mining_balance, 2);
+    }
+
+    public function getFormattedReferralBalanceAttribute()
+    {
+        return '$' . number_format($this->referral_balance, 2);
+    }
+
+    public function getFormattedHoldingBalanceAttribute()
+    {
+        return '$' . number_format($this->holding_balance, 2);
+    }
+
+    public function getFormattedStakingBalanceAttribute()
+    {
+        return '$' . number_format($this->staking_balance, 2);
+    }
+
+    /**
+     * Balance management methods
+     */
+    public function addToBalance($amount, $type = 'holding')
+    {
+        switch ($type) {
+            case 'trading':
+                $this->increment('trading_balance', $amount);
+                break;
+            case 'mining':
+                $this->increment('mining_balance', $amount);
+                break;
+            case 'referral':
+                $this->increment('referral_balance', $amount);
+                break;
+            case 'holding':
+            default:
+                $this->increment('balance', $amount);
+                break;
+        }
+    }
+
+    public function deductFromBalance($amount, $type = 'holding')
+    {
+        switch ($type) {
+            case 'trading':
+                $this->decrement('trading_balance', $amount);
+                break;
+            case 'mining':
+                $this->decrement('mining_balance', $amount);
+                break;
+            case 'referral':
+                $this->decrement('referral_balance', $amount);
+                break;
+            case 'holding':
+            default:
+                $this->decrement('balance', $amount);
+                break;
+        }
+    }
+
+    /**
+     * Check if user has sufficient balance
+     */
+    public function hasSufficientBalance($amount, $type = 'holding')
+    {
+        switch ($type) {
+            case 'trading':
+                return $this->trading_balance >= $amount;
+            case 'mining':
+                return $this->mining_balance >= $amount;
+            case 'referral':
+                return $this->referral_balance >= $amount;
+            case 'holding':
+            default:
+                return $this->balance >= $amount;
+        }
+    }
 }

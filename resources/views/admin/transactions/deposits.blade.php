@@ -24,27 +24,27 @@
     </div>
 @endif
 
-<div class="px-4 pt-5">
+ <div class="px-4 pt-5">
     <!-- Navigation Tabs -->
-    <ul class="flex text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
-        <li class="w-full focus-within:z-10">
+<ul class="flex text-sm font-medium text-center text-gray-500 rounded-lg shadow sm:flex dark:divide-gray-700 dark:text-gray-400">
+    <li class="w-full focus-within:z-10">
             <a href="{{ route('admin.transactions.deposits') }}" class="inline-block w-full p-4 text-gray-900 bg-gray-100 border-r border-gray-200 dark:border-gray-700 rounded-s-lg focus:ring-4 focus:ring-blue-300 active focus:outline-none dark:bg-gray-700 dark:text-white" aria-current="page">
                 Deposits
             </a>
-        </li>
-        <li class="w-full focus-within:z-10">
+    </li>
+    <li class="w-full focus-within:z-10">
             <a href="{{ route('admin.transactions.withdrawal') }}" class="inline-block w-full p-4 bg-white border-r border-gray-200 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
                 Withdrawal
             </a>
-        </li>
-    </ul>
+    </li>
+</ul>
 
     <!-- Main Content -->
     <div class="p-4 mt-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:border-gray-700 sm:p-6 dark:bg-gray-800">
         <!-- Card Header -->
-        <div class="items-center justify-between lg:flex">
-            <div class="mb-4 lg:mb-0">
-                <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">Deposit Transactions</h3>
+      <div class="items-center justify-between lg:flex">
+        <div class="mb-4 lg:mb-0">
+          <h3 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">Deposit Transactions</h3>
                 <p class="text-gray-600 dark:text-gray-400">Manage and review all deposit requests</p>
             </div>
             <div class="flex items-center space-x-2">
@@ -54,24 +54,24 @@
             </div>
         </div>
 
-        <!-- Table -->
-        <div class="flex flex-col mt-6">
-            <div class="overflow-x-auto rounded-lg">
-                <div class="inline-block min-w-full align-middle">
-                    <div class="overflow-hidden shadow sm:rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+      <!-- Table -->
+      <div class="flex flex-col mt-6">
+        <div class="overflow-x-auto rounded-lg">
+          <div class="inline-block min-w-full align-middle">
+            <div class="overflow-hidden shadow sm:rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                         ID
-                                    </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        User
-                                    </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        Amount
-                                    </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                    </th>
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                      User
+                    </th>
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                      Amount
+                    </th>
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                         Wallet
                                     </th>
                                     <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
@@ -79,21 +79,21 @@
                                     </th>
                                     <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                         Date
-                                    </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
-                                        Status
-                                    </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                    </th>
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                      Status
+                    </th>
+                      <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                                         Actions
-                                    </th>
-                                </tr>
-                            </thead>
+                    </th>
+                  </tr>
+                </thead>
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
                                 @forelse($deposits as $deposit)
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
                                         <td class="p-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             #{{ $deposit->id }}
-                                        </td>
+                    </td>
                                         <td class="p-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <img class="w-10 h-10 rounded-full" src="{{ asset($deposit->user->avatar ?? '/img/trader.jpg') }}" alt="{{ $deposit->user->name }}">
@@ -105,8 +105,8 @@
                                                         {{ $deposit->user->email }}
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
+                        </div>
+                    </td>
                                         <td class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
                                             ${{ number_format($deposit->amount, 2) }}
                                         </td>
@@ -126,14 +126,14 @@
                                             @else
                                                 <span class="text-gray-400">N/A</span>
                                             @endif
-                                        </td>
+                    </td>
                                         <td class="p-4 text-sm text-gray-900 whitespace-nowrap dark:text-white">
                                             {{ optional($deposit->payment_method)->wallet ?? 'N/A' }}
-                                        </td>
+                    </td>
                                         <td class="p-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                                             {{ $deposit->created_at ? $deposit->created_at->format('M d, Y H:i') : 'N/A' }}
-                                        </td>
-                                        <td class="p-4 whitespace-nowrap">
+                    </td>
+                    <td class="p-4 whitespace-nowrap">
                                             @if($deposit->status == 0)
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">
                                                     Pending
@@ -147,7 +147,7 @@
                                                     Declined
                                                 </span>
                                             @endif
-                                        </td>
+                    </td>
                                         <td class="p-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-2">
                                                 <!-- View Details Button -->
@@ -158,7 +158,7 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                                     </svg>
                                                     View
-                                                </button>
+                         </button>
 
                                                 @if($deposit->status == 0)
                                                     <!-- Approve Button -->
@@ -168,7 +168,7 @@
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                         </svg>
                                                         Approve
-                                                    </button>
+                         </button>
 
                                                     <!-- Decline Button -->
                                                     <button onclick="declineDeposit('{{ $deposit->id }}')" 
@@ -201,17 +201,17 @@
                                                 <p class="text-lg font-medium">No deposits found</p>
                                                 <p class="text-sm">There are no deposit transactions to display</p>
                                             </div>
-                                        </td>
-                                    </tr>
+                        </td>
+                  </tr>
                                 @endforelse
                             </tbody>
                         </table>
                     </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Deposit Details Modal -->
 <div id="depositDetailsModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
@@ -223,17 +223,17 @@
                 <button onclick="closeDepositModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
+                                        </svg>
+                                    </button>
+                                </div>
             
             <!-- Modal Body -->
             <div id="depositModalContent" class="p-6">
                 <!-- Content will be loaded dynamically -->
-            </div>
-        </div>
-    </div>
-</div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
 
 <!-- Confirmation Modal -->
 <div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
@@ -254,9 +254,9 @@
                     <button id="confirmActionBtn" class="px-4 py-2 text-white rounded-lg">
                         Confirm
                     </button>
-                </div>
             </div>
-        </div>
+          </div>
+      </div>
     </div>
 </div>
 

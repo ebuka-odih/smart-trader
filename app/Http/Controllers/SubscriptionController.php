@@ -17,7 +17,7 @@ class SubscriptionController extends Controller
         return view('dashboard.subscription', compact('plans', 'user', 'subscription'));
     }
 
-   public function store(Request $request)
+       public function store(Request $request)
     {
 //        return $request;
         $user = Auth::user();
@@ -45,5 +45,44 @@ class SubscriptionController extends Controller
         return redirect()->back()->with('success', 'Subscription Activated Successfully');
     }
 
+    /**
+     * Display Trading Plan page
+     */
+    public function trading()
+    {
+        $user = Auth::user();
+        $tradingPlans = \App\Models\Plan::where('type', 'trading')
+            ->where('is_active', true)
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('price', 'asc')
+            ->get();
+        return view('dashboard.plan.trading', compact('user', 'tradingPlans'));
+    }
 
+    /**
+     * Display Signal Plan page
+     */
+    public function signal()
+    {
+        $user = Auth::user();
+        return view('dashboard.plan.signal', compact('user'));
+    }
+
+    /**
+     * Display Mining Plan page
+     */
+    public function mining()
+    {
+        $user = Auth::user();
+        return view('dashboard.plan.mining', compact('user'));
+    }
+
+    /**
+     * Display Staking Plan page
+     */
+    public function staking()
+    {
+        $user = Auth::user();
+        return view('dashboard.plan.staking', compact('user'));
+    }
 }

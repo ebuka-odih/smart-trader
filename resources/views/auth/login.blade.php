@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ env('APP_NAME') }} - Sign In</title>
     <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     
@@ -29,12 +29,12 @@
                 </div>
             </div>
             <h1 class="text-2xl font-bold text-white">{{ env('APP_NAME') }}</h1>
-        </div>
+    </div>
 
         <!-- Login Form Card -->
         <div class="bg-gray-800 rounded-lg p-8 shadow-2xl border border-gray-700">
             <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                @csrf
+          @csrf
                 
                 <!-- Email Field -->
                 <div>
@@ -99,7 +99,7 @@
                     @error('password')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                     @enderror
-                </div>
+        </div>
 
                 <!-- Remember Me & Forgot Password -->
                 <div class="flex items-center justify-between">
@@ -113,13 +113,13 @@
                         <label for="remember" class="ml-2 block text-sm text-gray-300">
                             Remember me
                         </label>
-                    </div>
+        </div>
                     
-                    @if (Route::has('password.request'))
+            @if (Route::has('password.request'))
                         <a href="{{ route('password.request') }}" class="text-sm text-blue-400 hover:text-blue-300 transition-colors">
                             Forgot Password?
-                        </a>
-                    @endif
+                </a>
+            @endif
                 </div>
 
                 <!-- Sign In Button -->

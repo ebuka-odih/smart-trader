@@ -17,7 +17,7 @@ class DepositController extends Controller
     /**
      * Display the deposit page with user's deposit history
      */
-    public function deposit()
+     public function deposit()
     {
         $user = Auth::user();
         $wallets = PaymentMethod::all();
@@ -35,7 +35,7 @@ class DepositController extends Controller
     public function payment(Request $request)
     {
         try {
-            $validated = $request->validate([
+        $validated = $request->validate([
                 'amount' => 'required|numeric|min:0.01',
                 'payment_method_id' => 'required|exists:payment_methods,id',
                 'wallet_type' => 'required|in:trading,holding,staking',
@@ -56,7 +56,7 @@ class DepositController extends Controller
 
             // Handle file upload
             $proofPath = null;
-            if ($request->hasFile('proof')) {
+        if ($request->hasFile('proof')) {
                 $file = $request->file('proof');
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $proofPath = $file->storeAs('deposits', $fileName, 'public');
@@ -74,10 +74,10 @@ class DepositController extends Controller
 
             // Send email notifications
             try {
-                $admin = User::where('role', 'admin')->first();
+        $admin = User::where('role', 'admin')->first();
                 if ($admin) {
-                    Mail::to(auth()->user()->email)->send(new DepositMail($deposit));
-                    Mail::to($admin->email)->send(new AdminDepositMail($deposit));
+        Mail::to(auth()->user()->email)->send(new DepositMail($deposit));
+        Mail::to($admin->email)->send(new AdminDepositMail($deposit));
                 }
             } catch (\Exception $e) {
                 // Log email error but don't fail the deposit

@@ -63,14 +63,14 @@ class TransactionController extends Controller
             }
 
             // Update deposit status
-            $deposit->status = 1;
-            $deposit->save();
+        $deposit->status = 1;
+        $deposit->save();
 
             // Credit user's account based on wallet type
             $user = $deposit->user;
             switch ($deposit->wallet_type) {
                 case 'trading':
-                    $user->balance += $deposit->amount;
+        $user->balance += $deposit->amount;
                     break;
                 case 'holding':
                     $user->holding_balance += $deposit->amount;
@@ -81,11 +81,11 @@ class TransactionController extends Controller
                 default:
                     $user->balance += $deposit->amount; // Default to trading balance
             }
-            $user->save();
+        $user->save();
 
             // Send approval email
             try {
-                Mail::to($deposit->user->email)->send(new ApproveDepositMail($deposit));
+        Mail::to($deposit->user->email)->send(new ApproveDepositMail($deposit));
             } catch (\Exception $e) {
                 \Log::error('Failed to send deposit approval email: ' . $e->getMessage());
             }
@@ -174,11 +174,11 @@ class TransactionController extends Controller
                 return redirect()->back()->with('error', 'Withdrawal has already been processed.');
             }
 
-            $withdraw->status = 1;
-            $withdraw->save();
+        $withdraw->status = 1;
+        $withdraw->save();
 
             try {
-                Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
+        Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
             } catch (\Exception $e) {
                 \Log::error('Failed to send withdrawal approval email: ' . $e->getMessage());
             }
@@ -203,16 +203,16 @@ class TransactionController extends Controller
                 return redirect()->back()->with('error', 'Withdrawal has already been processed.');
             }
 
-            $withdraw->status = 2;
-            $withdraw->save();
+        $withdraw->status = 2;
+        $withdraw->save();
 
             // Refund user's balance
             $user = $withdraw->user;
-            $user->balance += $withdraw->amount;
-            $user->save();
+        $user->balance += $withdraw->amount;
+        $user->save();
 
             try {
-                Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
+        Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
             } catch (\Exception $e) {
                 \Log::error('Failed to send withdrawal decline email: ' . $e->getMessage());
             }

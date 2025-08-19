@@ -2,15 +2,15 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{{ env('APP_NAME') }} - Dashboard</title>
-    <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
+  <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     
     <!-- Tailwind CSS CDN for immediate styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- Vite assets (uncomment when running npm run dev) -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     
@@ -72,11 +72,57 @@
                     <span>Home</span>
                 </a>
 
-                <a href="{{ route('user.sub.plans') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.sub.plans') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                <!-- Plans Dropdown -->
+                <div class="relative">
+                    <button id="plansDropdown" class="flex items-center justify-between w-full px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                        <div class="flex items-center space-x-3">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Plans</span>
+                        </div>
+                        <svg class="w-4 h-4 transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+      </button>
+
+                    <!-- Dropdown Menu -->
+                    <div id="plansDropdownMenu" class="absolute left-0 right-0 mt-1 bg-gray-800 border border-gray-700 rounded-lg shadow-lg opacity-0 invisible transition-all duration-200 transform -translate-y-2 z-50">
+                        <div class="py-1">
+                            <a href="{{ route('user.plan.trading') }}" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                                <span>Trading</span>
+                            </a>
+                            <a href="{{ route('user.plan.signal') }}" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Signal</span>
+                            </a>
+                            <a href="{{ route('user.plan.mining') }}" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Mining</span>
+                            </a>
+                            <a href="{{ route('user.plan.staking') }}" class="flex items-center space-x-3 px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 transition-colors">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span>Staking</span>
+                            </a>
+                        </div>
+                </div>
+                </div>
+
+                <a href="{{ route('user.plans.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.plans.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        <path fill-rule="evenodd" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" clip-rule="evenodd"></path>
                     </svg>
-                    <span>Plans</span>
+                    <span>My Plans</span>
                 </a>
 
                 <a href="{{ route('user.trade.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.trade.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
@@ -132,15 +178,15 @@
 
             <!-- Logout -->
             <div class="p-4 border-t border-gray-700">
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
+                      <form method="POST" action="{{ route('logout') }}">
+                            @csrf
                     <button type="submit" class="flex items-center space-x-3 w-full px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
                         </svg>
-                        <span>Log Out</span>
+                                 <span>Log Out</span>
                     </button>
-                </form>
+                      </form>
             </div>
         </div>
 
@@ -174,13 +220,13 @@
                             <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400"></span>
                         </button>
                     </div>
-                </div>
-            </header>
+      </div>
+  </header>
 
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900">
                 <div class="container mx-auto px-6 py-8">
-                    @yield('content')
+  @yield('content')
                 </div>
             </main>
         </div>
@@ -188,10 +234,10 @@
 
    
 
-    @livewireScripts
+@livewireScripts
     @stack('scripts')
-    
-    <script>
+
+<script>
         // Sidebar toggle functionality
         document.addEventListener('DOMContentLoaded', function() {
             const sidebar = document.getElementById('sidebar');
@@ -258,7 +304,49 @@
                     sidebarBackdrop.classList.remove('hidden');
                 }
             });
-        });
-    </script>
+
+            // Plans dropdown functionality
+            const plansDropdown = document.getElementById('plansDropdown');
+            const plansDropdownMenu = document.getElementById('plansDropdownMenu');
+            const plansDropdownArrow = plansDropdown.querySelector('svg:last-child');
+
+            if (plansDropdown && plansDropdownMenu) {
+                plansDropdown.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const isOpen = plansDropdownMenu.classList.contains('opacity-100');
+                    
+                    if (isOpen) {
+                        // Close dropdown
+                        plansDropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                        plansDropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+                        plansDropdownArrow.style.transform = 'rotate(0deg)';
+                    } else {
+                        // Open dropdown
+                        plansDropdownMenu.classList.remove('opacity-0', 'invisible', '-translate-y-2');
+                        plansDropdownMenu.classList.add('opacity-100', 'visible', 'translate-y-0');
+                        plansDropdownArrow.style.transform = 'rotate(180deg)';
+                    }
+                });
+
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!plansDropdown.contains(e.target) && !plansDropdownMenu.contains(e.target)) {
+                        plansDropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                        plansDropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+                        plansDropdownArrow.style.transform = 'rotate(0deg)';
+                    }
+                });
+
+                // Close dropdown when sidebar closes
+                sidebarToggle.addEventListener('click', function() {
+                    plansDropdownMenu.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                    plansDropdownMenu.classList.add('opacity-0', 'invisible', '-translate-y-2');
+                    plansDropdownArrow.style.transform = 'rotate(0deg)';
+                });
+    }
+});
+</script>
 </body>
 </html>

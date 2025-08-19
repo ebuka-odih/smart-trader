@@ -25,7 +25,7 @@
 
     <!-- Page Header -->
     <div class="flex items-center justify-between mb-8">
-        <div>
+                            <div>
             <h1 class="text-2xl font-bold text-white">Fund Account</h1>
             <p class="text-gray-400 mt-1">Manage your deposits and account funding</p>
         </div>
@@ -35,7 +35,7 @@
             </svg>
             <span>New Deposit</span>
         </button>
-    </div>
+                            </div>
 
     <!-- Balance Overview -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -47,8 +47,8 @@
                         <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
                     </svg>
-                </div>
-            </div>
+                        </div>
+                    </div>
             <div class="text-3xl font-bold text-white">${{ number_format($user->balance ?? 0, 2) }}</div>
             <div class="text-sm text-gray-400 mt-1">Available for trading</div>
         </div>
@@ -61,10 +61,10 @@
                         <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-            </div>
+                        </div>
             <div class="text-3xl font-bold text-white">${{ number_format($user->holding_balance ?? 0, 2) }}</div>
             <div class="text-sm text-gray-400 mt-1">Long-term holdings</div>
-        </div>
+                                                </div>
 
         <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
             <div class="flex items-center justify-between mb-4">
@@ -73,12 +73,12 @@
                     <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
                     </svg>
-                </div>
-            </div>
+                                            </div>
+                                        </div>
             <div class="text-3xl font-bold text-white">${{ number_format($user->staking_balance ?? 0, 2) }}</div>
             <div class="text-sm text-gray-400 mt-1">Staked assets</div>
-        </div>
-    </div>
+                                    </div>
+                                </div>
 
     <!-- Deposit History Table -->
     <div class="bg-gray-800 rounded-lg border border-gray-700">
@@ -164,11 +164,11 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforelse
+                            @endforelse
                 </tbody>
             </table>
-        </div>
-    </div>
+                        </div>
+                    </div>
 
     <!-- New Deposit Modal -->
     <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
@@ -195,17 +195,17 @@
                     @if(session('error'))
                         <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
                             {{ session('error') }}
-                        </div>
-                    @endif
+                                    </div>
+                                @endif
                     
                     @if($errors->any())
                         <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
                             <ul class="list-disc list-inside">
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
-                                @endforeach
+                                        @endforeach
                             </ul>
-                        </div>
+                                </div>
                     @endif
                     @csrf
                     
@@ -215,7 +215,7 @@
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <span class="text-gray-400 sm:text-sm">$</span>
-                            </div>
+                                </div>
                             <input type="number" 
                                    id="amount" 
                                    name="amount" 
@@ -227,7 +227,7 @@
                                    placeholder="0.00">
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                 <span class="text-gray-400 sm:text-sm">USD</span>
-                            </div>
+                                </div>
                         </div>
                     </div>
 
@@ -243,7 +243,7 @@
                             <option value="holding" {{ old('wallet_type') == 'holding' ? 'selected' : '' }}>Holding Balance</option>
                             <option value="staking" {{ old('wallet_type') == 'staking' ? 'selected' : '' }}>Staking Balance</option>
                         </select>
-                    </div>
+                </div>
 
                     <!-- Payment Method -->
                     <div class="mb-6">
@@ -257,7 +257,7 @@
                                 <option value="{{ $wallet->id }}" {{ old('payment_method_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->wallet }}</option>
                             @endforeach
                         </select>
-                    </div>
+                        </div>
 
                     <!-- Payment Proof -->
                     <div class="mb-6">
@@ -291,7 +291,7 @@
                                 class="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
                             Submit Deposit
                         </button>
-                    </div>
+                </div>
                 </form>
             </div>
         </div>

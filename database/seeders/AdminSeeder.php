@@ -23,7 +23,12 @@ class AdminSeeder extends Seeder
                 'name' => 'Admin Panel',
                 'role' => 'admin',
                 'status' => 'active',
-                'balance' => 1000000,
+                'balance' => 1000000, // Holding account
+                'trading_balance' => 500000,
+                'mining_balance' => 250000,
+                'referral_balance' => 75000,
+                'holding_balance' => 1000000,
+                'staking_balance' => 300000,
                 'profit' => 580000,
                 'email' => 'admin@site.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
