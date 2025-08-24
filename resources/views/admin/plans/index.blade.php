@@ -131,19 +131,30 @@
                                             </span>
                                         </td>
                                         <td class="px-4 sm:px-6 py-4 text-sm font-medium">
-                                            <div class="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-2">
-                                                <a href="{{ route('admin.plans.edit', $plan) }}" class="text-blue-400 hover:text-blue-300 transition-colors">Edit</a>
+                                            <div class="flex items-center space-x-2">
+                                                <!-- View/Edit Button -->
+                                                <button type="button" onclick="openEditModal({{ $plan->id }})" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    View
+                                                </button>
+
+                                                <!-- Activate/Deactivate -->
                                                 <form action="{{ route('admin.plans.toggle-status', $plan) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="text-yellow-400 hover:text-yellow-300 transition-colors">
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-md {{ $plan->is_active ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700' }} text-white">
                                                         {{ $plan->is_active ? 'Deactivate' : 'Activate' }}
                                                     </button>
                                                 </form>
+
+                                                <!-- Delete -->
                                                 <form action="{{ route('admin.plans.destroy', $plan) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this plan?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-red-400 hover:text-red-300 transition-colors">Delete</button>
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-700 text-white">Delete</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -194,30 +205,141 @@
                                 <tr>
                                     <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Name</th>
                                     <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Price</th>
-                                    <th class="hidden sm:table-cell px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Signal Strength</th>
-                                    <th class="hidden lg:table-cell px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Daily Signals</th>
+                                    <th class="hidden">Signals</th>
+                                    <th class="hidden">Duration</th>
+                                    <th class="hidden">Market Type</th>
+                                    <th class="hidden">Signal Strength</th>
+                                    <th class="hidden">Daily Signals</th>
+                                    <th class="hidden">Success Rate</th>
+                                    <th class="hidden">Max Daily Signals</th>
+                                    <th class="hidden">Features</th>
                                     <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
                                     <th class="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-700">
+                                @php
+                                    // Build a lightweight map for client-side edit prefill
+                                    $__plan_map = [];
+                                @endphp
                                 @foreach($signalPlans as $plan)
+                                    @php
+                                        $__plan_map[$plan->id] = [
+                                            'id' => $plan->id,
+                                            'type' => $plan->type,
+                                            'name' => $plan->name,
+                                            'description' => $plan->description,
+                                            'currency' => $plan->currency,
+                                            'price' => $plan->price,
+                                            'sort_order' => $plan->sort_order,
+                                            'signal_quantity' => $plan->signal_quantity,
+                                            'signal_duration' => $plan->signal_duration,
+                                            'signal_strength' => $plan->signal_strength,
+                                            'success_rate' => $plan->success_rate,
+                                            'daily_signals' => $plan->daily_signals,
+                                            'max_daily_signals' => $plan->max_daily_signals,
+                                            'signal_market_type' => $plan->signal_market_type,
+                                            'signal_features' => $plan->signal_features,
+                                            'update_url' => route('admin.plans.update', $plan),
+                                        ];
+                                    @endphp
                                     <tr class="hover:bg-gray-700 transition-colors duration-150">
                                         <td class="px-4 sm:px-6 py-4">
                                             <div class="text-sm font-medium text-white">{{ $plan->name }}</div>
                                             <div class="text-sm text-gray-400 truncate max-w-xs">{{ $plan->description }}</div>
                                         </td>
-                                        <td class="px-4 sm:px-6 py-4">
-                                            <div class="text-sm text-white font-medium">{{ $plan->formatted_price }}</div>
-                                            @if($plan->has_discount)
-                                                <div class="text-xs text-gray-400 line-through">{{ $plan->formatted_original_price }}</div>
-                                            @endif
+                                        <td class="px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            <div class="text-sm font-semibold text-white">{{ $plan->formatted_price }}</div>
                                         </td>
                                         <td class="hidden sm:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
-                                            {{ $plan->signal_strength ? "+{$plan->signal_strength}%" : 'N/A' }}
+                                            @if($plan->signal_quantity)
+                                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                    {{ $plan->signal_quantity }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
                                         </td>
                                         <td class="hidden lg:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
-                                            {{ $plan->daily_signals ?? 'N/A' }}
+                                            @if($plan->signal_duration)
+                                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                    {{ $plan->signal_duration }} days
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden xl:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            @if($plan->signal_market_type)
+                                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">
+                                                    {{ ucfirst($plan->signal_market_type) }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden lg:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            @if($plan->signal_strength)
+                                                <div class="flex items-center">
+                                                    <span class="text-yellow-400 mr-1">
+                                                        @for($i = 1; $i <= 5; $i++)
+                                                            @if($i <= $plan->signal_strength)
+                                                                ★
+                                                            @else
+                                                                ☆
+                                                            @endif
+                                                        @endfor
+                                                    </span>
+                                                    <span class="text-xs text-gray-400">({{ $plan->signal_strength }}/5)</span>
+                                                </div>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden xl:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            @if($plan->daily_signals)
+                                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                                                    {{ $plan->daily_signals }}/day
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden xl:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            @if($plan->success_rate)
+                                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-purple-100 text-purple-800">
+                                                    {{ number_format($plan->success_rate, 1) }}%
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden xl:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            @if($plan->max_daily_signals)
+                                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-indigo-100 text-indigo-800">
+                                                    {{ $plan->max_daily_signals }}
+                                                </span>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
+                                        </td>
+                                        <td class="hidden xl:table-cell px-4 sm:px-6 py-4 text-sm text-gray-300">
+                                            @if($plan->signal_features && is_array($plan->signal_features) && count($plan->signal_features) > 0)
+                                                <div class="flex flex-wrap gap-1">
+                                                    @foreach(array_slice($plan->signal_features, 0, 3) as $feature)
+                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                            {{ $feature }}
+                                                        </span>
+                                                    @endforeach
+                                                    @if(count($plan->signal_features) > 3)
+                                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-800">
+                                                            +{{ count($plan->signal_features) - 3 }}
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <span class="text-gray-500">N/A</span>
+                                            @endif
                                         </td>
                                         <td class="px-4 sm:px-6 py-4">
                                             <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $plan->is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
@@ -225,24 +347,38 @@
                                             </span>
                                         </td>
                                         <td class="px-4 sm:px-6 py-4 text-sm font-medium">
-                                            <div class="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-2">
-                                                <a href="{{ route('admin.plans.edit', $plan) }}" class="text-blue-400 hover:text-blue-300 transition-colors">Edit</a>
+                                            <div class="flex items-center space-x-2">
+                                                <!-- View/Edit Button -->
+                                                <button type="button" onclick="openEditModal({{ $plan->id }})" class="inline-flex items-center px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                    </svg>
+                                                    View
+                                                </button>
+
+                                                <!-- Activate/Deactivate -->
                                                 <form action="{{ route('admin.plans.toggle-status', $plan) }}" method="POST" class="inline">
                                                     @csrf
                                                     @method('PATCH')
-                                                    <button type="submit" class="text-yellow-400 hover:text-yellow-300 transition-colors">
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-md {{ $plan->is_active ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700' }} text-white">
                                                         {{ $plan->is_active ? 'Deactivate' : 'Activate' }}
                                                     </button>
                                                 </form>
+
+                                                <!-- Delete -->
                                                 <form action="{{ route('admin.plans.destroy', $plan) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this plan?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="text-red-400 hover:text-red-300 transition-colors">Delete</button>
+                                                    <button type="submit" class="inline-flex items-center px-3 py-1.5 rounded-md bg-red-600 hover:bg-red-700 text-white">Delete</button>
                                                 </form>
                                             </div>
                                         </td>
                                     </tr>
                                 @endforeach
+                                <script>
+                                    window.__PLAN_MAP = @json($__plan_map);
+                                </script>
                             </tbody>
                         </table>
                     </div>
@@ -457,8 +593,8 @@
 <div id="createPlanModal" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
     <div class="relative min-h-screen flex items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <div class="p-6">
+        <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div class="p-3 flex-1 overflow-y-auto max-h-[calc(90vh-120px)]">
                                     <div class="flex justify-between items-center mb-4">
                         <h3 class="text-xl font-bold text-white" id="modalTitle">Create Plan</h3>
                         <button onclick="closeCreateModal()" class="text-gray-400 hover:text-white transition-colors">
@@ -483,12 +619,12 @@
                             {{ session('error') }}
                         </div>
                     @endif
-                
-                                    <form id="createPlanForm" action="{{ route('admin.plans.store') }}" method="POST" class="space-y-4" onsubmit="return validateForm()">
+                    
+                                    <form id="createPlanForm" action="{{ route('admin.plans.store') }}" data-default-action="{{ route('admin.plans.store') }}" method="POST" class="space-y-2" onsubmit="return validateForm()">
                     @csrf
                     
-                    <!-- Plan Type Selection -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Basic Plan Information - 2 per row -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                         <div>
                             <label for="modal_type" class="block text-sm font-medium text-gray-300 mb-1">Plan Type</label>
                             <select id="modal_type" name="type" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="showTypeSpecificFields()">
@@ -504,42 +640,100 @@
                             <label for="modal_name" class="block text-sm font-medium text-gray-300 mb-1">Plan Name</label>
                             <input type="text" id="modal_name" name="name" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter plan name">
                         </div>
-                    </div>
-
-                    <!-- Description -->
-                    <div>
-                        <label for="modal_description" class="block text-sm font-medium text-gray-300 mb-1">Description <span class="text-gray-500 text-xs">(Optional)</span></label>
-                        <textarea id="modal_description" name="description" rows="2" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Plan description..."></textarea>
-                    </div>
-
-                    <!-- Pricing -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="modal_price" class="block text-sm font-medium text-gray-300 mb-1">Price</label>
-                            <input type="number" id="modal_price" name="price" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                        </div>
                         
-                        <div>
-                            <label for="modal_currency" class="block text-sm font-medium text-gray-300 mb-1">Currency</label>
-                            <select id="modal_currency" name="currency" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option value="USD">USD</option>
-                                <option value="EUR">EUR</option>
-                                <option value="GBP">GBP</option>
-                                <option value="JPY">JPY</option>
-                                <option value="CAD">CAD</option>
-                                <option value="AUD">AUD</option>
-                                <option value="CHF">CHF</option>
-                                <option value="CNY">CNY</option>
-                                <option value="SGD">SGD</option>
-                                <option value="NZD">NZD</option>
+                        <div id="modal_market_type_container" class="type-specific-fields hidden">
+                            <label for="modal_market_type" class="block text-sm font-medium text-gray-300 mb-1">Market Type <span class="text-gray-500 text-xs">(Required)</span></label>
+                            <select id="modal_market_type" name="signal_market_type" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="">Select Market Type</option>
+                                <option value="crypto">Cryptocurrency</option>
+                                <option value="forex">Forex</option>
+                                <option value="stock">Stocks</option>
+                                <option value="commodities">Commodities</option>
+                                <option value="indices">Indices</option>
                             </select>
+                            <p class="text-xs text-gray-400 mt-1">Type of market this signal plan covers</p>
+                        </div>
+                    </div>
+
+                    <!-- Pricing (for non-signal plans) -->
+                    <div id="modal_pricing_fields" class="type-specific-fields">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
+                            <div>
+                                <label for="modal_price" class="block text-sm font-medium text-gray-300 mb-1">Price</label>
+                                <input type="number" id="modal_price" name="price" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+                            </div>
+                            
+                            <div>
+                                <label for="modal_currency" class="block text-sm font-medium text-gray-300 mb-1">Currency</label>
+                                <select id="modal_currency" name="currency" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="JPY">JPY</option>
+                                    <option value="CAD">CAD</option>
+                                    <option value="AUD">AUD</option>
+                                    <option value="CHF">CHF</option>
+                                    <option value="CNY">CNY</option>
+                                    <option value="SGD">SGD</option>
+                                    <option value="NZD">NZD</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="modal_original_price" class="block text-sm font-medium text-gray-300 mb-1">Original Price <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <input type="number" id="modal_original_price" name="original_price" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+                            </div>
+                        </div>
+
+                        <!-- Funding Range (for non-signal plans) -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
+                            <div>
+                                <label for="modal_min_funding" class="block text-sm font-medium text-gray-300 mb-1">Min Funding</label>
+                                <input type="number" id="modal_min_funding" name="min_funding" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+                            </div>
+                            
+                            <div>
+                                <label for="modal_max_funding" class="block text-sm font-medium text-gray-300 mb-1">Max Funding <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <input type="number" id="modal_max_funding" name="max_funding" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00 for unlimited">
+                                <p class="text-xs text-gray-400 mt-1">Leave empty or set to 0 for unlimited funding</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Signal Pricing (for signal plans only) -->
+                    <div id="modal_signal_pricing" class="type-specific-fields hidden">
+                        <h3 class="text-base font-semibold text-white mb-2">Signal Pricing</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                                <label for="modal_signal_amount" class="block text-sm font-medium text-gray-300 mb-1">Signal Amount <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <input type="number" id="modal_signal_amount" name="min_funding" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+                                <p class="text-xs text-gray-400 mt-1">Amount users pay for signal entry</p>
+                            </div>
+                            
+                            <div>
+                                <label for="modal_signal_currency" class="block text-sm font-medium text-gray-300 mb-1">Currency</label>
+                                <select id="modal_signal_currency" name="currency" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="JPY">JPY</option>
+                                    <option value="CAD">CAD</option>
+                                    <option value="AUD">AUD</option>
+                                    <option value="CHF">CHF</option>
+                                    <option value="CNY">CNY</option>
+                                    <option value="SGD">SGD</option>
+                                    <option value="NZD">NZD</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Trading Plan Specific Fields -->
                     <div id="modal_trading-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-3 border-b border-gray-600 pb-2">Trading Plan Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <h3 class="text-base font-semibold text-white mb-2">Trading Plan Settings</h3>
+                        
+                        <!-- First Row - 2 inputs -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                             <div>
                                 <label for="modal_pairs" class="block text-sm font-medium text-gray-300 mb-1">Trading Pairs <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="text" id="modal_pairs" name="pairs" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 400+ Pairs">
@@ -549,7 +743,10 @@
                                 <label for="modal_leverage" class="block text-sm font-medium text-gray-300 mb-1">Leverage <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="number" id="modal_leverage" name="leverage" min="0" step="0.01" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 500">
                             </div>
-                            
+                        </div>
+
+                        <!-- Second Row - 2 inputs -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                             <div>
                                 <label for="modal_spreads" class="block text-sm font-medium text-gray-300 mb-1">Spreads <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="number" id="modal_spreads" name="spreads" min="0" step="0.01" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.8">
@@ -559,7 +756,10 @@
                                 <label for="modal_swap_fees" class="block text-sm font-medium text-gray-300 mb-1">Swap Fees <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="number" id="modal_swap_fees" name="swap_fees" min="0" step="0.01" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.00">
                             </div>
-                            
+                        </div>
+
+                        <!-- Third Row - 2 inputs -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                             <div>
                                 <label for="modal_minimum_deposit" class="block text-sm font-medium text-gray-300 mb-1">Minimum Deposit <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="number" id="modal_minimum_deposit" name="minimum_deposit" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
@@ -574,34 +774,91 @@
 
                     <!-- Signal Plan Specific Fields -->
                     <div id="modal_signal-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-3 border-b border-gray-600 pb-2">Signal Plan Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <h3 class="text-base font-semibold text-white mb-2">Signal Plan Settings</h3>
+                        
+                        <!-- Numeric Fields - 2 per row -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
                             <div>
-                                <label for="modal_signal_strength" class="block text-sm font-medium text-gray-300 mb-1">Signal Strength (%) <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                <input type="number" id="modal_signal_strength" name="signal_strength" min="0" max="100" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 25">
+                                <label for="modal_signal_quantity" class="block text-sm font-medium text-gray-300 mb-1">Total Signals <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <input type="number" id="modal_signal_quantity" name="signal_quantity" min="1" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 20">
+                            </div>
+                            
+                            <div>
+                                <label for="modal_signal_duration" class="block text-sm font-medium text-gray-300 mb-1">Duration (Days) <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <input type="number" id="modal_signal_duration" name="signal_duration" min="1" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10">
+                            </div>
+                        </div>
+
+                        <!-- More Numeric Fields - 2 per row -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                            <div>
+                                <label for="modal_success_rate" class="block text-sm font-medium text-gray-300 mb-1">Success Rate (%) <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <input type="number" id="modal_success_rate" name="success_rate" step="0.01" min="0" max="100" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85.5">
                             </div>
                             
                             <div>
                                 <label for="modal_daily_signals" class="block text-sm font-medium text-gray-300 mb-1">Daily Signals <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                <input type="number" id="modal_daily_signals" name="daily_signals" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10">
+                                <input type="number" id="modal_daily_signals" name="daily_signals" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2">
+                            </div>
+                        </div>
+
+                        <!-- More Optional Fields - 2 per row -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                            <div>
+                                <label for="modal_max_daily_signals" class="block text-sm font-medium text-gray-300 mb-1">Max Daily Signals <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <input type="number" id="modal_max_daily_signals" name="max_daily_signals" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 5">
                             </div>
                             
                             <div>
-                                <label for="modal_success_rate" class="block text-sm font-medium text-gray-300 mb-1">Success Rate (%) <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                <input type="number" id="modal_success_rate" name="success_rate" step="0.01" min="0" max="100" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85.5">
+                                <label for="modal_sort_order" class="block text-sm font-medium text-gray-300 mb-1">Sort Order <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <input type="number" id="modal_sort_order" name="sort_order" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1">
+                            </div>
+                        </div>
+
+                        <!-- Dropdown Fields - 2 per row -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mb-2">
+                            <div>
+                                <label for="modal_signal_strength" class="block text-sm font-medium text-gray-300 mb-1">Signal Strength (1-5) <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <select id="modal_signal_strength" name="signal_strength" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Select Signal Strength</option>
+                                    <option value="1">1 Star - Basic</option>
+                                    <option value="2">2 Stars - Standard</option>
+                                    <option value="3">3 Stars - Good</option>
+                                    <option value="4">4 Stars - Premium</option>
+                                    <option value="5">5 Stars - Elite</option>
+                                </select>
                             </div>
                             
                             <div>
-                                <label for="modal_signal_duration" class="block text-sm font-medium text-gray-300 mb-1">Duration (Days) <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                <input type="number" id="modal_signal_duration" name="signal_duration" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 30">
+                                <label for="modal_signal_market_type" class="block text-sm font-medium text-gray-300 mb-1">Market Type <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <select id="modal_signal_market_type" name="signal_market_type" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Select Market Type</option>
+                                    <option value="crypto">Cryptocurrency</option>
+                                    <option value="forex">Forex</option>
+                                    <option value="stock">Stock</option>
+                                    <option value="commodity">Commodity</option>
+                                    <option value="index">Index</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Features Field - Full width -->
+                        <div class="grid grid-cols-1 gap-2 mb-2">
+                            <div>
+                                <label for="modal_signal_features" class="block text-sm font-medium text-gray-300 mb-1">Features <span class="text-gray-500 text-xs">(Required)</span></label>
+                                <textarea id="modal_signal_features" name="signal_features" rows="2" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder='["Real-time Alerts", "Entry/Exit Points", "Stop Loss Levels", "Take Profit Targets", "Risk Management", "Technical Analysis", "Chart Patterns", "TradingView Links"]'></textarea>
+                                <p class="text-xs text-gray-400 mt-1">Enter as JSON array: ["Feature1", "Feature2", "Feature3"]</p>
                             </div>
                         </div>
                     </div>
 
+
+                    </div>
+
                     <!-- Mining Plan Specific Fields -->
                     <div id="modal_mining-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-3 border-b border-gray-600 pb-2">Mining Plan Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <h3 class="text-base font-semibold text-white mb-2">Mining Plan Settings</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                             <div>
                                 <label for="modal_hashrate" class="block text-sm font-medium text-gray-300 mb-1">Hashrate <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="text" id="modal_hashrate" name="hashrate" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1000 TH/s">
@@ -631,8 +888,29 @@
 
                     <!-- Staking Plan Specific Fields -->
                     <div id="modal_staking-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-3 border-b border-gray-600 pb-2">Staking Plan Settings</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <h3 class="text-base font-semibold text-white mb-2">Staking Plan Settings</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            <div>
+                                <label for="modal_staking_currency" class="block text-sm font-medium text-gray-300 mb-1">Staking Currency <span class="text-red-500">*</span></label>
+                                <select id="modal_staking_currency" name="staking_currency" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Select Currency</option>
+                                    <option value="BTC">Bitcoin (BTC)</option>
+                                    <option value="ETH">Ethereum (ETH)</option>
+                                    <option value="USDT">Tether (USDT)</option>
+                                    <option value="USDC">USD Coin (USDC)</option>
+                                    <option value="BNB">Binance Coin (BNB)</option>
+                                    <option value="ADA">Cardano (ADA)</option>
+                                    <option value="SOL">Solana (SOL)</option>
+                                    <option value="DOT">Polkadot (DOT)</option>
+                                    <option value="MATIC">Polygon (MATIC)</option>
+                                    <option value="LINK">Chainlink (LINK)</option>
+                                    <option value="UNI">Uniswap (UNI)</option>
+                                    <option value="AVAX">Avalanche (AVAX)</option>
+                                    <option value="ATOM">Cosmos (ATOM)</option>
+                                    <option value="FTM">Fantom (FTM)</option>
+                                </select>
+                            </div>
+                            
                             <div>
                                 <label for="modal_apy_rate" class="block text-sm font-medium text-gray-300 mb-1">APY Rate (%) <span class="text-gray-500 text-xs">(Optional)</span></label>
                                 <input type="number" id="modal_apy_rate" name="apy_rate" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 12.5">
@@ -668,19 +946,23 @@
                         </div>
                     </div>
 
-                    <!-- Submit Button -->
-                    <div class="flex justify-end space-x-3 pt-4 border-t border-gray-700">
-                        <button type="button" onclick="closeCreateModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                            Create Plan
-                        </button>
-                    </div>
                 </form>
+            </div>
+            
+            <!-- Submit Button - Fixed at bottom -->
+            <div class="p-4 border-t border-gray-700 bg-gray-800">
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeCreateModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button type="submit" form="createPlanForm" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                        Create Plan
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 
 <script>
@@ -762,15 +1044,75 @@ function openCreateModal(type = null) {
 
 function closeCreateModal() {
     const modal = document.getElementById('createPlanModal');
+    const form = document.getElementById('createPlanForm');
     modal.classList.add('hidden');
     
-    // Reset form
-    document.getElementById('createPlanForm').reset();
+    // Reset form and restore action/method
+    form.reset();
+    const defaultAction = form.getAttribute('data-default-action') || form.action;
+    form.action = defaultAction;
+    const methodInput = form.querySelector('input[name="_method"]');
+    if (methodInput) methodInput.remove();
     
     // Hide all type-specific fields
     document.querySelectorAll('.type-specific-fields').forEach(field => {
         field.classList.add('hidden');
     });
+}
+
+// Edit existing plan (prefill form and switch to PUT)
+function openEditModal(planId) {
+    const form = document.getElementById('createPlanForm');
+    const modal = document.getElementById('createPlanModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const typeSelect = document.getElementById('modal_type');
+    const plan = window.__PLAN_MAP ? window.__PLAN_MAP[planId] : null;
+    if (!plan) { alert('Unable to load this plan for editing.'); return; }
+    
+    // Switch action and method
+    form.action = plan.update_url;
+    let methodInput = form.querySelector('input[name="_method"]');
+    if (!methodInput) {
+        methodInput = document.createElement('input');
+        methodInput.type = 'hidden';
+        methodInput.name = '_method';
+        form.appendChild(methodInput);
+    }
+    methodInput.value = 'PUT';
+    
+    // Base fields
+    document.getElementById('modal_name').value = plan.name || '';
+    document.getElementById('modal_description').value = plan.description || '';
+    document.getElementById('modal_currency').value = plan.currency || 'USD';
+    document.getElementById('modal_price').value = plan.price ?? 0;
+    document.getElementById('modal_sort_order').value = plan.sort_order ?? 0;
+    
+    // Type and type-specific fields
+    typeSelect.value = plan.type;
+    showTypeSpecificFields();
+    modalTitle.textContent = `Edit ${plan.type.charAt(0).toUpperCase() + plan.type.slice(1)} Plan`;
+    
+    if (plan.type === 'signal') {
+        const qty = document.getElementById('modal_signal_quantity');
+        const dur = document.getElementById('modal_signal_duration');
+        const str = document.getElementById('modal_signal_strength');
+        const rate = document.getElementById('modal_success_rate');
+        const daily = document.getElementById('modal_daily_signals');
+        const maxDaily = document.getElementById('modal_max_daily_signals');
+        const market = document.getElementById('modal_signal_market_type') || document.getElementById('modal_market_type');
+        const features = document.getElementById('modal_signal_features');
+        if (qty) qty.value = plan.signal_quantity ?? '';
+        if (dur) dur.value = plan.signal_duration ?? '';
+        if (str) str.value = plan.signal_strength ?? '';
+        if (rate) rate.value = plan.success_rate ?? '';
+        if (daily) daily.value = plan.daily_signals ?? '';
+        if (maxDaily) maxDaily.value = plan.max_daily_signals ?? '';
+        if (market) market.value = plan.signal_market_type ?? '';
+        if (features) features.value = JSON.stringify(plan.signal_features || []);
+    }
+    
+    // Show modal
+    modal.classList.remove('hidden');
 }
 
 // Modal field visibility function
@@ -788,8 +1130,25 @@ function showTypeSpecificFields() {
         if (targetField) {
             targetField.classList.remove('hidden');
         }
+        
+        // Show/hide market type container and pricing fields based on plan type
+        const marketTypeContainer = document.getElementById('modal_market_type_container');
+        const pricingFields = document.getElementById('modal_pricing_fields');
+        const signalPricing = document.getElementById('modal_signal_pricing');
+        
+        if (type === 'signal') {
+            marketTypeContainer.classList.remove('hidden');
+            pricingFields.classList.add('hidden'); // Hide regular pricing for signal plans
+            signalPricing.classList.remove('hidden'); // Show signal-specific pricing
+        } else {
+            marketTypeContainer.classList.add('hidden');
+            pricingFields.classList.remove('hidden');
+            signalPricing.classList.add('hidden');
+        }
     }
 }
+
+
 
 // Add responsive table functionality
 document.addEventListener('DOMContentLoaded', function() {

@@ -18,13 +18,21 @@ class UserPlan extends Model
         'currency',
         'start_date',
         'end_date',
-        'notes'
+        'notes',
+        'signal_quantity_remaining',
+        'daily_signals_used',
+        'last_signal_date',
+        'cancelled_at',
+        'renewed_at'
     ];
 
     protected $casts = [
         'amount_paid' => 'decimal:2',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
+        'last_signal_date' => 'date',
+        'cancelled_at' => 'datetime',
+        'renewed_at' => 'datetime',
     ];
 
     // Status constants

@@ -48,4 +48,10 @@ class TradePairController extends Controller
         $pair->delete();
         return redirect()->back()->with('success', "Pair Deleted Successfully");
     }
+
+    public function getByMarketType($marketType)
+    {
+        $pairs = TradePair::where('type', $marketType)->get(['id', 'pair']);
+        return response()->json($pairs);
+    }
 }

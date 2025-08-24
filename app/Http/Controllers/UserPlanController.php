@@ -124,7 +124,17 @@ class UserPlanController extends Controller
         }
 
         $userPlan->load('plan', 'user');
-        return view('dashboard.user-plans.show', compact('userPlan'));
+        
+        // Fetch signals for signal plans
+        $signals = collect();
+        if ($userPlan->plan->type === 'signal') {
+            $signals = \App\Models\TradingSignal::where('plan_id', $userPlan->plan_id)
+                ->where('is_active', true)
+                ->orderBy('created_at', 'desc')
+                ->get();
+        }
+        
+        return view('dashboard.user-plans.show', compact('userPlan', 'signals'));
     }
 
     /**

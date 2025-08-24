@@ -113,7 +113,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div>
                         <label for="pairs" class="block text-sm font-medium text-gray-300 mb-2">Trading Pairs</label>
-                        <input type="number" id="pairs" name="pairs" value="{{ old('pairs', $plan->pairs) }}" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 50">
+                        <input type="text" id="pairs" name="pairs" value="{{ old('pairs', $plan->pairs) }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 50+ Trading Pairs">
                         @error('pairs')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -121,7 +121,7 @@
                     
                     <div>
                         <label for="leverage" class="block text-sm font-medium text-gray-300 mb-2">Leverage</label>
-                        <input type="text" id="leverage" name="leverage" value="{{ old('leverage', $plan->leverage) }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1:100">
+                        <input type="number" id="leverage" name="leverage" value="{{ old('leverage', $plan->leverage) }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
                         @error('leverage')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -129,7 +129,7 @@
                     
                     <div>
                         <label for="spreads" class="block text-sm font-medium text-gray-300 mb-2">Spreads</label>
-                        <input type="text" id="spreads" name="spreads" value="{{ old('spreads', $plan->spreads) }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 0.5 pips">
+                        <input type="number" id="spreads" name="spreads" value="{{ old('spreads', $plan->spreads) }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1.5">
                         @error('spreads')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -150,16 +150,26 @@
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
+                    
+                    <div>
+                        <label for="max_lot_size" class="block text-sm font-medium text-gray-300 mb-2">Max Lot Size</label>
+                        <input type="text" id="max_lot_size" name="max_lot_size" value="{{ old('max_lot_size', $plan->max_lot_size) }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10 lots">
+                        @error('max_lot_size')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
                 </div>
             </div>
 
             <!-- Signal Plan Specific Fields -->
             <div id="signal-fields" class="type-specific-fields {{ $plan->type == 'signal' ? '' : 'hidden' }}">
                 <h3 class="text-lg font-semibold text-white mb-4">Signal Plan Settings</h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Basic Signal Settings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
                     <div>
-                        <label for="signal_strength" class="block text-sm font-medium text-gray-300 mb-2">Signal Strength (%)</label>
-                        <input type="number" id="signal_strength" name="signal_strength" value="{{ old('signal_strength', $plan->signal_strength) }}" min="0" max="100" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 25">
+                        <label for="signal_strength" class="block text-sm font-medium text-gray-300 mb-2">Signal Strength (1-5)</label>
+                        <input type="number" id="signal_strength" name="signal_strength" value="{{ old('signal_strength', $plan->signal_strength) }}" min="1" max="5" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 4">
                         @error('signal_strength')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -185,6 +195,91 @@
                         <label for="signal_duration" class="block text-sm font-medium text-gray-300 mb-2">Duration (Days)</label>
                         <input type="number" id="signal_duration" name="signal_duration" value="{{ old('signal_duration', $plan->signal_duration) }}" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 30">
                         @error('signal_duration')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Market Type and Trading Settings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div>
+                        <label for="signal_market_type" class="block text-sm font-medium text-gray-300 mb-2">Market Type</label>
+                        <select id="signal_market_type" name="signal_market_type" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select Market Type</option>
+                            <option value="crypto" {{ old('signal_market_type', $plan->signal_market_type) == 'crypto' ? 'selected' : '' }}>Cryptocurrency</option>
+                            <option value="forex" {{ old('signal_market_type', $plan->signal_market_type) == 'forex' ? 'selected' : '' }}>Forex</option>
+                            <option value="stock" {{ old('signal_market_type', $plan->signal_market_type) == 'stock' ? 'selected' : '' }}>Stocks</option>
+                            <option value="commodities" {{ old('signal_market_type', $plan->signal_market_type) == 'commodities' ? 'selected' : '' }}>Commodities</option>
+                            <option value="indices" {{ old('signal_market_type', $plan->signal_market_type) == 'indices' ? 'selected' : '' }}>Indices</option>
+                        </select>
+                        @error('signal_market_type')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="signal_pairs" class="block text-sm font-medium text-gray-300 mb-2">Trading Pairs (JSON Array)</label>
+                        <textarea id="signal_pairs" name="signal_pairs" rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder='["BTC/USDT", "ETH/USDT", "BNB/USDT"]'>{{ old('signal_pairs', json_encode($plan->signal_pairs)) }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Enter as JSON array: ["Feature 1", "Feature 2"]</p>
+                        @error('signal_pairs')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="signal_leverage" class="block text-sm font-medium text-gray-300 mb-2">Max Leverage</label>
+                        <input type="number" id="signal_leverage" name="signal_leverage" value="{{ old('signal_leverage', $plan->signal_leverage) }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
+                        @error('signal_leverage')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="signal_expiry_duration" class="block text-sm font-medium text-gray-300 mb-2">Signal Expiry</label>
+                        <select id="signal_expiry_duration" name="signal_expiry_duration" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select Expiry</option>
+                            <option value="1h" {{ old('signal_expiry_duration', $plan->signal_expiry_duration) == '1h' ? 'selected' : '' }}>1 Hour</option>
+                            <option value="4h" {{ old('signal_expiry_duration', $plan->signal_expiry_duration) == '4h' ? 'selected' : '' }}>4 Hours</option>
+                            <option value="1d" {{ old('signal_expiry_duration', $plan->signal_expiry_duration) == '1d' ? 'selected' : '' }}>1 Day</option>
+                            <option value="1w" {{ old('signal_expiry_duration', $plan->signal_expiry_duration) == '1w' ? 'selected' : '' }}>1 Week</option>
+                            <option value="1m" {{ old('signal_expiry_duration', $plan->signal_expiry_duration) == '1m' ? 'selected' : '' }}>1 Month</option>
+                        </select>
+                        @error('signal_expiry_duration')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </div>
+
+                <!-- Features and Delivery -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div>
+                        <label for="signal_features" class="block text-sm font-medium text-gray-300 mb-2">Features (JSON Array)</label>
+                        <textarea id="signal_features" name="signal_features" rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder='["Chart Analysis", "Risk Management", "TradingView Links"]'>{{ old('signal_features', json_encode($plan->signal_features)) }}</textarea>
+                        <p class="text-xs text-gray-400 mt-1">Enter as JSON array: ["Feature 1", "Feature 2"]</p>
+                        @error('signal_features')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="signal_delivery" class="block text-sm font-medium text-gray-300 mb-2">Delivery Method</label>
+                        <select id="signal_delivery" name="signal_delivery" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select Method</option>
+                            <option value="email" {{ old('signal_delivery', $plan->signal_delivery) == 'email' ? 'selected' : '' }}>Email</option>
+                            <option value="telegram" {{ old('signal_delivery', $plan->signal_delivery) == 'telegram' ? 'selected' : '' }}>Telegram</option>
+                            <option value="sms" {{ old('signal_delivery', $plan->signal_delivery) == 'sms' ? 'selected' : '' }}>SMS</option>
+                            <option value="push" {{ old('signal_delivery', $plan->signal_delivery) == 'push' ? 'selected' : '' }}>Push Notification</option>
+                            <option value="webhook" {{ old('signal_delivery', $plan->signal_delivery) == 'webhook' ? 'selected' : '' }}>Webhook</option>
+                        </select>
+                        @error('signal_delivery')
+                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="max_daily_signals" class="block text-sm font-medium text-gray-300 mb-2">Max Daily Signals</label>
+                        <input type="number" id="max_daily_signals" name="max_daily_signals" value="{{ old('max_daily_signals', $plan->max_daily_signals) }}" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 5">
+                        @error('max_daily_signals')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>

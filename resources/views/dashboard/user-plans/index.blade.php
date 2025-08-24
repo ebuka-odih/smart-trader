@@ -32,16 +32,16 @@
     @endif
 
     <!-- Action Buttons -->
-    <div class="flex justify-between items-center">
-        <div class="flex space-x-4">
-            <a href="{{ route('user.plans.my-plans') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div class="flex flex-col sm:flex-row gap-3">
+            <a href="{{ route('user.plans.my-plans') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-center">
                 Active Plans
             </a>
-            <a href="{{ route('user.plans.history') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
+            <a href="{{ route('user.plans.history') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors text-center">
                 Plan History
             </a>
         </div>
-        <a href="{{ route('user.plan.trading') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+        <a href="{{ route('user.plan.trading') }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-center">
             Subscribe to New Plan
         </a>
     </div>

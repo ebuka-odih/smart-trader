@@ -65,7 +65,12 @@ class SubscriptionController extends Controller
     public function signal()
     {
         $user = Auth::user();
-        return view('dashboard.plan.signal', compact('user'));
+        $signalPlans = \App\Models\Plan::where('type', 'signal')
+            ->where('is_active', true)
+            ->orderBy('sort_order', 'asc')
+            ->orderBy('price', 'asc')
+            ->get();
+        return view('dashboard.plan.signal', compact('user', 'signalPlans'));
     }
 
     /**

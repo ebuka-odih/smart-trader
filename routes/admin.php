@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PaymentMethodController;
 use App\Http\Controllers\Admin\TradePairController;
 use App\Http\Controllers\Admin\TransactionController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\SignalController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\TradeController;
@@ -38,6 +39,15 @@ Route::put('/plans/{plan}', [PlanController::class, 'update'])->name('plans.upda
 Route::delete('/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
 Route::patch('/plans/{plan}/toggle-status', [PlanController::class, 'toggleStatus'])->name('plans.toggle-status');
 
+// Signal Management Routes
+Route::get('/signals', [SignalController::class, 'index'])->name('signals.index');
+Route::get('/signals/create', [SignalController::class, 'create'])->name('signals.create');
+Route::post('/signals', [SignalController::class, 'store'])->name('signals.store');
+Route::get('/signals/{signal}', [SignalController::class, 'show'])->name('signals.show');
+Route::get('/signals/{signal}/edit', [SignalController::class, 'edit'])->name('signals.edit');
+Route::put('/signals/{signal}', [SignalController::class, 'update'])->name('signals.update');
+Route::delete('/signals/{signal}', [SignalController::class, 'destroy'])->name('signals.destroy');
+Route::patch('/signals/{signal}/status', [SignalController::class, 'updateStatus'])->name('signals.update-status');
 
     Route::get('/transactions/withdrawal', [TransactionController::class, 'withdrawal'])->name('transactions.withdrawal');
     Route::get('/approve/withdrawal/{id}', [TransactionController::class, 'approveWithdrawal'])->name('approveWithdrawal');
@@ -47,6 +57,7 @@ Route::patch('/plans/{plan}/toggle-status', [PlanController::class, 'toggleStatu
     Route::resource('/payment-method', PaymentMethodController::class);
     Route::resource('/package', PackageController::class);
     Route::resource('/trade-pair', TradePairController::class);
+    Route::get('/trade-pairs/{marketType}', [TradePairController::class, 'getByMarketType'])->name('trade-pairs.by-market');
     Route::resource('/trade', TradeController::class);
 
     Route::get('open-trades', [TradeController::class, 'openTrades'])->name('openTrades');

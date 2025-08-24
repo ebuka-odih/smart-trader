@@ -8,6 +8,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WithdrawalController;
 use App\Http\Controllers\UserPlanController;
+use App\Http\Controllers\UserSignalController;
+use App\Http\Controllers\SignalSubscriptionController;
+use App\Http\Controllers\UserStakingController;
+use App\Http\Controllers\UserMiningController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('index');
@@ -43,12 +47,13 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::get('plan/trading', [SubscriptionController::class, 'trading'])->name('plan.trading');
     Route::get('plan/signal', [SubscriptionController::class, 'signal'])->name('plan.signal');
     Route::get('plan/mining', [SubscriptionController::class, 'mining'])->name('plan.mining');
-    Route::get('plan/staking', [SubscriptionController::class, 'staking'])->name('plan.staking');
+    // Route::get('plan/staking', [SubscriptionController::class, 'staking'])->name('plan.staking'); // Removed - using new staking module
 
     // User Plan Management Routes
     Route::get('plans', [UserPlanController::class, 'index'])->name('plans.index');
     Route::get('plans/create', [UserPlanController::class, 'create'])->name('plans.create');
     Route::post('plans', [UserPlanController::class, 'store'])->name('plans.store');
+    Route::get('plans/history', [UserPlanController::class, 'history'])->name('plans.history');
     Route::get('plans/{userPlan}', [UserPlanController::class, 'show'])->name('plans.show');
     Route::get('plans/{userPlan}/edit', [UserPlanController::class, 'edit'])->name('plans.edit');
     Route::put('plans/{userPlan}', [UserPlanController::class, 'update'])->name('plans.update');
@@ -57,7 +62,44 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::post('plans/{userPlan}/reactivate', [UserPlanController::class, 'reactivate'])->name('plans.reactivate');
     Route::post('plans/subscribe/{plan}', [UserPlanController::class, 'subscribe'])->name('plans.subscribe');
     Route::get('my-plans', [UserPlanController::class, 'myPlans'])->name('plans.my-plans');
-    Route::get('plans/history', [UserPlanController::class, 'history'])->name('plans.history');
+
+    // Signal Routes
+Route::get('signals', [UserSignalController::class, 'index'])->name('signals.index');
+Route::get('signals/{signal}', [UserSignalController::class, 'show'])->name('signals.show');
+Route::post('signals/{signal}/copy', [UserSignalController::class, 'copySignal'])->name('signals.copy');
+Route::get('signals/statistics', [UserSignalController::class, 'statistics'])->name('signals.statistics');
+
+// Signal Subscription Routes
+Route::get('signal-subscriptions', [SignalSubscriptionController::class, 'index'])->name('signal-subscriptions.index');
+Route::get('signal-subscriptions/create', [SignalSubscriptionController::class, 'create'])->name('signal-subscriptions.create');
+Route::post('signal-subscriptions', [SignalSubscriptionController::class, 'store'])->name('signal-subscriptions.store');
+Route::get('signal-subscriptions/{subscription}', [SignalSubscriptionController::class, 'show'])->name('signal-subscriptions.show');
+Route::get('signal-subscriptions/{subscription}/edit', [SignalSubscriptionController::class, 'edit'])->name('signal-subscriptions.edit');
+Route::put('signal-subscriptions/{subscription}', [SignalSubscriptionController::class, 'update'])->name('signal-subscriptions.update');
+Route::delete('signal-subscriptions/{subscription}', [SignalSubscriptionController::class, 'cancel'])->name('signal-subscriptions.cancel');
+Route::post('signal-subscriptions/{subscription}/renew', [SignalSubscriptionController::class, 'renew'])->name('signal-subscriptions.renew');
+Route::get('signal-subscriptions/active', [SignalSubscriptionController::class, 'active'])->name('signal-subscriptions.active');
+Route::get('signal-subscriptions/history', [SignalSubscriptionController::class, 'history'])->name('signal-subscriptions.history');
+
+// Staking Routes
+Route::get('staking', [UserStakingController::class, 'index'])->name('staking.index');
+Route::get('staking/create', [UserStakingController::class, 'create'])->name('staking.create');
+Route::post('staking', [UserStakingController::class, 'store'])->name('staking.store');
+Route::get('staking/{staking}', [UserStakingController::class, 'show'])->name('staking.show');
+Route::post('staking/{staking}/cancel', [UserStakingController::class, 'cancel'])->name('staking.cancel');
+Route::post('staking/{staking}/withdraw', [UserStakingController::class, 'withdraw'])->name('staking.withdraw');
+Route::get('staking/statistics', [UserStakingController::class, 'statistics'])->name('staking.statistics');
+
+// Mining Routes
+Route::get('mining', [UserMiningController::class, 'index'])->name('mining.index');
+Route::get('mining/create', [UserMiningController::class, 'create'])->name('mining.create');
+Route::post('mining', [UserMiningController::class, 'store'])->name('mining.store');
+Route::get('mining/{mining}', [UserMiningController::class, 'show'])->name('mining.show');
+Route::post('mining/{mining}/cancel', [UserMiningController::class, 'cancel'])->name('mining.cancel');
+Route::post('mining/{mining}/suspend', [UserMiningController::class, 'suspend'])->name('mining.suspend');
+Route::post('mining/{mining}/resume', [UserMiningController::class, 'resume'])->name('mining.resume');
+Route::post('mining/{mining}/withdraw', [UserMiningController::class, 'withdraw'])->name('mining.withdraw');
+Route::get('mining/statistics', [UserMiningController::class, 'statistics'])->name('mining.statistics');
 
     Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
     Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');

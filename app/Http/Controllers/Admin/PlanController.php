@@ -164,7 +164,7 @@ class PlanController extends Controller
             'name' => 'required|string|max:255',
             'type' => 'required|in:trading,signal,staking,mining',
             'description' => 'nullable|string',
-            'price' => 'required|numeric|min:0',
+            'price' => 'nullable|numeric|min:0',
             'original_price' => 'nullable|numeric|min:0',
             'min_funding' => 'nullable|numeric|min:0',
             'max_funding' => 'nullable|numeric|min:0',
@@ -190,10 +190,16 @@ class PlanController extends Controller
                 
             case 'signal':
                 $rules = array_merge($rules, [
-                    'signal_strength' => 'nullable|integer|min:0',
+                    'min_funding' => 'required|numeric|min:0', // Signal amount
+                    'signal_strength' => 'required|integer|min:1|max:5',
+                    'signal_quantity' => 'required|integer|min:1',
+                    'signal_duration' => 'required|integer|min:1',
                     'daily_signals' => 'nullable|integer|min:0',
-                    'success_rate' => 'nullable|numeric|min:0|max:100',
-                    'signal_duration' => 'nullable|integer|min:0',
+                    'success_rate' => 'required|numeric|min:0|max:100',
+                    'signal_market_type' => 'required|string|in:crypto,forex,stock,commodities,indices',
+                    'signal_features' => 'nullable|string', // JSON array
+                    'signal_delivery' => 'nullable|string|in:email,telegram,sms,push,webhook',
+                    'max_daily_signals' => 'nullable|integer|min:0',
                 ]);
                 break;
                 
@@ -209,6 +215,7 @@ class PlanController extends Controller
                 
             case 'staking':
                 $rules = array_merge($rules, [
+                    'staking_currency' => 'required|string|max:10',
                     'apy_rate' => 'nullable|numeric|min:0',
                     'minimum_amount' => 'nullable|numeric|min:0',
                     'reward_frequency' => 'nullable|string|max:100',
@@ -227,9 +234,22 @@ class PlanController extends Controller
     private function preparePlanData(Request $request)
     {
         $data = $request->only([
-            'name', 'type', 'description', 'price', 'original_price', 
-            'min_funding', 'max_funding', 'currency', 'is_active', 'sort_order'
+            'name', 'type', 'description', 'currency', 'is_active', 'sort_order'
         ]);
+
+        // Handle pricing based on plan type
+        $type = $request->input('type');
+        if ($type === 'signal') {
+            // For signal plans, use min_funding as the price
+            $data['price'] = $request->input('min_funding');
+            $data['min_funding'] = $request->input('min_funding');
+            $data['max_funding'] = null; // No max funding for signal plans
+        } else {
+            // For other plans, use regular pricing
+            $data['price'] = $request->input('price');
+            $data['min_funding'] = $request->input('min_funding');
+            $data['max_funding'] = $request->input('max_funding');
+        }
 
         // Set default values
         $data['is_active'] = $request->has('is_active');
@@ -252,8 +272,17 @@ class PlanController extends Controller
                 
             case 'signal':
                 $data = array_merge($data, $request->only([
-                    'signal_strength', 'daily_signals', 'success_rate', 'signal_duration'
+                    'signal_strength', 'signal_quantity', 'signal_duration', 'daily_signals', 'success_rate',
+                    'signal_market_type', 'max_daily_signals'
                 ]));
+                
+                // Set empty signal_pairs array for signal plans (pairs are handled in individual signals)
+                $data['signal_pairs'] = [];
+                
+                if ($request->has('signal_features')) {
+                    $signalFeatures = json_decode($request->input('signal_features'), true);
+                    $data['signal_features'] = $signalFeatures ?: [];
+                }
                 break;
                 
             case 'mining':
@@ -264,7 +293,7 @@ class PlanController extends Controller
                 
             case 'staking':
                 $data = array_merge($data, $request->only([
-                    'apy_rate', 'minimum_amount', 'reward_frequency', 'lock_period', 'staking_duration'
+                    'staking_currency', 'apy_rate', 'minimum_amount', 'reward_frequency', 'lock_period', 'staking_duration'
                 ]));
                 break;
         }

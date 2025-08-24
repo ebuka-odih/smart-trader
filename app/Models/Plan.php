@@ -32,9 +32,17 @@ class Plan extends Model
         
         // Signal plan specific fields
         'signal_strength',
+        'signal_quantity',
         'daily_signals',
         'success_rate',
         'signal_duration',
+        'signal_market_type',
+        'signal_pairs',
+        'signal_leverage',
+        'signal_expiry_duration',
+        'signal_features',
+        'signal_delivery',
+        'max_daily_signals',
         
         // Mining plan specific fields
         'hashrate',
@@ -49,6 +57,7 @@ class Plan extends Model
         'reward_frequency',
         'lock_period',
         'staking_duration',
+        'staking_currency',
         
         // Common fields
         'features',
@@ -69,9 +78,17 @@ class Plan extends Model
         'minimum_deposit' => 'decimal:2',
         'max_lot_size' => 'string',
         'signal_strength' => 'integer',
+        'signal_quantity' => 'integer',
         'daily_signals' => 'integer',
         'success_rate' => 'decimal:2',
         'signal_duration' => 'integer',
+        'signal_market_type' => 'string',
+        'signal_pairs' => 'array',
+        'signal_leverage' => 'decimal:2',
+        'signal_expiry_duration' => 'string',
+        'signal_features' => 'array',
+        'signal_delivery' => 'string',
+        'max_daily_signals' => 'integer',
         'hashrate' => 'string',
         'equipment' => 'string',
         'downtime' => 'string',
@@ -82,6 +99,7 @@ class Plan extends Model
         'reward_frequency' => 'string',
         'lock_period' => 'integer',
         'staking_duration' => 'integer',
+        'staking_currency' => 'string',
         'features' => 'array',
         'terms_conditions' => 'array',
     ];
@@ -164,6 +182,13 @@ class Plan extends Model
             'daily_signals' => $this->daily_signals,
             'success_rate' => $this->success_rate,
             'signal_duration' => $this->signal_duration,
+            'signal_market_type' => $this->signal_market_type,
+            'signal_pairs' => $this->signal_pairs,
+            'signal_leverage' => $this->signal_leverage,
+            'signal_expiry_duration' => $this->signal_expiry_duration,
+            'signal_features' => $this->signal_features,
+            'signal_delivery' => $this->signal_delivery,
+            'max_daily_signals' => $this->max_daily_signals,
         ];
     }
 
@@ -200,6 +225,7 @@ class Plan extends Model
             'reward_frequency' => $this->reward_frequency,
             'lock_period' => $this->lock_period,
             'staking_duration' => $this->staking_duration,
+            'staking_currency' => $this->staking_currency,
         ];
     }
 
@@ -312,5 +338,97 @@ class Plan extends Model
         }
         
         return round((($this->original_price - $this->price) / $this->original_price) * 100);
+    }
+
+    /**
+     * Get signal market types
+     */
+    public static function getSignalMarketTypes()
+    {
+        return [
+            'crypto' => 'Cryptocurrency',
+            'forex' => 'Forex',
+            'stock' => 'Stocks',
+            'commodities' => 'Commodities',
+            'indices' => 'Indices',
+        ];
+    }
+
+    /**
+     * Get signal expiry durations
+     */
+    public static function getSignalExpiryDurations()
+    {
+        return [
+            '1h' => '1 Hour',
+            '4h' => '4 Hours',
+            '1d' => '1 Day',
+            '1w' => '1 Week',
+            '1m' => '1 Month',
+        ];
+    }
+
+    /**
+     * Get signal delivery methods
+     */
+    public static function getSignalDeliveryMethods()
+    {
+        return [
+            'email' => 'Email',
+            'telegram' => 'Telegram',
+            'sms' => 'SMS',
+            'push' => 'Push Notification',
+            'webhook' => 'Webhook',
+        ];
+    }
+
+    /**
+     * Get signal pairs as array
+     */
+    public function getSignalPairsArrayAttribute()
+    {
+        return $this->signal_pairs ?? [];
+    }
+
+    /**
+     * Get signal features as array
+     */
+    public function getSignalFeaturesArrayAttribute()
+    {
+        return $this->signal_features ?? [];
+    }
+
+    /**
+     * Get formatted signal pairs
+     */
+    public function getFormattedSignalPairsAttribute()
+    {
+        $pairs = $this->signal_pairs_array;
+        return !empty($pairs) ? implode(', ', $pairs) : 'N/A';
+    }
+
+    /**
+     * Get formatted signal features
+     */
+    public function getFormattedSignalFeaturesAttribute()
+    {
+        $features = $this->signal_features_array;
+        return !empty($features) ? implode(', ', $features) : 'N/A';
+    }
+
+    /**
+     * Relationship with TradingSignals
+     */
+    public function tradingSignals()
+    {
+        return $this->hasMany(TradingSignal::class);
+    }
+
+    /**
+     * Get active trading signals for this plan
+     */
+    public function activeTradingSignals()
+    {
+        return $this->tradingSignals()->active();
     }
 }
