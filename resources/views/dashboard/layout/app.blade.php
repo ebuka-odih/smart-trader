@@ -64,7 +64,7 @@
             </div>
 
             <!-- Navigation Menu -->
-            <nav class="flex-1 p-4 space-y-4">
+            <nav class="flex-1 p-4 space-y-4 overflow-y-auto">
                 <!-- Dashboard -->
                 <div>
                     <a href="{{ route('user.dashboard') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.dashboard') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
@@ -199,6 +199,8 @@
                     </div>
                 </div>
             </nav>
+            <!-- Bottom padding to ensure last items are visible -->
+            <div class="pb-4"></div>
 
             <!-- Logout -->
             <div class="p-4 border-t border-gray-700">

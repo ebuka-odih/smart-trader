@@ -188,7 +188,7 @@
     </div>
 
         <!-- Second Row: Trades Tabs -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700">
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-32 pb-8">
                 <!-- Tabs Header -->
                 <div class="border-b border-gray-700">
                     <nav class="flex space-x-8 px-6" aria-label="Tabs">
@@ -342,14 +342,14 @@
             </a>
 
             <!-- Deposit -->
-            <button id="mobileDepositBtn" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-green-400 transition-colors">
+            <a href="{{ route('user.deposit') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-green-400 transition-colors">
                 <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
                     <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
                 <span class="text-xs font-medium">Deposit</span>
-            </button>
+            </a>
 
             <!-- Plans -->
             <a href="{{ route('user.plans.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-purple-400 transition-colors">
@@ -373,113 +373,7 @@
         </div>
     </div>
 
-    <!-- Deposit Modal -->
-    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
-                <!-- Modal Header -->
-                <div class="flex items-center justify-between p-6 border-b border-gray-700">
-                    <h3 class="text-lg font-semibold text-white">New Deposit</h3>
-                    <button id="closeDepositModal" class="text-gray-400 hover:text-white transition-colors">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
 
-                <!-- Modal Body -->
-                <form id="depositForm" action="{{ route('user.payment') }}" method="POST" enctype="multipart/form-data" class="p-6">
-                    @csrf
-                    
-                    <!-- Amount Input -->
-                    <div class="mb-6">
-                        <label for="amount" class="block text-sm font-medium text-gray-300 mb-2">Amount</label>
-                        <div class="relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span class="text-gray-400 sm:text-sm">$</span>
-                            </div>
-                            <input type="number" 
-                                   id="amount" 
-                                   name="amount" 
-                                   step="0.01" 
-                                   min="0" 
-                                   required
-                                   value="{{ old('amount') }}"
-                                   class="block w-full pl-7 pr-12 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                   placeholder="0.00">
-                            <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                <span class="text-gray-400 sm:text-sm">USD</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Wallet Selection -->
-                    <div class="mb-6">
-                        <label for="wallet_type" class="block text-sm font-medium text-gray-300 mb-2">Select Wallet</label>
-                        <select id="wallet_type" 
-                                name="wallet_type" 
-                                required
-                                class="block w-full py-3 px-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Choose a wallet</option>
-                            <option value="trading" {{ old('wallet_type') == 'trading' ? 'selected' : '' }}>Trading Balance</option>
-                            <option value="holding" {{ old('wallet_type') == 'holding' ? 'selected' : '' }}>Holding Balance</option>
-                            <option value="staking" {{ old('wallet_type') == 'staking' ? 'selected' : '' }}>Staking Balance</option>
-                        </select>
-                    </div>
-
-                    <!-- Payment Method -->
-                    <div class="mb-6">
-                        <label for="payment_method_id" class="block text-sm font-medium text-gray-300 mb-2">Payment Method</label>
-                        <select id="payment_method_id" 
-                                name="payment_method_id" 
-                                required
-                                class="block w-full py-3 px-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                            <option value="">Select payment method</option>
-                            @if(isset($wallets))
-                                @foreach($wallets as $wallet)
-                                    <option value="{{ $wallet->id }}" {{ old('payment_method_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->wallet }}</option>
-                                @endforeach
-                            @endif
-                        </select>
-                    </div>
-
-                    <!-- Payment Proof -->
-                    <div class="mb-6">
-                        <label for="proof" class="block text-sm font-medium text-gray-300 mb-2">Payment Proof</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
-                            <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                </svg>
-                                <div class="flex text-sm text-gray-400">
-                                    <label for="proof" class="relative cursor-pointer bg-gray-700 rounded-md font-medium text-blue-400 hover:text-blue-300 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
-                                        <span>Upload a file</span>
-                                        <input id="proof" name="proof" type="file" class="sr-only" required>
-                                    </label>
-                                    <p class="pl-1">or drag and drop</p>
-                                </div>
-                                <p class="text-xs text-gray-500">PNG, JPG, PDF up to 10MB</p>
-                            </div>
-                        </div>
-                        <div id="filePreview" class="mt-2 text-sm text-gray-400 hidden"></div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="flex space-x-3">
-                        <button type="button" 
-                                id="cancelDepositBtn"
-                                class="flex-1 px-4 py-3 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
-                            Cancel
-                        </button>
-                        <button type="submit" 
-                                class="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
-                            Submit Deposit
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
         </div>
     </div>
 
@@ -523,81 +417,7 @@
                 openTradesContent.classList.remove('active');
             });
 
-            // Deposit Modal functionality
-            const depositModal = document.getElementById('depositModal');
-            const mobileDepositBtn = document.getElementById('mobileDepositBtn');
-            const closeDepositModal = document.getElementById('closeDepositModal');
-            const cancelDepositBtn = document.getElementById('cancelDepositBtn');
-            const depositForm = document.getElementById('depositForm');
-            const fileInput = document.getElementById('proof');
-            const filePreview = document.getElementById('filePreview');
 
-            // Open deposit modal
-            if (mobileDepositBtn) {
-                mobileDepositBtn.addEventListener('click', () => {
-                    depositModal.classList.remove('hidden');
-                    document.body.style.overflow = 'hidden';
-                });
-            }
-
-            // Close deposit modal functions
-            function closeDepositModalFunc() {
-                depositModal.classList.add('hidden');
-                document.body.style.overflow = 'auto';
-                depositForm.reset();
-                filePreview.classList.add('hidden');
-            }
-
-            if (closeDepositModal) {
-                closeDepositModal.addEventListener('click', closeDepositModalFunc);
-            }
-            if (cancelDepositBtn) {
-                cancelDepositBtn.addEventListener('click', closeDepositModalFunc);
-            }
-
-            // Close modal when clicking outside
-            if (depositModal) {
-                depositModal.addEventListener('click', (e) => {
-                    if (e.target === depositModal) {
-                        closeDepositModalFunc();
-                    }
-                });
-            }
-
-            // File upload preview
-            if (fileInput) {
-                fileInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        filePreview.textContent = `Selected: ${file.name}`;
-                        filePreview.classList.remove('hidden');
-                    } else {
-                        filePreview.classList.add('hidden');
-                    }
-                });
-            }
-
-            // Form submission
-            if (depositForm) {
-                depositForm.addEventListener('submit', (e) => {
-                    const amount = document.getElementById('amount').value;
-                    const walletType = document.getElementById('wallet_type').value;
-                    const paymentMethod = document.getElementById('payment_method_id').value;
-                    const proof = fileInput ? fileInput.files[0] : null;
-
-                    if (!amount || !walletType || !paymentMethod || !proof) {
-                        e.preventDefault();
-                        alert('Please fill in all required fields');
-                        return;
-                    }
-
-                    // Show loading state
-                    const submitBtn = depositForm.querySelector('button[type="submit"]');
-                    const originalText = submitBtn.textContent;
-                    submitBtn.textContent = 'Submitting...';
-                    submitBtn.disabled = true;
-                });
-            }
         });
     </script>
 @endsection
