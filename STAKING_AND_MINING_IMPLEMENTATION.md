@@ -107,10 +107,10 @@ This document tracks the implementation of staking and mining plans for the Cryp
 - [x] Implement `withdraw()` - Withdraw mined cryptocurrency
 - [x] Implement `statistics()` - Mining statistics
 
-#### 2. User Mining Views ✅
+#### 2. User Mining Views 🔄
 - [x] Create `resources/views/dashboard/mining/` directory
 - [x] Create `index.blade.php` - Mining plans listing and user subscriptions
-- [ ] Create `create.blade.php` - Mining subscription form
+- [x] Create `create.blade.php` - Mining subscription form
 - [ ] Create `show.blade.php` - Mining subscription details
 - [ ] Create `statistics.blade.php` - Mining statistics
 
