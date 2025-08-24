@@ -6,12 +6,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="mb-8">
-                <div class="flex items-center justify-between">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
                     <div>
                         <h1 class="text-2xl font-bold text-white">Subscribe to Signal Plan</h1>
                         <p class="text-gray-400 mt-1">Choose a signal plan that fits your trading needs</p>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="flex justify-center sm:justify-end">
                         <a href="{{ route('user.signal-subscriptions.index') }}" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors text-center">
                             Back to Subscriptions
                         </a>

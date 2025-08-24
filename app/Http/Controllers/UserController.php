@@ -18,7 +18,11 @@ class UserController extends Controller
         $user = Auth::user();
         $trades = Trade::whereUserId(auth()->id())->latest()->get();
         $closed_trades = Trade::whereUserId(auth()->id())->orderBy('updated_at', 'desc')->get();
-        return view('dashboard.index', compact('pairs', 'user', 'trades', 'closed_trades'));
+        
+        // Get payment methods for deposit modal
+        $wallets = \App\Models\PaymentMethod::all();
+        
+        return view('dashboard.index', compact('pairs', 'user', 'trades', 'closed_trades', 'wallets'));
     }
 
     public function profile()

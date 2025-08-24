@@ -46,7 +46,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     // Plan routes
     Route::get('plan/trading', [SubscriptionController::class, 'trading'])->name('plan.trading');
     Route::get('plan/signal', [SubscriptionController::class, 'signal'])->name('plan.signal');
-    Route::get('plan/mining', [SubscriptionController::class, 'mining'])->name('plan.mining');
+    // Route::get('plan/mining', [SubscriptionController::class, 'mining'])->name('plan.mining'); // Removed - using new mining module
     // Route::get('plan/staking', [SubscriptionController::class, 'staking'])->name('plan.staking'); // Removed - using new staking module
 
     // User Plan Management Routes

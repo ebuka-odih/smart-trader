@@ -84,16 +84,16 @@ class DepositController extends Controller
                 \Log::error('Failed to send deposit emails: ' . $e->getMessage());
             }
 
-            return redirect()->back()->with('success', 'Deposit submitted successfully! Awaiting approval.');
+            return redirect()->route('user.deposit')->with('success', 'Deposit submitted successfully! Awaiting approval.');
 
         } catch (\Illuminate\Validation\ValidationException $e) {
-            return redirect()->back()
+            return redirect()->route('user.deposit')
                            ->withErrors($e->validator)
                            ->withInput()
                            ->with('error', 'Please correct the errors below.');
         } catch (\Exception $e) {
             \Log::error('Deposit creation failed: ' . $e->getMessage());
-            return redirect()->back()
+            return redirect()->route('user.deposit')
                            ->with('error', 'An error occurred while processing your deposit. Please try again.')
                            ->withInput();
         }

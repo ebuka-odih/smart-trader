@@ -4,22 +4,36 @@
 <div class="min-h-screen bg-gray-900">
     <div class="py-6">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Header -->
             <div class="mb-8">
-                <div class="flex justify-between items-center">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
                     <div>
                         <h1 class="text-3xl font-bold text-white mb-2">Mining Dashboard</h1>
-                        <p class="text-gray-400">Start mining cryptocurrency with our professional mining solutions</p>
+                        <p class="text-gray-400">Manage your cryptocurrency mining subscriptions</p>
                     </div>
-                    <div class="flex space-x-3">
-                        <a href="{{ route('user.mining.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                        <a href="{{ route('user.mining.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
                             Start Mining
                         </a>
-                        <a href="{{ route('user.mining.statistics') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg transition-colors">
-                            Statistics
+                        <a href="{{ route('user.mining.statistics') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                            View Statistics
                         </a>
                     </div>
                 </div>
             </div>
+
+            <!-- Success/Error Messages -->
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-green-900/20 border border-green-500/30 rounded-lg">
+                    <div class="text-green-400">{{ session('success') }}</div>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="mb-6 p-4 bg-red-900/20 border border-red-500/30 rounded-lg">
+                    <div class="text-red-400">{{ session('error') }}</div>
+                </div>
+            @endif
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Content -->
@@ -30,98 +44,41 @@
                             <h2 class="text-lg font-semibold text-white">Available Mining Plans</h2>
                         </div>
                         <div class="p-6">
-                            @if($miningPlans->count() > 0)
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    @foreach($miningPlans as $plan)
-                                        <div class="bg-gray-700 rounded-lg p-6 border border-gray-600 hover:border-blue-500 transition-colors">
-                                            <div class="flex justify-between items-start mb-4">
-                                                <div>
-                                                    <h3 class="text-lg font-semibold text-white">{{ $plan->name }}</h3>
-                                                    <p class="text-gray-400 text-sm">{{ $plan->description }}</p>
-                                                </div>
-                                                <div class="text-right">
-                                                    <div class="text-2xl font-bold text-white">${{ number_format($plan->price, 2) }}</div>
-                                                    @if($plan->original_price && $plan->original_price > $plan->price)
-                                                        <div class="text-sm text-gray-400 line-through">${{ number_format($plan->original_price, 2) }}</div>
-                                                    @endif
-                                                </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                @foreach($miningPlans as $plan)
+                                    <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <h3 class="text-white font-semibold">{{ $plan->name }}</h3>
+                                            <span class="text-blue-400 font-bold">${{ number_format($plan->price, 2) }}</span>
+                                        </div>
+                                        <div class="space-y-2 text-sm text-gray-300">
+                                            <div class="flex justify-between">
+                                                <span>Hashrate:</span>
+                                                <span class="text-blue-400 font-semibold">{{ $plan->hashrate }}</span>
                                             </div>
-                                            
-                                            <div class="space-y-3 mb-6">
-                                                @if($plan->hashrate)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                                    </svg>
-                                                    <span class="text-gray-300 text-sm">{{ $plan->hashrate }}</span>
-                                                </div>
-                                                @endif
-                                                
-                                                @if($plan->equipment)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                                    </svg>
-                                                    <span class="text-gray-300 text-sm">{{ $plan->equipment }}</span>
-                                                </div>
-                                                @endif
-                                                
-                                                @if($plan->downtime)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    <span class="text-gray-300 text-sm">{{ $plan->downtime }}</span>
-                                                </div>
-                                                @endif
-                                                
-                                                @if($plan->electricity_costs)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                                                    </svg>
-                                                    <span class="text-gray-300 text-sm">{{ $plan->electricity_costs }}</span>
-                                                </div>
-                                                @endif
-                                                
-                                                @if($plan->mining_duration)
-                                                <div class="flex items-center space-x-2">
-                                                    <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                                    </svg>
-                                                    <span class="text-gray-300 text-sm">{{ $plan->mining_duration }} days</span>
-                                                </div>
-                                                @endif
+                                            <div class="flex justify-between">
+                                                <span>Equipment:</span>
+                                                <span>{{ $plan->equipment }}</span>
                                             </div>
-                                            
-                                            <div class="flex space-x-2">
-                                                <a href="{{ route('user.mining.create') }}?plan={{ $plan->id }}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm font-medium text-center transition-colors">
-                                                    Start Mining
-                                                </a>
-                                                @if($plan->features)
-                                                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
-                                                        Details
-                                                    </button>
-                                                @endif
+                                            <div class="flex justify-between">
+                                                <span>Uptime:</span>
+                                                <span>{{ $plan->downtime }}</span>
+                                            </div>
+                                            <div class="flex justify-between">
+                                                <span>Duration:</span>
+                                                <span>{{ $plan->mining_duration }} days</span>
                                             </div>
                                         </div>
-                                    @endforeach
-                                </div>
-                            @else
-                                <div class="text-center py-8">
-                                    <div class="text-gray-400 mb-4">
-                                        <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                        </svg>
+                                        <a href="{{ route('user.mining.create', ['plan' => $plan->id]) }}" class="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded text-center text-sm font-medium transition-colors block">
+                                            Start Mining
+                                        </a>
                                     </div>
-                                    <h3 class="text-lg font-medium text-white mb-2">No Mining Plans Available</h3>
-                                    <p class="text-gray-400">Check back later for new mining opportunities.</p>
-                                </div>
-                            @endif
+                                @endforeach
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Active Mining Subscriptions -->
+                    <!-- Active Mining -->
                     <div class="bg-gray-800 rounded-xl overflow-hidden shadow">
                         <div class="px-6 py-4 border-b border-gray-700">
                             <h2 class="text-lg font-semibold text-white">Active Mining</h2>
@@ -138,44 +95,34 @@
                                         </div>
                                         <div class="text-gray-400 text-sm space-y-1">
                                             <div>Invested: {{ $mining->formatted_amount_invested }}</div>
-                                            <div>Mined: {{ $mining->formatted_total_mined }}</div>
-                                            <div>Hashrate: {{ $mining->formatted_hashrate }}</div>
-                                            @if($mining->end_date)
-                                                <div>Ends: {{ $mining->end_date->format('M d, Y') }}</div>
-                                            @endif
+                                            <div>Total Mined: {{ $mining->formatted_total_mined }}</div>
+                                            <div>Progress: {{ $mining->mining_progress }}%</div>
+                                            <div>Started: {{ $mining->start_date->format('M d, Y') }}</div>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col space-y-2 ml-4">
-                                        <a href="{{ route('user.mining.show', $mining) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
-                                            View
+                                    <div class="flex flex-col space-y-2">
+                                        <a href="{{ route('user.mining.show', $mining) }}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
+                                            Details
                                         </a>
-                                        <form method="POST" action="{{ route('user.mining.withdraw', $mining) }}" class="inline">
-                                            @csrf
-                                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
-                                                Withdraw
-                                            </button>
-                                        </form>
+                                        @if($mining->canBeCancelled())
+                                            <form method="POST" action="{{ route('user.mining.cancel', $mining) }}" class="inline">
+                                                @csrf
+                                                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors w-full">
+                                                    Cancel
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </div>
                             @empty
                                 <div class="p-6 text-gray-400 text-center">
-                                    <div class="mb-4">
-                                        <svg class="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                        </svg>
-                                    </div>
-                                    <p>No active mining subscriptions.</p>
+                                    <p>No active mining subscriptions yet.</p>
                                     <a href="{{ route('user.mining.create') }}" class="text-blue-400 hover:text-blue-300 mt-2 inline-block">
-                                        Start your first mining
+                                        Start your first mining subscription
                                     </a>
                                 </div>
                             @endforelse
                         </div>
-                        @if($activeMinings->hasPages())
-                            <div class="px-6 py-4 border-t border-gray-700">
-                                {{ $activeMinings->links() }}
-                            </div>
-                        @endif
                     </div>
 
                     <!-- Completed Mining -->
@@ -209,11 +156,6 @@
                                 </div>
                             @endforelse
                         </div>
-                        @if($completedMinings->hasPages())
-                            <div class="px-6 py-4 border-t border-gray-700">
-                                {{ $completedMinings->links() }}
-                            </div>
-                        @endif
                     </div>
                 </div>
 
@@ -277,12 +219,54 @@
                             <a href="#" class="flex items-center justify-between p-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-colors">
                                 <div>
                                     <div class="text-white font-medium">Hashflare</div>
-                                    <div class="text-gray-400 text-sm">Cloud Mining Solutions</div>
+                                    <div class="text-gray-400 text-sm">Mining Contracts</div>
                                 </div>
                                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                                 </svg>
                             </a>
+                        </div>
+                    </div>
+
+                    <!-- Mining Tips -->
+                    <div class="bg-gray-800 rounded-xl overflow-hidden shadow">
+                        <div class="px-6 py-4 border-b border-gray-700">
+                            <h2 class="text-lg font-semibold text-white">Mining Tips</h2>
+                        </div>
+                        <div class="p-6 space-y-3">
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium">Diversify Your Mining</h4>
+                                    <p class="text-gray-400 text-sm">Spread your investment across different cryptocurrencies</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium">Monitor Performance</h4>
+                                    <p class="text-gray-400 text-sm">Regularly check your mining progress and profitability</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-white font-medium">Consider Electricity Costs</h4>
+                                    <p class="text-gray-400 text-sm">Factor in power consumption when calculating profitability</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -24,18 +24,18 @@
     @endif
 
     <!-- Page Header -->
-    <div class="flex items-center justify-between mb-8">
-                            <div>
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 space-y-4 sm:space-y-0">
+        <div>
             <h1 class="text-2xl font-bold text-white">Fund Account</h1>
             <p class="text-gray-400 mt-1">Manage your deposits and account funding</p>
         </div>
-        <button id="newDepositBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2">
+        <button id="newDepositBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center sm:justify-start space-x-2 w-full sm:w-auto">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
             </svg>
             <span>New Deposit</span>
         </button>
-                            </div>
+    </div>
 
     <!-- Balance Overview -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
