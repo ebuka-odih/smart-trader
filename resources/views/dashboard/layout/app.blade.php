@@ -237,40 +237,38 @@
             <!-- Page Content -->
             <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-900">
                 <div class="container mx-auto px-6 py-8">
-  @yield('content')
+                    @if(session('success'))
+                        <div id="alert-success" class="mb-4 rounded-md border border-green-500 bg-green-600 text-white px-4 py-3">
+                            <div class="font-medium">{{ session('success') }}</div>
+                        </div>
+                        <script>console.log('[Flash] success:', @json(session('success')));</script>
+                    @endif
+
+                    @if(session('error'))
+                        <div id="alert-error" class="mb-4 rounded-md border border-red-500 bg-red-600 text-white px-4 py-3">
+                            <div class="font-medium">{{ session('error') }}</div>
+                        </div>
+                        <script>console.log('[Flash] error:', @json(session('error')));</script>
+                    @endif
+
+                    @if ($errors->any())
+                        <div id="alert-validation" class="mb-4 rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
+                            <div class="font-semibold mb-1">Please fix the following:</div>
+                            <ul class="list-disc list-inside space-y-1">
+                                @foreach ($errors->all() as $message)
+                                    <li>{{ $message }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                        <script>console.log('[Flash] validation errors:', @json($errors->all()));</script>
+                    @endif
+
+                    @yield('content')
                 </div>
             </main>
         </div>
     </div>
 
-    
-    @if(session('success'))
-    <div id="toast-success" class="fixed top-4 right-4 z-50 bg-green-900 border border-green-700 text-green-100 px-4 py-3 rounded-lg shadow-lg flex items-start space-x-3">
-        <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <div class="text-sm">{{ session('success') }}</div>
-        <button onclick="document.getElementById('toast-success').remove()" class="ml-3 text-green-200 hover:text-white">×</button>
-    </div>
-    <script>
-        setTimeout(function(){ var el = document.getElementById('toast-success'); if(el){ el.remove(); } }, 4000);
-    </script>
-    @endif
-
-    @if(session('error'))
-    <div id="toast-error" class="fixed top-4 right-4 z-50 bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded-lg shadow-lg flex items-start space-x-3">
-        <svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-        <div class="text-sm">{{ session('error') }}</div>
-        <button onclick="document.getElementById('toast-error').remove()" class="ml-3 text-red-200 hover:text-white">×</button>
-    </div>
-    <script>
-        setTimeout(function(){ var el = document.getElementById('toast-error'); if(el){ el.remove(); } }, 4000);
-    </script>
-    @endif
-
-    
 
 @livewireScripts
     @stack('scripts')

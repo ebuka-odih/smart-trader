@@ -2,6 +2,30 @@
 
 @section('content')
 <div class="space-y-6">
+
+    @if(session('success'))
+        <div class="rounded-md border border-green-500 bg-green-600 text-white px-4 py-3">
+            <div class="font-medium">{{ session('success') }}</div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="rounded-md border border-red-500 bg-red-600 text-white px-4 py-3">
+            <div class="font-medium">{{ session('error') }}</div>
+        </div>
+    @endif
+
+    @if ($errors->any())
+        <div class="rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
+            <div class="font-semibold mb-1">Please fix the following:</div>
+            <ul class="list-disc list-inside space-y-1">
+                @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <!-- Page Header -->
     <div class="flex items-center justify-between">
         <div>
@@ -13,18 +37,6 @@
             <div class="text-xl font-bold text-white">${{ number_format(auth()->user()->balance, 2) }}</div>
         </div>
     </div>
-
-    <!-- Success/Error Messages -->
-    @if(session()->has('success'))
-        <div class="bg-green-900 border border-green-700 text-green-100 px-4 py-3 rounded-lg">
-            {{ session()->get('success') }}
-        </div>
-    @endif
-    @if(session()->has('error'))
-        <div class="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded-lg">
-            {{ session()->get('error') }}
-        </div>
-    @endif
 
     <!-- Available Traders Section -->
     <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
@@ -89,7 +101,7 @@
                     </div>
 
                     <!-- Copy Trade Button -->
-                    <form action="{{ route('user.copyTrading.store') }}" method="POST" class="pt-2">
+                    <form action="{{ route('user.copyTrading.store') }}" method="POST" class="pt-2 copy-trade-form" data-trader="{{ $trader->id }}">
                         @csrf
                         <input type="hidden" name="trader_id" value="{{ $trader->id }}">
                         <input type="hidden" name="amount" value="{{ $trader->amount }}">
@@ -174,4 +186,27 @@
         @endif
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Log any flash messages present in DOM
+        const successEl = document.getElementById('alert-success');
+        const errorEl = document.getElementById('alert-error');
+        const validationEl = document.getElementById('alert-validation');
+        if (successEl) console.log('[CopyTrading] Success message:', successEl.textContent.trim());
+        if (errorEl) console.log('[CopyTrading] Error message:', errorEl.textContent.trim());
+        if (validationEl) console.log('[CopyTrading] Validation errors present');
+
+        // Attach submit logging to forms
+        document.querySelectorAll('.copy-trade-form').forEach(function(form){
+            form.addEventListener('submit', function(){
+                const traderId = form.getAttribute('data-trader');
+                const amount = form.querySelector('input[name="amount"]').value;
+                console.log('[CopyTrading] Submitting copy trade:', { traderId, amount, action: form.action, method: form.method });
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
