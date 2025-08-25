@@ -221,11 +221,7 @@
                     </div>
                     
                     <div class="flex items-center space-x-4">
-                        <!-- Balance Display -->
-                        <div class="bg-gray-700 rounded-lg px-4 py-2">
-                            <div class="text-sm text-gray-400">Balance</div>
-                            <div class="text-white font-semibold">${{ number_format(auth()->user()->balance ?? 0, 2) }}</div>
-                        </div>
+                    
                         
                         <!-- Notifications -->
                         <button class="relative p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg">
