@@ -103,6 +103,8 @@ Route::get('mining/statistics', [UserMiningController::class, 'statistics'])->na
 
     Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
     Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');
+    Route::get('copy-trading/{id}', [CopyTradingController::class, 'detail'])->name('copyTrading.detail');
+    Route::post('copy-trading/{id}/stop', [CopyTradingController::class, 'stop'])->name('copyTrading.stop');
 
 });
 

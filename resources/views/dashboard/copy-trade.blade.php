@@ -1,158 +1,177 @@
 @extends('dashboard.layout.app')
+
 @section('content')
-     <style>
-    .payment-grid {
-        display: grid;
-        grid-template-columns: 2fr 2fr 2fr 2fr ; /* Added one more 2fr for the "Ending" column */
-        grid-gap: 10px;
-        width: 100%;
-    }
-
-    .payment-grid-header, .payment-grid-row {
-        display: contents;
-    }
-
-    .payment-grid div {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        text-align: center; /* Center text in each grid cell */
-    }
-
-    .payment-grid-header div {
-        font-weight: bold;
-        text-align: center; /* Ensure header text is centered */
-    }
-
-    .payment-grid-row div {
-        padding: 10px;
-    }
-
-    .payment-grid-row:last-child div {
-        border-bottom: none;
-    }
-
-    .badge {
-        padding: 0.3rem 0.6rem; /* Adjust badge padding for smaller display */
-        font-size: 0.875rem;
-    }
-</style>
-     <style>
-          .icon {
-              color: #3030da;
-          }
-          li {
-              margin-top: 10px
-          }
-      </style>
-
-
-    <div class="container">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><i style="color: #6c6cf3; font-size: 30px" class="icon ion-md-cash"></i> Main Balance</h5>
-                    <div>
-                        <h5>
-                            <small>USD</small><strong> {{ number_format($user->balance, 2) }}</strong>
-                        </h5>
-
-                         <h5>
-                             <small>BTC</small><strong id="btc-balance"> {{ $user->balance }}</strong>
-                         </h5>
-                    </div>
-
-                </div>
-            </div>
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-white">Copy Trading</h1>
+            <p class="text-gray-400 mt-1">Follow successful traders and copy their strategies</p>
         </div>
-        <h2 class="text-center m-3">Copy Trading</h2>
-        <div class="container">
-            @if(session()->has('success'))
-                <div class="alert alert-success">
-                    {{ session()->get('success') }}
-                </div>
-            @endif
-            @if(session()->has('error'))
-                <div class="alert alert-danger">
-                    {{ session()->get('error') }}
-                </div>
-            @endif
-        </div>
-        <div class="row">
-
-
-            @foreach($traders as $item)
-                 <div  class="col-md-4">
-                  <div style="border: 1px solid green" class="landing-feature-item">
-                      <div class="d-flex flex-column align-items-center text-center">
-                        <img style="border-radius: 50%; height: 70px; width: 70px" src="{{ asset($item->avatar) }}" alt="">
-                        <h3 class="mt-0"><strong>{{ $item->name }}</strong></h3>
-                    </div>
-
-
-                      <hr>
-
-                    <div class="cad">
-                        <div class="text-center m-3">
-                            <h4><strong class="text-primary text-center">${{ $item->amount }}</strong>/<small>Min</small></h4>
-                        </div>
-                        <div  class="card-body">
-                         <ul >
-                            <li><i class="icon ion-ios-checkmark-circle"></i> Win Rate: <span class="badge badge-sm bg-secondary text-white">{{ $item->win_rate }}%</span></li>
-                            <li><i class="icon ion-ios-checkmark-circle"></i> Profit Shared: <span class="badge badge-sm bg-secondary text-white">${{ $item->profit_share }}</span></li>
-                            <li><i class="icon ion-ios-checkmark-circle"></i> Win: <span class="badge badge-sm bg-success text-white">{{ $item->win }}</span></li>
-                            <li><i class="icon ion-ios-checkmark-circle"></i> Loss: <span class="badge bg-danger text-white">{{ $item->loss }}</span></li>
-                          </ul>
-                            <form  action="{{ route('user.copyTrading.store') }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="trader_id" value="{{ $item->id }}">
-                                <input type="hidden" name="amount" value="{{ $item->amount }}">
-
-                                <button class="btn btn-primary btn-block submit-with mt-3" type="submit">Copy Trade</button>
-                            </form>
-                        </div>
-                    </div>
-                  </div>
-                </div>
-
-            @endforeach
-
-        </div>
-
-        <div class="row">
-             <div class="col-md-12 py-3">
-                <div class="card my-2">
-                    <div class="card-header">
-                        <h4 class="mb-0">Copied Trades</h4>
-                    </div>
-                    <div class="card-body px-3 py-3">
-
-                         <div class="payment-grid">
-                                <div class="payment-grid-header">
-                                    <div>Date</div>
-                                    <div>Amount</div>
-                                    <div>Trader</div>
-                                    <div>Status</div>
-                                </div>
-
-                                @foreach($copiedTrades as $index => $item)
-                                    <div class="payment-grid-row">
-                                        <div>{{ date('d M, Y', strtotime($item->created_at)) }}</div>
-                                        <div>${{ number_format($item->amount, 2) ?? '' }}</div>
-                                        <div>{{ $item->copy_trader->name ?? '' }}</div>
-                                        <div>
-                                            @if($item->status == 0)
-                                                <span class="badge bg-warning text-white">Pending</span>
-                                            @else
-                                                <span class="badge bg-success text-white">Active</span>
-                                            @endif
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                    </div>
-                </div>
-            </div>
+        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
+            <div class="text-sm text-gray-400">Available Balance</div>
+            <div class="text-xl font-bold text-white">${{ number_format(auth()->user()->balance, 2) }}</div>
         </div>
     </div>
 
+    <!-- Success/Error Messages -->
+    @if(session()->has('success'))
+        <div class="bg-green-900 border border-green-700 text-green-100 px-4 py-3 rounded-lg">
+            {{ session()->get('success') }}
+        </div>
+    @endif
+    @if(session()->has('error'))
+        <div class="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded-lg">
+            {{ session()->get('error') }}
+        </div>
+    @endif
+
+    <!-- Available Traders Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-white">Available Traders</h2>
+            <div class="text-sm text-gray-400">{{ count($traders) }} traders available</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($traders as $trader)
+            <div class="bg-gray-700 rounded-lg border border-gray-600 hover:border-blue-500 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20">
+                <!-- Trader Header -->
+                <div class="p-6 border-b border-gray-600">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <img src="{{ asset($trader->avatar) }}" alt="{{ $trader->name }}" 
+                                 class="w-16 h-16 rounded-full object-cover border-2 border-gray-600">
+                            <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-700"></div>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-white">{{ $trader->name }}</h3>
+                            <p class="text-sm text-gray-400">Professional Trader</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trader Stats -->
+                <div class="p-6 space-y-4">
+                    <!-- Win Rate -->
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-400">Win Rate</span>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-16 bg-gray-600 rounded-full h-2">
+                                <div class="bg-green-500 h-2 rounded-full" style="width: {{ $trader->win_rate }}%"></div>
+                            </div>
+                            <span class="text-sm font-semibold text-white">{{ $trader->win_rate }}%</span>
+                        </div>
+                    </div>
+
+                    <!-- Performance Stats -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-3 bg-gray-600 rounded-lg">
+                            <div class="text-lg font-bold text-green-400">{{ $trader->win }}</div>
+                            <div class="text-xs text-gray-400">Wins</div>
+                        </div>
+                        <div class="text-center p-3 bg-gray-600 rounded-lg">
+                            <div class="text-lg font-bold text-red-400">{{ $trader->loss }}</div>
+                            <div class="text-xs text-gray-400">Losses</div>
+                        </div>
+                    </div>
+
+                    <!-- Profit Share -->
+                    <div class="flex items-center justify-between p-3 bg-blue-900/20 border border-blue-700/30 rounded-lg">
+                        <span class="text-sm text-gray-400">Profit Share</span>
+                        <span class="text-sm font-semibold text-blue-400">${{ number_format($trader->profit_share, 2) }}</span>
+                    </div>
+
+                    <!-- Minimum Amount -->
+                    <div class="text-center p-3 bg-gray-600 rounded-lg">
+                        <div class="text-sm text-gray-400">Minimum Investment</div>
+                        <div class="text-lg font-bold text-white">${{ number_format($trader->amount, 2) }}</div>
+                    </div>
+
+                    <!-- Copy Trade Button -->
+                    <form action="{{ route('user.copyTrading.store') }}" method="POST" class="pt-2">
+                        @csrf
+                        <input type="hidden" name="trader_id" value="{{ $trader->id }}">
+                        <input type="hidden" name="amount" value="{{ $trader->amount }}">
+                        
+                        <button type="submit" 
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            <span>Copy Trade</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- My Copied Trades Section -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-white">My Copied Trades</h2>
+            <div class="text-sm text-gray-400">{{ count($copiedTrades) }} active trades</div>
+        </div>
+
+        @if(count($copiedTrades) > 0)
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-700">
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Trader</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Amount</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Date Started</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Status</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($copiedTrades as $trade)
+                    <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
+                        <td class="py-4 px-4">
+                            <div class="flex items-center space-x-3">
+                                <img src="{{ asset($trade->copy_trader->avatar ?? '') }}" alt="" 
+                                     class="w-8 h-8 rounded-full object-cover">
+                                <span class="text-white">{{ $trade->copy_trader->name ?? 'Unknown' }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4 text-white">${{ number_format($trade->amount, 2) }}</td>
+                        <td class="py-4 px-4 text-gray-400">{{ date('M d, Y', strtotime($trade->created_at)) }}</td>
+                        <td class="py-4 px-4">
+                            @if($trade->status == 0)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-900 text-yellow-200">
+                                    Pending
+                                </span>
+                            @else
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200">
+                                    Active
+                                </span>
+                            @endif
+                        </td>
+                        <td class="py-4 px-4">
+                            <a href="{{ route('user.copyTrading.detail', $trade->id) }}" 
+                               class="text-blue-400 hover:text-blue-300 text-sm font-medium">
+                                View Details
+                            </a>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        @else
+        <div class="text-center py-12">
+            <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-medium text-gray-300 mb-2">No Copied Trades Yet</h3>
+            <p class="text-gray-500">Start copying trades from our professional traders above</p>
+        </div>
+        @endif
+    </div>
+</div>
 @endsection
