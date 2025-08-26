@@ -115,9 +115,9 @@
     <div class="flex justify-around">
         <a href="{{ route('user.portfolio.trade') }}" class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('user.portfolio.trade') ? 'text-blue-400' : 'text-gray-400' }} hover:text-white">
             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                <path fill-rule="evenodd" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-xs">Trade</span>
+            <span class="text-xs">Plans</span>
         </a>
         <a href="{{ route('user.portfolio.staking') }}" class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('user.portfolio.staking') ? 'text-blue-400' : 'text-gray-400' }} hover:text-white">
             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">

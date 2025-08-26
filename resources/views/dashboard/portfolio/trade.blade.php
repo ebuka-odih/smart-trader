@@ -8,9 +8,9 @@
             <h2 class="text-xl font-semibold text-white">Total Balance</h2>
             <div class="text-2xl font-bold text-green-400">${{ number_format($totalBalance, 2) }}</div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-gray-700 rounded-lg p-4">
-                <div class="text-gray-400 text-sm">Trading Investment</div>
+                <div class="text-gray-400 text-sm">Total Investment</div>
                 <div class="text-white font-semibold">${{ number_format($totalTradingInvestment, 2) }}</div>
             </div>
             <div class="bg-gray-700 rounded-lg p-4">
@@ -21,20 +21,25 @@
                 <div class="text-gray-400 text-sm">Expired Plans</div>
                 <div class="text-red-400 font-semibold">{{ $expiredTradingPlans }}</div>
             </div>
+            <div class="bg-gray-700 rounded-lg p-4">
+                <div class="text-gray-400 text-sm">Plan Types</div>
+                <div class="text-purple-400 font-semibold">4</div>
+            </div>
         </div>
     </div>
 
-    <!-- Trading Plans Table -->
+    <!-- All Subscriptions Table -->
     <div class="bg-gray-800 rounded-lg border border-gray-700">
         <div class="p-6 border-b border-gray-700">
-            <h3 class="text-lg font-semibold text-white">Trading Plans</h3>
+            <h3 class="text-lg font-semibold text-white">All Subscriptions</h3>
         </div>
         <div class="overflow-x-auto">
             @if($tradingPlans->count() > 0)
                 <table class="w-full">
                     <thead class="bg-gray-700">
                         <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Plan</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Plan Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Plan Name</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Amount</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Start Date</th>
@@ -45,6 +50,29 @@
                     <tbody class="bg-gray-800 divide-y divide-gray-700">
                         @foreach($tradingPlans as $plan)
                         <tr class="hover:bg-gray-700">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($plan->plan->type === 'trading')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Trading
+                                    </span>
+                                @elseif($plan->plan->type === 'signal')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        Signal
+                                    </span>
+                                @elseif($plan->plan->type === 'mining')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                        Mining
+                                    </span>
+                                @elseif($plan->plan->type === 'staking')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        Staking
+                                    </span>
+                                @else
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        {{ ucfirst($plan->plan->type) }}
+                                    </span>
+                                @endif
+                            </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm font-medium text-white">{{ $plan->plan->name }}</div>
                                 <div class="text-sm text-gray-400">{{ $plan->plan->description }}</div>
@@ -86,10 +114,10 @@
                 </table>
             @else
                 <div class="p-6 text-center">
-                    <div class="text-gray-400 text-lg">No trading plans found</div>
+                    <div class="text-gray-400 text-lg">No subscriptions found</div>
                     <div class="mt-2">
                         <a href="{{ route('user.plans.create') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                            Subscribe to a Trading Plan
+                            Subscribe to a Plan
                         </a>
                     </div>
                 </div>
@@ -103,9 +131,9 @@
     <div class="flex justify-around">
         <a href="{{ route('user.portfolio.trade') }}" class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('user.portfolio.trade') ? 'text-blue-400' : 'text-gray-400' }} hover:text-white">
             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                <path fill-rule="evenodd" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" clip-rule="evenodd"></path>
             </svg>
-            <span class="text-xs">Trade</span>
+            <span class="text-xs">Plans</span>
         </a>
         <a href="{{ route('user.portfolio.staking') }}" class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('user.portfolio.staking') ? 'text-blue-400' : 'text-gray-400' }} hover:text-white">
             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">

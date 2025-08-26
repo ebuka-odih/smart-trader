@@ -11,17 +11,14 @@ use App\Models\UserMining;
 class PortfolioController extends Controller
 {
     /**
-     * Show the main portfolio page (Trade tab)
+     * Show the main portfolio page (Plans/Subscriptions tab)
      */
     public function index()
     {
         $user = Auth::user();
         
-        // Get user's trading plans
-        $tradingPlans = $user->userPlans()
-            ->whereHas('plan', function($query) {
-                $query->where('type', 'trading');
-            })
+        // Get user's all plans
+        $allPlans = $user->userPlans()
             ->with('plan')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -29,19 +26,20 @@ class PortfolioController extends Controller
         // Calculate total balance
         $totalBalance = $user->getTotalBalanceAttribute();
         
-        // Calculate trading statistics
-        $totalTradingInvestment = $tradingPlans->sum('amount_paid');
-        $activeTradingPlans = $tradingPlans->where('status', 'active')->count();
-        $expiredTradingPlans = $tradingPlans->where('status', 'expired')->count();
+        // Calculate subscription statistics
+        $totalInvestment = $allPlans->sum('amount_paid');
+        $activePlans = $allPlans->where('status', 'active')->count();
+        $expiredPlans = $allPlans->where('status', 'expired')->count();
 
         return view('dashboard.portfolio.trade', compact(
             'user',
-            'tradingPlans',
-            'totalBalance',
-            'totalTradingInvestment',
-            'activeTradingPlans',
-            'expiredTradingPlans'
-        ));
+            'totalBalance'
+        ))->with([
+            'tradingPlans' => $allPlans,
+            'totalTradingInvestment' => $totalInvestment,
+            'activeTradingPlans' => $activePlans,
+            'expiredTradingPlans' => $expiredPlans
+        ]);
     }
 
     /**
