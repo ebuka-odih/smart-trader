@@ -12,6 +12,7 @@ use App\Http\Controllers\UserSignalController;
 use App\Http\Controllers\SignalSubscriptionController;
 use App\Http\Controllers\UserStakingController;
 use App\Http\Controllers\UserMiningController;
+use App\Http\Controllers\PortfolioController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('index');
@@ -100,6 +101,14 @@ Route::post('mining/{mining}/suspend', [UserMiningController::class, 'suspend'])
 Route::post('mining/{mining}/resume', [UserMiningController::class, 'resume'])->name('mining.resume');
 Route::post('mining/{mining}/withdraw', [UserMiningController::class, 'withdraw'])->name('mining.withdraw');
 Route::get('mining/statistics', [UserMiningController::class, 'statistics'])->name('mining.statistics');
+
+// Portfolio Routes
+Route::get('portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+Route::get('portfolio/trade', [PortfolioController::class, 'index'])->name('portfolio.trade');
+Route::get('portfolio/staking', [PortfolioController::class, 'staking'])->name('portfolio.staking');
+Route::get('portfolio/mining', [PortfolioController::class, 'mining'])->name('portfolio.mining');
+Route::get('portfolio/holding', [PortfolioController::class, 'holding'])->name('portfolio.holding');
+Route::get('portfolio/signal', [PortfolioController::class, 'signal'])->name('portfolio.signal');
 
     Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
     Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');

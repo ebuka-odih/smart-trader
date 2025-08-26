@@ -146,6 +146,22 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the user's staking activities
+     */
+    public function stakings()
+    {
+        return $this->hasMany(UserStaking::class);
+    }
+
+    /**
+     * Get the user's mining activities
+     */
+    public function minings()
+    {
+        return $this->hasMany(UserMining::class);
+    }
+
+    /**
      * Get total balance across all accounts
      */
     public function getTotalBalanceAttribute()
