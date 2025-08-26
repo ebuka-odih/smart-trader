@@ -5,8 +5,7 @@
     <!-- Balance Card -->
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-white">Total Balance</h2>
-            <div class="text-2xl font-bold text-green-400">${{ number_format($totalBalance, 2) }}</div>
+            <h2 class="text-xl font-semibold text-white">Subscriptions</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-gray-700 rounded-lg p-4">
@@ -126,8 +125,8 @@
     </div>
 </div>
 
-<!-- Mobile Footer Menu -->
-<div class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 md:hidden z-50">
+<!-- Footer Menu -->
+<div class="fixed bottom-0 left-0 right-0 bg-gray-800 border-t border-gray-700 z-50">
     <div class="flex justify-around">
         <a href="{{ route('user.portfolio.trade') }}" class="flex flex-col items-center py-3 px-4 {{ request()->routeIs('user.portfolio.trade') ? 'text-blue-400' : 'text-gray-400' }} hover:text-white">
             <svg class="w-6 h-6 mb-1" fill="currentColor" viewBox="0 0 20 20">
@@ -163,6 +162,6 @@
     </div>
 </div>
 
-<!-- Add bottom padding for mobile footer -->
-<div class="pb-20 md:pb-0"></div>
+<!-- Add bottom padding for footer -->
+<div class="pb-20"></div>
 @endsection
