@@ -149,10 +149,11 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Win Rate -->
             <div class="text-center p-4 bg-gray-700 rounded-lg">
+                @php $barPercent = min(100, max(0, (int)($trader->win_rate ?? 0))); @endphp
                 <div class="text-2xl font-bold text-green-400 mb-2">{{ $trader->win_rate }}%</div>
                 <div class="text-sm text-gray-400">Win Rate</div>
-                <div class="w-full bg-gray-600 rounded-full h-2 mt-3">
-                    <div class="bg-green-500 h-2 rounded-full" style="width: {{ $trader->win_rate }}%"></div>
+                <div class="w-full bg-gray-600 rounded-full h-1.5 mt-3 overflow-hidden">
+                    <div class="bg-green-500 h-1.5" style="width: {{ $barPercent }}%"></div>
                 </div>
             </div>
 

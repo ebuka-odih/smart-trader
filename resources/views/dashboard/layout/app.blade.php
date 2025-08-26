@@ -54,47 +54,52 @@
 
             <!-- Navigation Menu -->
             <nav class="flex-1 p-4 space-y-4 overflow-y-auto">
-                <!-- Dashboard -->
-                <div>
-                    <a href="{{ route('user.dashboard') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.dashboard') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
-                        </svg>
-                        <span>Dashboard</span>
-                    </a>
-                </div>
-
-                <!-- Trading Section -->
+                <!-- Main Section -->
                 <div>
                     <div class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        Trading
+                        Main
                     </div>
                     <div class="space-y-1">
-                        <a href="{{ route('user.trade.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.trade.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                        <a href="{{ route('user.dashboard') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.dashboard') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path>
                             </svg>
-                            <span>Active Trading</span>
+                            <span>Dashboard</span>
                         </a>
-                        <a href="{{ route('user.copyTrading.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.copyTrading.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                        <a href="{{ route('user.profile') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.profile') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                             </svg>
-                            <span>Copy Trading</span>
-                        </a>
-                        <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-700">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"></path>
-                            </svg>
-                            <span>Portfolio</span>
+                            <span>Profile</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Investment Plans Section -->
+                <!-- Finance & Wallet Section -->
                 <div>
                     <div class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        Investment Plans
+                        Finance & Wallet
+                    </div>
+                    <div class="space-y-1">
+                        <a href="{{ route('user.deposit') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.deposit') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Deposit</span>
+                        </a>
+                        <a href="{{ route('user.withdrawal') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.withdrawal') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Withdraw</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Investments Section -->
+                <div>
+                    <div class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                        Investments
                     </div>
                     <div class="space-y-1">
                         <!-- Plans Dropdown -->
@@ -147,43 +152,47 @@
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" clip-rule="evenodd"></path>
                             </svg>
-                            <span>My Subscriptions</span>
+                            <span>My Plans</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-700">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z"></path>
+                            </svg>
+                            <span>Portfolio</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- Wallet Section -->
+                <!-- Trading Section -->
                 <div>
                     <div class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        Wallet
+                        Trading
                     </div>
                     <div class="space-y-1">
-                        <a href="{{ route('user.deposit') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.deposit') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-700">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                             </svg>
-                            <span>Deposits</span>
+                            <span>Overview</span>
                         </a>
-                        <a href="{{ route('user.withdrawal') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.withdrawal') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                        <a href="{{ route('user.trade.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.trade.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
                             </svg>
-                            <span>Withdrawals</span>
+                            <span>Live Trading</span>
                         </a>
-                    </div>
-                </div>
-
-                <!-- Account Section -->
-                <div>
-                    <div class="px-3 py-2 text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                        Account
-                    </div>
-                    <div class="space-y-1">
-                        <a href="{{ route('user.profile') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.profile') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                        <a href="{{ route('user.copyTrading.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.copyTrading.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
                             </svg>
-                            <span>Profile</span>
+                            <span>Copy Trading</span>
+                        </a>
+                        <a href="#" class="flex items-center space-x-3 px-3 py-2 rounded-lg text-gray-300 hover:bg-gray-700">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Bot Trading</span>
                         </a>
                     </div>
                 </div>
@@ -249,6 +258,13 @@
                             <div class="font-medium">{{ session('error') }}</div>
                         </div>
                         <script>console.log('[Flash] error:', @json(session('error')));</script>
+                    @endif
+
+                    @if(session('warning'))
+                        <div id="alert-warning" class="mb-4 rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
+                            <div class="font-medium">{{ session('warning') }}</div>
+                        </div>
+                        <script>console.log('[Flash] warning:', @json(session('warning')));</script>
                     @endif
 
                     @if ($errors->any())

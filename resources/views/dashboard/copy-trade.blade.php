@@ -15,6 +15,12 @@
         </div>
     @endif
 
+    @if(session('warning'))
+        <div class="rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
+            <div class="font-medium">{{ session('warning') }}</div>
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
             <div class="font-semibold mb-1">Please fix the following:</div>
@@ -66,11 +72,14 @@
                 <!-- Trader Stats -->
                 <div class="p-6 space-y-4">
                     <!-- Win Rate -->
+                    @php
+                        $barPercent = min(100, max(0, (int)($trader->win_rate ?? 0)));
+                    @endphp
                     <div class="flex items-center justify-between">
                         <span class="text-sm text-gray-400">Win Rate</span>
                         <div class="flex items-center space-x-2">
-                            <div class="w-16 bg-gray-600 rounded-full h-2">
-                                <div class="bg-green-500 h-2 rounded-full" style="width: {{ $trader->win_rate }}%"></div>
+                            <div class="w-24 md:w-28 bg-gray-600 rounded-full h-1.5 overflow-hidden">
+                                <div class="bg-green-500 h-1.5" style="width: {{ $barPercent }}%"></div>
                             </div>
                             <span class="text-sm font-semibold text-white">{{ $trader->win_rate }}%</span>
                         </div>

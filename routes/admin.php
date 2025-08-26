@@ -1,67 +1,37 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\CopyTraderController;
-use App\Http\Controllers\Admin\PackageController;
-use App\Http\Controllers\Admin\PaymentMethodController;
-use App\Http\Controllers\Admin\TradePairController;
-use App\Http\Controllers\Admin\TransactionController;
-use App\Http\Controllers\Admin\PlanController;
-use App\Http\Controllers\Admin\SignalController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\TradeController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\TradeController as AdminTradeController;
+use App\Http\Controllers\Admin\CopyTraderController;
+use App\Http\Controllers\Admin\PaymentMethodController as AdminPaymentMethodController;
+use App\Http\Controllers\Admin\PlanController as AdminPlanController;
+use App\Http\Controllers\Admin\TradePairController as AdminTradePairController;
+use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
+use App\Http\Controllers\Admin\SignalController as AdminSignalController;
+use App\Http\Controllers\Admin\CopiedTradeController;
 
-Route::group(['middleware' => ['auth', 'verified', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function(){
-
+Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
-    Route::get('user/security/', [AdminController::class, 'security'])->name('security');
-    Route::post('change/password', [AdminController::class, 'resetPassword'])->name('resetPassword');
 
-    Route::get('/users', [UserController::class, 'index'])->name('user.index');
-    Route::get('/show/user/{id}', [UserController::class, 'show'])->name('user.show');
-    Route::post('/update/account/user/{id}', [UserController::class, 'updateBalance'])->name('updateBalance');
-    Route::delete('delete/user/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');
-
-    Route::get('/transactions/deposits', [TransactionController::class, 'deposits'])->name('transactions.deposits');
-Route::get('/deposit/{id}/details', [TransactionController::class, 'getDepositDetails'])->name('deposit.details');
-Route::get('/deposit/{id}/approve', [TransactionController::class, 'approveDeposit'])->name('deposit.approve');
-Route::get('/deposit/{id}/decline', [TransactionController::class, 'declineDeposit'])->name('deposit.decline');
-Route::post('/deposit/{id}/delete', [TransactionController::class, 'deleteDeposit'])->name('deposit.delete');
-
-// Plan Management Routes
-Route::get('/plans', [PlanController::class, 'index'])->name('plans.index');
-Route::get('/plans/create', [PlanController::class, 'create'])->name('plans.create');
-Route::post('/plans', [PlanController::class, 'store'])->name('plans.store');
-Route::get('/plans/{plan}/edit', [PlanController::class, 'edit'])->name('plans.edit');
-Route::put('/plans/{plan}', [PlanController::class, 'update'])->name('plans.update');
-Route::delete('/plans/{plan}', [PlanController::class, 'destroy'])->name('plans.destroy');
-Route::patch('/plans/{plan}/toggle-status', [PlanController::class, 'toggleStatus'])->name('plans.toggle-status');
-
-// Signal Management Routes
-Route::get('/signals', [SignalController::class, 'index'])->name('signals.index');
-Route::get('/signals/create', [SignalController::class, 'create'])->name('signals.create');
-Route::post('/signals', [SignalController::class, 'store'])->name('signals.store');
-Route::get('/signals/{signal}', [SignalController::class, 'show'])->name('signals.show');
-Route::get('/signals/{signal}/edit', [SignalController::class, 'edit'])->name('signals.edit');
-Route::put('/signals/{signal}', [SignalController::class, 'update'])->name('signals.update');
-Route::delete('/signals/{signal}', [SignalController::class, 'destroy'])->name('signals.destroy');
-Route::patch('/signals/{signal}/status', [SignalController::class, 'updateStatus'])->name('signals.update-status');
-
-    Route::get('/transactions/withdrawal', [TransactionController::class, 'withdrawal'])->name('transactions.withdrawal');
-    Route::get('/approve/withdrawal/{id}', [TransactionController::class, 'approveWithdrawal'])->name('approveWithdrawal');
-    Route::get('/decline/withdrawal/{id}', [TransactionController::class, 'declineWithdrawal'])->name('declineWithdrawal');
-
+    Route::get('/open-trades', [AdminTradeController::class, 'openTrades'])->name('openTrades');
+    Route::get('/trade-room', [AdminTradeController::class, 'index'])->name('trade.index');
     Route::resource('/copy-trader', CopyTraderController::class);
-    Route::resource('/payment-method', PaymentMethodController::class);
-    Route::resource('/package', PackageController::class);
-    Route::resource('/trade-pair', TradePairController::class);
-    Route::get('/trade-pairs/{marketType}', [TradePairController::class, 'getByMarketType'])->name('trade-pairs.by-market');
-    Route::resource('/trade', TradeController::class);
 
-    Route::get('open-trades', [TradeController::class, 'openTrades'])->name('openTrades');
-    Route::get('closed-trades', [TradeController::class, 'closedTrades'])->name('closedTrades');
-    Route::post('close/trade/{id}', [TradeController::class, 'closeTrade'])->name('closeTrade');
+    // Admin users management
+    Route::resource('/user', AdminUserController::class)->names('user');
 
+    Route::resource('/payment-method', AdminPaymentMethodController::class);
+    Route::get('/security', [AdminController::class, 'security'])->name('security');
+
+    Route::resource('/plans', AdminPlanController::class)->names('plans');
+    Route::resource('/trade-pair', AdminTradePairController::class);
+
+    Route::get('/transactions/deposits', [AdminTransactionController::class, 'deposits'])->name('transactions.deposits');
+
+    Route::resource('/signals', AdminSignalController::class)->names('signals');
+
+    // Copied trades history
+    Route::get('/copied-trades', [CopiedTradeController::class, 'index'])->name('copied-trades.index');
 });

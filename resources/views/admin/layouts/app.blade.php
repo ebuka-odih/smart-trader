@@ -174,30 +174,56 @@
                 <span class="ml-3" sidebar-toggle-item>Trade History</span>
             </a>
           </li>
+          
+          <!-- Copy Trade Dropdown -->
+          <li>
+            <button id="copyTradeDropdownBtn" type="button" class="w-full flex items-center justify-between p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+              <span class="flex items-center">
+                <x-gmdi-person-pin-o class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
+                <span class="ml-3" sidebar-toggle-item>Copy Trade</span>
+              </span>
+              <svg id="copyTradeDropdownIcon" class="w-4 h-4 text-gray-500 dark:text-gray-400 transition-transform" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+            <ul id="copyTradeDropdown" class="ml-9 mt-1 space-y-1 hidden">
+              <li>
+                <a href="{{ route('admin.copy-trader.index') }}" class="{{ request()->routeIs('admin.copy-trader.*') ? "active" : '' }} flex items-center p-2 text-sm text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                  <span>Copy Trader</span>
+                </a>
+              </li>
+              <li>
+                <a href="{{ route('admin.copied-trades.index') }}" class="{{ request()->routeIs('admin.copied-trades.*') ? "active" : '' }} flex items-center p-2 text-sm text-gray-900 rounded-lg hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                  <span>Copied History</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
           <li>
             <a href="{{ route('admin.trade.index') }}" class="{{ request()->routeIs('admin.trade.index') ? "active" : '' }} flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
                 <x-gmdi-analytics class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
                 <span class="ml-3" sidebar-toggle-item>Trade Room</span>
             </a>
           </li>
-          <li>
-            <a href="{{ route('admin.copy-trader.index') }}" class="{{ request()->routeIs('admin.copy-trader.index') ? "active" : '' }} flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                <x-gmdi-person-pin-o class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
-                <span class="ml-3" sidebar-toggle-item>Copy Trader</span>
-            </a>
-          </li>
-          <li>
-            <a href="#" class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                <x-gmdi-file-copy-o class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
-                <span class="ml-3" sidebar-toggle-item>Copied Trades</span>
-            </a>
-          </li>
-          <li>
-            <a href="{{ route('admin.trade-pair.index') }}" class="{{ request()->routeIs('admin.trade-pair.index') ? "active" : '' }} flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
-                <x-gmdi-list-alt-o class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"/>
-                <span class="ml-3" sidebar-toggle-item>Trade Pair</span>
-            </a>
-          </li>
+
+          <script>
+            document.addEventListener('DOMContentLoaded', function(){
+              var btn = document.getElementById('copyTradeDropdownBtn');
+              var menu = document.getElementById('copyTradeDropdown');
+              var icon = document.getElementById('copyTradeDropdownIcon');
+              if(btn && menu && icon){
+                btn.addEventListener('click', function(){
+                  var isHidden = menu.classList.contains('hidden');
+                  if(isHidden){
+                    menu.classList.remove('hidden');
+                    icon.style.transform = 'rotate(180deg)';
+                  } else {
+                    menu.classList.add('hidden');
+                    icon.style.transform = 'rotate(0deg)';
+                  }
+                });
+              }
+            });
+          </script>
 
           <!-- Investment Plans Section -->
           <li>

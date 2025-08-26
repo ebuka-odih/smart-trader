@@ -47,7 +47,7 @@ class CopyTradingController extends Controller
                 ->first();
 
             if ($existingCopy) {
-                return redirect()->back()->with('error', 'You are already copying this trader');
+                return redirect()->back()->withInput()->with('warning', 'You are already copying this trader.');
             }
 
             // Create the copied trade
