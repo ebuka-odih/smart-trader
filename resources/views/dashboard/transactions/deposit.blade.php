@@ -268,13 +268,13 @@
                     <div id="walletAddressSection" class="mb-4 hidden">
                         <label class="block text-sm font-medium text-gray-300 mb-2">Wallet Address</label>
                         <div class="bg-gray-700 border border-gray-600 rounded-lg p-3">
-                            <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center justify-between mb-3">
                                 <span class="text-sm text-gray-400">Send payment to:</span>
-                                <button type="button" id="copyAddressBtn" class="text-blue-400 hover:text-blue-300 text-sm">
+                                <button type="button" id="copyAddressBtn" class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-blue-600 hover:bg-blue-700 rounded transition-colors">
                                     <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                     </svg>
-                                    Copy
+                                    Copy Address
                                 </button>
                             </div>
                             <div class="flex items-center space-x-4">
@@ -283,6 +283,19 @@
                                 </div>
                                 <div id="qrCode" class="w-16 h-16 bg-white rounded p-1 flex items-center justify-center">
                                     <div id="qrCodeDiv" class="w-full h-full flex items-center justify-center"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Countdown Timer -->
+                            <div class="mt-3 pt-3 border-t border-gray-600">
+                                <div class="flex items-center justify-center space-x-2">
+                                    <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <span class="text-sm text-gray-300">Payment expires in:</span>
+                                    <div id="countdownTimer" class="text-sm font-mono font-bold text-yellow-400">
+                                        <span id="minutes">15</span>:<span id="seconds">00</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -348,6 +361,11 @@
             document.body.style.overflow = 'auto';
             depositForm.reset();
             filePreview.classList.add('hidden');
+            
+            // Stop countdown timer when modal is closed
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
         }
 
         closeModal.addEventListener('click', closeModalFunc);
@@ -385,6 +403,45 @@
             console.error('Copy button not found!');
         }
 
+        // Countdown timer variables
+        let countdownInterval;
+        let timeLeft = 15 * 60; // 15 minutes in seconds
+
+        // Start countdown timer
+        function startCountdown() {
+            // Clear any existing timer
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+            }
+            
+            // Reset time to 15 minutes
+            timeLeft = 15 * 60;
+            
+            // Update display immediately
+            updateCountdownDisplay();
+            
+            // Start the countdown
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                updateCountdownDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    // Handle timer expiration
+                    document.getElementById('countdownTimer').innerHTML = '<span class="text-red-400">EXPIRED</span>';
+                }
+            }, 1000);
+        }
+
+        // Update countdown display
+        function updateCountdownDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
         // Handle payment method selection
         paymentMethodSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
@@ -403,11 +460,19 @@
                 
                 // Generate QR code using Laravel
                 generateQRCode(walletAddress);
+                
+                // Start countdown timer
+                startCountdown();
             } else {
                 // Hide wallet address section
                 walletAddressSection.classList.add('hidden');
                 walletAddressInput.value = '';
                 qrCodeDiv.innerHTML = '';
+                
+                // Stop countdown timer
+                if (countdownInterval) {
+                    clearInterval(countdownInterval);
+                }
             }
         });
 
