@@ -1,8 +1,6 @@
 @extends('dashboard.layout.app')
 
-@push('head')
-<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
-@endpush
+
 
 @section('content')
     <!-- Success/Error Messages -->
@@ -283,7 +281,7 @@
                                 <div class="flex-1">
                                     <input type="text" id="walletAddress" readonly class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white text-sm font-mono" />
                                 </div>
-                                <div id="qrCode" class="w-16 h-16 bg-white rounded p-1"></div>
+                                <div id="qrCode" class="w-16 h-16 bg-white rounded p-1 flex items-center justify-center"></div>
                             </div>
                         </div>
                     </div>
@@ -378,10 +376,34 @@
         const qrCodeDiv = document.getElementById('qrCode');
         const copyAddressBtn = document.getElementById('copyAddressBtn');
 
+        // Wait for QRCode library to load
+        function waitForQRCode() {
+            return new Promise((resolve) => {
+                if (typeof QRCode !== 'undefined') {
+                    resolve();
+                } else {
+                    const checkInterval = setInterval(() => {
+                        if (typeof QRCode !== 'undefined') {
+                            clearInterval(checkInterval);
+                            resolve();
+                        }
+                    }, 100);
+                    
+                    // Timeout after 5 seconds
+                    setTimeout(() => {
+                        clearInterval(checkInterval);
+                        resolve();
+                    }, 5000);
+                }
+            });
+        }
+
         // Handle payment method selection
         paymentMethodSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const walletAddress = selectedOption.getAttribute('data-address');
+            
+            console.log('Selected wallet address:', walletAddress); // Debug log
             
             if (walletAddress && walletAddress.trim() !== '') {
                 // Show wallet address section
@@ -390,20 +412,55 @@
                 
                 // Generate QR code
                 qrCodeDiv.innerHTML = '';
-                QRCode.toCanvas(walletAddress, {
-                    width: 64,
-                    height: 64,
-                    margin: 1,
-                    color: {
-                        dark: '#000000',
-                        light: '#FFFFFF'
+                
+                // Wait for QRCode library and generate QR code
+                const generateQR = async () => {
+                    await waitForQRCode();
+                    
+                    if (typeof QRCode === 'undefined') {
+                        console.error('QRCode library not loaded after waiting');
+                        qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Library Error</div>';
+                        return;
                     }
-                }).then(function(canvas) {
-                    qrCodeDiv.appendChild(canvas);
-                }).catch(function(error) {
-                    console.error('QR Code generation error:', error);
-                    qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Error</div>';
-                });
+
+                    try {
+                        // Method 1: Canvas
+                        const canvas = await QRCode.toCanvas(walletAddress, {
+                            width: 64,
+                            height: 64,
+                            margin: 2,
+                            color: {
+                                dark: '#000000',
+                                light: '#FFFFFF'
+                            },
+                            errorCorrectionLevel: 'M'
+                        });
+                        qrCodeDiv.appendChild(canvas);
+                        console.log('QR Code generated successfully via canvas');
+                    } catch (canvasError) {
+                        console.log('Canvas method failed, trying image method:', canvasError);
+                        
+                        try {
+                            // Method 2: Data URL
+                            const dataUrl = await QRCode.toDataURL(walletAddress, {
+                                width: 64,
+                                height: 64,
+                                margin: 2,
+                                color: {
+                                    dark: '#000000',
+                                    light: '#FFFFFF'
+                                }
+                            });
+                            qrCodeDiv.innerHTML = `<img src="${dataUrl}" alt="QR Code" class="w-full h-full" />`;
+                            console.log('QR Code generated successfully via image');
+                        } catch (imgError) {
+                            console.error('All QR Code generation methods failed:', imgError);
+                            qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Error</div>';
+                        }
+                    }
+                };
+                
+                generateQR();
             } else {
                 // Hide wallet address section
                 walletAddressSection.classList.add('hidden');
