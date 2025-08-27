@@ -36,11 +36,6 @@
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-white">Copy Trading</h1>
-            <p class="text-gray-400 mt-1">Follow successful traders and copy their strategies</p>
-        </div>
-        <div class="bg-gray-800 rounded-lg p-4 border border-gray-700">
-            <div class="text-sm text-gray-400">Available Balance</div>
-            <div class="text-xl font-bold text-white">${{ number_format(auth()->user()->balance, 2) }}</div>
         </div>
     </div>
 
@@ -49,6 +44,21 @@
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-xl font-semibold text-white">Available Traders</h2>
             <div class="text-sm text-gray-400">{{ count($traders) }} traders available</div>
+        </div>
+
+        <!-- Search Box -->
+        <div class="mb-6">
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <input type="text" 
+                       id="traderSearch" 
+                       placeholder="Search traders by name..." 
+                       class="block w-full pl-10 pr-3 py-2 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+            </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -215,6 +225,68 @@
                 console.log('[CopyTrading] Submitting copy trade:', { traderId, amount, action: form.action, method: form.method });
             });
         });
+
+        // Trader Search Functionality
+        const searchInput = document.getElementById('traderSearch');
+        const traderCards = document.querySelectorAll('.bg-gray-700.rounded-lg.border.border-gray-600');
+        const traderCountElement = document.querySelector('.text-sm.text-gray-400');
+
+        if (searchInput && traderCards.length > 0) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                let visibleCount = 0;
+                
+                traderCards.forEach(function(card) {
+                    const traderNameElement = card.querySelector('h3');
+                    if (traderNameElement) {
+                        const traderName = traderNameElement.textContent.toLowerCase();
+                        
+                        if (searchTerm === '' || traderName.includes(searchTerm)) {
+                            card.style.display = 'block';
+                            visibleCount++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+
+                // Update trader count
+                if (traderCountElement) {
+                    traderCountElement.textContent = `${visibleCount} traders available`;
+                }
+
+                // Show "no results" message if no traders match
+                const noResultsMessage = document.getElementById('noResultsMessage');
+                if (visibleCount === 0 && searchTerm !== '') {
+                    if (!noResultsMessage) {
+                        const gridContainer = traderCards[0].parentElement;
+                        const messageDiv = document.createElement('div');
+                        messageDiv.id = 'noResultsMessage';
+                        messageDiv.className = 'col-span-full text-center py-12';
+                        messageDiv.innerHTML = `
+                            <div class="w-16 h-16 bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-medium text-gray-300 mb-2">No traders found</h3>
+                            <p class="text-gray-500">Try adjusting your search terms</p>
+                        `;
+                        gridContainer.appendChild(messageDiv);
+                    }
+                } else if (noResultsMessage) {
+                    noResultsMessage.remove();
+                }
+            });
+
+            // Clear search functionality
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    this.value = '';
+                    this.dispatchEvent(new Event('input'));
+                }
+            });
+        }
     });
 </script>
 @endpush
