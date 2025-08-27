@@ -328,10 +328,10 @@
                                                 </div>
                                             </div>
 
-    <!-- Mobile Bottom Menu -->
-    <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-50">
+    <!-- Bottom Menu (Mobile & Desktop) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-50">
         <div class="flex justify-around items-center py-3 px-4">
-            <!-- Quick Trade -->
+            <!-- Trade -->
             <a href="{{ route('user.trade.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-blue-400 transition-colors">
                 <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
                     <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
@@ -351,24 +351,24 @@
                 <span class="text-xs font-medium">Deposit</span>
             </a>
 
-            <!-- Plans -->
-            <a href="{{ route('user.plans.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-purple-400 transition-colors">
+            <!-- Portfolio -->
+            <a href="{{ route('user.portfolio.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-purple-400 transition-colors">
                 <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors">
                     <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                     </svg>
                 </div>
-                <span class="text-xs font-medium">Plans</span>
+                <span class="text-xs font-medium">Portfolio</span>
             </a>
 
-            <!-- Copy Trade -->
-            <a href="{{ route('user.copyTrading.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-orange-400 transition-colors">
+            <!-- Profile -->
+            <a href="{{ route('user.profile') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-orange-400 transition-colors">
                 <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors">
                     <svg class="w-5 h-5 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
                     </svg>
                 </div>
-                <span class="text-xs font-medium">Copy Trade</span>
+                <span class="text-xs font-medium">Profile</span>
             </a>
         </div>
     </div>

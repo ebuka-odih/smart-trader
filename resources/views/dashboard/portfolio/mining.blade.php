@@ -5,7 +5,7 @@
     <!-- Balance Card -->
     <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-white">Mining Portfolio</h2>
+            <h2 class="text-xl font-semibold text-white">Mining Overview</h2>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div class="bg-gray-700 rounded-lg p-4">
