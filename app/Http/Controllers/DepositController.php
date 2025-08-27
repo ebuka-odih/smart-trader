@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class DepositController extends Controller
 {
@@ -142,6 +143,50 @@ class DepositController extends Controller
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Unable to view proof. Please try again.');
+        }
+    }
+
+    /**
+     * Generate QR code for wallet address
+     */
+    public function generateQRCode(Request $request)
+    {
+                    try {
+                $request->validate([
+                    'address' => 'required|string|max:255'
+                ]);
+
+                $address = $request->input('address');
+            
+            // Generate QR code as SVG
+            $qrCode = QrCode::format('svg')
+                           ->size(200)
+                           ->margin(1)
+                           ->errorCorrection('H')
+                           ->generate($address);
+
+            // Convert QR code object to string
+            $qrCodeString = (string) $qrCode;
+
+            // Return SVG directly without storing file
+            \Log::info('QR Code generated successfully', [
+                'address' => $address,
+                'format' => 'svg',
+                'qr_code_length' => strlen($qrCodeString)
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'qr_code_svg' => $qrCodeString
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('QR Code generation failed: ' . $e->getMessage());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to generate QR code: ' . $e->getMessage()
+            ], 500);
         }
     }
 }

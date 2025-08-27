@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 
     Route::post('deposit/payment/', [DepositController::class, 'payment'])->name('payment');
     Route::post('deposit/cancel/{id}', [DepositController::class, 'cancelDeposit'])->name('deposit.cancel');
     Route::get('deposit/proof/{id}', [DepositController::class, 'viewProof'])->name('deposit.proof');
+    Route::post('generate/qrcode', [DepositController::class, 'generateQRCode'])->name('generate.qrcode');
 
     Route::get('withdrawal/', [WithdrawalController::class, 'withdrawal'])->name('withdrawal');
     Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'])->name('withdrawalStore');

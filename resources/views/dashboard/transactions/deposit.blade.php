@@ -281,7 +281,9 @@
                                 <div class="flex-1">
                                     <input type="text" id="walletAddress" readonly class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white text-sm font-mono" />
                                 </div>
-                                <div id="qrCode" class="w-16 h-16 bg-white rounded p-1 flex items-center justify-center"></div>
+                                <div id="qrCode" class="w-16 h-16 bg-white rounded p-1 flex items-center justify-center">
+                                    <div id="qrCodeDiv" class="w-full h-full flex items-center justify-center"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -374,93 +376,27 @@
         const walletAddressSection = document.getElementById('walletAddressSection');
         const walletAddressInput = document.getElementById('walletAddress');
         const qrCodeDiv = document.getElementById('qrCode');
-        const copyAddressBtn = document.getElementById('copyAddressBtn');
 
-        // Wait for QRCode library to load
-        function waitForQRCode() {
-            return new Promise((resolve) => {
-                if (typeof QRCode !== 'undefined') {
-                    resolve();
-                } else {
-                    const checkInterval = setInterval(() => {
-                        if (typeof QRCode !== 'undefined') {
-                            clearInterval(checkInterval);
-                            resolve();
-                        }
-                    }, 100);
-                    
-                    // Timeout after 5 seconds
-                    setTimeout(() => {
-                        clearInterval(checkInterval);
-                        resolve();
-                    }, 5000);
-                }
-            });
-        }
+        const copyAddressBtn = document.getElementById('copyAddressBtn');
 
         // Handle payment method selection
         paymentMethodSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             const walletAddress = selectedOption.getAttribute('data-address');
             
-            console.log('Selected wallet address:', walletAddress); // Debug log
+            console.log('Payment method changed:', {
+                selectedOption: selectedOption.value,
+                walletAddress: walletAddress,
+                hasAddress: walletAddress && walletAddress.trim() !== ''
+            });
             
             if (walletAddress && walletAddress.trim() !== '') {
                 // Show wallet address section
                 walletAddressSection.classList.remove('hidden');
                 walletAddressInput.value = walletAddress;
                 
-                // Generate QR code
-                qrCodeDiv.innerHTML = '';
-                
-                // Wait for QRCode library and generate QR code
-                const generateQR = async () => {
-                    await waitForQRCode();
-                    
-                    if (typeof QRCode === 'undefined') {
-                        console.error('QRCode library not loaded after waiting');
-                        qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Library Error</div>';
-                        return;
-                    }
-
-                    try {
-                        // Method 1: Canvas
-                        const canvas = await QRCode.toCanvas(walletAddress, {
-                            width: 64,
-                            height: 64,
-                            margin: 2,
-                            color: {
-                                dark: '#000000',
-                                light: '#FFFFFF'
-                            },
-                            errorCorrectionLevel: 'M'
-                        });
-                        qrCodeDiv.appendChild(canvas);
-                        console.log('QR Code generated successfully via canvas');
-                    } catch (canvasError) {
-                        console.log('Canvas method failed, trying image method:', canvasError);
-                        
-                        try {
-                            // Method 2: Data URL
-                            const dataUrl = await QRCode.toDataURL(walletAddress, {
-                                width: 64,
-                                height: 64,
-                                margin: 2,
-                                color: {
-                                    dark: '#000000',
-                                    light: '#FFFFFF'
-                                }
-                            });
-                            qrCodeDiv.innerHTML = `<img src="${dataUrl}" alt="QR Code" class="w-full h-full" />`;
-                            console.log('QR Code generated successfully via image');
-                        } catch (imgError) {
-                            console.error('All QR Code generation methods failed:', imgError);
-                            qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Error</div>';
-                        }
-                    }
-                };
-                
-                generateQR();
+                // Generate QR code using Laravel
+                generateQRCode(walletAddress);
             } else {
                 // Hide wallet address section
                 walletAddressSection.classList.add('hidden');
@@ -468,6 +404,52 @@
                 qrCodeDiv.innerHTML = '';
             }
         });
+
+        // Generate QR code using Laravel backend
+        function generateQRCode(address) {
+            // Show loading state
+            qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">Generating...</div>';
+            
+            // Get CSRF token
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            console.log('CSRF Token:', csrfToken);
+            
+            // Make AJAX request to generate QR code
+            fetch('{{ route("user.generate.qrcode") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    address: address
+                })
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('QR Code response:', data);
+                if (data.success) {
+                    // Display QR code as SVG div
+                    qrCodeDiv.innerHTML = data.qr_code_svg;
+                    console.log('QR Code generated successfully as SVG');
+                    console.log('QR Code SVG length:', data.qr_code_svg.length);
+                    console.log('QR Code SVG preview:', data.qr_code_svg.substring(0, 100));
+                } else {
+                    qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Error</div>';
+                }
+            })
+            .catch(error => {
+                console.error('QR Code generation failed:', error);
+                qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Error</div>';
+            });
+        }
 
         // Copy address functionality
         copyAddressBtn.addEventListener('click', function() {
@@ -574,4 +556,14 @@
             }
         }
     </script>
+
+    <style>
+        /* QR Code SVG styling */
+        #qrCodeDiv svg {
+            width: 100%;
+            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
+        }
+    </style>
 @endsection
