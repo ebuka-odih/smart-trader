@@ -1,4 +1,9 @@
 @extends('dashboard.layout.app')
+
+@push('head')
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+@endpush
+
 @section('content')
     <!-- Success/Error Messages -->
     @if(session('success'))
@@ -173,9 +178,9 @@
     <!-- New Deposit Modal -->
     <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
+            <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700 max-h-[90vh] overflow-y-auto">
                 <!-- Modal Header -->
-                <div class="flex items-center justify-between p-6 border-b border-gray-700">
+                <div class="flex items-center justify-between p-4 border-b border-gray-700">
                     <h3 class="text-lg font-semibold text-white">New Deposit</h3>
                     <button id="closeModal" class="text-gray-400 hover:text-white transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,7 +190,7 @@
                 </div>
 
                 <!-- Modal Body -->
-                <form id="depositForm" action="{{ route('user.payment') }}" method="POST" enctype="multipart/form-data" class="p-6">
+                <form id="depositForm" action="{{ route('user.payment') }}" method="POST" enctype="multipart/form-data" class="p-4">
                     @if(session('success'))
                         <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
                             {{ session('success') }}
@@ -210,7 +215,7 @@
                     @csrf
                     
                     <!-- Amount Input -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <label for="amount" class="block text-sm font-medium text-gray-300 mb-2">Amount</label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -232,7 +237,7 @@
                     </div>
 
                     <!-- Wallet Selection -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <label for="wallet_type" class="block text-sm font-medium text-gray-300 mb-2">Select Wallet</label>
                         <select id="wallet_type" 
                                 name="wallet_type" 
@@ -246,7 +251,7 @@
                 </div>
 
                     <!-- Payment Method -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <label for="payment_method_id" class="block text-sm font-medium text-gray-300 mb-2">Payment Method</label>
                         <select id="payment_method_id" 
                                 name="payment_method_id" 
@@ -254,17 +259,41 @@
                                 class="block w-full py-3 px-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">Select payment method</option>
                             @foreach($wallets as $wallet)
-                                <option value="{{ $wallet->id }}" {{ old('payment_method_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->wallet }}</option>
+                                <option value="{{ $wallet->id }}" 
+                                        data-address="{{ $wallet->address ?? '' }}"
+                                        {{ old('payment_method_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->wallet }}</option>
                             @endforeach
                         </select>
+                    </div>
+
+                    <!-- Wallet Address Display -->
+                    <div id="walletAddressSection" class="mb-4 hidden">
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Wallet Address</label>
+                        <div class="bg-gray-700 border border-gray-600 rounded-lg p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-sm text-gray-400">Send payment to:</span>
+                                <button type="button" id="copyAddressBtn" class="text-blue-400 hover:text-blue-300 text-sm">
+                                    <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Copy
+                                </button>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-1">
+                                    <input type="text" id="walletAddress" readonly class="w-full px-3 py-2 bg-gray-600 border border-gray-500 rounded text-white text-sm font-mono" />
+                                </div>
+                                <div id="qrCode" class="w-16 h-16 bg-white rounded p-1"></div>
+                            </div>
                         </div>
+                    </div>
 
                     <!-- Payment Proof -->
-                    <div class="mb-6">
+                    <div class="mb-4">
                         <label for="proof" class="block text-sm font-medium text-gray-300 mb-2">Payment Proof</label>
-                        <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-600 border-dashed rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
+                        <div class="mt-1 flex justify-center px-3 pt-3 pb-3 border-2 border-gray-600 border-dashed rounded-lg bg-gray-700 hover:bg-gray-600 transition-colors">
                             <div class="space-y-1 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                <svg class="mx-auto h-6 w-6 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <div class="flex text-sm text-gray-400">
@@ -284,11 +313,11 @@
                     <div class="flex space-x-3">
                         <button type="button" 
                                 id="cancelBtn"
-                                class="flex-1 px-4 py-3 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
+                                class="flex-1 px-4 py-2 border border-gray-600 rounded-lg text-gray-300 hover:bg-gray-700 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
+                                class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors">
                             Submit Deposit
                         </button>
                 </div>
@@ -339,6 +368,102 @@
                 filePreview.classList.remove('hidden');
             } else {
                 filePreview.classList.add('hidden');
+            }
+        });
+
+        // Wallet address and QR code functionality
+        const paymentMethodSelect = document.getElementById('payment_method_id');
+        const walletAddressSection = document.getElementById('walletAddressSection');
+        const walletAddressInput = document.getElementById('walletAddress');
+        const qrCodeDiv = document.getElementById('qrCode');
+        const copyAddressBtn = document.getElementById('copyAddressBtn');
+
+        // Handle payment method selection
+        paymentMethodSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const walletAddress = selectedOption.getAttribute('data-address');
+            
+            if (walletAddress && walletAddress.trim() !== '') {
+                // Show wallet address section
+                walletAddressSection.classList.remove('hidden');
+                walletAddressInput.value = walletAddress;
+                
+                // Generate QR code
+                qrCodeDiv.innerHTML = '';
+                QRCode.toCanvas(walletAddress, {
+                    width: 64,
+                    height: 64,
+                    margin: 1,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                }).then(function(canvas) {
+                    qrCodeDiv.appendChild(canvas);
+                }).catch(function(error) {
+                    console.error('QR Code generation error:', error);
+                    qrCodeDiv.innerHTML = '<div class="w-full h-full bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">QR Error</div>';
+                });
+            } else {
+                // Hide wallet address section
+                walletAddressSection.classList.add('hidden');
+                walletAddressInput.value = '';
+                qrCodeDiv.innerHTML = '';
+            }
+        });
+
+        // Copy address functionality
+        copyAddressBtn.addEventListener('click', function() {
+            const address = walletAddressInput.value;
+            if (address) {
+                // Fallback copy method for older browsers
+                const copyToClipboard = async (text) => {
+                    try {
+                        if (navigator.clipboard && window.isSecureContext) {
+                            await navigator.clipboard.writeText(text);
+                            return true;
+                        } else {
+                            // Fallback for older browsers
+                            const textArea = document.createElement('textarea');
+                            textArea.value = text;
+                            textArea.style.position = 'fixed';
+                            textArea.style.left = '-999999px';
+                            textArea.style.top = '-999999px';
+                            document.body.appendChild(textArea);
+                            textArea.focus();
+                            textArea.select();
+                            const result = document.execCommand('copy');
+                            textArea.remove();
+                            return result;
+                        }
+                    } catch (err) {
+                        console.error('Copy failed:', err);
+                        return false;
+                    }
+                };
+
+                copyToClipboard(address).then(success => {
+                    if (success) {
+                        // Show success feedback
+                        const originalText = copyAddressBtn.innerHTML;
+                        copyAddressBtn.innerHTML = `
+                            <svg class="w-4 h-4 inline mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Copied!
+                        `;
+                        copyAddressBtn.classList.remove('text-blue-400', 'hover:text-blue-300');
+                        copyAddressBtn.classList.add('text-green-400');
+                        
+                        setTimeout(() => {
+                            copyAddressBtn.innerHTML = originalText;
+                            copyAddressBtn.classList.remove('text-green-400');
+                            copyAddressBtn.classList.add('text-blue-400', 'hover:text-blue-300');
+                        }, 2000);
+                    } else {
+                        alert('Failed to copy address to clipboard');
+                    }
+                });
             }
         });
 
