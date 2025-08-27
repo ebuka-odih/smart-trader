@@ -378,6 +378,12 @@
         const qrCodeDiv = document.getElementById('qrCode');
 
         const copyAddressBtn = document.getElementById('copyAddressBtn');
+        
+        // Debug: Check if copy button is found
+        console.log('Copy button found:', copyAddressBtn);
+        if (!copyAddressBtn) {
+            console.error('Copy button not found!');
+        }
 
         // Handle payment method selection
         paymentMethodSelect.addEventListener('change', function() {
@@ -451,29 +457,44 @@
             });
         }
 
-        // Copy address functionality
-        copyAddressBtn.addEventListener('click', function() {
-            const address = walletAddressInput.value;
-            if (address) {
-                // Fallback copy method for older browsers
+        // Copy address functionality - using event delegation as fallback
+        if (copyAddressBtn) {
+            console.log('Adding click event listener to copy button');
+            copyAddressBtn.addEventListener('click', function() {
+                console.log('Copy button clicked!');
+                const address = walletAddressInput.value;
+                console.log('Copy button clicked, address:', address);
+            
+            if (address && address.trim() !== '') {
+                // Modern clipboard API
                 const copyToClipboard = async (text) => {
                     try {
+                        // Try modern clipboard API first
                         if (navigator.clipboard && window.isSecureContext) {
+                            console.log('Using modern clipboard API');
                             await navigator.clipboard.writeText(text);
                             return true;
                         } else {
-                            // Fallback for older browsers
+                            // Fallback for older browsers or non-secure contexts
+                            console.log('Using fallback copy method');
                             const textArea = document.createElement('textarea');
                             textArea.value = text;
                             textArea.style.position = 'fixed';
                             textArea.style.left = '-999999px';
                             textArea.style.top = '-999999px';
+                            textArea.style.opacity = '0';
                             document.body.appendChild(textArea);
                             textArea.focus();
                             textArea.select();
-                            const result = document.execCommand('copy');
-                            textArea.remove();
-                            return result;
+                            
+                            try {
+                                const result = document.execCommand('copy');
+                                document.body.removeChild(textArea);
+                                return result;
+                            } catch (err) {
+                                document.body.removeChild(textArea);
+                                throw err;
+                            }
                         }
                     } catch (err) {
                         console.error('Copy failed:', err);
@@ -482,6 +503,7 @@
                 };
 
                 copyToClipboard(address).then(success => {
+                    console.log('Copy result:', success);
                     if (success) {
                         // Show success feedback
                         const originalText = copyAddressBtn.innerHTML;
@@ -500,9 +522,119 @@
                             copyAddressBtn.classList.add('text-blue-400', 'hover:text-blue-300');
                         }, 2000);
                     } else {
-                        alert('Failed to copy address to clipboard');
+                        // Show error feedback
+                        const originalText = copyAddressBtn.innerHTML;
+                        copyAddressBtn.innerHTML = `
+                            <svg class="w-4 h-4 inline mr-1 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Failed!
+                        `;
+                        copyAddressBtn.classList.remove('text-blue-400', 'hover:text-blue-300');
+                        copyAddressBtn.classList.add('text-red-400');
+                        
+                        setTimeout(() => {
+                            copyAddressBtn.innerHTML = originalText;
+                            copyAddressBtn.classList.remove('text-red-400');
+                            copyAddressBtn.classList.add('text-blue-400', 'hover:text-blue-300');
+                        }, 2000);
                     }
                 });
+            } else {
+                console.log('No address to copy');
+                alert('No wallet address available to copy');
+            }
+        });
+        } else {
+            console.log('Copy button not found, using event delegation');
+        }
+
+        // Event delegation fallback for copy button (in case button is not found initially)
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'copyAddressBtn') {
+                console.log('Copy button clicked via event delegation!');
+                const address = walletAddressInput.value;
+                console.log('Copy button clicked, address:', address);
+                
+                if (address && address.trim() !== '') {
+                    // Modern clipboard API
+                    const copyToClipboard = async (text) => {
+                        try {
+                            // Try modern clipboard API first
+                            if (navigator.clipboard && window.isSecureContext) {
+                                console.log('Using modern clipboard API');
+                                await navigator.clipboard.writeText(text);
+                                return true;
+                            } else {
+                                // Fallback for older browsers or non-secure contexts
+                                console.log('Using fallback copy method');
+                                const textArea = document.createElement('textarea');
+                                textArea.value = text;
+                                textArea.style.position = 'fixed';
+                                textArea.style.left = '-999999px';
+                                textArea.style.top = '-999999px';
+                                textArea.style.opacity = '0';
+                                document.body.appendChild(textArea);
+                                textArea.focus();
+                                textArea.select();
+                                
+                                try {
+                                    const result = document.execCommand('copy');
+                                    document.body.removeChild(textArea);
+                                    return result;
+                                } catch (err) {
+                                    document.body.removeChild(textArea);
+                                    throw err;
+                                }
+                            }
+                        } catch (err) {
+                            console.error('Copy failed:', err);
+                            return false;
+                        }
+                    };
+
+                    copyToClipboard(address).then(success => {
+                        console.log('Copy result:', success);
+                        if (success) {
+                            // Show success feedback
+                            const originalText = e.target.innerHTML;
+                            e.target.innerHTML = `
+                                <svg class="w-4 h-4 inline mr-1 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Copied!
+                            `;
+                            e.target.classList.remove('text-blue-400', 'hover:text-blue-300');
+                            e.target.classList.add('text-green-400');
+                            
+                            setTimeout(() => {
+                                e.target.innerHTML = originalText;
+                                e.target.classList.remove('text-green-400');
+                                e.target.classList.add('text-blue-400', 'hover:text-blue-300');
+                            }, 2000);
+                        } else {
+                            // Show error feedback
+                            const originalText = e.target.innerHTML;
+                            e.target.innerHTML = `
+                                <svg class="w-4 h-4 inline mr-1 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Failed!
+                            `;
+                            e.target.classList.remove('text-blue-400', 'hover:text-blue-300');
+                            e.target.classList.add('text-red-400');
+                            
+                            setTimeout(() => {
+                                e.target.innerHTML = originalText;
+                                e.target.classList.remove('text-red-400');
+                                e.target.classList.add('text-blue-400', 'hover:text-blue-300');
+                            }, 2000);
+                        }
+                    });
+                } else {
+                    console.log('No address to copy');
+                    alert('No wallet address available to copy');
+                }
             }
         });
 
