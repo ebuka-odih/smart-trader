@@ -149,7 +149,7 @@
     </div>
 
     <!-- Second Row: My Subscriptions -->
-    <div class="mb-6">
+    <div class="mb-6 lg:hidden">
         <!-- User Subscriptions Card -->
         <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
             <div class="flex items-center justify-between mb-4">
@@ -188,7 +188,7 @@
     </div>
 
         <!-- Second Row: Trades Tabs -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-32 pb-8">
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
                 <!-- Tabs Header -->
                 <div class="border-b border-gray-700">
                     <nav class="flex space-x-8 px-6" aria-label="Tabs">
@@ -230,38 +230,18 @@
                                 </thead>
                                 <tbody class="bg-gray-800 divide-y divide-gray-700">
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">BTC/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">BUY</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$1,000</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">10x</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$45,230</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">+$156.80</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-red-400 hover:text-red-300">Close</button>
-                                            </td>
-                                </tr>
-                                <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">ETH/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">SELL</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$500</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">20x</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$3,240</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-400">-$89.50</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-red-400 hover:text-red-300">Close</button>
+                                        <td colspan="7" class="px-6 py-12 text-center">
+                                            <div class="flex flex-col items-center space-y-3">
+                                                <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                                </svg>
+                                                <div class="text-gray-400">
+                                                    <p class="text-lg font-medium">No open trades</p>
+                                                    <p class="text-sm">Start trading to see your open positions here</p>
+                                                </div>
+                                            </div>
                                         </td>
-                                </tr>
-                                <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">ADA/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">BUY</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$750</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">15x</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$0.48</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">+$234.20</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button class="text-red-400 hover:text-red-300">Close</button>
-                                        </td>
-                                </tr>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -284,41 +264,18 @@
                                 </thead>
                                 <tbody class="bg-gray-800 divide-y divide-gray-700">
                                     <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">BTC/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">BUY</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$2,000</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$44,500</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$45,800</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">+$580.40</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-01-15</td>
-                                </tr>
-                                <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">ETH/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">SELL</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$1,500</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$3,300</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$3,180</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">+$545.45</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-01-14</td>
-                                </tr>
-                                <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">SOL/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">BUY</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$800</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$98.50</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$95.20</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-red-400">-$268.02</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-01-13</td>
-                                </tr>
-                                <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">XRP/USD</td>
-                                        <td class="px-6 py-4 whitespace-nowrap"><span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">SELL</span></td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$600</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$0.58</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">$0.55</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-green-400">+$310.34</td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">2024-01-12</td>
-                                </tr>
+                                        <td colspan="7" class="px-6 py-12 text-center">
+                                            <div class="flex flex-col items-center space-y-3">
+                                                <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                <div class="text-gray-400">
+                                                    <p class="text-lg font-medium">No closed trades</p>
+                                                    <p class="text-sm">Your completed trades will appear here</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
