@@ -260,4 +260,17 @@ class User extends Authenticatable implements MustVerifyEmail
                 return $this->balance >= $amount;
         }
     }
+
+    /**
+     * Holding relationships
+     */
+    public function holdings()
+    {
+        return $this->hasMany(UserHolding::class);
+    }
+
+    public function holdingTransactions()
+    {
+        return $this->hasMany(HoldingTransaction::class);
+    }
 }

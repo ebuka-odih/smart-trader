@@ -35,4 +35,13 @@ return [
         ],
     ],
 
+    'alpha_vantage' => [
+        'key' => env('ALPHA_VANTAGE_API_KEY'),
+    ],
+
+    'coinmarketcap' => [
+        'key' => env('COINMARKETCAP_API_KEY'),
+        'base_url' => 'https://pro-api.coinmarketcap.com/v1',
+    ],
+
 ];

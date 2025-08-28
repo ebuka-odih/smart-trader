@@ -13,6 +13,7 @@ use App\Http\Controllers\SignalSubscriptionController;
 use App\Http\Controllers\UserStakingController;
 use App\Http\Controllers\UserMiningController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\HoldingController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('index');
@@ -21,7 +22,7 @@ Route::view('market-caps', 'pages.market')->name('market');
 Route::view('about', 'pages.about')->name('about');
 Route::get('loading', [UserController::class, 'loading'])->name('loading');
 
-Route::group(['middleware' => ['auth', 'verified'], 'prefix' => 'user', 'as' => 'user.'], function(){
+Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], function(){
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
     Route::post('update/profile/{id}', [UserController::class, 'updateProfile'])->name('updateProfile');
@@ -110,6 +111,25 @@ Route::get('portfolio/staking', [PortfolioController::class, 'staking'])->name('
 Route::get('portfolio/mining', [PortfolioController::class, 'mining'])->name('portfolio.mining');
 Route::get('portfolio/holding', [PortfolioController::class, 'holding'])->name('portfolio.holding');
 Route::get('portfolio/signal', [PortfolioController::class, 'signal'])->name('portfolio.signal');
+
+// Holding Routes
+Route::get('holding', [HoldingController::class, 'index'])->name('holding.index');
+Route::get('holding/buy-assets', [HoldingController::class, 'buyAssets'])->name('holding.buy-assets');
+Route::post('holding/buy', [HoldingController::class, 'buy'])->name('holding.buy');
+Route::post('holding/sell', [HoldingController::class, 'sell'])->name('holding.sell');
+Route::get('holding/search', [HoldingController::class, 'searchAssets'])->name('holding.search');
+Route::get('holding/list', [HoldingController::class, 'getHoldings'])->name('holding.list');
+Route::get('holding/assets', [HoldingController::class, 'getAssets'])->name('holding.assets');
+Route::get('holding/transactions', [HoldingController::class, 'getTransactions'])->name('holding.transactions');
+
+// Cart & Checkout Routes (Placeholder routes to prevent errors)
+Route::get('cart', function() {
+    return redirect()->route('user.dashboard')->with('info', 'Cart functionality not implemented yet.');
+})->name('cart.index');
+
+Route::get('checkout', function() {
+    return redirect()->route('user.dashboard')->with('info', 'Checkout functionality not implemented yet.');
+})->name('checkout');
 
     Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
     Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');
