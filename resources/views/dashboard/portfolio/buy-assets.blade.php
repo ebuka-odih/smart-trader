@@ -4,23 +4,64 @@
 <style>
 /* Price change animations */
 .price-up {
-    animation: priceUp 2s ease-in-out;
-    background-color: rgba(34, 197, 94, 0.1);
+    animation: priceUp 3s ease-in-out;
+    background-color: rgba(34, 197, 94, 0.2);
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
 }
 
 .price-down {
-    animation: priceDown 2s ease-in-out;
-    background-color: rgba(239, 68, 68, 0.1);
+    animation: priceDown 3s ease-in-out;
+    background-color: rgba(239, 68, 68, 0.2);
+    transform: scale(1.02);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
 }
 
 @keyframes priceUp {
-    0% { background-color: rgba(34, 197, 94, 0.3); }
-    100% { background-color: transparent; }
+    0% { 
+        background-color: rgba(34, 197, 94, 0.4); 
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+    }
+    50% { 
+        background-color: rgba(34, 197, 94, 0.2); 
+        transform: scale(1.02);
+        box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+    }
+    100% { 
+        background-color: transparent; 
+        transform: scale(1);
+        box-shadow: none;
+    }
 }
 
 @keyframes priceDown {
-    0% { background-color: rgba(239, 68, 68, 0.3); }
-    100% { background-color: transparent; }
+    0% { 
+        background-color: rgba(239, 68, 68, 0.4); 
+        transform: scale(1.05);
+        box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+    }
+    50% { 
+        background-color: rgba(239, 68, 68, 0.2); 
+        transform: scale(1.02);
+        box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+    }
+    100% { 
+        background-color: transparent; 
+        transform: scale(1);
+        box-shadow: none;
+    }
+}
+
+/* Pulse animation for price changes */
+.price-pulse {
+    animation: pricePulse 1s ease-in-out;
+}
+
+@keyframes pricePulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
 </style>
 
@@ -213,6 +254,28 @@ let stockAssets = [];
 let selectedAsset = null;
 let searchTimeout = null;
 
+// Function to format asset price with appropriate decimals
+function formatAssetPrice(price) {
+    const numPrice = parseFloat(price);
+    
+    // For prices >= $1, show 2 decimal places
+    if (numPrice >= 1) {
+        return numPrice.toFixed(2);
+    }
+    // For prices >= $0.01, show 4 decimal places
+    else if (numPrice >= 0.01) {
+        return numPrice.toFixed(4);
+    }
+    // For prices >= $0.0001, show 6 decimal places
+    else if (numPrice >= 0.0001) {
+        return numPrice.toFixed(6);
+    }
+    // For very small prices, show 8 decimal places
+    else {
+        return numPrice.toFixed(8);
+    }
+}
+
 // Tab functionality
 document.getElementById('cryptoTab').addEventListener('click', () => switchTab('crypto'));
 document.getElementById('stockTab').addEventListener('click', () => switchTab('stock'));
@@ -338,6 +401,9 @@ function createAssetCard(asset, type) {
     // Get asset icon with color
     const assetIcon = getAssetIcon(asset.symbol, asset.name);
     
+    // Format price with appropriate decimals
+    const formattedPrice = formatAssetPrice(asset.current_price);
+    
     card.innerHTML = `
         <div class="flex items-center justify-between mb-3">
             <div class="flex items-center space-x-3">
@@ -350,7 +416,7 @@ function createAssetCard(asset, type) {
                 </div>
             </div>
             <div class="text-right">
-                <div class="text-white font-medium asset-price">$${parseFloat(asset.current_price).toFixed(8)}</div>
+                <div class="text-white font-medium asset-price">$${formattedPrice}</div>
                 <div class="text-sm ${priceChangeClass} flex items-center asset-change">
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${priceChangeIcon}"></path>
@@ -495,7 +561,59 @@ function getAssetIcon(symbol, name) {
         'HD': { bg: 'bg-orange-500', initial: 'H' },
         'MA': { bg: 'bg-orange-600', initial: 'M' },
         'DIS': { bg: 'bg-blue-500', initial: 'D' },
-        'BAC': { bg: 'bg-red-500', initial: 'B' }
+        'BAC': { bg: 'bg-red-500', initial: 'B' },
+        'WFC': { bg: 'bg-red-600', initial: 'W' },
+        'GS': { bg: 'bg-blue-700', initial: 'G' },
+        'MS': { bg: 'bg-blue-600', initial: 'M' },
+        'C': { bg: 'bg-blue-500', initial: 'C' },
+        'BLK': { bg: 'bg-gray-700', initial: 'B' },
+        'AXP': { bg: 'bg-green-500', initial: 'A' },
+        'SPGI': { bg: 'bg-blue-600', initial: 'S' },
+        'PFE': { bg: 'bg-blue-500', initial: 'P' },
+        'ABBV': { bg: 'bg-purple-600', initial: 'A' },
+        'MRK': { bg: 'bg-blue-500', initial: 'M' },
+        'TMO': { bg: 'bg-red-500', initial: 'T' },
+        'ABT': { bg: 'bg-blue-600', initial: 'A' },
+        'DHR': { bg: 'bg-purple-500', initial: 'D' },
+        'LLY': { bg: 'bg-blue-500', initial: 'L' },
+        'BMY': { bg: 'bg-blue-600', initial: 'B' },
+        'KO': { bg: 'bg-red-500', initial: 'K' },
+        'PEP': { bg: 'bg-blue-500', initial: 'P' },
+        'COST': { bg: 'bg-blue-600', initial: 'C' },
+        'TGT': { bg: 'bg-red-500', initial: 'T' },
+        'LOW': { bg: 'bg-blue-500', initial: 'L' },
+        'SBUX': { bg: 'bg-green-600', initial: 'S' },
+        'MCD': { bg: 'bg-yellow-500', initial: 'M' },
+        'NKE': { bg: 'bg-black', initial: 'N' },
+        'XOM': { bg: 'bg-red-600', initial: 'X' },
+        'CVX': { bg: 'bg-blue-500', initial: 'C' },
+        'BA': { bg: 'bg-blue-600', initial: 'B' },
+        'CAT': { bg: 'bg-yellow-600', initial: 'C' },
+        'GE': { bg: 'bg-blue-500', initial: 'G' },
+        'MMM': { bg: 'bg-red-500', initial: 'M' },
+        'HON': { bg: 'bg-blue-600', initial: 'H' },
+        'CMCSA': { bg: 'bg-blue-500', initial: 'C' },
+        'VZ': { bg: 'bg-red-500', initial: 'V' },
+        'T': { bg: 'bg-blue-600', initial: 'T' },
+        'TMUS': { bg: 'bg-pink-500', initial: 'T' },
+        'CHTR': { bg: 'bg-blue-500', initial: 'C' },
+        'PARA': { bg: 'bg-purple-500', initial: 'P' },
+        'UPS': { bg: 'bg-brown-600', initial: 'U' },
+        'FDX': { bg: 'bg-orange-500', initial: 'F' },
+        'RTX': { bg: 'bg-blue-600', initial: 'R' },
+        'LMT': { bg: 'bg-green-500', initial: 'L' },
+        'DE': { bg: 'bg-green-600', initial: 'D' },
+        'ISRG': { bg: 'bg-blue-500', initial: 'I' },
+        'GILD': { bg: 'bg-blue-600', initial: 'G' },
+        'REGN': { bg: 'bg-purple-500', initial: 'R' },
+        'AMGN': { bg: 'bg-blue-500', initial: 'A' },
+        'MDLZ': { bg: 'bg-purple-600', initial: 'M' },
+        'KHC': { bg: 'bg-red-500', initial: 'K' },
+        'PM': { bg: 'bg-blue-600', initial: 'P' },
+        'MO': { bg: 'bg-red-600', initial: 'M' },
+        'DUK': { bg: 'bg-blue-500', initial: 'D' },
+        'SO': { bg: 'bg-blue-600', initial: 'S' },
+        'NEE': { bg: 'bg-green-500', initial: 'N' }
     };
     
     // Check if we have a predefined color for this crypto
@@ -561,7 +679,8 @@ function openBuyModal(assetId, symbol, name, currentPrice, priceChange, assetTyp
     document.getElementById('selectedAssetId').value = assetId;
     document.getElementById('modalAssetName').textContent = name;
     document.getElementById('modalAssetSymbol').textContent = symbol;
-    document.getElementById('currentPrice').textContent = `$${parseFloat(currentPrice).toFixed(8)}`;
+    const formattedPrice = formatAssetPrice(currentPrice);
+    document.getElementById('currentPrice').textContent = `$${formattedPrice}`;
     document.getElementById('priceChange').textContent = `${priceChange >= 0 ? '+' : ''}${priceChange.toFixed(2)}%`;
     document.getElementById('priceChange').className = priceChange >= 0 ? 'text-sm text-green-400' : 'text-sm text-red-400';
     document.getElementById('buyPrice').value = currentPrice;
@@ -1033,19 +1152,30 @@ function updateAssetPrice(data) {
     priceElements.forEach(element => {
         const oldPrice = parseFloat(element.textContent.replace('$', '').replace(',', ''));
         console.log('Old price from element:', oldPrice);
-        element.textContent = `$${parseFloat(newPrice).toFixed(8)}`;
-        console.log('Updated element text to:', `$${parseFloat(newPrice).toFixed(8)}`);
+        const formattedPrice = formatAssetPrice(newPrice);
         
-        // Add visual feedback for price changes
-        if (newPrice > oldPrice) {
-            element.classList.add('price-up');
-            setTimeout(() => element.classList.remove('price-up'), 2000);
-            console.log('Added price-up animation');
-        } else if (newPrice < oldPrice) {
-            element.classList.add('price-down');
-            setTimeout(() => element.classList.remove('price-down'), 2000);
-            console.log('Added price-down animation');
-        }
+        // Add pulse animation first
+        element.classList.add('price-pulse');
+        
+        // Update the price with a slight delay for better visibility
+        setTimeout(() => {
+            element.textContent = `$${formattedPrice}`;
+            console.log('Updated element text to:', `$${formattedPrice}`);
+            
+            // Add visual feedback for price changes
+            if (newPrice > oldPrice) {
+                element.classList.add('price-up');
+                setTimeout(() => element.classList.remove('price-up'), 3000);
+                console.log('Added price-up animation');
+            } else if (newPrice < oldPrice) {
+                element.classList.add('price-down');
+                setTimeout(() => element.classList.remove('price-down'), 3000);
+                console.log('Added price-down animation');
+            }
+            
+            // Remove pulse animation
+            setTimeout(() => element.classList.remove('price-pulse'), 1000);
+        }, 200);
     });
     
     // Update price change percentage
@@ -1062,7 +1192,8 @@ function updateAssetPrice(data) {
     // Update modal if open
     if (selectedAsset && selectedAsset.id == assetId) {
         console.log('Updating modal for selected asset');
-        document.getElementById('currentPrice').textContent = `$${parseFloat(newPrice).toFixed(8)}`;
+        const formattedPrice = formatAssetPrice(newPrice);
+        document.getElementById('currentPrice').textContent = `$${formattedPrice}`;
         document.getElementById('priceChange').textContent = `${priceChange >= 0 ? '+' : ''}${parseFloat(priceChange).toFixed(2)}%`;
         document.getElementById('priceChange').className = priceChange >= 0 ? 'text-sm text-green-400' : 'text-sm text-red-400';
         document.getElementById('buyPrice').value = newPrice;

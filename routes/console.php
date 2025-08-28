@@ -17,3 +17,6 @@ Schedule::call(function () {
     $controller = new \App\Http\Controllers\TradeController;
     $controller->checkTradeDuration();
 });
+
+// Update prices every 30 seconds for more frequent movement
+Schedule::command('prices:update-scheduled')->everyThirtySeconds();

@@ -92,7 +92,7 @@ class AssetPriceService
                     'X-CMC_PRO_API_KEY' => $this->coinmarketcapApiKey,
                     'Accept' => 'application/json'
                 ])
-                ->get($this->coinMarketCapApi . '/cryptocurrency/quotes/latest', [
+                ->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/quotes/latest', [
                     'symbol' => implode(',', $symbols),
                     'convert' => 'USD'
                 ]);
@@ -174,7 +174,7 @@ class AssetPriceService
                     'X-CMC_PRO_API_KEY' => $this->coinmarketcapApiKey,
                     'Accept' => 'application/json'
                 ])
-                ->get($this->coinMarketCapApi . '/cryptocurrency/map', [
+                ->get('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map', [
                     'limit' => 100,
                     'sort' => 'cmc_rank'
                 ]);
