@@ -142,6 +142,9 @@
                                 <input type="number" id="buyQuantity" step="0.00000001" min="0.00000001"
                                        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                                        placeholder="0.00000000">
+                                <div class="mt-1 text-xs text-green-400">
+                                    Available Balance: $<span id="userHoldingBalance">{{ number_format(auth()->user()->balance, 2) }}</span>
+                                </div>
                             </div>
 
                             <!-- Price per Unit -->
@@ -539,11 +542,34 @@ function openBuyModal(assetId, symbol, name, currentPrice, priceChange) {
     document.getElementById('priceChange').className = priceChange >= 0 ? 'text-sm text-green-400' : 'text-sm text-red-400';
     document.getElementById('buyPrice').value = currentPrice;
     
+    // Update user balance display
+    updateUserBalanceDisplay();
+    
     document.getElementById('buyAssetModal').classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     
     // Initialize TradingView chart
     initTradingViewChart(symbol);
+}
+
+function updateUserBalanceDisplay() {
+    // Fetch current user balance
+    fetch('/user/holding/balance', {
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('userHoldingBalance').textContent = parseFloat(data.balance).toFixed(2);
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching balance:', error);
+    });
 }
 
 function initTradingViewChart(symbol) {
@@ -860,6 +886,10 @@ document.getElementById('buyAssetForm').addEventListener('submit', function(e) {
     .then(data => {
         if (data.success) {
             alert('Asset purchased successfully!');
+            // Update balance display with new balance
+            if (data.new_balance !== undefined) {
+                document.getElementById('userHoldingBalance').textContent = parseFloat(data.new_balance).toFixed(2);
+            }
             closeBuyModal();
             // Redirect back to portfolio
             window.location.href = '/user/holding';

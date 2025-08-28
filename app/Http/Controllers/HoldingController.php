@@ -68,7 +68,7 @@ class HoldingController extends Controller
                 'success' => true,
                 'message' => 'Asset purchased successfully!',
                 'holding' => $holding->load('asset'),
-                'new_balance' => Auth::user()->holding_balance
+                'new_balance' => Auth::user()->balance
             ]);
         } catch (\Exception $e) {
             Log::error('Buy asset error: ' . $e->getMessage());
@@ -217,6 +217,24 @@ class HoldingController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to load transactions'
+            ], 500);
+        }
+    }
+
+    public function getBalance(Request $request)
+    {
+        try {
+            $user = Auth::user();
+            
+            return response()->json([
+                'success' => true,
+                'balance' => $user->balance
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Get balance error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to load balance'
             ], 500);
         }
     }

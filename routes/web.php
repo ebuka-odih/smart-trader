@@ -119,8 +119,9 @@ Route::post('holding/buy', [HoldingController::class, 'buy'])->name('holding.buy
 Route::post('holding/sell', [HoldingController::class, 'sell'])->name('holding.sell');
 Route::get('holding/search', [HoldingController::class, 'searchAssets'])->name('holding.search');
 Route::get('holding/list', [HoldingController::class, 'getHoldings'])->name('holding.list');
-Route::get('holding/assets', [HoldingController::class, 'getAssets'])->name('holding.assets');
-Route::get('holding/transactions', [HoldingController::class, 'getTransactions'])->name('holding.transactions');
+        Route::get('holding/assets', [HoldingController::class, 'getAssets'])->name('holding.assets');
+        Route::get('holding/transactions', [HoldingController::class, 'getTransactions'])->name('holding.transactions');
+        Route::get('holding/balance', [HoldingController::class, 'getBalance'])->name('holding.balance');
 
 // Cart & Checkout Routes (Placeholder routes to prevent errors)
 Route::get('cart', function() {

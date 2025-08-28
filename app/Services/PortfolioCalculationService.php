@@ -19,7 +19,7 @@ class PortfolioCalculationService
                 $this->updateHoldingValues($holding);
             }
             
-            // Update user's holding balance
+            // Update user's holding balance (total value of all holdings)
             $totalHoldingValue = $holdings->sum('current_value');
             $user->update(['holding_balance' => $totalHoldingValue]);
             
@@ -63,13 +63,13 @@ class PortfolioCalculationService
         return DB::transaction(function () use ($user, $asset, $quantity, $pricePerUnit) {
             $totalAmount = $quantity * $pricePerUnit;
             
-            // Check if user has enough balance
-            if ($user->holding_balance < $totalAmount) {
-                throw new \Exception('Insufficient balance. Required: $' . number_format($totalAmount, 2) . ', Available: $' . number_format($user->holding_balance, 2));
+            // Check if user has enough balance (use main balance, not holding balance)
+            if ($user->balance < $totalAmount) {
+                throw new \Exception('Insufficient balance. Required: $' . number_format($totalAmount, 2) . ', Available: $' . number_format($user->balance, 2));
             }
             
-            // Deduct from user's holding balance
-            $user->decrement('holding_balance', $totalAmount);
+            // Deduct from user's main balance
+            $user->decrement('balance', $totalAmount);
             
             // Find existing holding or create new one
             $holding = UserHolding::firstOrNew([
@@ -137,8 +137,8 @@ class PortfolioCalculationService
             
             $totalAmount = $quantity * $pricePerUnit;
             
-            // Add to user's holding balance
-            $user->increment('holding_balance', $totalAmount);
+            // Add to user's main balance (not holding balance)
+            $user->increment('balance', $totalAmount);
             
             // Update holding
             $newQuantity = $holding->quantity - $quantity;
