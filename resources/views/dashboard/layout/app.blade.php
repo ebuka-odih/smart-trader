@@ -12,6 +12,9 @@
     <!-- Tailwind CSS CDN for immediate styling -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Pusher JS for real-time updates -->
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+
     <!-- Vite assets (uncomment when running npm run dev) -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     

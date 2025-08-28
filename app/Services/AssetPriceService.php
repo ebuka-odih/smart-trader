@@ -3,21 +3,19 @@
 namespace App\Services;
 
 use App\Models\Asset;
+use App\Events\PriceUpdated;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class AssetPriceService
 {
-    private $coinMarketCapApi;
-    private $alphaVantageApi = 'https://www.alphavantage.co/query';
-    private $alphaVantageKey;
-    private $coinMarketCapKey;
+    private $coinmarketcapApiKey;
+    private $finnhubApiKey;
 
     public function __construct()
     {
-        $this->alphaVantageKey = config('services.alpha_vantage.key');
-        $this->coinMarketCapKey = config('services.coinmarketcap.key');
-        $this->coinMarketCapApi = config('services.coinmarketcap.base_url');
+        $this->coinmarketcapApiKey = config('services.coinmarketcap.api_key');
+        $this->finnhubApiKey = config('services.finnhub.api_key');
     }
 
     public function updateCryptoPrices(): void
@@ -49,42 +47,49 @@ class AssetPriceService
         }
     }
 
-    public function updateStockPrices(): void
+    public function updateStockPrices()
     {
         try {
-            $stockAssets = Asset::where('type', 'stock')
-                ->where('is_active', true)
-                ->get();
+            $stocks = Asset::where('type', 'stock')->get();
             
-            if ($stockAssets->isEmpty()) {
-                Log::info('No stock assets found to update');
-                return;
+            foreach ($stocks as $stock) {
+                $price = $this->getStockPrice($stock->symbol);
+                if ($price && $price['current_price'] != $stock->current_price) {
+                    $oldPrice = $stock->current_price;
+                    
+                    $stock->update([
+                        'current_price' => $price['current_price'],
+                        'price_change_24h' => $price['price_change_24h'],
+                        'market_cap' => $price['market_cap'] ?? 0,
+                        'last_updated' => now()
+                    ]);
+                    
+                    // Broadcast price update
+                    broadcast(new PriceUpdated($stock, $price['current_price'], $price['price_change_24h']))->toOthers();
+                    
+                    Log::info("Stock price updated: {$stock->symbol} - {$oldPrice} -> {$price['current_price']}");
+                }
             }
             
-            foreach ($stockAssets as $asset) {
-                $this->updateStockPrice($asset);
-                
-                // Rate limiting for Alpha Vantage (5 calls per minute)
-                sleep(12);
-            }
-            
-            Log::info('Stock prices updated successfully', ['count' => $stockAssets->count()]);
+            Log::info('Stock prices updated successfully');
+            return true;
         } catch (\Exception $e) {
-            Log::error('Failed to update stock prices: ' . $e->getMessage());
+            Log::error('Error updating stock prices: ' . $e->getMessage());
+            return false;
         }
     }
 
     private function updateCryptoBatch(array $symbols): void
     {
         try {
-            if (!$this->coinMarketCapKey) {
+            if (!$this->coinmarketcapApiKey) {
                 Log::warning('CoinMarketCap API key not configured');
                 return;
             }
 
             $response = Http::timeout(30)
                 ->withHeaders([
-                    'X-CMC_PRO_API_KEY' => $this->coinMarketCapKey,
+                    'X-CMC_PRO_API_KEY' => $this->coinmarketcapApiKey,
                     'Accept' => 'application/json'
                 ])
                 ->get($this->coinMarketCapApi . '/cryptocurrency/quotes/latest', [
@@ -100,15 +105,23 @@ class AssetPriceService
                         $asset = Asset::where('symbol', $symbol)->first();
                         if ($asset && isset($cryptoData['quote']['USD'])) {
                             $quote = $cryptoData['quote']['USD'];
+                            $oldPrice = $asset->current_price;
+                            $newPrice = $quote['price'] ?? 0;
                             
                             $asset->update([
-                                'current_price' => $quote['price'] ?? 0,
+                                'current_price' => $newPrice,
                                 'price_change_24h' => $quote['volume_change_24h'] ?? 0,
                                 'price_change_percentage_24h' => $quote['percent_change_24h'] ?? 0,
                                 'market_cap' => $quote['market_cap'] ?? 0,
                                 'volume_24h' => $quote['volume_24h'] ?? 0,
                                 'last_updated' => now(),
                             ]);
+                            
+                            // Broadcast price update if price changed
+                            if ($oldPrice != $newPrice) {
+                                broadcast(new PriceUpdated($asset, $newPrice, $quote['percent_change_24h'] ?? 0))->toOthers();
+                                Log::info("Crypto price updated: {$asset->symbol} - {$oldPrice} -> {$newPrice}");
+                            }
                         }
                     }
                 }
@@ -123,57 +136,42 @@ class AssetPriceService
         }
     }
 
-    private function updateStockPrice(Asset $asset): void
+    private function getStockPrice($symbol)
     {
         try {
-            if (!$this->alphaVantageKey) {
-                Log::warning('Alpha Vantage API key not configured');
-                return;
-            }
-
-            $response = Http::timeout(30)->get($this->alphaVantageApi, [
-                'function' => 'GLOBAL_QUOTE',
-                'symbol' => $asset->symbol,
-                'apikey' => $this->alphaVantageKey
+            $response = Http::get('https://finnhub.io/api/v1/quote', [
+                'symbol' => $symbol,
+                'token' => $this->finnhubApiKey
             ]);
 
             if ($response->successful()) {
                 $data = $response->json();
                 
-                if (isset($data['Global Quote'])) {
-                    $quote = $data['Global Quote'];
-                    
-                    $asset->update([
-                        'current_price' => $quote['05. price'] ?? 0,
-                        'price_change_24h' => $quote['09. change'] ?? 0,
-                        'price_change_percentage_24h' => $quote['10. change percent'] ?? 0,
-                        'volume_24h' => $quote['06. volume'] ?? 0,
-                        'last_updated' => now(),
-                    ]);
-                }
-            } else {
-                Log::warning('Alpha Vantage API request failed', [
-                    'symbol' => $asset->symbol,
-                    'status' => $response->status(),
-                    'body' => $response->body()
-                ]);
+                return [
+                    'current_price' => $data['c'] ?? 0, // Current price
+                    'price_change_24h' => $data['dp'] ?? 0, // Daily percentage change
+                    'market_cap' => $data['market_cap'] ?? 0
+                ];
             }
+            
+            return null;
         } catch (\Exception $e) {
-            Log::error('Error updating stock price for ' . $asset->symbol . ': ' . $e->getMessage());
+            Log::error("Error fetching stock price for {$symbol}: " . $e->getMessage());
+            return null;
         }
     }
 
     public function getCryptoAssets(): array
     {
         try {
-            if (!$this->coinMarketCapKey) {
+            if (!$this->coinmarketcapApiKey) {
                 Log::warning('CoinMarketCap API key not configured');
                 return [];
             }
 
             $response = Http::timeout(30)
                 ->withHeaders([
-                    'X-CMC_PRO_API_KEY' => $this->coinMarketCapKey,
+                    'X-CMC_PRO_API_KEY' => $this->coinmarketcapApiKey,
                     'Accept' => 'application/json'
                 ])
                 ->get($this->coinMarketCapApi . '/cryptocurrency/map', [
@@ -195,13 +193,13 @@ class AssetPriceService
     public function getCryptoMetadata(string $symbol): ?array
     {
         try {
-            if (!$this->coinMarketCapKey) {
+            if (!$this->coinmarketcapApiKey) {
                 return null;
             }
 
             $response = Http::timeout(30)
                 ->withHeaders([
-                    'X-CMC_PRO_API_KEY' => $this->coinMarketCapKey,
+                    'X-CMC_PRO_API_KEY' => $this->coinmarketcapApiKey,
                     'Accept' => 'application/json'
                 ])
                 ->get($this->coinMarketCapApi . '/cryptocurrency/info', [
@@ -258,6 +256,60 @@ class AssetPriceService
             
         } catch (\Exception $e) {
             Log::error('Error populating crypto assets: ' . $e->getMessage());
+        }
+    }
+
+    public function populateStockAssets()
+    {
+        try {
+            // Popular stocks to populate
+            $popularStocks = [
+                'AAPL' => 'Apple Inc.',
+                'MSFT' => 'Microsoft Corporation',
+                'GOOGL' => 'Alphabet Inc.',
+                'AMZN' => 'Amazon.com Inc.',
+                'TSLA' => 'Tesla Inc.',
+                'META' => 'Meta Platforms Inc.',
+                'NVDA' => 'NVIDIA Corporation',
+                'BRK.A' => 'Berkshire Hathaway Inc.',
+                'JNJ' => 'Johnson & Johnson',
+                'V' => 'Visa Inc.',
+                'JPM' => 'JPMorgan Chase & Co.',
+                'PG' => 'Procter & Gamble Co.',
+                'UNH' => 'UnitedHealth Group Inc.',
+                'HD' => 'The Home Depot Inc.',
+                'MA' => 'Mastercard Inc.',
+                'DIS' => 'The Walt Disney Company',
+                'PYPL' => 'PayPal Holdings Inc.',
+                'ADBE' => 'Adobe Inc.',
+                'CRM' => 'Salesforce Inc.',
+                'NFLX' => 'Netflix Inc.'
+            ];
+
+            foreach ($popularStocks as $symbol => $name) {
+                // Check if asset already exists
+                $existingAsset = Asset::where('symbol', $symbol)->first();
+                if (!$existingAsset) {
+                    // Get initial price data
+                    $priceData = $this->getStockPrice($symbol);
+                    
+                    Asset::create([
+                        'symbol' => $symbol,
+                        'name' => $name,
+                        'type' => 'stock',
+                        'current_price' => $priceData['current_price'] ?? 0,
+                        'price_change_24h' => $priceData['price_change_24h'] ?? 0,
+                        'market_cap' => $priceData['market_cap'] ?? 0,
+                        'last_updated' => now()
+                    ]);
+                }
+            }
+            
+            Log::info('Stock assets populated successfully');
+            return true;
+        } catch (\Exception $e) {
+            Log::error('Error populating stock assets: ' . $e->getMessage());
+            return false;
         }
     }
 }

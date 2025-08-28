@@ -1,6 +1,29 @@
 @extends('dashboard.layout.app')
 
 @section('content')
+<style>
+/* Price change animations */
+.price-up {
+    animation: priceUp 2s ease-in-out;
+    background-color: rgba(34, 197, 94, 0.1);
+}
+
+.price-down {
+    animation: priceDown 2s ease-in-out;
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+@keyframes priceUp {
+    0% { background-color: rgba(34, 197, 94, 0.3); }
+    100% { background-color: transparent; }
+}
+
+@keyframes priceDown {
+    0% { background-color: rgba(239, 68, 68, 0.3); }
+    100% { background-color: transparent; }
+}
+</style>
+
 <div class="space-y-6">
     <!-- Page Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
@@ -306,6 +329,7 @@ function renderAssets(type, assets) {
 function createAssetCard(asset, type) {
     const card = document.createElement('div');
     card.className = 'bg-gray-700 rounded-lg p-4 border border-gray-600 hover:border-gray-500 transition-colors cursor-pointer';
+    card.setAttribute('data-asset-id', asset.id);
     
     const priceChange = asset.price_change_percentage_24h || 0;
     const priceChangeClass = priceChange >= 0 ? 'text-green-400' : 'text-red-400';
@@ -326,8 +350,8 @@ function createAssetCard(asset, type) {
                 </div>
             </div>
             <div class="text-right">
-                <div class="text-white font-medium">$${parseFloat(asset.current_price).toFixed(8)}</div>
-                <div class="text-sm ${priceChangeClass} flex items-center">
+                <div class="text-white font-medium asset-price">$${parseFloat(asset.current_price).toFixed(8)}</div>
+                <div class="text-sm ${priceChangeClass} flex items-center asset-change">
                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${priceChangeIcon}"></path>
                     </svg>
@@ -336,10 +360,10 @@ function createAssetCard(asset, type) {
             </div>
         </div>
         <div class="flex space-x-2">
-            <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors" onclick="openBuyModal(${asset.id}, '${asset.symbol}', '${asset.name}', ${asset.current_price}, ${priceChange})">
+            <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors" onclick="openBuyModal(${asset.id}, '${asset.symbol}', '${asset.name}', ${asset.current_price}, ${priceChange}, '${asset.type}')">
                 Buy
             </button>
-            <button class="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors" onclick="viewChart('${asset.symbol}', '${type}')">
+            <button class="bg-gray-600 hover:bg-gray-500 text-white px-2 py-1.5 rounded text-xs font-medium transition-colors" onclick="viewAssetChart('${asset.symbol}', '${asset.name}', '${asset.type}')">
                 Chart
             </button>
         </div>
@@ -531,8 +555,8 @@ function applySearchFilter() {
 }
 
 // Modal functions
-function openBuyModal(assetId, symbol, name, currentPrice, priceChange) {
-    selectedAsset = { id: assetId, symbol, name, current_price: currentPrice };
+function openBuyModal(assetId, symbol, name, currentPrice, priceChange, assetType) {
+    selectedAsset = { id: assetId, symbol, name, current_price: currentPrice, type: assetType };
     
     document.getElementById('selectedAssetId').value = assetId;
     document.getElementById('modalAssetName').textContent = name;
@@ -549,7 +573,7 @@ function openBuyModal(assetId, symbol, name, currentPrice, priceChange) {
     document.body.style.overflow = 'hidden';
     
     // Initialize TradingView chart
-    initTradingViewChart(symbol);
+    initTradingViewChart(symbol, assetType);
 }
 
 function updateUserBalanceDisplay() {
@@ -572,11 +596,39 @@ function updateUserBalanceDisplay() {
     });
 }
 
-function initTradingViewChart(symbol) {
+function initTradingViewChart(symbol, assetType) {
     // Remove existing chart
     const chartContainer = document.getElementById('tradingViewChart');
     chartContainer.innerHTML = '';
     
+    // If it's a stock, use NASDAQ
+    if (assetType === 'stock') {
+        const tradingViewSymbol = `NASDAQ:${symbol}`;
+        
+        new TradingView.widget({
+            "width": "100%",
+            "height": "100%",
+            "symbol": tradingViewSymbol,
+            "interval": "D",
+            "timezone": "Etc/UTC",
+            "theme": "dark",
+            "style": "1",
+            "locale": "en",
+            "toolbar_bg": "#f1f3f6",
+            "enable_publishing": false,
+            "hide_side_toolbar": false,
+            "allow_symbol_change": true,
+            "container_id": "tradingViewChart",
+            "studies": [
+                "RSI@tv-basicstudies",
+                "MACD@tv-basicstudies",
+                "Volume@tv-basicstudies"
+            ]
+        });
+        return;
+    }
+    
+    // For crypto assets, use the existing logic
     // Determine the correct symbol format for TradingView with multiple exchange fallbacks
     let tradingViewSymbol = symbol;
     let exchange = 'BINANCE';
@@ -807,10 +859,9 @@ function initTradingViewChart(symbol) {
     }, 5000); // 5 second timeout
 }
 
-function viewChart(symbol, type) {
-    // For now, just open the buy modal with chart view
-    // In a full implementation, this could open a dedicated chart page
-    alert(`Chart view for ${symbol} will be implemented in the next phase`);
+function viewAssetChart(symbol, name, type) {
+    // Redirect to the dedicated chart page
+    window.location.href = `/user/holding/chart/${symbol}`;
 }
 
 // Close modal functions
@@ -910,7 +961,115 @@ document.getElementById('buyAssetForm').addEventListener('submit', function(e) {
 // Load initial data
 document.addEventListener('DOMContentLoaded', function() {
     loadCryptoAssets();
+    
+    // Initialize Pusher for real-time updates
+    initializePusher();
 });
+
+// Initialize Pusher for real-time price updates
+function initializePusher() {
+    // Check if Pusher is available
+    if (typeof Pusher === 'undefined') {
+        console.warn('Pusher is not loaded. Real-time updates will be disabled.');
+        return;
+    }
+
+    // Enable pusher logging for debugging
+    Pusher.logToConsole = true;
+
+    try {
+        // Use the actual Pusher credentials from your test
+        const pusher = new Pusher('f8a3ce7115e96cd715fa', {
+            cluster: 'mt1'
+        });
+
+        // Subscribe to price updates channel
+        const channel = pusher.subscribe('price-updates');
+        
+        // Listen for price updates (new event name)
+        channel.bind('price.updated', function(data) {
+            console.log('Price update received (new):', data);
+            updateAssetPrice(data);
+        });
+
+        // Also listen for the full class name (fallback)
+        channel.bind('App\\Events\\PriceUpdated', function(data) {
+            console.log('Price update received (fallback):', data);
+            updateAssetPrice(data);
+        });
+
+        // Also listen for test events
+        channel.bind('pusher:subscription_succeeded', function() {
+            console.log('Successfully subscribed to price-updates channel');
+        });
+
+        // Test event listener for any event
+        channel.bind_global(function(eventName, data) {
+            console.log('Global event received:', eventName, data);
+        });
+
+        console.log('Pusher initialized successfully for real-time updates');
+    } catch (error) {
+        console.error('Failed to initialize Pusher:', error);
+    }
+}
+
+// Function to update asset price in real-time
+function updateAssetPrice(data) {
+    console.log('updateAssetPrice called with data:', data);
+    
+    const assetId = data.asset_id;
+    const newPrice = data.current_price;
+    const priceChange = data.price_change_24h;
+    
+    console.log('Looking for asset with ID:', assetId);
+    console.log('New price:', newPrice);
+    console.log('Price change:', priceChange);
+    
+    // Update price in asset cards
+    const priceElements = document.querySelectorAll(`[data-asset-id="${assetId}"] .asset-price`);
+    console.log('Found price elements:', priceElements.length);
+    
+    priceElements.forEach(element => {
+        const oldPrice = parseFloat(element.textContent.replace('$', '').replace(',', ''));
+        console.log('Old price from element:', oldPrice);
+        element.textContent = `$${parseFloat(newPrice).toFixed(8)}`;
+        console.log('Updated element text to:', `$${parseFloat(newPrice).toFixed(8)}`);
+        
+        // Add visual feedback for price changes
+        if (newPrice > oldPrice) {
+            element.classList.add('price-up');
+            setTimeout(() => element.classList.remove('price-up'), 2000);
+            console.log('Added price-up animation');
+        } else if (newPrice < oldPrice) {
+            element.classList.add('price-down');
+            setTimeout(() => element.classList.remove('price-down'), 2000);
+            console.log('Added price-down animation');
+        }
+    });
+    
+    // Update price change percentage
+    const changeElements = document.querySelectorAll(`[data-asset-id="${assetId}"] .asset-change`);
+    console.log('Found change elements:', changeElements.length);
+    
+    changeElements.forEach(element => {
+        const isPositive = priceChange >= 0;
+        element.textContent = `${isPositive ? '+' : ''}${parseFloat(priceChange).toFixed(2)}%`;
+        element.className = `asset-change text-sm font-medium ${isPositive ? 'text-green-400' : 'text-red-400'}`;
+        console.log('Updated change element to:', `${isPositive ? '+' : ''}${parseFloat(priceChange).toFixed(2)}%`);
+    });
+    
+    // Update modal if open
+    if (selectedAsset && selectedAsset.id == assetId) {
+        console.log('Updating modal for selected asset');
+        document.getElementById('currentPrice').textContent = `$${parseFloat(newPrice).toFixed(8)}`;
+        document.getElementById('priceChange').textContent = `${priceChange >= 0 ? '+' : ''}${parseFloat(priceChange).toFixed(2)}%`;
+        document.getElementById('priceChange').className = priceChange >= 0 ? 'text-sm text-green-400' : 'text-sm text-red-400';
+        document.getElementById('buyPrice').value = newPrice;
+    }
+    
+    console.log('updateAssetPrice completed');
+}
 </script>
 
 

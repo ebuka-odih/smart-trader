@@ -115,6 +115,7 @@ Route::get('portfolio/signal', [PortfolioController::class, 'signal'])->name('po
 // Holding Routes
 Route::get('holding', [HoldingController::class, 'index'])->name('holding.index');
 Route::get('holding/buy-assets', [HoldingController::class, 'buyAssets'])->name('holding.buy-assets');
+Route::get('holding/chart/{symbol}', [HoldingController::class, 'assetChart'])->name('holding.asset-chart');
 Route::post('holding/buy', [HoldingController::class, 'buy'])->name('holding.buy');
 Route::post('holding/sell', [HoldingController::class, 'sell'])->name('holding.sell');
 Route::get('holding/search', [HoldingController::class, 'searchAssets'])->name('holding.search');

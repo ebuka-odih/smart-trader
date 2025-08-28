@@ -24,18 +24,17 @@ class UpdateStockPrices extends Command
     /**
      * Execute the console command.
      */
-    public function handle(AssetPriceService $priceService)
+    public function handle()
     {
-        $this->info('Updating stock prices...');
+        $this->info('Starting to update stock prices...');
         
-        try {
-            $priceService->updateStockPrices();
+        $service = new AssetPriceService();
+        $result = $service->updateStockPrices();
+        
+        if ($result) {
             $this->info('Stock prices updated successfully!');
-        } catch (\Exception $e) {
-            $this->error('Failed to update stock prices: ' . $e->getMessage());
-            return 1;
+        } else {
+            $this->error('Failed to update stock prices. Check the logs for details.');
         }
-
-        return 0;
     }
 }

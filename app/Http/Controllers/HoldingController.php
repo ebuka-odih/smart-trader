@@ -39,12 +39,19 @@ class HoldingController extends Controller
 
     public function buyAssets()
     {
-        try {
-            return view('dashboard.portfolio.buy-assets');
-        } catch (\Exception $e) {
-            Log::error('Error in buy assets: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to load buy assets page.');
+        return view('dashboard.portfolio.buy-assets');
+    }
+
+    public function assetChart($symbol)
+    {
+        // Get asset details
+        $asset = Asset::where('symbol', strtoupper($symbol))->first();
+        
+        if (!$asset) {
+            abort(404, 'Asset not found');
         }
+        
+        return view('dashboard.portfolio.asset-chart', compact('asset'));
     }
 
     public function buy(Request $request)

@@ -40,8 +40,11 @@ return [
     ],
 
     'coinmarketcap' => [
-        'key' => env('COINMARKETCAP_API_KEY'),
-        'base_url' => 'https://pro-api.coinmarketcap.com/v1',
+        'api_key' => env('COINMARKETCAP_API_KEY'),
+    ],
+
+    'finnhub' => [
+        'api_key' => env('FINNHUB_API_KEY'),
     ],
 
 ];
