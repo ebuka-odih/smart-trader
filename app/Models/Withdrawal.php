@@ -9,7 +9,17 @@ use Illuminate\Database\Eloquent\Model;
 class Withdrawal extends Model
 {
     use HasFactory, HasUuids;
-    protected $fillable = [];
+    protected $fillable = [
+        'user_id',
+        'amount',
+        'payment_method',
+        'from_account',
+        'address',
+        'wallet',
+        'bank',
+        'paypal',
+        'status',
+    ];
 
     protected $casts = ['bank' => 'array'];
 

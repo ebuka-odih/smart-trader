@@ -273,4 +273,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(HoldingTransaction::class);
     }
+
+    public function fundTransfers()
+    {
+        return $this->hasMany(FundTransfer::class);
+    }
 }

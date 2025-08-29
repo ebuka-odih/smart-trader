@@ -29,6 +29,9 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::resource('/trade-pair', AdminTradePairController::class);
 
     Route::get('/transactions/deposits', [AdminTransactionController::class, 'deposits'])->name('transactions.deposits');
+    Route::get('/transactions/withdrawals', [AdminTransactionController::class, 'withdrawals'])->name('transactions.withdrawals');
+    Route::post('/transactions/withdrawals/{withdrawal}/approve', [AdminTransactionController::class, 'approveWithdrawal'])->name('transactions.withdrawals.approve');
+    Route::post('/transactions/withdrawals/{withdrawal}/reject', [AdminTransactionController::class, 'rejectWithdrawal'])->name('transactions.withdrawals.reject');
 
     Route::resource('/signals', AdminSignalController::class)->names('signals');
 

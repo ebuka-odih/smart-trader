@@ -41,7 +41,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     Route::post('generate/qrcode', [DepositController::class, 'generateQRCode'])->name('generate.qrcode');
 
     Route::get('withdrawal/', [WithdrawalController::class, 'withdrawal'])->name('withdrawal');
-    Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'])->name('withdrawalStore');
+Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'])->name('withdrawalStore');
+Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds');
+Route::get('withdrawal/history', [WithdrawalController::class, 'getWithdrawalHistory'])->name('withdrawal.history');
+Route::get('transfer/history', [WithdrawalController::class, 'getTransferHistory'])->name('transfer.history');
 
     Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');

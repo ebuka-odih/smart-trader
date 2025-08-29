@@ -3,9 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\ApproveDepositMail;
-use App\Mail\ApproveWithdrawalMail;
-use App\Mail\DeclineDepositMail;
+use App\Mail\DepositApprovalMail;
 use App\Models\Deposit;
 use App\Models\User;
 use App\Models\Withdrawal;
@@ -83,9 +81,9 @@ class TransactionController extends Controller
             }
         $user->save();
 
-            // Send approval email
+            // Send approval email to user
             try {
-        Mail::to($deposit->user->email)->send(new ApproveDepositMail($deposit));
+                Mail::to($deposit->user->email)->send(new DepositApprovalMail($deposit));
             } catch (\Exception $e) {
                 \Log::error('Failed to send deposit approval email: ' . $e->getMessage());
             }
@@ -163,22 +161,31 @@ class TransactionController extends Controller
     }
 
     /**
-     * Approve a withdrawal
+     * Display all withdrawals (alias for withdrawal)
      */
-    public function approveWithdrawal($id)
+    public function withdrawals()
+    {
+        $withdrawal = Withdrawal::with('user')->latest()->get();
+        return view('admin.transactions.withdrawal', compact('withdrawal'));
+    }
+
+
+
+    /**
+     * Approve a withdrawal (route model binding)
+     */
+    public function approveWithdrawal(Withdrawal $withdrawal)
     {
         try {
-            $withdraw = Withdrawal::with('user')->findOrFail($id);
-            
-            if ($withdraw->status != 0) {
+            if ($withdrawal->status != 0) {
                 return redirect()->back()->with('error', 'Withdrawal has already been processed.');
             }
 
-        $withdraw->status = 1;
-        $withdraw->save();
+            $withdrawal->status = 1;
+            $withdrawal->save();
 
             try {
-        Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
+                Mail::to($withdrawal->user->email)->send(new ApproveWithdrawalMail($withdrawal));
             } catch (\Exception $e) {
                 \Log::error('Failed to send withdrawal approval email: ' . $e->getMessage());
             }
@@ -213,6 +220,39 @@ class TransactionController extends Controller
 
             try {
         Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send withdrawal decline email: ' . $e->getMessage());
+            }
+
+            return redirect()->back()->with('success', 'Withdrawal declined and user balance refunded.');
+
+        } catch (\Exception $e) {
+            \Log::error('Withdrawal decline failed: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to decline withdrawal. Please try again.');
+        }
+    }
+
+    /**
+     * Reject a withdrawal and refund user's balance (route model binding)
+     */
+    public function rejectWithdrawal(Withdrawal $withdrawal)
+    {
+        try {
+            if ($withdrawal->status != 0) {
+                return redirect()->back()->with('error', 'Withdrawal has already been processed.');
+            }
+
+            $withdrawal->status = 2;
+            $withdrawal->save();
+
+            // Refund user's balance based on the account it was withdrawn from
+            $user = $withdrawal->user;
+            $fromAccount = $withdrawal->from_account ?? 'balance';
+            $user->$fromAccount += $withdrawal->amount;
+            $user->save();
+
+            try {
+                Mail::to($withdrawal->user->email)->send(new ApproveWithdrawalMail($withdrawal));
             } catch (\Exception $e) {
                 \Log::error('Failed to send withdrawal decline email: ' . $e->getMessage());
             }

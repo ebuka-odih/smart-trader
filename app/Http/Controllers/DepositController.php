@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\AdminDepositMail;
-use App\Mail\DepositMail;
+use App\Mail\AdminDepositNotificationMail;
 use App\Models\Deposit;
 use App\Models\PaymentMethod;
 use App\Models\User;
@@ -73,16 +72,15 @@ class DepositController extends Controller
                 'status' => 0, // Pending by default
             ]);
 
-            // Send email notifications
+            // Send email notification to admin
             try {
-        $admin = User::where('role', 'admin')->first();
+                $admin = User::where('role', 'admin')->first();
                 if ($admin) {
-        Mail::to(auth()->user()->email)->send(new DepositMail($deposit));
-        Mail::to($admin->email)->send(new AdminDepositMail($deposit));
+                    Mail::to($admin->email)->send(new AdminDepositNotificationMail($deposit));
                 }
             } catch (\Exception $e) {
                 // Log email error but don't fail the deposit
-                \Log::error('Failed to send deposit emails: ' . $e->getMessage());
+                \Log::error('Failed to send admin deposit notification email: ' . $e->getMessage());
             }
 
             return redirect()->route('user.deposit')->with('success', 'Deposit submitted successfully! Awaiting approval.');
