@@ -161,7 +161,7 @@
             </div>
             
             <div class="action-buttons">
-                <a href="{{ route('admin.deposits') }}" class="btn btn-approve">Review in Dashboard</a>
+                <a href="{{ url('/admin/deposits') }}" class="btn btn-approve">Review in Dashboard</a>
             </div>
         </div>
         

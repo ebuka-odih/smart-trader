@@ -182,7 +182,7 @@
             </div>
             
             <div class="action-buttons">
-                <a href="{{ route('dashboard') }}" class="btn">Go to Dashboard</a>
+                <a href="{{ url('/user/dashboard') }}" class="btn">Go to Dashboard</a>
             </div>
         </div>
         

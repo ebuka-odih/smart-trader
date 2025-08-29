@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\AssetPurchaseMail;
 use App\Models\Asset;
 use App\Models\UserHolding;
+use App\Models\HoldingTransaction;
 use App\Services\PortfolioCalculationService;
 use App\Services\AssetPriceService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class HoldingController extends Controller
 {
@@ -70,6 +73,35 @@ class HoldingController extends Controller
                 $request->quantity,
                 $request->price_per_unit
             );
+
+            // Get the latest transaction for this purchase
+            $transaction = HoldingTransaction::where('user_id', Auth::id())
+                ->where('asset_id', $asset->id)
+                ->where('type', 'buy')
+                ->latest()
+                ->first();
+
+            // Get portfolio summary for this asset
+            $portfolioSummary = null;
+            if ($holding) {
+                $portfolioSummary = [
+                    'total_holdings' => $holding->quantity,
+                    'average_buy_price' => $holding->average_buy_price,
+                    'total_invested' => $holding->total_invested,
+                    'current_value' => $holding->current_value,
+                    'unrealized_pnl' => $holding->unrealized_pnl,
+                    'unrealized_pnl_percentage' => $holding->unrealized_pnl_percentage,
+                ];
+            }
+
+            // Send email notification
+            if ($transaction) {
+                try {
+                    Mail::to(Auth::user()->email)->send(new AssetPurchaseMail($transaction, $portfolioSummary));
+                } catch (\Exception $e) {
+                    Log::error('Failed to send asset purchase email: ' . $e->getMessage());
+                }
+            }
 
             return response()->json([
                 'success' => true,

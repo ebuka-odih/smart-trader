@@ -22,6 +22,9 @@ Route::view('market-caps', 'pages.market')->name('market');
 Route::view('about', 'pages.about')->name('about');
 Route::get('loading', [UserController::class, 'loading'])->name('loading');
 
+// Email template preview route (for development/testing)
+Route::view('email-preview', 'email-preview')->name('email.preview');
+
 Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], function(){
     Route::get('dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     Route::get('profile', [UserController::class, 'profile'])->name('profile');
