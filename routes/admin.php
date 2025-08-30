@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\TradePairController as AdminTradePairController;
 use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Admin\SignalController as AdminSignalController;
 use App\Http\Controllers\Admin\CopiedTradeController;
+use App\Http\Controllers\Admin\BotTradingController;
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -26,6 +27,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::get('/security', [AdminController::class, 'security'])->name('security');
 
     Route::resource('/plans', AdminPlanController::class)->names('plans');
+    Route::post('/plans/{plan}/toggle-status', [AdminPlanController::class, 'toggleStatus'])->name('plans.toggle-status');
     Route::resource('/trade-pair', AdminTradePairController::class);
 
     Route::get('/transactions/deposits', [AdminTransactionController::class, 'deposits'])->name('transactions.deposits');
@@ -37,4 +39,11 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
 
     // Copied trades history
     Route::get('/copied-trades', [CopiedTradeController::class, 'index'])->name('copied-trades.index');
+
+    // Bot Trading Management
+    Route::resource('/bot-trading', BotTradingController::class)->names('bot-trading');
+    Route::post('/bot-trading/{bot}/stop', [BotTradingController::class, 'stop'])->name('bot-trading.stop');
+    Route::post('/bot-trading/{bot}/edit-pnl', [BotTradingController::class, 'editPnl'])->name('bot-trading.edit-pnl');
+    Route::post('/bot-trading/trade/{trade}/edit-pnl', [BotTradingController::class, 'editTradePnl'])->name('bot-trading.edit-trade-pnl');
+    Route::get('/bot-trading/stats', [BotTradingController::class, 'stats'])->name('bot-trading.stats');
 });

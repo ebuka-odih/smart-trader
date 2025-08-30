@@ -4,19 +4,35 @@ use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 
-
-
+/*
+|--------------------------------------------------------------------------
+| Console Commands
+|--------------------------------------------------------------------------
+| Here you can define custom console commands for your application.
+|
+*/
 
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
-
 })->purpose('Display an inspiring quote')->hourly();
 
+/*
+|--------------------------------------------------------------------------
+| Scheduled Tasks
+|--------------------------------------------------------------------------
+| All scheduled tasks for the application should be defined here.
+| These will be executed by the Laravel scheduler via cron job.
+|
+*/
 
+// Trade Management
 Schedule::call(function () {
     $controller = new \App\Http\Controllers\TradeController;
     $controller->checkTradeDuration();
-});
+})->everyMinute();
 
-// Update prices every 30 seconds for more frequent movement
+// Real-time Price Updates
 Schedule::command('prices:update-scheduled')->everyThirtySeconds();
+
+// Bot Trading Simulation
+Schedule::command('bot-trading:simulate')->everyMinute();

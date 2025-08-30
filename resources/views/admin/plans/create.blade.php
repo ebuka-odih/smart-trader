@@ -52,7 +52,7 @@
             </div>
 
             <!-- Pricing -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
                     <label for="price" class="block text-sm font-medium text-gray-300 mb-2">Plan Price</label>
                     <input type="number" id="price" name="price" value="{{ old('price') }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
@@ -85,7 +85,10 @@
                         <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                     @enderror
                 </div>
-                
+            </div>
+
+            <!-- Currency -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label for="currency" class="block text-sm font-medium text-gray-300 mb-2">Currency</label>
                     <select id="currency" name="currency" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
@@ -120,7 +123,7 @@
                     
                     <div>
                         <label for="leverage" class="block text-sm font-medium text-gray-300 mb-2">Leverage</label>
-                        <input type="number" id="leverage" name="leverage" value="{{ old('leverage') }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
+                        <input type="text" id="leverage" name="leverage" value="{{ old('leverage') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
                         @error('leverage')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -128,15 +131,15 @@
                     
                     <div>
                         <label for="spreads" class="block text-sm font-medium text-gray-300 mb-2">Spreads</label>
-                        <input type="number" id="spreads" name="spreads" value="{{ old('spreads') }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1.5">
+                        <input type="text" id="spreads" name="spreads" value="{{ old('spreads') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1.5">
                         @error('spreads')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                     
                     <div>
-                        <label for="swap_fees" class="block text-sm font-medium text-gray-300 mb-2">Swap Fees (%)</label>
-                        <input type="number" id="swap_fees" name="swap_fees" value="{{ old('swap_fees') }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
+                        <label for="swap_fees" class="block text-sm font-medium text-gray-300 mb-2">Swap Fees</label>
+                        <input type="text" id="swap_fees" name="swap_fees" value="{{ old('swap_fees') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2.5">
                         @error('swap_fees')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -198,91 +201,6 @@
                         @enderror
                     </div>
                 </div>
-
-                <!-- Market Type and Trading Settings -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div>
-                        <label for="signal_market_type" class="block text-sm font-medium text-gray-300 mb-2">Market Type</label>
-                        <select id="signal_market_type" name="signal_market_type" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select Market Type</option>
-                            <option value="crypto" {{ old('signal_market_type') == 'crypto' ? 'selected' : '' }}>Cryptocurrency</option>
-                            <option value="forex" {{ old('signal_market_type') == 'forex' ? 'selected' : '' }}>Forex</option>
-                            <option value="stock" {{ old('signal_market_type') == 'stock' ? 'selected' : '' }}>Stocks</option>
-                            <option value="commodities" {{ old('signal_market_type') == 'commodities' ? 'selected' : '' }}>Commodities</option>
-                            <option value="indices" {{ old('signal_market_type') == 'indices' ? 'selected' : '' }}>Indices</option>
-                        </select>
-                        @error('signal_market_type')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="signal_pairs" class="block text-sm font-medium text-gray-300 mb-2">Trading Pairs (JSON Array)</label>
-                        <textarea id="signal_pairs" name="signal_pairs" rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder='["BTC/USDT", "ETH/USDT", "BNB/USDT"]'>{{ old('signal_pairs') }}</textarea>
-                        <p class="text-xs text-gray-400 mt-1">Enter as JSON array: ["BTC/USDT", "ETH/USDT"]</p>
-                        @error('signal_pairs')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="signal_leverage" class="block text-sm font-medium text-gray-300 mb-2">Max Leverage</label>
-                        <input type="number" id="signal_leverage" name="signal_leverage" value="{{ old('signal_leverage') }}" step="0.01" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
-                        @error('signal_leverage')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="signal_expiry_duration" class="block text-sm font-medium text-gray-300 mb-2">Signal Expiry</label>
-                        <select id="signal_expiry_duration" name="signal_expiry_duration" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select Expiry</option>
-                            <option value="1h" {{ old('signal_expiry_duration') == '1h' ? 'selected' : '' }}>1 Hour</option>
-                            <option value="4h" {{ old('signal_expiry_duration') == '4h' ? 'selected' : '' }}>4 Hours</option>
-                            <option value="1d" {{ old('signal_expiry_duration') == '1d' ? 'selected' : '' }}>1 Day</option>
-                            <option value="1w" {{ old('signal_expiry_duration') == '1w' ? 'selected' : '' }}>1 Week</option>
-                            <option value="1m" {{ old('signal_expiry_duration') == '1m' ? 'selected' : '' }}>1 Month</option>
-                        </select>
-                        @error('signal_expiry_duration')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
-
-                <!-- Features and Delivery -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div>
-                        <label for="signal_features" class="block text-sm font-medium text-gray-300 mb-2">Features (JSON Array)</label>
-                        <textarea id="signal_features" name="signal_features" rows="3" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder='["Chart Analysis", "Risk Management", "TradingView Links"]'>{{ old('signal_features') }}</textarea>
-                        <p class="text-xs text-gray-400 mt-1">Enter as JSON array: ["Feature 1", "Feature 2"]</p>
-                        @error('signal_features')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="signal_delivery" class="block text-sm font-medium text-gray-300 mb-2">Delivery Method</label>
-                        <select id="signal_delivery" name="signal_delivery" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            <option value="">Select Method</option>
-                            <option value="email" {{ old('signal_delivery') == 'email' ? 'selected' : '' }}>Email</option>
-                            <option value="telegram" {{ old('signal_delivery') == 'telegram' ? 'selected' : '' }}>Telegram</option>
-                            <option value="sms" {{ old('signal_delivery') == 'sms' ? 'selected' : '' }}>SMS</option>
-                            <option value="push" {{ old('signal_delivery') == 'push' ? 'selected' : '' }}>Push Notification</option>
-                            <option value="webhook" {{ old('signal_delivery') == 'webhook' ? 'selected' : '' }}>Webhook</option>
-                        </select>
-                        @error('signal_delivery')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <div>
-                        <label for="max_daily_signals" class="block text-sm font-medium text-gray-300 mb-2">Max Daily Signals</label>
-                        <input type="number" id="max_daily_signals" name="max_daily_signals" value="{{ old('max_daily_signals') }}" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 5">
-                        @error('max_daily_signals')
-                            <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                </div>
             </div>
 
             <!-- Mining Plan Specific Fields -->
@@ -299,7 +217,7 @@
                     
                     <div>
                         <label for="equipment" class="block text-sm font-medium text-gray-300 mb-2">Equipment</label>
-                        <input type="text" id="equipment" name="equipment" value="{{ old('equipment') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., ~ 10 Antminer S19">
+                        <input type="text" id="equipment" name="equipment" value="{{ old('equipment') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10 Antminer S19">
                         @error('equipment')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -307,7 +225,7 @@
                     
                     <div>
                         <label for="downtime" class="block text-sm font-medium text-gray-300 mb-2">Downtime</label>
-                        <input type="text" id="downtime" name="downtime" value="{{ old('downtime') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., No Downtime">
+                        <input type="text" id="downtime" name="downtime" value="{{ old('downtime') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 99.9% Uptime">
                         @error('downtime')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -315,7 +233,7 @@
                     
                     <div>
                         <label for="electricity_costs" class="block text-sm font-medium text-gray-300 mb-2">Electricity Costs</label>
-                        <input type="text" id="electricity_costs" name="electricity_costs" value="{{ old('electricity_costs') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., No Electricity Costs">
+                        <input type="text" id="electricity_costs" name="electricity_costs" value="{{ old('electricity_costs') }}" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Included">
                         @error('electricity_costs')
                             <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
                         @enderror
@@ -378,19 +296,9 @@
             </div>
 
             <!-- Additional Settings -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <label for="sort_order" class="block text-sm font-medium text-gray-300 mb-2">Sort Order</label>
-                    <input type="number" id="sort_order" name="sort_order" value="{{ old('sort_order', 0) }}" min="0" class="w-full bg-gray-700 border border-gray-600 text-white rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0">
-                    @error('sort_order')
-                        <p class="text-red-400 text-sm mt-1">{{ $message }}</p>
-                    @enderror
-                </div>
-                
-                <div class="flex items-center">
-                    <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active') ? 'checked' : '' }} class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
-                    <label for="is_active" class="ml-2 text-sm font-medium text-gray-300">Active Plan</label>
-                </div>
+            <div class="flex items-center">
+                <input type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active') ? 'checked' : '' }} class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
+                <label for="is_active" class="ml-2 text-sm font-medium text-gray-300">Active Plan</label>
             </div>
 
             <!-- Submit Button -->

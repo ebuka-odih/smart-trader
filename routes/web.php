@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BotTradingController;
 use App\Http\Controllers\CopyTradingController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\SubscriptionController;
@@ -143,6 +144,25 @@ Route::get('checkout', function() {
     Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');
     Route::get('copy-trading/{id}', [CopyTradingController::class, 'detail'])->name('copyTrading.detail');
     Route::post('copy-trading/{id}/stop', [CopyTradingController::class, 'stop'])->name('copyTrading.stop');
+
+    // Bot Trading Routes
+    Route::get('bot-trading', [BotTradingController::class, 'index'])->name('botTrading.index');
+    Route::get('bot-trading/create', [BotTradingController::class, 'create'])->name('botTrading.create');
+    Route::post('bot-trading', [BotTradingController::class, 'store'])->name('botTrading.store');
+    Route::get('bot-trading/{bot}', [BotTradingController::class, 'show'])->name('botTrading.show');
+    Route::get('bot-trading/{bot}/edit', [BotTradingController::class, 'edit'])->name('botTrading.edit');
+    Route::put('bot-trading/{bot}', [BotTradingController::class, 'update'])->name('botTrading.update');
+    Route::delete('bot-trading/{bot}', [BotTradingController::class, 'destroy'])->name('botTrading.destroy');
+    
+    // Bot Control Routes
+    Route::post('bot-trading/{bot}/start', [BotTradingController::class, 'start'])->name('botTrading.start');
+    Route::post('bot-trading/{bot}/pause', [BotTradingController::class, 'pause'])->name('botTrading.pause');
+    Route::post('bot-trading/{bot}/stop', [BotTradingController::class, 'stop'])->name('botTrading.stop');
+    
+    // Bot Data Routes
+    Route::get('bot-trading/{bot}/trades', [BotTradingController::class, 'trades'])->name('botTrading.trades');
+    Route::get('bot-trading/{bot}/performance', [BotTradingController::class, 'performance'])->name('botTrading.performance');
+    Route::post('bot-trading/{bot}/execute', [BotTradingController::class, 'execute'])->name('botTrading.execute');
 
 });
 

@@ -278,4 +278,17 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(FundTransfer::class);
     }
+
+    /**
+     * Bot Trading relationships
+     */
+    public function botTradings()
+    {
+        return $this->hasMany(BotTrading::class);
+    }
+
+    public function botTrades()
+    {
+        return $this->hasMany(BotTrade::class);
+    }
 }
