@@ -21,9 +21,19 @@ return new class extends Migration
                 // Index doesn't exist, continue
             }
             
-            // Recreate the index with proper naming
+            try {
+                DB::statement('DROP INDEX IF EXISTS bot_trades_base_asset_quote_asset_index ON bot_trades');
+            } catch (Exception $e) {
+                // Index doesn't exist, continue
+            }
+            
+            // Recreate the indexes with proper naming
             Schema::table('bot_tradings', function (Blueprint $table) {
                 $table->index(['base_asset', 'quote_asset'], 'bot_tradings_pair_index');
+            });
+            
+            Schema::table('bot_trades', function (Blueprint $table) {
+                $table->index(['base_asset', 'quote_asset'], 'bot_trades_pair_index');
             });
         }
     }
@@ -36,6 +46,10 @@ return new class extends Migration
         if (config('database.default') === 'mysql') {
             Schema::table('bot_tradings', function (Blueprint $table) {
                 $table->dropIndex('bot_tradings_pair_index');
+            });
+            
+            Schema::table('bot_trades', function (Blueprint $table) {
+                $table->dropIndex('bot_trades_pair_index');
             });
         }
     }

@@ -19,8 +19,8 @@ return new class extends Migration
             // Trade Details
             $table->string('trade_id')->unique(); // Unique trade identifier
             $table->enum('type', ['buy', 'sell']);
-            $table->string('base_asset'); // e.g., BTC
-            $table->string('quote_asset'); // e.g., USDT
+            $table->string('base_asset', 10); // e.g., BTC
+            $table->string('quote_asset', 10); // e.g., USDT
             
             // Trade Amounts
             $table->decimal('base_amount', 20, 8); // Amount of base asset
@@ -51,7 +51,7 @@ return new class extends Migration
             // Indexes
             $table->index(['bot_trading_id', 'status']);
             $table->index(['user_id', 'created_at']);
-            $table->index(['base_asset', 'quote_asset']);
+            $table->index(['base_asset', 'quote_asset'], 'bot_trades_pair_index');
             $table->index('executed_at');
         });
     }
