@@ -24,10 +24,5 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
-        
-        // Fix for MySQL key length issues
-        if (config('database.default') === 'mysql') {
-            \Illuminate\Database\Schema\Blueprint::defaultStringLength(191);
-        }
     }
 }
