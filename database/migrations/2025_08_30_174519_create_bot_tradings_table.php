@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name'); // Bot name
-            $table->string('base_asset'); // e.g., BTC, ETH
-            $table->string('quote_asset'); // e.g., USDT, USD
+            $table->string('base_asset', 10); // e.g., BTC, ETH
+            $table->string('quote_asset', 10); // e.g., USDT, USD
             $table->enum('strategy', ['grid', 'dca', 'scalping', 'trend_following']);
             $table->enum('status', ['active', 'paused', 'stopped'])->default('stopped');
             
@@ -57,7 +57,7 @@ return new class extends Migration
             
             // Indexes
             $table->index(['user_id', 'status']);
-            $table->index(['base_asset', 'quote_asset']);
+            $table->index(['base_asset', 'quote_asset'], 'bot_tradings_pair_index');
         });
     }
 

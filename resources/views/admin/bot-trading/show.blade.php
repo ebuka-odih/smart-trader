@@ -371,4 +371,5 @@ function executeBot(botId) {
     }
 }
 </script>
+@endif
 @endsection
