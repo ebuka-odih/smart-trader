@@ -9,7 +9,21 @@ class PaymentMethod extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['wallet', 'address', 'avatar', 'bank'];
+    // Crypto type constants
+    const CRYPTO_TYPES = [
+        'bitcoin' => 'Bitcoin (BTC)',
+        'ethereum' => 'Ethereum (ETH)',
+        'binance_coin' => 'Binance Coin (BNB)',
+        'cardano' => 'Cardano (ADA)',
+        'solana' => 'Solana (SOL)',
+        'ripple' => 'Ripple (XRP)',
+        'polkadot' => 'Polkadot (DOT)',
+        'dogecoin' => 'Dogecoin (DOGE)',
+        'avalanche' => 'Avalanche (AVAX)',
+        'polygon' => 'Polygon (MATIC)'
+    ];
+
+    protected $fillable = ['wallet', 'crypto_type', 'address', 'bank'];
 
     protected $casts = [
         'bank' => 'array'
@@ -18,5 +32,34 @@ class PaymentMethod extends Model
     public function deposits()
     {
         return $this->hasMany(Deposit::class, 'payment_method_id');
+    }
+
+    /**
+     * Get the display name for the crypto type
+     */
+    public function getCryptoDisplayNameAttribute()
+    {
+        return self::CRYPTO_TYPES[$this->crypto_type] ?? $this->crypto_type;
+    }
+
+    /**
+     * Get the crypto symbol
+     */
+    public function getCryptoSymbolAttribute()
+    {
+        $symbols = [
+            'bitcoin' => 'BTC',
+            'ethereum' => 'ETH',
+            'binance_coin' => 'BNB',
+            'cardano' => 'ADA',
+            'solana' => 'SOL',
+            'ripple' => 'XRP',
+            'polkadot' => 'DOT',
+            'dogecoin' => 'DOGE',
+            'avalanche' => 'AVAX',
+            'polygon' => 'MATIC'
+        ];
+
+        return $symbols[$this->crypto_type] ?? '';
     }
 }

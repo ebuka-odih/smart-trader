@@ -29,6 +29,8 @@ class BotTradingController extends Controller
             'total_profit' => BotTrading::sum('total_profit'),
             'total_invested' => BotTrading::sum('total_invested'),
             'total_trades' => BotTrade::count(),
+            'profitable_trades' => BotTrade::where('profit_loss', '>', 0)->count(),
+            'loss_trades' => BotTrade::where('profit_loss', '<', 0)->count(),
         ];
 
         return view('admin.bot-trading.index', compact('bots', 'stats'));
@@ -39,9 +41,24 @@ class BotTradingController extends Controller
      */
     public function show(BotTrading $bot)
     {
+        // Add debugging
+        \Log::info('Admin BotTrading show method called', [
+            'bot_id' => $bot->id,
+            'bot_name' => $bot->name,
+            'user_id' => $bot->user_id,
+            'bot_exists' => $bot->exists,
+        ]);
+
         $bot->load(['user', 'trades' => function($query) {
             $query->latest()->limit(50);
         }]);
+
+        // Check if user relationship loaded properly
+        \Log::info('Bot loaded with relationships', [
+            'user_loaded' => $bot->relationLoaded('user'),
+            'user_exists' => $bot->user ? $bot->user->exists : false,
+            'user_name' => $bot->user ? $bot->user->name : 'null',
+        ]);
 
         $recentTrades = $bot->trades()->latest()->limit(20)->get();
         
@@ -79,17 +96,16 @@ class BotTradingController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
-            'status' => 'required|in:active,paused,stopped',
+            'strategy' => 'required|string|max:255',
+            'base_asset' => 'required|string|max:10',
+            'quote_asset' => 'required|string|max:10',
             'leverage' => 'required|numeric|min:1.00|max:100.00',
-            'trade_duration' => 'required|string|in:1h,4h,24h,1w,1m',
+            'trade_duration' => 'nullable|string|max:10',
             'target_yield_percentage' => 'nullable|numeric|min:0.1|max:100',
             'auto_close' => 'nullable',
             'max_investment' => 'required|numeric|min:10|max:1000000',
             'min_trade_amount' => 'required|numeric|min:1',
             'max_trade_amount' => 'required|numeric|min:1|gte:min_trade_amount',
-            'max_open_trades' => 'required|integer|min:1|max:50',
-            'stop_loss_percentage' => 'nullable|numeric|min:0.1|max:50',
-            'take_profit_percentage' => 'nullable|numeric|min:0.1|max:1000',
             'daily_loss_limit' => 'nullable|numeric|min:1',
             'trading_24_7' => 'nullable',
             'auto_restart' => 'nullable',
@@ -102,7 +118,9 @@ class BotTradingController extends Controller
         try {
             $bot->update([
                 'name' => $request->name,
-                'status' => $request->status,
+                'strategy' => $request->strategy,
+                'base_asset' => $request->base_asset,
+                'quote_asset' => $request->quote_asset,
                 'leverage' => $request->leverage,
                 'trade_duration' => $request->trade_duration,
                 'target_yield_percentage' => $request->target_yield_percentage,
@@ -110,20 +128,10 @@ class BotTradingController extends Controller
                 'max_investment' => $request->max_investment,
                 'min_trade_amount' => $request->min_trade_amount,
                 'max_trade_amount' => $request->max_trade_amount,
-                'max_open_trades' => $request->max_open_trades,
-                'stop_loss_percentage' => $request->stop_loss_percentage,
-                'take_profit_percentage' => $request->take_profit_percentage,
                 'daily_loss_limit' => $request->daily_loss_limit,
                 'trading_24_7' => $request->boolean('trading_24_7', true),
                 'auto_restart' => $request->boolean('auto_restart', false),
             ]);
-
-            // Update timestamps based on status
-            if ($request->status === 'active' && $bot->status !== 'active') {
-                $bot->update(['started_at' => now()]);
-            } elseif ($request->status === 'stopped' && $bot->status !== 'stopped') {
-                $bot->update(['stopped_at' => now()]);
-            }
 
             Log::info("Admin updated bot {$bot->id} by user " . auth()->id());
 

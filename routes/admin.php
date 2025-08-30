@@ -37,13 +37,13 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
 
     Route::resource('/signals', AdminSignalController::class)->names('signals');
 
-    // Copied trades history
-    Route::get('/copied-trades', [CopiedTradeController::class, 'index'])->name('copied-trades.index');
-
     // Bot Trading Management
-    Route::resource('/bot-trading', BotTradingController::class)->names('bot-trading');
+    Route::resource('/bot-trading', BotTradingController::class)->names('bot-trading')->parameters(['bot-trading' => 'bot']);
     Route::post('/bot-trading/{bot}/stop', [BotTradingController::class, 'stop'])->name('bot-trading.stop');
     Route::post('/bot-trading/{bot}/edit-pnl', [BotTradingController::class, 'editPnl'])->name('bot-trading.edit-pnl');
     Route::post('/bot-trading/trade/{trade}/edit-pnl', [BotTradingController::class, 'editTradePnl'])->name('bot-trading.edit-trade-pnl');
     Route::get('/bot-trading/stats', [BotTradingController::class, 'stats'])->name('bot-trading.stats');
+
+    // Copied trades history
+    Route::get('/copied-trades', [CopiedTradeController::class, 'index'])->name('copied-trades.index');
 });

@@ -4,59 +4,50 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\PaymentMethod;
-use Faker\Provider\Payment;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PaymentMethodController extends Controller
 {
    public function index()
    {
-        $payment_method = PaymentMethod::all();
+        $payment_method = PaymentMethod::orderBy('created_at', 'desc')->get();
         return view('admin.payment-method', compact('payment_method'));
    }
 
    public function store(Request $request)
    {
        $validated = $request->validate([
-           'wallet' => 'required',
-           'address' => 'required',
-           'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+           'crypto_type' => 'required|in:' . implode(',', array_keys(PaymentMethod::CRYPTO_TYPES)),
+           'address' => 'required|string|max:255',
        ]);
-       $wallet = new PaymentMethod();
 
-       if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('files', 'public');
-        }
-       $wallet->wallet = $validated['wallet'];
-       $wallet->address = $validated['address'];
-       $wallet->avatar = $avatarPath ?? null;
-       $wallet->save();
-       return redirect()->back()->with('success', 'Payment Method Added');
+       $paymentMethod = new PaymentMethod();
+       $paymentMethod->crypto_type = $validated['crypto_type'];
+       $paymentMethod->address = $validated['address'];
+       $paymentMethod->save();
+
+       return redirect()->back()->with('success', 'Payment Method Added Successfully');
    }
 
    public function update(Request $request, $id)
    {
        $validated = $request->validate([
-           'wallet' => 'nullable',
-           'address' => 'nullable',
-           'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+           'crypto_type' => 'required|in:' . implode(',', array_keys(PaymentMethod::CRYPTO_TYPES)),
+           'address' => 'required|string|max:255',
        ]);
-       $wallet = PaymentMethod::findOrFail($id);
-       if ($request->hasFile('avatar')) {
-            $avatarPath = $request->file('avatar')->store('files', 'public');
-        }
-       $wallet->avatar = $avatarPath ?? null;
-       $wallet->wallet = $request->wallet;
-       $wallet->address = $request->address;
-       $wallet->save();
-       return redirect()->back()->with('success', 'Payment Method Updated');
+
+       $paymentMethod = PaymentMethod::findOrFail($id);
+       $paymentMethod->crypto_type = $validated['crypto_type'];
+       $paymentMethod->address = $validated['address'];
+       $paymentMethod->save();
+
+       return redirect()->back()->with('success', 'Payment Method Updated Successfully');
    }
 
    public function destroy($id)
    {
-       $wallet = PaymentMethod::findOrFail($id);
-       $wallet->delete();
-       return redirect()->back()->with('success', 'Payment Method Deleted');
+       $paymentMethod = PaymentMethod::findOrFail($id);
+       $paymentMethod->delete();
+       return redirect()->back()->with('success', 'Payment Method Deleted Successfully');
    }
 }
