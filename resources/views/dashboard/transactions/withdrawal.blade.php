@@ -78,26 +78,26 @@
     <!-- Tabs -->
     <div class="bg-gray-800 rounded-lg border border-gray-700">
         <div class="border-b border-gray-700">
-            <nav class="-mb-px flex space-x-8 px-6" aria-label="Tabs">
-                <button id="withdrawTab" class="tab-button border-b-2 border-blue-500 py-4 px-1 text-sm font-medium text-blue-400">
-                    <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <nav class="-mb-px flex space-x-2 sm:space-x-4 md:space-x-8 px-4 sm:px-6 overflow-x-auto" aria-label="Tabs">
+                <button id="withdrawTab" class="tab-button border-b-2 border-blue-500 py-3 sm:py-4 px-2 sm:px-1 text-xs sm:text-sm font-medium text-blue-400 whitespace-nowrap">
+                    <div class="flex items-center space-x-1 sm:space-x-2">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
                         <span>Withdraw</span>
                     </div>
                 </button>
-                <button id="transferTab" class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-400 hover:text-gray-300">
-                    <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <button id="transferTab" class="tab-button border-b-2 border-transparent py-3 sm:py-4 px-2 sm:px-1 text-xs sm:text-sm font-medium text-gray-400 hover:text-gray-300 whitespace-nowrap">
+                    <div class="flex items-center space-x-1 sm:space-x-2">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M3 3a1 1 0 000 2v8a2 2 0 002 2h2.586l-1.293 1.293a1 1 0 101.414 1.414L10 15.414l2.293 2.293a1 1 0 001.414-1.414L12.414 15H15a2 2 0 002-2V5a1 1 0 100-2H3zm11.707 4.707a1 1 0 00-1.414-1.414L10 9.586 8.707 8.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                         </svg>
-                        <span>Transfer Funds</span>
+                        <span>Transfer</span>
                     </div>
                 </button>
-                <button id="historyTab" class="tab-button border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-400 hover:text-gray-300">
-                    <div class="flex items-center space-x-2">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <button id="historyTab" class="tab-button border-b-2 border-transparent py-3 sm:py-4 px-2 sm:px-1 text-xs sm:text-sm font-medium text-gray-400 hover:text-gray-300 whitespace-nowrap">
+                    <div class="flex items-center space-x-1 sm:space-x-2">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                         </svg>
                         <span>History</span>

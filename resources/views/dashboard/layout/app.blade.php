@@ -31,7 +31,7 @@
         <div id="sidebarBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
         
         <!-- Sidebar -->
-        <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-gray-800 border-r border-gray-700 flex flex-col transform -translate-x-full transition-transform duration-300 ease-in-out z-50">
+        <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-gray-800 border-r border-gray-700 flex flex-col transform transition-transform duration-300 ease-in-out z-50">
             <!-- User Profile Section -->
             <div class="p-6 border-b border-gray-700">
                 <div class="flex items-center justify-between mb-4">
@@ -202,9 +202,10 @@
         <!-- Main Content -->
         <div class="w-full h-full flex flex-col overflow-hidden">
             <!-- Top Header -->
-            <header class="bg-gray-800 border-b border-gray-700 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-4">
+            <header class="bg-gray-800 border-b border-gray-700 py-4">
+                <div class="flex items-center">
+                    <!-- Left side - Brand and menu -->
+                    <div class="flex items-center space-x-4 px-4 sm:px-6">
                         <!-- Menu Toggle Button -->
                         <button id="sidebarToggle" class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -214,9 +215,8 @@
                         <h1 class="text-xl font-semibold text-white">{{ env('APP_NAME') }}</h1>
                     </div>
                     
-                    <div class="flex items-center space-x-4">
-                    
-                        
+                    <!-- Right side - Notification and user profile -->
+                    <div class="flex items-center space-x-1 sm:space-x-2 ml-auto -mr-2 sm:-mr-4">
                         <!-- Notifications -->
                         <button class="relative p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -227,7 +227,7 @@
 
                         <!-- User Dropdown -->
                         <div class="relative" x-data="{ open: false }">
-                            <button @click="open = !open" class="flex items-center space-x-2 p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
+                            <button @click="open = !open" class="flex items-center space-x-1 sm:space-x-2 p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
                                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                                     <span class="text-white font-semibold text-sm">{{ substr(auth()->user()->name, 0, 1) }}</span>
                                 </div>
@@ -314,13 +314,12 @@
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebarClose = document.getElementById('sidebarClose');
             const sidebarBackdrop = document.getElementById('sidebarBackdrop');
-            const isSidebarOpen = localStorage.getItem('sidebarOpen') === 'true';
+            // Always start with sidebar hidden on page load
+            sidebar.classList.add('-translate-x-full');
+            sidebarBackdrop.classList.add('hidden');
             
-            // Set initial state based on localStorage
-            if (isSidebarOpen) {
-                sidebar.classList.remove('-translate-x-full');
-                sidebarBackdrop.classList.remove('hidden');
-            }
+            // Clear any existing localStorage to ensure clean state
+            localStorage.removeItem('sidebarOpen');
             
             // Toggle sidebar
             sidebarToggle.addEventListener('click', function() {
