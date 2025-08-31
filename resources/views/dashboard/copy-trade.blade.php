@@ -39,12 +39,25 @@
         </div>
     </div>
 
+    <!-- Tabs -->
+    <div class="border-b border-gray-700">
+        <nav class="-mb-px flex space-x-8">
+            <button id="tradersTab" class="tab-button active py-2 px-1 border-b-2 border-blue-500 font-medium text-sm text-blue-400">
+                Available Traders
+            </button>
+            <button id="historyTab" class="tab-button py-2 px-1 border-b-2 border-transparent font-medium text-sm text-gray-400 hover:text-gray-300">
+                My History
+            </button>
+        </nav>
+    </div>
+
     <!-- Available Traders Section -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-white">Available Traders</h2>
-            <div class="text-sm text-gray-400">{{ count($traders) }} traders available</div>
-        </div>
+    <div id="tradersSection" class="tab-content">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-white">Available Traders</h2>
+                <div class="text-sm text-gray-400">{{ count($traders) }} traders available</div>
+            </div>
 
         <!-- Search Box -->
         <div class="mb-6">
@@ -110,7 +123,7 @@
                     <!-- Profit Share -->
                     <div class="flex items-center justify-between p-3 bg-blue-900/20 border border-blue-700/30 rounded-lg">
                         <span class="text-sm text-gray-400">Profit Share</span>
-                        <span class="text-sm font-semibold text-blue-400">${{ number_format($trader->profit_share, 2) }}</span>
+                        <span class="text-sm font-semibold text-blue-400">{{ number_format($trader->profit_share, 1) }}%</span>
                     </div>
 
                     <!-- Minimum Amount -->
@@ -138,13 +151,15 @@
             @endforeach
         </div>
     </div>
+    </div>
 
     <!-- My Copied Trades Section -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl font-semibold text-white">My Copied Trades</h2>
-            <div class="text-sm text-gray-400">{{ count($copiedTrades) }} active trades</div>
-        </div>
+    <div id="historySection" class="tab-content hidden">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-white">My Copied Trades</h2>
+                <div class="text-sm text-gray-400">{{ count($copiedTrades) }} active trades</div>
+            </div>
 
         @if(count($copiedTrades) > 0)
         <div class="overflow-x-auto">
@@ -204,11 +219,55 @@
         </div>
         @endif
     </div>
+    </div>
 </div>
 
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Tab functionality
+        const tradersTab = document.getElementById('tradersTab');
+        const historyTab = document.getElementById('historyTab');
+        const tradersSection = document.getElementById('tradersSection');
+        const historySection = document.getElementById('historySection');
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active', 'border-blue-500', 'text-blue-400');
+                button.classList.add('border-transparent', 'text-gray-400');
+            });
+
+            // Show selected tab content
+            if (tabName === 'traders') {
+                tradersSection.classList.remove('hidden');
+                tradersTab.classList.add('active', 'border-blue-500', 'text-blue-400');
+                tradersTab.classList.remove('border-transparent', 'text-gray-400');
+            } else if (tabName === 'history') {
+                historySection.classList.remove('hidden');
+                historyTab.classList.add('active', 'border-blue-500', 'text-blue-400');
+                historyTab.classList.remove('border-transparent', 'text-gray-400');
+            }
+        }
+
+        // Add click event listeners to tabs
+        tradersTab.addEventListener('click', () => showTab('traders'));
+        historyTab.addEventListener('click', () => showTab('history'));
+
+        // Check URL parameters for initial tab
+        const urlParams = new URLSearchParams(window.location.search);
+        const initialTab = urlParams.get('tab');
+        if (initialTab === 'history') {
+            showTab('history');
+        } else {
+            showTab('traders'); // Default to traders tab
+        }
+
         // Log any flash messages present in DOM
         const successEl = document.getElementById('alert-success');
         const errorEl = document.getElementById('alert-error');

@@ -102,7 +102,7 @@
                       <span>{{ $item->win_rate ?? '' }}</span>
                     </td>
                     <td class="text-gray-500 dark:text-gray-400">
-                      <span>{{ $item->profit_share ?? '' }}</span>
+                      <span>{{ $item->profit_share ?? '' }}%</span>
                     </td>
                    <td class="text-gray-500 dark:text-gray-400">
                       <span>{{ $item->win ?? '' }}</span>
