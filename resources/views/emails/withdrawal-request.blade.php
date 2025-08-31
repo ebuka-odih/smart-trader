@@ -188,9 +188,9 @@
                 <div class="detail-row">
                     <span class="detail-label">Status:</span>
                     <span class="detail-value">
-                        <span class="status status-{{ $withdrawal->status }}">
-                            {{ ucfirst($withdrawal->status) }}
-                        </span>
+                                        <span class="status status-{{ $withdrawal->status_text }}">
+                    {{ ucfirst($withdrawal->status_text) }}
+                </span>
                     </span>
                 </div>
                 

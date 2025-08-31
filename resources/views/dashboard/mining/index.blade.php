@@ -100,7 +100,7 @@
                                             <div>Started: {{ $mining->start_date->format('M d, Y') }}</div>
                                         </div>
                                     </div>
-                                    <div class="flex flex-col space-y-2">
+                                    <div class="flex flex-wrap gap-2">
                                         <a href="{{ route('user.mining.show', $mining) }}" class="bg-gray-700 hover:bg-gray-600 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
                                             Details
                                         </a>

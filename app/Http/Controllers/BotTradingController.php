@@ -355,15 +355,36 @@ class BotTradingController extends Controller
             ], 400);
         }
 
-        $bot->update([
-            'status' => 'stopped',
-            'stopped_at' => now(),
-        ]);
+        try {
+            // Transfer profits to user's trading balance before stopping
+            if ($bot->total_profit > 0) {
+                $user = Auth::user();
+                $user->increment('trading_balance', $bot->total_profit);
+                
+                \Log::info('Bot profits transferred to user on manual stop', [
+                    'bot_id' => $bot->id,
+                    'user_id' => $user->id,
+                    'profit_transferred' => $bot->total_profit,
+                    'new_trading_balance' => $user->fresh()->trading_balance
+                ]);
+            }
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Bot stopped successfully!'
-        ]);
+            $bot->update([
+                'status' => 'stopped',
+                'stopped_at' => now(),
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bot stopped successfully!' . ($bot->total_profit > 0 ? ' Profits have been transferred to your trading balance.' : '')
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Bot stop failed: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to stop bot: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -555,6 +576,12 @@ class BotTradingController extends Controller
     private function updateStrategyConfig(BotTrading $bot, Request $request): array
     {
         $currentConfig = $bot->strategy_config ?? [];
+        
+        // If strategy is not in request, use the bot's current strategy
+        if (!$request->has('strategy')) {
+            $request->merge(['strategy' => $bot->strategy]);
+        }
+        
         $newConfig = $this->buildStrategyConfig($request);
         
         return array_merge($currentConfig, $newConfig);

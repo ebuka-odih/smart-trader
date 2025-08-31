@@ -43,10 +43,10 @@
                         <div>
                             <label for="strategy" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Strategy</label>
                             <select name="strategy" id="strategy" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
-                                <option value="Grid" {{ $bot->strategy === 'Grid' ? 'selected' : '' }}>Grid</option>
-                                <option value="DCA" {{ $bot->strategy === 'DCA' ? 'selected' : '' }}>DCA</option>
-                                <option value="Scalping" {{ $bot->strategy === 'Scalping' ? 'selected' : '' }}>Scalping</option>
-                                <option value="Trend Following" {{ $bot->strategy === 'Trend Following' ? 'selected' : '' }}>Trend Following</option>
+                                <option value="grid" {{ $bot->strategy === 'grid' ? 'selected' : '' }}>Grid Trading</option>
+                                <option value="dca" {{ $bot->strategy === 'dca' ? 'selected' : '' }}>DCA</option>
+                                <option value="scalping" {{ $bot->strategy === 'scalping' ? 'selected' : '' }}>Scalping</option>
+                                <option value="trend_following" {{ $bot->strategy === 'trend_following' ? 'selected' : '' }}>Trend Following</option>
                             </select>
                         </div>
 

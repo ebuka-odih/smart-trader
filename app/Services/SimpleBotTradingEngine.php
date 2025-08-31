@@ -256,16 +256,57 @@ class SimpleBotTradingEngine
         if (!$bot->target_yield_percentage) {
             return false;
         }
+
+        $currentYield = $this->calculateCurrentYield($bot);
         
+        if ($currentYield >= $bot->target_yield_percentage) {
+            // Transfer profits to user's trading balance before stopping
+            $this->transferBotProfitsToUser($bot);
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Calculate current yield percentage for the bot
+     */
+    private function calculateCurrentYield(BotTrading $bot)
+    {
         $totalProfit = $bot->total_profit;
         $totalInvested = $bot->total_invested;
         
         if ($totalInvested > 0) {
-            $currentYield = ($totalProfit / $totalInvested) * 100;
-            return $currentYield >= $bot->target_yield_percentage;
+            return ($totalProfit / $totalInvested) * 100;
         }
         
-        return false;
+        return 0;
+    }
+
+    /**
+     * Transfer bot profits to user's trading balance
+     */
+    private function transferBotProfitsToUser(BotTrading $bot)
+    {
+        try {
+            if ($bot->total_profit > 0) {
+                $user = $bot->user;
+                $user->increment('trading_balance', $bot->total_profit);
+                
+                Log::info("Bot profits transferred to user", [
+                    'bot_id' => $bot->id,
+                    'user_id' => $user->id,
+                    'profit_transferred' => $bot->total_profit,
+                    'new_trading_balance' => $user->fresh()->trading_balance
+                ]);
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to transfer bot profits to user: " . $e->getMessage(), [
+                'bot_id' => $bot->id,
+                'user_id' => $bot->user_id,
+                'profit_amount' => $bot->total_profit
+            ]);
+        }
     }
 
     /**

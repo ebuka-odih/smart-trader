@@ -139,11 +139,19 @@
                         <input type="hidden" name="amount" value="{{ $trader->amount }}">
                         
                         <button type="submit" 
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                class="copy-trade-btn w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                            <!-- Default state -->
+                            <svg class="copy-trade-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                             </svg>
-                            <span>Copy Trade</span>
+                            <span class="copy-trade-text">Copy Trade</span>
+                            
+                            <!-- Loading state (hidden by default) -->
+                            <svg class="copy-trade-spinner hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span class="copy-trade-loading hidden">Processing...</span>
                         </button>
                     </form>
                 </div>
@@ -256,8 +264,20 @@
         }
 
         // Add click event listeners to tabs
-        tradersTab.addEventListener('click', () => showTab('traders'));
-        historyTab.addEventListener('click', () => showTab('history'));
+        tradersTab.addEventListener('click', () => {
+            showTab('traders');
+            // Update URL without page reload
+            const url = new URL(window.location);
+            url.searchParams.set('tab', 'traders');
+            window.history.pushState({}, '', url);
+        });
+        historyTab.addEventListener('click', () => {
+            showTab('history');
+            // Update URL without page reload
+            const url = new URL(window.location);
+            url.searchParams.set('tab', 'history');
+            window.history.pushState({}, '', url);
+        });
 
         // Check URL parameters for initial tab
         const urlParams = new URLSearchParams(window.location.search);
@@ -276,12 +296,57 @@
         if (errorEl) console.log('[CopyTrading] Error message:', errorEl.textContent.trim());
         if (validationEl) console.log('[CopyTrading] Validation errors present');
 
-        // Attach submit logging to forms
+        // Function to reset copy trade button state
+        function resetCopyTradeButton(form) {
+            const submitBtn = form.querySelector('.copy-trade-btn');
+            const icon = form.querySelector('.copy-trade-icon');
+            const text = form.querySelector('.copy-trade-text');
+            const spinner = form.querySelector('.copy-trade-spinner');
+            const loadingText = form.querySelector('.copy-trade-loading');
+            
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+            icon.classList.remove('hidden');
+            text.classList.remove('hidden');
+            spinner.classList.add('hidden');
+            loadingText.classList.add('hidden');
+        }
+
+        // Copy trade form submission with loading state
         document.querySelectorAll('.copy-trade-form').forEach(function(form){
-            form.addEventListener('submit', function(){
+            form.addEventListener('submit', function(e){
                 const traderId = form.getAttribute('data-trader');
                 const amount = form.querySelector('input[name="amount"]').value;
+                const submitBtn = form.querySelector('.copy-trade-btn');
+                const icon = form.querySelector('.copy-trade-icon');
+                const text = form.querySelector('.copy-trade-text');
+                const spinner = form.querySelector('.copy-trade-spinner');
+                const loadingText = form.querySelector('.copy-trade-loading');
+                
                 console.log('[CopyTrading] Submitting copy trade:', { traderId, amount, action: form.action, method: form.method });
+                
+                // Show loading state
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                icon.classList.add('hidden');
+                text.classList.add('hidden');
+                spinner.classList.remove('hidden');
+                loadingText.classList.remove('hidden');
+                
+                // Prevent double submission
+                e.preventDefault();
+                
+                // Submit the form after a brief delay to show loading state
+                setTimeout(() => {
+                    form.submit();
+                }, 100);
+                
+                // Fallback: Reset button state if form submission takes too long
+                setTimeout(() => {
+                    if (submitBtn.disabled) {
+                        resetCopyTradeButton(form);
+                    }
+                }, 10000); // Reset after 10 seconds if still loading
             });
         });
 

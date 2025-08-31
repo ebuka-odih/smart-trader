@@ -154,7 +154,7 @@
                                             <div class="text-xs text-gray-400">{{ $subscription->created_at->format('M d, Y') }}</div>
                                         </td>
                                         <td class="px-6 py-4 text-sm font-medium">
-                                            <div class="flex flex-col space-y-1">
+                                            <div class="flex flex-wrap gap-2">
                                                 <a href="{{ route('user.signal-subscriptions.show', $subscription) }}" class="text-blue-400 hover:text-blue-300 transition-colors">
                                                     View Details
                                                 </a>

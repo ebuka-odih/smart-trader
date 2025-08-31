@@ -130,7 +130,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="flex flex-col space-y-2 ml-4">
+                                    <div class="flex flex-wrap gap-2 ml-4">
                                         <a href="{{ route('user.staking.show', $staking) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded text-sm font-medium transition-colors">
                                             View
                                         </a>

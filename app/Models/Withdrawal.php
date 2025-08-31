@@ -28,7 +28,7 @@ class Withdrawal extends Model
         return $this->belongsTo(User::class);
     }
 
-     public function status()
+     public function getStatusBadgeAttribute()
     {
         if ($this->status == 1)
         {
@@ -38,6 +38,18 @@ class Withdrawal extends Model
             return '<span class="badge bg-danger text-white">Declined</span>';
         }
         return '<span class="badge bg-warning text-white">Pending</span>';
+    }
+
+    public function getStatusTextAttribute()
+    {
+        if ($this->status == 1)
+        {
+            return 'completed';
+        }elseif ($this->status == 2)
+        {
+            return 'rejected';
+        }
+        return 'pending';
     }
 
     public function adminStatus()

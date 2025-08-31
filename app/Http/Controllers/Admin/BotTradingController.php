@@ -149,6 +149,19 @@ class BotTradingController extends Controller
     public function stop(BotTrading $bot)
     {
         try {
+            // Transfer profits to user's trading balance before stopping
+            if ($bot->total_profit > 0) {
+                $user = $bot->user;
+                $user->increment('trading_balance', $bot->total_profit);
+                
+                Log::info("Bot profits transferred to user on manual stop", [
+                    'bot_id' => $bot->id,
+                    'user_id' => $user->id,
+                    'profit_transferred' => $bot->total_profit,
+                    'new_trading_balance' => $user->fresh()->trading_balance
+                ]);
+            }
+
             $bot->update([
                 'status' => 'stopped',
                 'stopped_at' => now()
@@ -158,13 +171,51 @@ class BotTradingController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Bot stopped successfully!'
+                'message' => 'Bot stopped successfully!' . ($bot->total_profit > 0 ? ' Profits have been transferred to your trading balance.' : '')
             ]);
         } catch (\Exception $e) {
             Log::error("Admin bot stop failed: " . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to stop bot: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Execute the specified bot manually
+     */
+    public function execute(BotTrading $bot)
+    {
+        try {
+            // Check if bot is active
+            if ($bot->status !== 'active') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bot must be active to execute manually'
+                ], 400);
+            }
+
+            // Import the bot trading engine
+            $engine = new \App\Services\SimpleBotTradingEngine();
+            
+            // Execute the bot
+            $result = $engine->executeBot($bot);
+
+            Log::info("Admin manually executed bot {$bot->id} by user " . auth()->id(), [
+                'result' => $result
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bot executed successfully!',
+                'result' => $result
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Admin bot execution failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to execute bot: ' . $e->getMessage()
             ], 500);
         }
     }
@@ -243,7 +294,7 @@ class BotTradingController extends Controller
             ]);
 
             // Update bot's total profit
-            $bot = $trade->bot;
+            $bot = $trade->botTrading;
             $profitDifference = $request->profit_loss - $oldProfit;
             $bot->increment('total_profit', $profitDifference);
 
