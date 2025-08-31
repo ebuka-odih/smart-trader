@@ -1022,7 +1022,7 @@ document.getElementById('buyAssetForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
     if (!selectedAsset) {
-        alert('Please select an asset first');
+        showErrorModal('Validation Error', 'Please select an asset first');
         return;
     }
     
@@ -1030,7 +1030,7 @@ document.getElementById('buyAssetForm').addEventListener('submit', function(e) {
     const price = parseFloat(document.getElementById('buyPrice').value);
     
     if (!quantity || !price) {
-        alert('Please fill in all fields');
+        showErrorModal('Validation Error', 'Please fill in all fields');
         return;
     }
     
@@ -1055,21 +1055,23 @@ document.getElementById('buyAssetForm').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert('Asset purchased successfully!');
+            showSuccessModal('Success!', 'Asset purchased successfully!');
             // Update balance display with new balance
             if (data.new_balance !== undefined) {
                 document.getElementById('userHoldingBalance').textContent = parseFloat(data.new_balance).toFixed(2);
             }
             closeBuyModal();
-            // Redirect back to portfolio
-            window.location.href = '/user/holding';
+            // Redirect back to portfolio after showing success message
+            setTimeout(() => {
+                window.location.href = '/user/holding';
+            }, 2000);
         } else {
-            alert('Error: ' + data.message);
+            showErrorModal('Error', data.message);
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('An error occurred while processing your request');
+        showErrorModal('Error', 'An error occurred while processing your request');
     })
     .finally(() => {
         submitBtn.textContent = originalText;
@@ -1083,7 +1085,48 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize Pusher for real-time updates
     initializePusher();
+    
+    // Initialize modal functionality
+    initializeModals();
 });
+
+// Initialize modal functionality
+function initializeModals() {
+    const successModal = document.getElementById('successModal');
+    const errorModal = document.getElementById('errorModal');
+    const closeSuccessModal = document.getElementById('closeSuccessModal');
+    const closeErrorModal = document.getElementById('closeErrorModal');
+
+    // Close modals when clicking backdrop
+    [successModal, errorModal].forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.add('hidden');
+            }
+        });
+    });
+
+    // Close success/error modals
+    [closeSuccessModal, closeErrorModal].forEach(btn => {
+        btn.addEventListener('click', () => {
+            successModal.classList.add('hidden');
+            errorModal.classList.add('hidden');
+        });
+    });
+}
+
+// Modal functions
+function showSuccessModal(title, message) {
+    document.getElementById('successTitle').textContent = title;
+    document.getElementById('successMessage').textContent = message;
+    document.getElementById('successModal').classList.remove('hidden');
+}
+
+function showErrorModal(title, message) {
+    document.getElementById('errorTitle').textContent = title;
+    document.getElementById('errorMessage').textContent = message;
+    document.getElementById('errorModal').classList.remove('hidden');
+}
 
 // Initialize Pusher for real-time price updates
 function initializePusher() {
@@ -1203,5 +1246,43 @@ function updateAssetPrice(data) {
 }
 </script>
 
+<!-- Success/Error Modals -->
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
+            <div class="p-6 text-center">
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-2" id="successTitle">Success!</h3>
+                <p class="text-gray-400 mb-6" id="successMessage">Operation completed successfully.</p>
+                <button id="closeSuccessModal" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="errorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
+            <div class="p-6 text-center">
+                <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-2" id="errorTitle">Error!</h3>
+                <p class="text-gray-400 mb-6" id="errorMessage">An error occurred. Please try again.</p>
+                <button id="closeErrorModal" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 @endsection

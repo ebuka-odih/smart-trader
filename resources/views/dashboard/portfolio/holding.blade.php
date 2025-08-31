@@ -179,4 +179,6 @@ function openSellModal(holdingId, symbol, quantity, currentPrice) {
     alert('Sell functionality will be implemented in the next phase');
 }
 </script>
+
+@include('dashboard.portfolio.partials.footer-menu')
 @endsection

@@ -70,7 +70,7 @@
             <h3>Deposit Details:</h3>
             <p><strong>Transaction ID:</strong> #{{ $deposit->id }}</p>
             <p><strong>Amount:</strong> <span class="amount">${{ number_format($deposit->amount, 2) }}</span></p>
-            <p><strong>Payment Method:</strong> {{ optional($deposit->payment_method)->wallet ?? 'N/A' }}</p>
+            <p><strong>Payment Method:</strong> {{ optional($deposit->payment_method)->crypto_display_name ?? 'N/A' }}</p>
             <p><strong>Date:</strong> {{ $deposit->created_at ? $deposit->created_at->format('M d, Y H:i') : 'N/A' }}</p>
         </div>
         

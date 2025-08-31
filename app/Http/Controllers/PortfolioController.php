@@ -102,33 +102,7 @@ class PortfolioController extends Controller
         ));
     }
 
-    /**
-     * Show holding portfolio page
-     */
-    public function holding()
-    {
-        $user = Auth::user();
-        
-        // Get user's holding balance and related activities
-        $holdingBalance = $user->holding_balance;
-        
-        // Calculate total balance
-        $totalBalance = $user->getTotalBalanceAttribute();
-        
-        // For holding, we'll show the balance and any related activities
-        // This could be expanded to show holding history, etc.
-        $holdingStats = [
-            'current_balance' => $holdingBalance,
-            'total_balance' => $totalBalance,
-            'percentage' => $totalBalance > 0 ? ($holdingBalance / $totalBalance) * 100 : 0
-        ];
 
-        return view('dashboard.portfolio.holding', compact(
-            'user',
-            'holdingStats',
-            'totalBalance'
-        ));
-    }
 
     /**
      * Show signal portfolio page

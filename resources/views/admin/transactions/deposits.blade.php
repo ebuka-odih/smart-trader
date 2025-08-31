@@ -128,7 +128,7 @@
                                             @endif
                     </td>
                                         <td class="p-4 text-sm text-gray-900 whitespace-nowrap dark:text-white">
-                                            {{ optional($deposit->payment_method)->wallet ?? 'N/A' }}
+                                            {{ optional($deposit->payment_method)->crypto_display_name ?? 'N/A' }}
                     </td>
                                         <td class="p-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
                                             {{ $deposit->created_at ? $deposit->created_at->format('M d, Y H:i') : 'N/A' }}

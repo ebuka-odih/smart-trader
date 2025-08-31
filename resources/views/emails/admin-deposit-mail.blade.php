@@ -37,7 +37,7 @@
                   </tr>
                   <tr>
                     <th>Deposit Method:</th>
-                    <td>{{ $deposit->payment_method->wallet ?? '' }}</td>
+                    <td>{{ $deposit->payment_method->crypto_display_name ?? '' }}</td>
                   </tr>
                   <tr>
                     <th>Date:</th>

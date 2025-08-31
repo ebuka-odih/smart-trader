@@ -33,7 +33,7 @@
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Payment Method</label>
-                <p class="text-sm text-gray-900 dark:text-white">{{ optional($deposit->payment_method)->wallet ?? 'N/A' }}</p>
+                <p class="text-sm text-gray-900 dark:text-white">{{ optional($deposit->payment_method)->crypto_display_name ?? 'N/A' }}</p>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Status</label>

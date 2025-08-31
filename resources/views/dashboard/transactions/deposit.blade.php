@@ -122,7 +122,7 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                {{ optional($deposit->payment_method)->wallet ?? 'N/A' }}
+                                {{ optional($deposit->payment_method)->crypto_display_name ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @if($deposit->status == 0)
@@ -259,7 +259,7 @@
                             @foreach($wallets as $wallet)
                                 <option value="{{ $wallet->id }}" 
                                         data-address="{{ $wallet->address ?? '' }}"
-                                        {{ old('payment_method_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->wallet }}</option>
+                                        {{ old('payment_method_id') == $wallet->id ? 'selected' : '' }}>{{ $wallet->crypto_display_name }}</option>
                             @endforeach
                         </select>
                     </div>

@@ -34,7 +34,7 @@
                   </tr>
                   <tr>
                     <th>Deposit Method:</th>
-                    <td>{{ $withdraw->payment_method->wallet ?? '' }}</td>
+                    <td>{{ $withdraw->payment_method->crypto_display_name ?? '' }}</td>
                   </tr>
                     <tr>
                     <th>Payment Details:</th>

@@ -124,7 +124,7 @@
                                     </li>
                                     <li class="flex justify-between items-center py-4 px-6">
                                         <strong class="text-white-700">Deposit Method:</strong>
-                                        <span>{{ $item->payment_method->wallet ?? '' }}</span>
+                                        <span>{{ $item->payment_method->crypto_display_name ?? '' }}</span>
                                     </li>
                                 </ul>
 

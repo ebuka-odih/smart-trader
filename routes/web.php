@@ -116,7 +116,7 @@ Route::get('portfolio', [PortfolioController::class, 'index'])->name('portfolio.
 Route::get('portfolio/trade', [PortfolioController::class, 'index'])->name('portfolio.trade');
 Route::get('portfolio/staking', [PortfolioController::class, 'staking'])->name('portfolio.staking');
 Route::get('portfolio/mining', [PortfolioController::class, 'mining'])->name('portfolio.mining');
-Route::get('portfolio/holding', [PortfolioController::class, 'holding'])->name('portfolio.holding');
+Route::get('portfolio/holding', [HoldingController::class, 'index'])->name('portfolio.holding');
 Route::get('portfolio/signal', [PortfolioController::class, 'signal'])->name('portfolio.signal');
 
 // Holding Routes
