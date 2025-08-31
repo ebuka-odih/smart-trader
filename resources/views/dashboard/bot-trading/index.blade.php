@@ -304,6 +304,9 @@
                                 <div class="mt-1 text-xs text-blue-400">
                                     💡 Total USD limit for this bot's trading activities.
                                 </div>
+                                <div class="mt-1 text-xs text-yellow-400">
+                                    ⚠️ Must be greater than Max Trade Amount
+                                </div>
                             </div>
                             
                             <div>
@@ -312,6 +315,9 @@
                                 <div class="mt-1 text-xs text-blue-400">
                                     💡 Bot will buy/sell the equivalent value in the base currency.
                                 </div>
+                                <div class="mt-1 text-xs text-yellow-400">
+                                    ⚠️ Must be less than Max Trade Amount
+                                </div>
                             </div>
                             
                             <div>
@@ -319,6 +325,9 @@
                                 <input type="number" name="max_trade_amount" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100.00">
                                 <div class="mt-1 text-xs text-blue-400">
                                     💡 Bot will buy/sell the equivalent value in the base currency.
+                                </div>
+                                <div class="mt-1 text-xs text-yellow-400">
+                                    ⚠️ Must be greater than Min Trade Amount
                                 </div>
                             </div>
                         </div>
@@ -563,6 +572,22 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (missingFields.length > 0) {
             showErrorModal('Validation Error', `Please fill in the following fields: ${missingFields.join(', ')}`);
+            return;
+        }
+
+        // Validate trade amount logic
+        const minTradeAmount = parseFloat(formData.get('min_trade_amount'));
+        const maxTradeAmount = parseFloat(formData.get('max_trade_amount'));
+        
+        if (maxTradeAmount < minTradeAmount) {
+            showErrorModal('Validation Error', 'Max Trade Amount must be greater than or equal to Min Trade Amount.');
+            return;
+        }
+
+        // Validate investment amount
+        const maxInvestment = parseFloat(formData.get('max_investment'));
+        if (maxInvestment < maxTradeAmount) {
+            showErrorModal('Validation Error', 'Max Investment must be greater than or equal to Max Trade Amount.');
             return;
         }
 

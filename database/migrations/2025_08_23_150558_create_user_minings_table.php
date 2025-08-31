@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             
             // User and Plan relationships
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('plan_id')->constrained()->onDelete('cascade');
             
             // Investment details

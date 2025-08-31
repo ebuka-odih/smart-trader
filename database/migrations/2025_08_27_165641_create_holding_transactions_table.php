@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('holding_transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('asset_id')->constrained()->onDelete('cascade');
             $table->enum('type', ['buy', 'sell']);
             $table->decimal('quantity', 20, 8);

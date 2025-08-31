@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_holdings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('asset_id')->constrained()->onDelete('cascade');
             $table->decimal('quantity', 20, 8)->default(0);
             $table->decimal('average_buy_price', 20, 8)->default(0);

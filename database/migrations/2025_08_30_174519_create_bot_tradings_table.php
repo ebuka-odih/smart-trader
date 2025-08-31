@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bot_tradings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->string('name'); // Bot name
             $table->string('base_asset', 10); // e.g., BTC, ETH
             $table->string('quote_asset', 10); // e.g., USDT, USD

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('bot_trades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('bot_trading_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             
             // Trade Details
             $table->string('trade_id')->unique(); // Unique trade identifier

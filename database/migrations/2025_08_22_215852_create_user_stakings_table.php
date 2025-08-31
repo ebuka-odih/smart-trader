@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_stakings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('plan_id')->constrained()->onDelete('cascade');
             $table->decimal('amount_staked', 15, 8);
             $table->string('currency', 10); // BTC, ETH, USDT, etc.
