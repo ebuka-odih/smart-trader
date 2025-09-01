@@ -36,3 +36,6 @@ Schedule::command('prices:update-scheduled')->everyThirtySeconds();
 
 // Bot Trading Simulation
 Schedule::command('bot-trading:simulate')->everyMinute();
+
+// Trade Market Simulation
+Schedule::command('trade:simulate-market')->everyFiveMinutes();

@@ -11,6 +11,14 @@ class TradePair extends Model
     use HasFactory;
     protected $keyType = 'string';
     public $incrementing = false;
+    
+    protected $fillable = [
+        'type',
+        'pair',
+        'current_price',
+        'price_change_24h'
+    ];
+    
     public static function boot() {
         parent::boot();
 
