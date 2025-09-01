@@ -26,9 +26,9 @@
             @php
                 $walletBalance = auth()->user()->balance ?? 0;
                 $tradingBalance = auth()->user()->trading_balance ?? 0;
-                $holdings = auth()->user()->holding_balance ?? 0;
+                $holdingsBalance = auth()->user()->holding_balance ?? 0;
                 $staking = auth()->user()->staking_balance ?? 0;
-                $totalPortfolio = $walletBalance + $tradingBalance + $holdings + $staking;
+                $totalPortfolio = $walletBalance + $tradingBalance + $holdingsBalance + $staking;
             @endphp
 
             <!-- Total Balance -->
@@ -60,7 +60,7 @@
                         <div class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
                         <span class="text-sm text-gray-300">Holdings</span>
                     </div>
-                    <span class="text-sm font-semibold text-white">${{ number_format($holdings, 2) }}</span>
+                    <span class="text-sm font-semibold text-white">${{ number_format($holdingsBalance, 2) }}</span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 px-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
@@ -101,21 +101,23 @@
                     </div>
                 </div>
                 <div class="mb-4">
-                    <div class="text-3xl font-bold text-purple-400">85%</div>
-                    <div class="text-sm text-gray-400">Strong Performance</div>
+                    <div class="text-3xl font-bold text-purple-400">{{ number_format($winRate, 1) }}%</div>
+                    <div class="text-sm text-gray-400">{{ $winRate >= 70 ? 'Strong Performance' : ($winRate >= 50 ? 'Good Performance' : 'Learning Phase') }}</div>
                 </div>
                 <div class="space-y-3">
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Win Rate</span>
-                        <span class="text-white">78%</span>
+                        <span class="text-white">{{ number_format($winRate, 1) }}%</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Total Trades</span>
-                        <span class="text-white">156</span>
+                        <span class="text-white">{{ $totalTrades }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Avg. Profit</span>
-                        <span class="text-green-400">+$245.30</span>
+                        <span class="{{ $avgProfit >= 0 ? 'text-green-400' : 'text-red-400' }}">
+                            {{ $avgProfit >= 0 ? '+' : '' }}${{ number_format($avgProfit, 2) }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -133,15 +135,21 @@
                 <div class="space-y-2">
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-400">Active Plans</span>
-                        <span class="text-green-400 font-semibold">7</span>
+                        <span class="text-green-400 font-semibold">{{ $totalPlans }}</span>
                     </div>
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-400">Premium Status</span>
-                        <span class="text-blue-400 font-semibold">Active</span>
+                        <span class="text-blue-400 font-semibold">{{ $totalPlans > 0 ? 'Active' : 'Inactive' }}</span>
                     </div>
                     <div class="flex justify-between text-xs">
                         <span class="text-gray-400">Next Renewal</span>
-                        <span class="text-white">Dec 15, 2024</span>
+                        <span class="text-white">
+                            @if($activePlans->count() > 0)
+                                {{ $activePlans->first()->end_date ? $activePlans->first()->end_date->format('M d, Y') : 'N/A' }}
+                            @else
+                                N/A
+                            @endif
+                        </span>
                     </div>
                 </div>
             </div>
@@ -163,31 +171,135 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Trading Plans</span>
-                    <span class="text-blue-400 font-semibold">2 Active</span>
+                    <span class="text-blue-400 font-semibold">{{ $tradingPlans }} Active</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Signal Plans</span>
-                    <span class="text-green-400 font-semibold">1 Active</span>
+                    <span class="text-green-400 font-semibold">{{ $signalPlans }} Active</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Staking Plans</span>
-                    <span class="text-purple-400 font-semibold">3 Active</span>
+                    <span class="text-purple-400 font-semibold">{{ $stakingPlans }} Active</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Mining Plans</span>
-                    <span class="text-orange-400 font-semibold">1 Active</span>
+                    <span class="text-orange-400 font-semibold">{{ $miningPlans }} Active</span>
                 </div>
             </div>
             <div class="mt-4 pt-3 border-t border-gray-700">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Total Subscriptions</span>
-                    <span class="text-white font-semibold">7 Active</span>
+                    <span class="text-white font-semibold">{{ $totalPlans }} Active</span>
                 </div>
             </div>
         </div>
     </div>
 
-        <!-- Second Row: Trades Tabs -->
+    <!-- Second Row: Additional Insights -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Holdings Overview -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-white">Holdings Overview</h3>
+                <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Total Value</span>
+                    <span class="text-white font-semibold">${{ number_format($totalHoldingsValue, 2) }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Assets Held</span>
+                    <span class="text-white">{{ $holdings->count() }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Recent Activity</span>
+                    <span class="text-white">{{ $recentTransactions->count() }}</span>
+                </div>
+            </div>
+            @if($holdings->count() > 0)
+            <div class="mt-4 pt-3 border-t border-gray-700">
+                <a href="{{ route('user.holding.index') }}" class="text-blue-400 hover:text-blue-300 text-sm font-medium">
+                    View All Holdings →
+                </a>
+            </div>
+            @endif
+        </div>
+
+        <!-- Bot Trading Overview -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-white">Bot Trading</h3>
+                <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Active Bots</span>
+                    <span class="text-white font-semibold">{{ $activeBots }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Total Profit</span>
+                    <span class="{{ $totalBotProfit >= 0 ? 'text-green-400' : 'text-red-400' }} font-semibold">
+                        {{ $totalBotProfit >= 0 ? '+' : '' }}${{ number_format($totalBotProfit, 2) }}
+                    </span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Total Bots</span>
+                    <span class="text-white">{{ $botTradings->count() }}</span>
+                </div>
+            </div>
+            @if($botTradings->count() > 0)
+            <div class="mt-4 pt-3 border-t border-gray-700">
+                <a href="{{ route('user.botTrading.index') }}" class="text-purple-400 hover:text-purple-300 text-sm font-medium">
+                    Manage Bots →
+                </a>
+            </div>
+            @endif
+        </div>
+
+        <!-- Copy Trading Overview -->
+        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-white">Copy Trading</h3>
+                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="space-y-3">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Active Copies</span>
+                    <span class="text-white font-semibold">{{ $activeCopyTrades }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Total Copies</span>
+                    <span class="text-white">{{ $copyTrades->count() }}</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Status</span>
+                    <span class="text-green-400 font-semibold">{{ $activeCopyTrades > 0 ? 'Active' : 'Inactive' }}</span>
+                </div>
+            </div>
+            @if($copyTrades->count() > 0)
+            <div class="mt-4 pt-3 border-t border-gray-700">
+                <a href="{{ route('user.copyTrading.index') }}" class="text-green-400 hover:text-green-300 text-sm font-medium">
+                    View Copy Trades →
+                </a>
+            </div>
+            @endif
+        </div>
+    </div>
+
+    <!-- Third Row: Trades Tabs -->
     <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
                 <!-- Tabs Header -->
                 <div class="border-b border-gray-700">
@@ -229,6 +341,33 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-gray-800 divide-y divide-gray-700">
+                                    @forelse($openTrades as $trade)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            {{ $trade->trade_pair->name ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $trade->action_type === 'buy' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ ucfirst($trade->action_type ?? 'N/A') }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            ${{ number_format($trade->amount, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            {{ $trade->leverage ?? 'N/A' }}x
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            ${{ number_format($trade->entry_price ?? 0, 8) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm {{ ($trade->profit_loss ?? 0) >= 0 ? 'text-green-400' : 'text-red-400' }}">
+                                            {{ ($trade->profit_loss ?? 0) >= 0 ? '+' : '' }}${{ number_format($trade->profit_loss ?? 0, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <button class="text-red-400 hover:text-red-300">Close</button>
+                                        </td>
+                                    </tr>
+                                    @empty
                                     <tr>
                                         <td colspan="7" class="px-6 py-12 text-center">
                                             <div class="flex flex-col items-center space-y-3">
@@ -242,6 +381,7 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -263,6 +403,33 @@
                                 </tr>
                                 </thead>
                                 <tbody class="bg-gray-800 divide-y divide-gray-700">
+                                    @forelse($closedTrades as $trade)
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            {{ $trade->trade_pair->name ?? 'N/A' }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $trade->action_type === 'buy' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                                {{ ucfirst($trade->action_type ?? 'N/A') }}
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            ${{ number_format($trade->amount, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            ${{ number_format($trade->entry_price ?? 0, 8) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            ${{ number_format($trade->exit_price ?? 0, 8) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm {{ ($trade->profit_loss ?? 0) >= 0 ? 'text-green-400' : 'text-red-400' }}">
+                                            {{ ($trade->profit_loss ?? 0) >= 0 ? '+' : '' }}${{ number_format($trade->profit_loss ?? 0, 2) }}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
+                                            {{ $trade->updated_at ? $trade->updated_at->format('M d, Y') : 'N/A' }}
+                                        </td>
+                                    </tr>
+                                    @empty
                                     <tr>
                                         <td colspan="7" class="px-6 py-12 text-center">
                                             <div class="flex flex-col items-center space-y-3">
@@ -276,14 +443,19 @@
                                             </div>
                                         </td>
                                     </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+
                                                 </div>
                                             </div>
+
+    <!-- Bottom spacing for fixed menu -->
+    <div class="h-24"></div>
 
     <!-- Bottom Menu (Mobile & Desktop) -->
     <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-50">

@@ -1,1063 +1,348 @@
 @extends('dashboard.layout.app')
-@section('content')
 
-<div class="settings mtb15">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12 col-lg-3">
-          <div class="nav flex-column nav-pills settings-nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-            <a class="nav-link active" id="settings-profile-tab" data-toggle="pill" href="#settings-profile" role="tab" aria-controls="settings-profile" aria-selected="true"><i class="icon ion-md-person"></i> Profile</a>
-            <a class="nav-link" id="settings-wallet-tab" data-toggle="pill" href="#settings-wallet" role="tab" aria-controls="settings-wallet" aria-selected="false"><i class="icon ion-md-wallet"></i> Wallet</a>
-            <a class="nav-link" id="settings-tab" data-toggle="pill" href="#settings" role="tab" aria-controls="settings" aria-selected="false"><i class="icon ion-md-settings"></i> Settings</a>
-          </div>
+@section('content')
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-bold text-white">Profile Settings</h1>
+            <p class="text-gray-400 mt-1">Manage your account information and preferences</p>
         </div>
-        <div class="col-md-12 col-lg-9">
-          <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade active show" id="settings-profile" role="tabpanel" aria-labelledby="settings-profile-tab">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">General Information</h5>
-                  <div class="settings-profile">
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Profile Overview -->
+        <div class="lg:col-span-1">
+            <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                <div class="text-center">
+                    <div class="relative inline-block">
+                        <img class="w-24 h-24 rounded-full mx-auto mb-4" 
+                             src="{{ asset($user->avatar ?? 'assets/img/avatar.svg') }}" 
+                             alt="Profile Photo">
+                        <div class="absolute bottom-4 right-0">
+                            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-semibold text-white">{{ $user->name }}</h3>
+                    <p class="text-gray-400 text-sm">{{ $user->email }}</p>
+                    <div class="mt-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                            {{ $user->package->name ?? 'Free' }} Member
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="mt-6 pt-6 border-t border-gray-700">
+                    <div class="space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Member Since</span>
+                            <span class="text-white">{{ $user->created_at->format('M Y') }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Last Login</span>
+                            <span class="text-white">{{ $user->last_login_at ? $user->last_login_at->format('M d, Y') : 'N/A' }}</span>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="text-gray-400">Status</span>
+                            <span class="text-green-400 font-medium">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Cards -->
+        <div class="lg:col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Personal Information -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">Personal Information</h3>
+                        <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    @if(session()->has('success'))
+                        <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                            {{ session()->get('success') }}
+                        </div>
+                    @endif
+                    
+                    @if ($errors->any())
+                        <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                            <ul class="list-disc list-inside">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form action="{{ route('user.updateProfile', $user->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div>
-                         @if(session()->has('success'))
-                            <div class="alert alert-success">
-                                {{ session()->get('success') }}
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Full Name</label>
+                                <input type="text" name="name" value="{{ $user->name }}" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                       placeholder="Enter your full name">
                             </div>
-                        @endif
-                         @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                                <input type="email" value="{{ $user->email }}" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-gray-400 focus:outline-none"
+                                       readonly>
+                                <p class="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                             </div>
-                        @endif
-                     </div>
-                      <img style="height: 70px; width: 70px; border-radius: 50%" src="{{ asset($user->avatar ?? "assets/img/avatar.svg") }}" alt="avatar">
-                      <div class="custom-file">
-                        <input  type="file" name="avatar" class="form-control " id="fileUpload">
-{{--                        <label class="custom-file-label" for="fileUpload">Choose avatar</label>--}}
-                      </div>
-                      <div class="form-row mt-4">
-                        <div class="col-md-6">
-                          <label for="formFirst">First name</label>
-                          <input id="formFirst" type="text" name="first_name" value="{{ $user->first_name ?? '' }}" class="form-control" placeholder="First name">
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
+                                <input type="text" name="phone" value="{{ $user->phone }}" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                       placeholder="Enter phone number">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Telegram Username</label>
+                                <input type="text" name="telegram" value="{{ $user->telegram }}" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                       placeholder="@username">
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
+                                Update Profile
+                            </button>
                         </div>
-                        <div class="col-md-6">
-                          <label for="formLast">Last name</label>
-                          <input id="formLast" type="text" name="last_name" value="{{ $user->last_name ?? '' }}" class="form-control" placeholder="Last name">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="emailAddress">Email</label>
-                          <input id="emailAddress" type="text" readonly value="{{ $user->email ?? '' }}" class="form-control" placeholder="Enter your email">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="phoneNumber">Phone</label>
-                          <input id="phoneNumber" type="text" name="phone" value="{{ $user->phone ?? '' }}" class="form-control" placeholder="Enter phone number">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="phoneNumber">Telegram Username</label>
-                          <input id="phoneNumber" type="text" name="telegram" value="{{ $user->telegram ?? '' }}" class="form-control" placeholder="Telegram Username">
-                        </div>
-                        <div class="col-md-12">
-                          <input type="submit" value="Update">
-                        </div>
-                      </div>
                     </form>
-                  </div>
                 </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Security Information</h5>
-                  <div class="settings-profile">
+
+                <!-- Security Settings -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">Security</h3>
+                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    @if(session()->has('status'))
+                        <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+                            {{ session()->get('status') }}
+                        </div>
+                    @endif
+
                     <form action="{{ route('user.updatePassword') }}" method="POST">
                         @csrf
-                         <div>
-                         @if(session()->has('status'))
-                            <div class="alert alert-success">
-                                {{ session()->get('status') }}
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Current Password</label>
+                                <input type="password" name="current_password" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                       placeholder="Enter current password">
                             </div>
-                        @endif
-                         @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">New Password</label>
+                                <input type="password" name="new_password" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                       placeholder="Enter new password">
                             </div>
-                        @endif
-                     </div>
-                      <div class="form-row">
-                        <div class="col-md-6">
-                          <label for="currentPass">Current password</label>
-                          <input id="currentPass" type="password" name="current_password" class="form-control" placeholder="Enter your password">
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Confirm New Password</label>
+                                <input type="password" name="new_password_confirmation" 
+                                       class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                       placeholder="Confirm new password">
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg font-medium transition-colors">
+                                Change Password
+                            </button>
                         </div>
-                        <div class="col-md-6">
-                          <label for="newPass">New password</label>
-                          <input id="newPass" type="password" name="new_password" class="form-control" placeholder="Enter new password">
-                        </div>
-                          <div class="col-md-6">
-                          <label for="newPass">Confirm New password</label>
-                          <input id="newPass" type="password" name="confirm_new_password" class="form-control" placeholder="Confirm new password">
-                        </div>
-                        <div class="col-md-12">
-                          <input type="submit" value="Update">
-                        </div>
-                      </div>
                     </form>
-                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="settings-wallet" role="tabpanel" aria-labelledby="settings-wallet-tab">
-              <div class="wallet">
-                <div class="row">
-                  <div class="col-md-12 col-lg-4">
-                    <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill" href="#coinBTC" role="tab" aria-selected="false">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/18.png" alt="btc">
-                          <div>
-                            <h2>BTC</h2>
-                            <p>Bitcoin</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>4.5484254</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill" href="#coinETH" role="tab" aria-selected="true">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/1.png" alt="btc">
-                          <div>
-                            <h2>ETH</h2>
-                            <p>Ethereum</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>13.454845</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                      <a class="nav-link d-flex justify-content-between align-items-center active" data-toggle="pill" href="#coinBNB" role="tab" aria-selected="true">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/9.png" alt="btc">
-                          <div>
-                            <h2>BNB</h2>
-                            <p>Binance</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>35.4842458</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill" href="#coinTRX" role="tab" aria-selected="true">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/6.png" alt="btc">
-                          <div>
-                            <h2>TRX</h2>
-                            <p>Tron</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>4.458941</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill" href="#coinEOS" role="tab" aria-selected="true">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/2.png" alt="btc">
-                          <div>
-                            <h2>EOS</h2>
-                            <p>Eosio</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>33.478951</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill" href="#coinXMR" role="tab" aria-selected="true">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/7.png" alt="btc">
-                          <div>
-                            <h2>XMR</h2>
-                            <p>Monero</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>99.465975</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                      <a class="nav-link d-flex justify-content-between align-items-center" data-toggle="pill" href="#coinKCS" role="tab" aria-selected="true">
-                        <div class="d-flex">
-                          <img src="assets/img/icon/4.png" alt="btc">
-                          <div>
-                            <h2>KCS</h2>
-                            <p>Kstarcoin</p>
-                          </div>
-                        </div>
-                        <div>
-                          <h3>114.57564</h3>
-                          <p class="text-right"><i class="icon ion-md-lock"></i> 0.0000000</p>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                  <div class="col-md-12 col-lg-8">
-                    <div class="tab-content">
-                      <div class="tab-pane fade" id="coinBTC" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>5.5894 BTC</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>2.480 BTC</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade" id="coinETH" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>4.1542 ETH</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>1.334 ETH</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade active show" id="coinBNB" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>7.342 BNB</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>0.332 BNB</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade" id="coinTRX" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>4.3344 TRX</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>1.453 TRX</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade" id="coinEOS" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>33.35 EOS</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>4.445 EOS</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade" id="coinXMR" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>34.333 XMR</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>2.354 XMR</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="tab-pane fade" id="coinKCS" role="tabpanel">
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Balances</h5>
-                            <ul>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-cash"></i>
-                                  <h2>Total Equity</h2>
-                                </div>
-                                <div>
-                                  <h3>86.577 KCS</h3>
-                                </div>
-                              </li>
-                              <li class="d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                  <i class="icon ion-md-checkmark"></i>
-                                  <h2>Available Margin</h2>
-                                </div>
-                                <div>
-                                  <h3>5.78 KCS</h3>
-                                </div>
-                              </li>
-                            </ul>
-                            <button class="btn green">Deposit</button>
-                            <button class="btn red">Withdraw</button>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Wallet Deposit Address</h5>
-                            <div class="row wallet-address">
-                              <div class="col-md-8">
-                                <p>Deposits to this address are unlimited. Note that you may not be able to withdraw all
-                                  of your
-                                  funds at once if you deposit more than your daily withdrawal limit.</p>
-                                <div class="input-group">
-                                  <input type="text" class="form-control" value="Ad87deD4gEe8dG57Ede4eEg5dREs4d5e8f4e">
-                                  <div class="input-group-prepend">
-                                    <button class="btn btn-primary">COPY</button>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="col-md-4">
-                                <img src="assets/img/qr-code-dark.svg" alt="qr-code">
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="card">
-                          <div class="card-body">
-                            <h5 class="card-title">Latest Transactions</h5>
-                            <div class="wallet-history">
-                              <table class="table">
-                                <thead>
-                                  <tr>
-                                    <th>No.</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th>Amount</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>1</td>
-                                    <td>25-04-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>4.5454334</td>
-                                  </tr>
-                                  <tr>
-                                    <td>2</td>
-                                    <td>25-05-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>0.5484468</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-06-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                  <tr>
-                                    <td>4</td>
-                                    <td>25-07-2019</td>
-                                    <td><i class="icon ion-md-checkmark-circle-outline green"></i></td>
-                                    <td>1.45894147</td>
-                                  </tr>
-                                  <tr>
-                                    <td>3</td>
-                                    <td>25-08-2019</td>
-                                    <td><i class="icon ion-md-close-circle-outline red"></i></td>
-                                    <td>2.5454545</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Notifications</h5>
-                  <div class="settings-notification">
-                    <ul>
-                      <li>
-                        <div class="notification-info">
-                          <p>Update price</p>
-                          <span>Get the update price in your dashboard</span>
-                        </div>
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="notification1">
-                          <label class="custom-control-label" for="notification1"></label>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="notification-info">
-                          <p>2FA</p>
-                          <span>Unable two factor authentication service</span>
-                        </div>
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="notification2" checked="">
-                          <label class="custom-control-label" for="notification2"></label>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="notification-info">
-                          <p>Latest news</p>
-                          <span>Get the latest news in your mail</span>
-                        </div>
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="notification3">
-                          <label class="custom-control-label" for="notification3"></label>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="notification-info">
-                          <p>Email Service</p>
-                          <span>Get security code in your mail</span>
-                        </div>
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="notification4" checked="">
-                          <label class="custom-control-label" for="notification4"></label>
-                        </div>
-                      </li>
-                      <li>
-                        <div class="notification-info">
-                          <p>Phone Notify</p>
-                          <span>Get transition notification in your phone </span>
-                        </div>
-                        <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="notification5" checked="">
-                          <label class="custom-control-label" for="notification5"></label>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="card settings-profile">
-                <div class="card-body">
-                  <h5 class="card-title">Create API Key</h5>
-                  <div class="form-row">
-                    <div class="col-md-6">
-                      <label for="generateKey">Generate key name</label>
-                      <input id="generateKey" type="text" class="form-control" placeholder="Enter your key name">
-                    </div>
-                    <div class="col-md-6">
-                      <label for="rewritePassword">Confirm password</label>
-                      <input id="rewritePassword" type="password" class="form-control" placeholder="Confirm your password">
-                    </div>
-                    <div class="col-md-12">
-                      <input type="submit" value="Create API key">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Your API Keys</h5>
-                  <div class="wallet-history">
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>No.</th>
-                          <th>Key</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>zRmWVcrAZ1C0RZkFMu7K5v0KWC9jUJLt</td>
-                          <td>
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="apiStatus1" checked="">
-                              <label class="custom-control-label" for="apiStatus1"></label>
-                            </div>
-                          </td>
-                          <td><i class="icon ion-md-trash"></i></td>
-                        </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>Rv5dgnKdmVPyHwxeExBYz8uFwYQz3Jvg</td>
-                          <td>
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="apiStatus2">
-                              <label class="custom-control-label" for="apiStatus2"></label>
-                            </div>
-                          </td>
-                          <td><i class="icon ion-md-trash"></i></td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>VxEYIs1HwgmtKTUMA4aknjSEjjePZIWu</td>
-                          <td>
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="apiStatus3">
-                              <label class="custom-control-label" for="apiStatus3"></label>
-                            </div>
-                          </td>
-                          <td><i class="icon ion-md-trash"></i></td>
-                        </tr>
-                        <tr>
-                          <td>4</td>
-                          <td>M01DueJ4x3awI1SSLGT3CP1EeLSnqt8o</td>
-                          <td>
-                            <div class="custom-control custom-switch">
-                              <input type="checkbox" class="custom-control-input" id="apiStatus4">
-                              <label class="custom-control-label" for="apiStatus4"></label>
-                            </div>
-                          </td>
-                          <td><i class="icon ion-md-trash"></i></td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
+                <!-- KYC Verification -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">KYC Verification</h3>
+                        <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-gray-700 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-white font-medium">Identity Verification</span>
+                            </div>
+                            <span class="text-green-400 text-sm font-medium">Verified</span>
+                        </div>
+                        
+                        <a href="{{ route('user.kyc.index') }}" class="w-full flex items-center justify-between p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-white font-medium">View KYC Details</span>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Account Actions -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">Account Actions</h3>
+                        <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <!-- <a href="{{ route('user.transactions.index') }}?tab=transfers" class="w-full flex items-center justify-between p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-white font-medium">Transfer Funds</span>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a> -->
+                        
+                        <button class="w-full flex items-center justify-between p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-white font-medium">Referrals</span>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                        
+                        <a href="{{ route('user.transactions.index') }}" class="w-full flex items-center justify-between p-3 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-2H4v2zM4 15h6v-2H4v2zM4 11h6V9H4v2zM4 7h6V5H4v2zM10 7h10V5H10v2zM10 11h10V9H10v2zM10 15h10v-2H10v2zM10 19h10v-2H10v2z"></path>
+                                    </svg>
+                                </div>
+                                <span class="text-white font-medium">Transaction History</span>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Notifications -->
+                <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-white">Notifications</h3>
+                        <div class="w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-2H4v2zM4 15h6v-2H4v2zM4 11h6V9H4v2zM4 7h6V5H4v2zM10 7h10V5H10v2zM10 11h10V9H10v2zM10 15h10v-2H10v2zM10 19h10v-2H10v2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white font-medium">Email Notifications</p>
+                                <p class="text-gray-400 text-sm">Receive updates via email</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                        
+
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-white font-medium">Push Notifications</p>
+                                <p class="text-gray-400 text-sm">Receive browser notifications</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" class="sr-only peer" checked>
+                                <div class="w-11 h-6 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Handle profile photo upload
+document.querySelector('.relative.inline-block').addEventListener('click', function() {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Create a form and submit it
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route("user.updateProfile", $user->id) }}';
+            form.enctype = 'multipart/form-data';
+            
+            const csrfToken = document.createElement('input');
+            csrfToken.type = 'hidden';
+            csrfToken.name = '_token';
+            csrfToken.value = '{{ csrf_token() }}';
+            
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.name = 'avatar';
+            fileInput.files = e.target.files;
+            
+            form.appendChild(csrfToken);
+            form.appendChild(fileInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    };
+    input.click();
+});
+</script>
 @endsection

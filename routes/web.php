@@ -15,6 +15,8 @@ use App\Http\Controllers\UserStakingController;
 use App\Http\Controllers\UserMiningController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\HoldingController;
+use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\KycController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome')->name('index');
@@ -49,6 +51,9 @@ Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'
 Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds');
 Route::get('withdrawal/history', [WithdrawalController::class, 'getWithdrawalHistory'])->name('withdrawal.history');
 Route::get('transfer/history', [WithdrawalController::class, 'getTransferHistory'])->name('transfer.history');
+Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
+Route::get('kyc', [KycController::class, 'index'])->name('kyc.index');
+Route::post('kyc', [KycController::class, 'store'])->name('kyc.store');
 
     Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');

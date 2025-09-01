@@ -65,6 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_login_at' => 'datetime',
             'password' => 'hashed',
             'balance' => 'decimal:2',
             'trading_balance' => 'decimal:2',
@@ -75,7 +76,6 @@ class User extends Authenticatable implements MustVerifyEmail
             'profit' => 'decimal:2',
         ];
     }
-    protected $dates = ['last_login_at'];
 
     public function fullname()
     {
@@ -290,5 +290,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function botTrades()
     {
         return $this->hasMany(BotTrade::class);
+    }
+
+    /**
+     * Copy Trading relationships
+     */
+    public function copiedTrades()
+    {
+        return $this->hasMany(CopiedTrade::class);
     }
 }
