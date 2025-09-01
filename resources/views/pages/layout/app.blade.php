@@ -12,7 +12,7 @@
     <meta name="locale" content="en">
     <meta name="content-language" content="en">
     <title>BlackRock | Home</title>
-    <link rel="icon" href="storage/settings/l21Oj4xbtOpQp7BGToYlVcaPz1vISLAqr1vb5bwB.png" type="image/png" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{ config('app.name')[0] }}</text></svg>" type="image/svg+xml" />
     <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
@@ -254,8 +254,8 @@
 <!-- Add this loader HTML right after the body tag -->
 <div id="site-loader" class="fixed inset-0 flex items-center justify-center bg-[#0A0714] z-50">
     <div class="flex flex-col items-center">
-        <div class="w-32 h-32 mb-4">
-            <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Loading..." class="animate-pulse w-full h-full object-contain">
+        <div class="w-32 h-32 mb-4 bg-[#2FE6DE] rounded-full flex items-center justify-center">
+            <span class="text-4xl font-bold text-black">{{ config('app.name') }}</span>
         </div>
 
     </div>
@@ -873,7 +873,7 @@ function updateTicker(data) {
         <div class="container mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                 <div class="lg:col-span-2">
-                    <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Logo" class="h-8 mb-4">
+                    <span class="text-2xl font-bold text-[#2FE6DE] mb-4 block">{{ config('app.name') }}</span>
                     <p class="text-gray-400 text-sm mb-4">A modern trading platform with advanced features and real-time market data.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">

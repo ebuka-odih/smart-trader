@@ -33,6 +33,30 @@ class LiveTradingController extends Controller
         ));
     }
 
+    public function trade(Request $request)
+    {
+        $assetType = $request->get('asset_type');
+        $symbol = $request->get('symbol');
+        
+        // Get asset details
+        if ($assetType === 'crypto' || $assetType === 'stock') {
+            $asset = Asset::where('symbol', $symbol)->first();
+            if (!$asset) {
+                abort(404, 'Asset not found');
+            }
+        } else {
+            // For forex, create a mock asset
+            $asset = [
+                'symbol' => $symbol,
+                'name' => $symbol,
+                'current_price' => rand(100, 200) / 100,
+                'price_change_24h' => rand(-50, 50) / 10
+            ];
+        }
+        
+        return view('dashboard.live-trading.trade', compact('asset', 'assetType'));
+    }
+
     public function store(Request $request)
     {
         $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
