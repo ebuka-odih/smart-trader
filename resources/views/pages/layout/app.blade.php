@@ -1,1410 +1,1501 @@
-<!doctype html>
-<html lang="en-US">
 
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from www.blackrockinvestmentcorporation.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Aug 2025 18:10:48 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
 <head>
+    <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="profile" href="https://gmpg.org/xfn/11">
-    <title>{{ env('APP_NAME') }}</title>
-    <meta name='robots' content='max-image-preview:large'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs">
+    <meta name="locale" content="en">
+    <meta name="content-language" content="en">
+    <title>BlackRock | Home</title>
+    <link rel="icon" href="storage/settings/l21Oj4xbtOpQp7BGToYlVcaPz1vISLAqr1vb5bwB.png" type="image/png" />
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pako@2.1.0/dist/pako.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
-    <script>
-        window._wpemojiSettings = {
-            "baseUrl": "https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/72x72\/",
-            "ext": ".png",
-            "svgUrl": "https:\/\/s.w.org\/images\/core\/emoji\/14.0.0\/svg\/",
-            "svgExt": ".svg",
-            "source": {"concatemoji": "https:\/\/demo2.strongtheme.com\/coinone\/wp-includes\/js\/wp-emoji-release.min.js?ver=6.1.7"}
-        };
-        /*! This file is auto-generated */
-        !function (e, a, t) {
-            var n, r, o, i = a.createElement("canvas"), p = i.getContext && i.getContext("2d");
+<style>
+    #site-loader {
+    transition: opacity 0.5s ease-in-out;
+}
 
-            function s(e, t) {
-                var a = String.fromCharCode,
-                    e = (p.clearRect(0, 0, i.width, i.height), p.fillText(a.apply(this, e), 0, 0), i.toDataURL());
-                return p.clearRect(0, 0, i.width, i.height), p.fillText(a.apply(this, t), 0, 0), e === i.toDataURL()
-            }
+@keyframes pulse {
+    0% { opacity: 0.6; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.6; transform: scale(0.98); }
+}
 
-            function c(e) {
-                var t = a.createElement("script");
-                t.src = e, t.defer = t.type = "text/javascript", a.getElementsByTagName("head")[0].appendChild(t)
-            }
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
 
-            for (o = Array("flag", "emoji"), t.supports = {
-                everything: !0,
-                everythingExceptFlag: !0
-            }, r = 0; r < o.length; r++) t.supports[o[r]] = function (e) {
-                if (p && p.fillText) switch (p.textBaseline = "top", p.font = "600 32px Arial", e) {
-                    case"flag":
-                        return s([127987, 65039, 8205, 9895, 65039], [127987, 65039, 8203, 9895, 65039]) ? !1 : !s([55356, 56826, 55356, 56819], [55356, 56826, 8203, 55356, 56819]) && !s([55356, 57332, 56128, 56423, 56128, 56418, 56128, 56421, 56128, 56430, 56128, 56423, 56128, 56447], [55356, 57332, 8203, 56128, 56423, 8203, 56128, 56418, 8203, 56128, 56421, 8203, 56128, 56430, 8203, 56128, 56423, 8203, 56128, 56447]);
-                    case"emoji":
-                        return !s([129777, 127995, 8205, 129778, 127999], [129777, 127995, 8203, 129778, 127999])
-                }
-                return !1
-            }(o[r]), t.supports.everything = t.supports.everything && t.supports[o[r]], "flag" !== o[r] && (t.supports.everythingExceptFlag = t.supports.everythingExceptFlag && t.supports[o[r]]);
-            t.supports.everythingExceptFlag = t.supports.everythingExceptFlag && !t.supports.flag, t.DOMReady = !1, t.readyCallback = function () {
-                t.DOMReady = !0
-            }, t.supports.everything || (n = function () {
-                t.readyCallback()
-            }, a.addEventListener ? (a.addEventListener("DOMContentLoaded", n, !1), e.addEventListener("load", n, !1)) : (e.attachEvent("onload", n), a.attachEvent("onreadystatechange", function () {
-                "complete" === a.readyState && t.readyCallback()
-            })), (e = t.source || {}).concatemoji ? c(e.concatemoji) : e.wpemoji && e.twemoji && (c(e.twemoji), c(e.wpemoji)))
-        }(window, document, window._wpemojiSettings);
-    </script>
-    <style>
-        img.wp-smiley,
-        img.emoji {
-            display: inline !important;
-            border: none !important;
-            box-shadow: none !important;
-            height: 1em !important;
-            width: 1em !important;
-            margin: 0 0.07em !important;
-            vertical-align: -0.1em !important;
-            background: none !important;
-            padding: 0 !important;
-        }
     </style>
-    <link rel='stylesheet' id='classic-theme-styles-css' href='{{ asset('wp-includes/css/classic-themes.min68b3.css?ver=1') }}'
-          media='all'/>
-    <style id='global-styles-inline-css'>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
+
+        :root {
+            --primary-bg: #0A0714;
+            --secondary-bg: #0D091C;
+            --card-bg: #1A1428;
+            --accent-color: #2FE6DE;
+            --accent-hover: rgba(47, 230, 222, 0.8);
+            --accent-light: rgba(47, 230, 222, 0.1);
+            --text-primary: #FFFFFF;
+            --text-secondary: #A0AEC0;
+            --border-color: rgba(47, 230, 222, 0.1);
+        }
+
         body {
-            --wp--preset--color--black: #000000;
-            --wp--preset--color--cyan-bluish-gray: #abb8c3;
-            --wp--preset--color--white: #ffffff;
-            --wp--preset--color--pale-pink: #f78da7;
-            --wp--preset--color--vivid-red: #cf2e2e;
-            --wp--preset--color--luminous-vivid-orange: #ff6900;
-            --wp--preset--color--luminous-vivid-amber: #fcb900;
-            --wp--preset--color--light-green-cyan: #7bdcb5;
-            --wp--preset--color--vivid-green-cyan: #00d084;
-            --wp--preset--color--pale-cyan-blue: #8ed1fc;
-            --wp--preset--color--vivid-cyan-blue: #0693e3;
-            --wp--preset--color--vivid-purple: #9b51e0;
-            --wp--preset--gradient--vivid-cyan-blue-to-vivid-purple: linear-gradient(135deg, rgba(6, 147, 227, 1) 0%, rgb(155, 81, 224) 100%);
-            --wp--preset--gradient--light-green-cyan-to-vivid-green-cyan: linear-gradient(135deg, rgb(122, 220, 180) 0%, rgb(0, 208, 130) 100%);
-            --wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange: linear-gradient(135deg, rgba(252, 185, 0, 1) 0%, rgba(255, 105, 0, 1) 100%);
-            --wp--preset--gradient--luminous-vivid-orange-to-vivid-red: linear-gradient(135deg, rgba(255, 105, 0, 1) 0%, rgb(207, 46, 46) 100%);
-            --wp--preset--gradient--very-light-gray-to-cyan-bluish-gray: linear-gradient(135deg, rgb(238, 238, 238) 0%, rgb(169, 184, 195) 100%);
-            --wp--preset--gradient--cool-to-warm-spectrum: linear-gradient(135deg, rgb(74, 234, 220) 0%, rgb(151, 120, 209) 20%, rgb(207, 42, 186) 40%, rgb(238, 44, 130) 60%, rgb(251, 105, 98) 80%, rgb(254, 248, 76) 100%);
-            --wp--preset--gradient--blush-light-purple: linear-gradient(135deg, rgb(255, 206, 236) 0%, rgb(152, 150, 240) 100%);
-            --wp--preset--gradient--blush-bordeaux: linear-gradient(135deg, rgb(254, 205, 165) 0%, rgb(254, 45, 45) 50%, rgb(107, 0, 62) 100%);
-            --wp--preset--gradient--luminous-dusk: linear-gradient(135deg, rgb(255, 203, 112) 0%, rgb(199, 81, 192) 50%, rgb(65, 88, 208) 100%);
-            --wp--preset--gradient--pale-ocean: linear-gradient(135deg, rgb(255, 245, 203) 0%, rgb(182, 227, 212) 50%, rgb(51, 167, 181) 100%);
-            --wp--preset--gradient--electric-grass: linear-gradient(135deg, rgb(202, 248, 128) 0%, rgb(113, 206, 126) 100%);
-            --wp--preset--gradient--midnight: linear-gradient(135deg, rgb(2, 3, 129) 0%, rgb(40, 116, 252) 100%);
-            --wp--preset--duotone--dark-grayscale: url('#wp-duotone-dark-grayscale');
-            --wp--preset--duotone--grayscale: url('#wp-duotone-grayscale');
-            --wp--preset--duotone--purple-yellow: url('#wp-duotone-purple-yellow');
-            --wp--preset--duotone--blue-red: url('#wp-duotone-blue-red');
-            --wp--preset--duotone--midnight: url('#wp-duotone-midnight');
-            --wp--preset--duotone--magenta-yellow: url('#wp-duotone-magenta-yellow');
-            --wp--preset--duotone--purple-green: url('#wp-duotone-purple-green');
-            --wp--preset--duotone--blue-orange: url('#wp-duotone-blue-orange');
-            --wp--preset--font-size--small: 13px;
-            --wp--preset--font-size--medium: 20px;
-            --wp--preset--font-size--large: 36px;
-            --wp--preset--font-size--x-large: 42px;
-            --wp--preset--spacing--20: 0.44rem;
-            --wp--preset--spacing--30: 0.67rem;
-            --wp--preset--spacing--40: 1rem;
-            --wp--preset--spacing--50: 1.5rem;
-            --wp--preset--spacing--60: 2.25rem;
-            --wp--preset--spacing--70: 3.38rem;
-            --wp--preset--spacing--80: 5.06rem;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-primary);
         }
 
-        :where(.is-layout-flex) {
-            gap: 0.5em;
+        /* Custom Scrollbar Styling */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(47, 230, 222, 0.2) #1A1428;
         }
 
-        body .is-layout-flow > .alignleft {
-            float: left;
-            margin-inline-start: 0;
-            margin-inline-end: 2em;
+        *::-webkit-scrollbar {
+            width: 8px;
         }
 
-        body .is-layout-flow > .alignright {
-            float: right;
-            margin-inline-start: 2em;
-            margin-inline-end: 0;
+        *::-webkit-scrollbar-track {
+            background: #1A1428;
+            border-radius: 10px;
         }
 
-        body .is-layout-flow > .aligncenter {
-            margin-left: auto !important;
-            margin-right: auto !important;
+        *::-webkit-scrollbar-thumb {
+            background-color: rgba(47, 230, 222, 0.2);
+            border-radius: 10px;
+            border: 2px solid transparent;
+            background-clip: content-box;
         }
 
-        body .is-layout-constrained > .alignleft {
-            float: left;
-            margin-inline-start: 0;
-            margin-inline-end: 2em;
+        *::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(47, 230, 222, 0.4);
         }
 
-        body .is-layout-constrained > .alignright {
-            float: right;
-            margin-inline-start: 2em;
-            margin-inline-end: 0;
+        /* Animations */
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
         }
 
-        body .is-layout-constrained > .aligncenter {
-            margin-left: auto !important;
-            margin-right: auto !important;
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
         }
 
-        body .is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
-            max-width: var(--wp--style--global--content-size);
-            margin-left: auto !important;
-            margin-right: auto !important;
+        .animate-bounce-slow {
+            animation: bounce 2s ease-in-out infinite;
         }
 
-        body .is-layout-constrained > .alignwide {
-            max-width: var(--wp--style--global--wide-size);
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
 
-        body .is-layout-flex {
-            display: flex;
+        .animate-ping-slow {
+            animation: ping 2s ease-in-out infinite;
         }
 
-        body .is-layout-flex {
-            flex-wrap: wrap;
-            align-items: center;
+        @keyframes ping {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
         }
 
-        body .is-layout-flex > * {
-            margin: 0;
+        /* Navbar styles */
+        .navbar-item {
+            position: relative;
         }
 
-        :where(.wp-block-columns.is-layout-flex) {
-            gap: 2em;
+        .navbar-item::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
         }
 
-        .has-black-color {
-            color: var(--wp--preset--color--black) !important;
+        .navbar-item:hover::after,
+        .navbar-item.active::after {
+            width: 100%;
         }
 
-        .has-cyan-bluish-gray-color {
-            color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        /* Card styles */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 0.75rem;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
-        .has-white-color {
-            color: var(--wp--preset--color--white) !important;
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .has-pale-pink-color {
-            color: var(--wp--preset--color--pale-pink) !important;
+        /* Button styles */
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        .has-vivid-red-color {
-            color: var(--wp--preset--color--vivid-red) !important;
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
         }
 
-        .has-luminous-vivid-orange-color {
-            color: var(--wp--preset--color--luminous-vivid-orange) !important;
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        .has-luminous-vivid-amber-color {
-            color: var(--wp--preset--color--luminous-vivid-amber) !important;
+        .btn-secondary:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
         }
 
-        .has-light-green-cyan-color {
-            color: var(--wp--preset--color--light-green-cyan) !important;
+        /* Mobile navigation */
+        .mobile-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--secondary-bg);
+            z-index: 50;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
         }
 
-        .has-vivid-green-cyan-color {
-            color: var(--wp--preset--color--vivid-green-cyan) !important;
+        .mobile-nav.active {
+            transform: translateX(0);
         }
 
-        .has-pale-cyan-blue-color {
-            color: var(--wp--preset--color--pale-cyan-blue) !important;
+        /* Market ticker */
+        .market-ticker {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
         }
 
-        .has-vivid-cyan-blue-color {
-            color: var(--wp--preset--color--vivid-cyan-blue) !important;
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 30s linear infinite;
         }
 
-        .has-vivid-purple-color {
-            color: var(--wp--preset--color--vivid-purple) !important;
+        @keyframes ticker {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
         }
 
-        .has-black-background-color {
-            background-color: var(--wp--preset--color--black) !important;
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
         }
 
-        .has-cyan-bluish-gray-background-color {
-            background-color: var(--wp--preset--color--cyan-bluish-gray) !important;
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: var(--secondary-bg);
+            min-width: 200px;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        .has-white-background-color {
-            background-color: var(--wp--preset--color--white) !important;
+        .dropdown:hover .dropdown-content {
+            display: block;
         }
 
-        .has-pale-pink-background-color {
-            background-color: var(--wp--preset--color--pale-pink) !important;
-        }
-
-        .has-vivid-red-background-color {
-            background-color: var(--wp--preset--color--vivid-red) !important;
-        }
-
-        .has-luminous-vivid-orange-background-color {
-            background-color: var(--wp--preset--color--luminous-vivid-orange) !important;
-        }
-
-        .has-luminous-vivid-amber-background-color {
-            background-color: var(--wp--preset--color--luminous-vivid-amber) !important;
-        }
-
-        .has-light-green-cyan-background-color {
-            background-color: var(--wp--preset--color--light-green-cyan) !important;
-        }
-
-        .has-vivid-green-cyan-background-color {
-            background-color: var(--wp--preset--color--vivid-green-cyan) !important;
-        }
-
-        .has-pale-cyan-blue-background-color {
-            background-color: var(--wp--preset--color--pale-cyan-blue) !important;
-        }
-
-        .has-vivid-cyan-blue-background-color {
-            background-color: var(--wp--preset--color--vivid-cyan-blue) !important;
-        }
-
-        .has-vivid-purple-background-color {
-            background-color: var(--wp--preset--color--vivid-purple) !important;
-        }
-
-        .has-black-border-color {
-            border-color: var(--wp--preset--color--black) !important;
-        }
-
-        .has-cyan-bluish-gray-border-color {
-            border-color: var(--wp--preset--color--cyan-bluish-gray) !important;
-        }
-
-        .has-white-border-color {
-            border-color: var(--wp--preset--color--white) !important;
-        }
-
-        .has-pale-pink-border-color {
-            border-color: var(--wp--preset--color--pale-pink) !important;
-        }
-
-        .has-vivid-red-border-color {
-            border-color: var(--wp--preset--color--vivid-red) !important;
-        }
-
-        .has-luminous-vivid-orange-border-color {
-            border-color: var(--wp--preset--color--luminous-vivid-orange) !important;
-        }
-
-        .has-luminous-vivid-amber-border-color {
-            border-color: var(--wp--preset--color--luminous-vivid-amber) !important;
-        }
-
-        .has-light-green-cyan-border-color {
-            border-color: var(--wp--preset--color--light-green-cyan) !important;
-        }
-
-        .has-vivid-green-cyan-border-color {
-            border-color: var(--wp--preset--color--vivid-green-cyan) !important;
-        }
-
-        .has-pale-cyan-blue-border-color {
-            border-color: var(--wp--preset--color--pale-cyan-blue) !important;
-        }
-
-        .has-vivid-cyan-blue-border-color {
-            border-color: var(--wp--preset--color--vivid-cyan-blue) !important;
-        }
-
-        .has-vivid-purple-border-color {
-            border-color: var(--wp--preset--color--vivid-purple) !important;
-        }
-
-        .has-vivid-cyan-blue-to-vivid-purple-gradient-background {
-            background: var(--wp--preset--gradient--vivid-cyan-blue-to-vivid-purple) !important;
-        }
-
-        .has-light-green-cyan-to-vivid-green-cyan-gradient-background {
-            background: var(--wp--preset--gradient--light-green-cyan-to-vivid-green-cyan) !important;
-        }
-
-        .has-luminous-vivid-amber-to-luminous-vivid-orange-gradient-background {
-            background: var(--wp--preset--gradient--luminous-vivid-amber-to-luminous-vivid-orange) !important;
-        }
-
-        .has-luminous-vivid-orange-to-vivid-red-gradient-background {
-            background: var(--wp--preset--gradient--luminous-vivid-orange-to-vivid-red) !important;
-        }
-
-        .has-very-light-gray-to-cyan-bluish-gray-gradient-background {
-            background: var(--wp--preset--gradient--very-light-gray-to-cyan-bluish-gray) !important;
-        }
-
-        .has-cool-to-warm-spectrum-gradient-background {
-            background: var(--wp--preset--gradient--cool-to-warm-spectrum) !important;
-        }
-
-        .has-blush-light-purple-gradient-background {
-            background: var(--wp--preset--gradient--blush-light-purple) !important;
-        }
-
-        .has-blush-bordeaux-gradient-background {
-            background: var(--wp--preset--gradient--blush-bordeaux) !important;
-        }
-
-        .has-luminous-dusk-gradient-background {
-            background: var(--wp--preset--gradient--luminous-dusk) !important;
-        }
-
-        .has-pale-ocean-gradient-background {
-            background: var(--wp--preset--gradient--pale-ocean) !important;
-        }
-
-        .has-electric-grass-gradient-background {
-            background: var(--wp--preset--gradient--electric-grass) !important;
-        }
-
-        .has-midnight-gradient-background {
-            background: var(--wp--preset--gradient--midnight) !important;
-        }
-
-        .has-small-font-size {
-            font-size: var(--wp--preset--font-size--small) !important;
-        }
-
-        .has-medium-font-size {
-            font-size: var(--wp--preset--font-size--medium) !important;
-        }
-
-        .has-large-font-size {
-            font-size: var(--wp--preset--font-size--large) !important;
-        }
-
-        .has-x-large-font-size {
-            font-size: var(--wp--preset--font-size--x-large) !important;
-        }
-
-        .wp-block-navigation a:where(:not(.wp-element-button)) {
-            color: inherit;
-        }
-
-        :where(.wp-block-columns.is-layout-flex) {
-            gap: 2em;
-        }
-
-        .wp-block-pullquote {
-            font-size: 1.5em;
-            line-height: 1.6;
-        }
-    </style>
-
-    <link rel='stylesheet' id='template-kit-export-css'
-      href='{{ asset('wp-content/plugins/template-kit-export/public/assets/css/template-kit-export-public.min365c.css?ver=1.0.21') }}'
-      media='all'/>
-<link rel='stylesheet' id='hello-elementor-css'
-      href='{{ asset('wp-content/themes/hello-elementor/style.minc141.css?ver=2.6.1') }}' media='all'/>
-<link rel='stylesheet' id='hello-elementor-theme-style-css'
-      href='{{ asset('wp-content/themes/hello-elementor/theme.minc141.css?ver=2.6.1') }}' media='all'/>
-<link rel='stylesheet' id='elementor-frontend-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/css/frontend-lite.mind5d5.css?ver=3.23.4') }}' media='all'/>
-<link rel='stylesheet' id='elementor-post-3-css'
-      href='{{ asset('wp-content/uploads/sites/5/elementor/css/post-38b81.css?ver=1706807157') }}' media='all'/>
-<link rel='stylesheet' id='elementor-icons-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/lib/eicons/css/elementor-icons.mine94d.css?ver=5.30.0') }}'
-      media='all'/>
-<link rel='stylesheet' id='swiper-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/lib/swiper/v8/css/swiper.min94a4.css?ver=8.4.5') }}'
-      media='all'/>
-<link rel='stylesheet' id='elementor-pro-css'
-      href='{{ asset('wp-content/plugins/elementor-pro/assets/css/frontend-lite.min225e.css?ver=3.19.0') }}' media='all'/>
-<link rel='stylesheet' id='font-awesome-5-all-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/lib/font-awesome/css/all.mind5d5.css?ver=3.23.4') }}'
-      media='all'/>
-<link rel='stylesheet' id='font-awesome-4-shim-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.mind5d5.css?ver=3.23.4') }}'
-      media='all'/>
-<link rel='stylesheet' id='elementor-post-6-css'
-      href='{{ asset('wp-content/uploads/sites/5/elementor/css/post-66fe9.css?ver=1706807158') }}' media='all'/>
-<link rel='stylesheet' id='elementor-post-634-css'
-      href='{{ asset('wp-content/uploads/sites/5/elementor/css/post-6346fe9.css?ver=1706807158') }}' media='all'/>
-<link rel='stylesheet' id='elementor-post-582-css'
-      href='{{ asset('wp-content/uploads/sites/5/elementor/css/post-5826fe9.css?ver=1706807158') }}' media='all'/>
-<link rel='stylesheet' id='google-fonts-1-css'
-      href='https://fonts.googleapis.com/css?family=Lexend%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic%7CQuestrial%3A100%2C100italic%2C200%2C200italic%2C300%2C300italic%2C400%2C400italic%2C500%2C500italic%2C600%2C600italic%2C700%2C700italic%2C800%2C800italic%2C900%2C900italic&amp;display=auto&amp;ver=6.1.7'
-      media='all'/>
-<link rel='stylesheet' id='elementor-icons-shared-0-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/lib/font-awesome/css/fontawesome.min52d5.css?ver=5.15.3') }}'
-      media='all'/>
-<link rel='stylesheet' id='elementor-icons-fa-solid-css'
-      href='{{ asset('wp-content/plugins/elementor/assets/lib/font-awesome/css/solid.min52d5.css?ver=5.15.3') }}'
-      media='all'/>
-<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
-<script src='{{ asset('wp-includes/js/jquery/jquery.mina7a0.js?ver=3.6.1') }}' id='jquery-core-js'></script>
-<script src='{{ asset('wp-includes/js/jquery/jquery-migrate.mind617.js?ver=3.3.2') }}' id='jquery-migrate-js'></script>
-<script src='{{ asset('wp-content/plugins/template-kit-export/public/assets/js/template-kit-export-public.min365c.js?ver=1.0.21') }}'
-        id='template-kit-export-js'></script>
-<script src='{{ asset('wp-content/plugins/elementor/assets/lib/font-awesome/js/v4-shims.mind5d5.js?ver=3.23.4') }}'
-        id='font-awesome-4-shim-js'></script>
-
-
-    <style>
-        .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload),
-        .e-con.e-parent:nth-of-type(n+4):not(.e-lazyloaded):not(.e-no-lazyload) * {
-            background-image: none !important;
-        }
-
-        @media screen and (max-height: 1024px) {
-            .e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload),
-            .e-con.e-parent:nth-of-type(n+3):not(.e-lazyloaded):not(.e-no-lazyload) * {
-                background-image: none !important;
-            }
-        }
-
-        @media screen and (max-height: 640px) {
-            .e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload),
-            .e-con.e-parent:nth-of-type(n+2):not(.e-lazyloaded):not(.e-no-lazyload) * {
-                background-image: none !important;
+        /* Mobile responsive */
+        @media (max-width: 640px) {
+            .live-notification {
+                bottom: 10px;
+                right: 10px;
+                left: 10px;
+                max-width: none;
+                min-width: auto;
             }
         }
     </style>
-    <meta name="theme-color" content="#F1F8FF">
-
-    <style>
-        /* General menu styles */
-.dropdown-menu {
-    font-family: Arial, sans-serif;
-    position: relative;
-}
-
-.menu {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.menu-item {
-    position: relative;
-}
-
-.menu-item > a {
-    text-decoration: none;
-    padding: 10px 15px;
-    display: block;
-    color: #333;
-    /*background-color: #f5f5f5;*/
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.menu-item > a:hover {
-    background-color: #ddd;
-}
-
-/* Submenu styles */
-.submenu {
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    list-style: none;
-    padding: 10px 0;
-    background-color: #f5f5f5;
-    border-radius: 5px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-.submenu li {
-    padding: 5px 15px;
-}
-
-.submenu li a {
-    text-decoration: none;
-    color: #333;
-    display: block;
-    transition: color 0.3s;
-}
-
-.submenu li a:hover {
-    color: #007BFF;
-}
-
-/* Show submenu on hover */
-.menu-item:hover > .submenu {
-    display: block;
-}
-
-    </style>
-
-    <script src="//code.jivosite.com/widget/ncGgmn72BI" async></script>
-
+        <!-- Livewire Styles --><style >[wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #ffffff;}[x-cloak] {display: none !important;}</style>
 </head>
-<body
-    class="home page-template page-template-elementor_header_footer page page-id-6 wp-custom-logo elementor-default elementor-template-full-width elementor-kit-3 elementor-page elementor-page-6">
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-dark-grayscale">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0 0.49803921568627"/>
-                <feFuncG type="table" tableValues="0 0.49803921568627"/>
-                <feFuncB type="table" tableValues="0 0.49803921568627"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-grayscale">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0 1"/>
-                <feFuncG type="table" tableValues="0 1"/>
-                <feFuncB type="table" tableValues="0 1"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-purple-yellow">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0.54901960784314 0.98823529411765"/>
-                <feFuncG type="table" tableValues="0 1"/>
-                <feFuncB type="table" tableValues="0.71764705882353 0.25490196078431"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-blue-red">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0 1"/>
-                <feFuncG type="table" tableValues="0 0.27843137254902"/>
-                <feFuncB type="table" tableValues="0.5921568627451 0.27843137254902"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-midnight">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0 0"/>
-                <feFuncG type="table" tableValues="0 0.64705882352941"/>
-                <feFuncB type="table" tableValues="0 1"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-magenta-yellow">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0.78039215686275 1"/>
-                <feFuncG type="table" tableValues="0 0.94901960784314"/>
-                <feFuncB type="table" tableValues="0.35294117647059 0.47058823529412"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-purple-green">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0.65098039215686 0.40392156862745"/>
-                <feFuncG type="table" tableValues="0 1"/>
-                <feFuncB type="table" tableValues="0.44705882352941 0.4"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" width="0" height="0" focusable="false" role="none"
-     style="visibility: hidden; position: absolute; left: -9999px; overflow: hidden;">
-    <defs>
-        <filter id="wp-duotone-blue-orange">
-            <feColorMatrix color-interpolation-filters="sRGB" type="matrix"
-                           values=" .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 .299 .587 .114 0 0 "/>
-            <feComponentTransfer color-interpolation-filters="sRGB">
-                <feFuncR type="table" tableValues="0.098039215686275 1"/>
-                <feFuncG type="table" tableValues="0 0.66274509803922"/>
-                <feFuncB type="table" tableValues="0.84705882352941 0.41960784313725"/>
-                <feFuncA type="table" tableValues="1 1"/>
-            </feComponentTransfer>
-            <feComposite in2="SourceGraphic" operator="in"/>
-        </filter>
-    </defs>
-</svg>
-<a class="skip-link screen-reader-text" href="#content">Skip to content</a>
-
-<div data-elementor-type="header" data-elementor-id="634" class="elementor elementor-634 elementor-location-header"
-     data-elementor-post-type="elementor_library">
-    <section
-        class="elementor-section elementor-top-section elementor-element elementor-element-aabb6c8 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-        data-id="aabb6c8" data-element_type="section"
-        data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-        <div class="elementor-container elementor-column-gap-default">
-            <div
-                class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-b768278"
-                data-id="b768278" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div class="elementor-element elementor-element-5e03de4 elementor-widget elementor-widget-image"
-                         data-id="5e03de4" data-element_type="widget" data-widget_type="image.default">
-                        <div class="elementor-widget-container">
-                            <img src="{{ asset('img/logo.png') }}"  alt="">
-                            <style>/*! elementor - v3.23.0 - 05-08-2024 */
-                                .elementor-widget-image {
-                                    text-align: center
-                                }
-
-                                .elementor-widget-image a {
-                                    display: inline-block
-                                }
-
-                                .elementor-widget-image a img[src$=".svg"] {
-                                    width: 48px
-                                }
-
-                                .elementor-widget-image img {
-                                    vertical-align: middle;
-                                    display: inline-block
-                                }</style>
-{{--                            <img fetchpriority="high" width="800" height="207"--}}
-{{--                                 src="wp-content/uploads/sites/5/2021/08/Logo-1024x265.png"--}}
-{{--                                 class="attachment-large size-large wp-image-613" alt=""--}}
-{{--                                 srcset="https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/Logo-1024x265.png 1024w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/Logo-300x78.png 300w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/Logo-768x199.png 768w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/Logo-800x207.png 800w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/Logo.png 1276w"--}}
-{{--                                 sizes="(max-width: 800px) 100vw, 800px"/>--}}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-0766e43"
-                data-id="0766e43" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-a9c9edf elementor-nav-menu__align-end elementor-nav-menu--stretch elementor-nav-menu--dropdown-tablet elementor-nav-menu__text-align-aside elementor-nav-menu--toggle elementor-nav-menu--burger elementor-widget elementor-widget-nav-menu"
-                        data-id="a9c9edf" data-element_type="widget"
-                        data-settings="{&quot;full_width&quot;:&quot;stretch&quot;,&quot;layout&quot;:&quot;horizontal&quot;,&quot;submenu_icon&quot;:{&quot;value&quot;:&quot;&lt;i class=\&quot;fas fa-caret-down\&quot;&gt;&lt;\/i&gt;&quot;,&quot;library&quot;:&quot;fa-solid&quot;},&quot;toggle&quot;:&quot;burger&quot;}"
-                        data-widget_type="nav-menu.default">
-                        <div class="elementor-widget-container">
-                            <link rel="stylesheet"
-                                  href="{{ asset('wp-content/plugins/elementor-pro/assets/css/widget-nav-menu.min.css') }}">
-                            <nav
-                                class="elementor-nav-menu--main elementor-nav-menu__container elementor-nav-menu--layout-horizontal e--pointer-none">
-                                <ul id="menu-1-a9c9edf" class="elementor-nav-menu">
-                                    <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-1394">
-                                        <a href="{{ route('index') }}" aria-current="page"
-                                           class="elementor-item elementor-item-active">Home</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1391">
-                                        <a href="{{ route('products') }}" class="elementor-item">Trade</a>
-                                        <ul class="submenu">
-                                            <li><a href="{{ route('user.dashboard') }}">Future</a></li>
-                                            <li><a href="{{ route('user.dashboard') }}">Spot</a></li>
-                                            <li><a href="{{ route('user.dashboard') }}">Margin</a></li>
-                                            <li><a href="{{ route('user.dashboard') }}">Copy Trading</a></li>
-                                            <li><a href="{{ route('user.dashboard') }}">AI Assist</a></li>
-                                        </ul>
-                                    </li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1388">
-                                        <a href="{{ route('market') }}" class="elementor-item">Markets</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1391">
-                                        <a href="{{ route('products') }}" class="elementor-item">Buy Crypto</a>
-                                        <ul class="submenu">
-                                            <li><a href="https://www.moonpay.com/buy" target="_blank">MoonPay</a></li>
-                                            <li><a href="https://www.kraken.com/" target="_blank">Kraken</a></li>
-                                            <li><a href="https://www.bybit.com/" target="_blank">ByBit</a></li>
-                                            <li><a href="https://www.binance.com/" target="_blank">Binance</a></li>
-                                        </ul>
-                                    </li>
-{{--                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1382">--}}
-{{--                                        <a href="about/index.html" class="elementor-item">About</a></li>--}}
-                                </ul>
-                            </nav>
-                            <div class="elementor-menu-toggle" role="button" tabindex="0" aria-label="Menu Toggle"
-                                 aria-expanded="false">
-                                <i aria-hidden="true" role="presentation"
-                                   class="elementor-menu-toggle__icon--open eicon-menu-bar"></i>
-                                <i aria-hidden="true"
-                                                   role="presentation"
-                                                   class="elementor-menu-toggle__icon--close eicon-close"></i>
-                                <span class="elementor-screen-only">Menu</span>
-                            </div>
-                            <nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" aria-hidden="true">
-                                <ul id="menu-2-a9c9edf" class="elementor-nav-menu">
-                                    <li class="menu-item menu-item-type-custom menu-item-object-custom current-menu-item current_page_item menu-item-home menu-item-1394">
-                                        <a href="{{ route('index') }}" aria-current="page"
-                                           class="elementor-item elementor-item-active" tabindex="-1">Home</a></li>
-{{--                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1391">--}}
-{{--                                        <a href="{{ route('products') }}" class="elementor-item" tabindex="-1">Products</a>--}}
-{{--                                    </li>--}}
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1388">
-                                        <a href="{{ route('market') }}" class="elementor-item" tabindex="-1">Market
-                                            Coin</a></li>
-                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1382">
-                                        <a href="#about" class="elementor-item" tabindex="-1">About</a></li>
-
-{{--                                    <li class="menu-item menu-item-type-post_type menu-item-object-page menu-item-1385">--}}
-{{--                                        <a href="contact-us/index.html" class="elementor-item" tabindex="-1">Contact--}}
-{{--                                            Us</a></li>--}}
-                                </ul>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="elementor-column elementor-col-33 elementor-top-column elementor-element elementor-element-7b48a59 elementor-hidden-tablet elementor-hidden-phone"
-                data-id="7b48a59" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <section
-                        class="elementor-section elementor-inner-section elementor-element elementor-element-b59c7b3 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-                        data-id="b59c7b3" data-element_type="section">
-                        <div class="elementor-container elementor-column-gap-default">
-                            <div
-                                class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-7c6da81"
-                                data-id="7c6da81" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-cc7529d elementor-align-justify elementor-widget elementor-widget-button"
-                                        data-id="cc7529d" data-element_type="widget" data-widget_type="button.default">
-                                        <div class="elementor-widget-container">
-                                            <div class="elementor-button-wrapper">
-                                                 @guest
-                                                <a class="elementor-button elementor-button-link elementor-size-sm"
-                                                   href="{{ route('register') }}" target="_blank">
-                                                    <span class="elementor-button-content-wrapper">
-                                                                <span class="elementor-button-text">Sign Up</span>
-                                                </span>
-                                                </a>
-                                                @endguest
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-6515f55"
-                                data-id="6515f55" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-050c9e1 elementor-align-right elementor-widget elementor-widget-button"
-                                        data-id="050c9e1" data-element_type="widget" data-widget_type="button.default">
-                                        <div class="elementor-widget-container">
-                                            <div class="elementor-button-wrapper">
-                                                @guest
-                                                <a class="elementor-button elementor-button-link elementor-size-sm"
-                                                   href="{{ route('login') }}" target="_blank">
-						<span class="elementor-button-content-wrapper">
-									<span class="elementor-button-text">Login</span>
-					</span>
-                                                </a>
-                                                @else
-                                                    <a style="margin-left: 5px" class="elementor-button elementor-button-link elementor-size-sm"
-                                                   href="{{ route('user.dashboard') }}" target="_blank">
-                                                        <span class="elementor-button-content-wrapper">
-                                                                    <span class="elementor-button-text">Dashboard</span>
-                                                    </span>
-                                                </a>
-                                                @endguest
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
+<body>
+<!-- Add this loader HTML right after the body tag -->
+<div id="site-loader" class="fixed inset-0 flex items-center justify-center bg-[#0A0714] z-50">
+    <div class="flex flex-col items-center">
+        <div class="w-32 h-32 mb-4">
+            <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Loading..." class="animate-pulse w-full h-full object-contain">
         </div>
-    </section>
+
+    </div>
 </div>
 
-@yield('content')
+    <!-- Advanced Stock Market Ticker -->
+<div class="bg-gradient-to-r from-[#0A0714] via-[#0D091C] to-[#0A0714] py-3 overflow-hidden border-b border-[#2FE6DE]/20 shadow-lg">
+    <div class="ticker-wrap">
+        <div class="ticker" id="stock-ticker">
+            <div class="ticker-item flex items-center">
+                <span class="loading-ticker text-[#2FE6DE] animate-pulse">
+                    <i class="fas fa-chart-line mr-2"></i>Loading market data...
+                </span>
+            </div>
+        </div>
+    </div>
 
-<div data-elementor-type="footer" data-elementor-id="582" class="elementor elementor-582 elementor-location-footer"
-     data-elementor-post-type="elementor_library">
-    <section
-        class="elementor-section elementor-top-section elementor-element elementor-element-f5c7696 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-        data-id="f5c7696" data-element_type="section">
-        <div class="elementor-container elementor-column-gap-default">
-            <div
-                class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-b6c1931"
-                data-id="b6c1931" data-element_type="column"
-                data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <section
-                        class="elementor-section elementor-inner-section elementor-element elementor-element-731a3d4 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-                        data-id="731a3d4" data-element_type="section">
-                        <div class="elementor-container elementor-column-gap-default">
-                            <div
-                                class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-8d87f94"
-                                data-id="8d87f94" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-0851529 elementor-invisible elementor-widget elementor-widget-heading"
-                                        data-id="0851529" data-element_type="widget"
-                                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:200}"
-                                        data-widget_type="heading.default">
-                                        <div class="elementor-widget-container">
-                                            <h2 class="elementor-heading-title elementor-size-default">Get {{ env('APP_NAME') }}
-                                                Crypto</h2></div>
-                                    </div>
-                                    <div
-                                        class="elementor-element elementor-element-83d1b7a elementor-invisible elementor-widget elementor-widget-heading"
-                                        data-id="83d1b7a" data-element_type="widget"
-                                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:400}"
-                                        data-widget_type="heading.default">
-                                        <div class="elementor-widget-container">
-                                            <h6 class="elementor-heading-title elementor-size-default">The Ultimate
-                                                Security for Your Digital Assets</h6></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-7760c54"
-                                data-id="7760c54" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-52c232d elementor-invisible elementor-widget elementor-widget-image"
-                                        data-id="52c232d" data-element_type="widget"
-                                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:200}"
-                                        data-widget_type="image.default">
-                                        <div class="elementor-widget-container">
-                                            <img width="592" height="175"
-                                                 src="wp-content/uploads/sites/5/2021/07/coinonehome010.png"
-                                                 class="elementor-animation-shrink attachment-large size-large wp-image-332"
-                                                 alt=""
-                                                 srcset="https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/07/coinonehome010.png 592w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/07/coinonehome010-300x89.png 300w"
-                                                 sizes="(max-width: 592px) 100vw, 592px"/></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-66457a1"
-                                data-id="66457a1" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-e4d5c6c elementor-invisible elementor-widget elementor-widget-image"
-                                        data-id="e4d5c6c" data-element_type="widget"
-                                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:400}"
-                                        data-widget_type="image.default">
-                                        <div class="elementor-widget-container">
-                                            <img width="592" height="175"
-                                                 src="wp-content/uploads/sites/5/2021/07/coinonehome09.png"
-                                                 class="elementor-animation-shrink attachment-large size-large wp-image-331"
-                                                 alt=""
-                                                 srcset="https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/07/coinonehome09.png 592w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/07/coinonehome09-300x89.png 300w"
-                                                 sizes="(max-width: 592px) 100vw, 592px"/></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div
-                                class="elementor-column elementor-col-25 elementor-inner-column elementor-element elementor-element-15801da elementor-hidden-phone"
-                                data-id="15801da" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-3f30b9c elementor-invisible elementor-widget elementor-widget-image"
-                                        data-id="3f30b9c" data-element_type="widget"
-                                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:600}"
-                                        data-widget_type="image.default">
-                                        <div class="elementor-widget-container">
-                                            <img width="234" height="68"
-                                                 src="wp-content/uploads/sites/5/2021/07/coinonehome011.png"
-                                                 class="elementor-animation-shrink attachment-large size-large wp-image-336"
-                                                 alt=""/></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
+    <!-- Market Status Bar -->
+    <div class="flex justify-center items-center mt-1">
+        <div class="flex items-center space-x-6 text-xs">
+            <div class="flex items-center space-x-1">
+                <div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span class="text-gray-400" id="market-status">Market Open</span>
+            </div>
+            <div class="text-gray-400" id="market-time"></div>
+            <div class="flex items-center space-x-1">
+                <i class="fas fa-arrow-up text-green-400"></i>
+                <span class="text-green-400" id="gainers-count">0</span>
+                <span class="text-gray-500">gainers</span>
+            </div>
+            <div class="flex items-center space-x-1">
+                <i class="fas fa-arrow-down text-red-400"></i>
+                <span class="text-red-400" id="losers-count">0</span>
+                <span class="text-gray-500">losers</span>
             </div>
         </div>
-    </section>
-    <section
-        class="elementor-section elementor-top-section elementor-element elementor-element-54a2ebf elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-        data-id="54a2ebf" data-element_type="section">
-        <div class="elementor-container elementor-column-gap-default">
-            <div
-                class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-afba3d9"
-                data-id="afba3d9" data-element_type="column"
-                data-settings="{&quot;background_background&quot;:&quot;gradient&quot;}">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <section
-                        class="elementor-section elementor-inner-section elementor-element elementor-element-c8fce66 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-                        data-id="c8fce66" data-element_type="section">
-                        <div class="elementor-container elementor-column-gap-default">
-                            <div
-                                class="elementor-column elementor-col-50 elementor-inner-column elementor-element elementor-element-f318752"
-                                data-id="f318752" data-element_type="column">
-                                <div class="elementor-widget-wrap elementor-element-populated">
-                                    <div
-                                        class="elementor-element elementor-element-2fa9851 elementor-invisible elementor-widget elementor-widget-image"
-                                        data-id="2fa9851" data-element_type="widget"
-                                        data-settings="{&quot;_animation&quot;:&quot;fadeIn&quot;,&quot;_animation_delay&quot;:400}"
-                                        data-widget_type="image.default">
-                                        <div class="elementor-widget-container">
-                                            <img width="800" height="655"
-                                                 src="wp-content/uploads/sites/5/2021/08/coinonehome029-1024x838.png"
-                                                 class="attachment-large size-large wp-image-591" alt=""
-                                                 srcset="https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome029-1024x838.png 1024w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome029-300x246.png 300w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome029-768x629.png 768w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome029-800x655.png 800w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome029.png 1250w"
-                                                 sizes="(max-width: 800px) 100vw, 800px"/></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section
-        class="elementor-section elementor-top-section elementor-element elementor-element-6445f69 elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-        data-id="6445f69" data-element_type="section"
-        data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-        <div class="elementor-container elementor-column-gap-default">
-            <div
-                class="elementor-column elementor-col-20 elementor-top-column elementor-element elementor-element-61906ae"
-                data-id="61906ae" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-85102d6 elementor-invisible elementor-widget elementor-widget-image"
-                        data-id="85102d6" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:100}"
-                        data-widget_type="image.default">
-                        <div class="elementor-widget-container">
-                            <img src="{{ asset('img/logo.png') }}"  alt="">
-
-                        </div>
-                    </div>
-                    <div
-                        class="elementor-element elementor-element-1c2b30e elementor-invisible elementor-widget elementor-widget-text-editor"
-                        data-id="1c2b30e" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:400}"
-                        data-widget_type="text-editor.default">
-                        <div class="elementor-widget-container">
-                            <p>Trade crypto.
-                            Anytime, Anywhere.
-                            </p></div>
-                    </div>
-                    <div
-                        class="elementor-element elementor-element-2baed1f elementor-invisible elementor-widget elementor-widget-image"
-                        data-id="2baed1f" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:400}"
-                        data-widget_type="image.default">
-                        <div class="elementor-widget-container">
-                            <img width="600" height="292" src="wp-content/uploads/sites/5/2021/08/coinonehome030.png"
-                                 class="attachment-large size-large wp-image-629" alt=""
-                                 srcset="https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome030.png 600w, https://demo2.strongtheme.com/coinone/wp-content/uploads/sites/5/2021/08/coinonehome030-300x146.png 300w"
-                                 sizes="(max-width: 600px) 100vw, 600px"/></div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="elementor-column elementor-col-20 elementor-top-column elementor-element elementor-element-75950fd"
-                data-id="75950fd" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-4c05f6e elementor-invisible elementor-widget elementor-widget-heading"
-                        data-id="4c05f6e" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:200}"
-                        data-widget_type="heading.default">
-                        <div class="elementor-widget-container">
-                            <h4 class="elementor-heading-title elementor-size-default">Product</h4></div>
-                    </div>
-                    <div
-                        class="elementor-element elementor-element-8d3a485 elementor-tablet-align-center elementor-mobile-align-left elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-invisible elementor-widget elementor-widget-icon-list"
-                        data-id="8d3a485" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:300}"
-                        data-widget_type="icon-list.default">
-                        <div class="elementor-widget-container">
-                            <link rel="stylesheet"
-                                  href="wp-content/plugins/elementor/assets/css/widget-icon-list.min.css">
-                            <ul class="elementor-icon-list-items">
-                                <li class="elementor-icon-list-item">
-                                    <a href="{{ route('user.dashboard') }}"><span class="elementor-icon-list-text">Buy Crypto</span></a>
-                                </li>
-                                <li class="elementor-icon-list-item">
-                                    <a href="{{ route('user.dashboard') }}"> <span class="elementor-icon-list-text">Sell Crypto</span></a>
-                                </li>
-                                <li class="elementor-icon-list-item">
-                                    <a href="{{ route('user.dashboard') }}"><span class="elementor-icon-list-text">Track Profit</span></a>
-                                </li>
-                                <li class="elementor-icon-list-item">
-                                    <a href="{{ route('user.dashboard') }}"><span class="elementor-icon-list-text">Realtime Data</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="elementor-column elementor-col-20 elementor-top-column elementor-element elementor-element-24788fe"
-                data-id="24788fe" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-d4a19c8 elementor-invisible elementor-widget elementor-widget-heading"
-                        data-id="d4a19c8" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:400}"
-                        data-widget_type="heading.default">
-                        <div class="elementor-widget-container">
-                            <h4 class="elementor-heading-title elementor-size-default">Company</h4></div>
-                    </div>
-                    <div
-                        class="elementor-element elementor-element-0978a3f elementor-tablet-align-center elementor-mobile-align-left elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-invisible elementor-widget elementor-widget-icon-list"
-                        data-id="0978a3f" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:500}"
-                        data-widget_type="icon-list.default">
-                        <div class="elementor-widget-container">
-                            <ul class="elementor-icon-list-items">
-                                <li class="elementor-icon-list-item">
-                                    <a href="#about"><span class="elementor-icon-list-text">About Us</span></a>
-                                </li>
-                                <li class="elementor-icon-list-item">
-                                    <a href="#about"><span class="elementor-icon-list-text">Community</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="elementor-column elementor-col-20 elementor-top-column elementor-element elementor-element-a76baf0"
-                data-id="a76baf0" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-cf78ce8 elementor-invisible elementor-widget elementor-widget-heading"
-                        data-id="cf78ce8" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:600}"
-                        data-widget_type="heading.default">
-                        <div class="elementor-widget-container">
-                            <h4 class="elementor-heading-title elementor-size-default">Services</h4></div>
-                    </div>
-                    <div
-                        class="elementor-element elementor-element-bf489ba elementor-tablet-align-center elementor-mobile-align-left elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-invisible elementor-widget elementor-widget-icon-list"
-                        data-id="bf489ba" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:700}"
-                        data-widget_type="icon-list.default">
-                        <div class="elementor-widget-container">
-                            <ul class="elementor-icon-list-items">
-                                <li class="elementor-icon-list-item">
-                                   <a href="{{ route('user.dashboard') }}"> <span class="elementor-icon-list-text">Download</span></a>
-                                </li>
-                                <li class="elementor-icon-list-item">
-                                    <a href="{{ route('user.dashboard') }}"><span class="elementor-icon-list-text">Desktop Application</span></a>
-                                </li>
-                                <li class="elementor-icon-list-item">
-                                    <a href="{{ route('user.dashboard') }}"><span class="elementor-icon-list-text">Referral</span></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="elementor-column elementor-col-20 elementor-top-column elementor-element elementor-element-cd0e941"
-                data-id="cd0e941" data-element_type="column">
-                <div style="display: none" class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-406bdc7 elementor-invisible elementor-widget elementor-widget-heading"
-                        data-id="406bdc7" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:800}"
-                        data-widget_type="heading.default">
-                        <div class="elementor-widget-container">
-                            <h4 class="elementor-heading-title elementor-size-default">Help</h4></div>
-                    </div>
-                    <div
-                        class="elementor-element elementor-element-339bd17 elementor-tablet-align-center elementor-mobile-align-left elementor-icon-list--layout-traditional elementor-list-item-link-full_width elementor-invisible elementor-widget elementor-widget-icon-list"
-                        data-id="339bd17" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:900}"
-                        data-widget_type="icon-list.default">
-                        <div class="elementor-widget-container">
-                            <ul class="elementor-icon-list-items">
-                                <li class="elementor-icon-list-item">
-                                    <span class="elementor-icon-list-text">Help Center</span>
-                                </li>
-{{--                                <li class="elementor-icon-list-item">--}}
-{{--                                    <span class="elementor-icon-list-text">Privacy</span>--}}
-{{--                                </li>--}}
-{{--                                <li class="elementor-icon-list-item">--}}
-{{--                                    <span class="elementor-icon-list-text">Terms</span>--}}
-{{--                                </li>--}}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section
-        class="elementor-section elementor-top-section elementor-element elementor-element-113be4a elementor-section-boxed elementor-section-height-default elementor-section-height-default"
-        data-id="113be4a" data-element_type="section"
-        data-settings="{&quot;background_background&quot;:&quot;classic&quot;}">
-        <div class="elementor-background-overlay"></div>
-        <div class="elementor-container elementor-column-gap-default">
-            <div
-                class="elementor-column elementor-col-100 elementor-top-column elementor-element elementor-element-0dcce92"
-                data-id="0dcce92" data-element_type="column">
-                <div class="elementor-widget-wrap elementor-element-populated">
-                    <div
-                        class="elementor-element elementor-element-081eeb4 elementor-invisible elementor-widget elementor-widget-heading"
-                        data-id="081eeb4" data-element_type="widget"
-                        data-settings="{&quot;_animation&quot;:&quot;fadeInUp&quot;,&quot;_animation_delay&quot;:400}"
-                        data-widget_type="heading.default">
-                        <div class="elementor-widget-container">
-                            <h6 class="elementor-heading-title elementor-size-default">© {{ Date('Y') }} {{ env('APP_NAME') }}</h6></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 </div>
 
-<script type='text/javascript'>
-    const lazyloadRunObserver = () => {
-        const lazyloadBackgrounds = document.querySelectorAll(`.e-con.e-parent:not(.e-lazyloaded)`);
-        const lazyloadBackgroundObserver = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    let lazyloadBackground = entry.target;
-                    if (lazyloadBackground) {
-                        lazyloadBackground.classList.add('e-lazyloaded');
-                    }
-                    lazyloadBackgroundObserver.unobserve(entry.target);
-                }
+<script>
+// Advanced Stock Market Ticker
+class StockTicker {
+    constructor() {
+        this.stocks = [
+            {
+                symbol: 'AAPL',
+                name: 'Apple Inc.',
+                price: 175.43,
+                change: 2.67,
+                changePercent: 1.55,
+                volume: 65432100,
+                sector: 'Technology',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'MSFT',
+                name: 'Microsoft Corp',
+                price: 384.30,
+                change: -1.15,
+                changePercent: -0.30,
+                volume: 32156789,
+                sector: 'Technology',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'GOOGL',
+                name: 'Alphabet Inc',
+                price: 142.65,
+                change: 1.25,
+                changePercent: 0.88,
+                volume: 28765432,
+                sector: 'Communication',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'TSLA',
+                name: 'Tesla Inc',
+                price: 248.48,
+                change: 5.73,
+                changePercent: 2.36,
+                volume: 89543210,
+                sector: 'Consumer Cyclical',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'AMZN',
+                name: 'Amazon.com',
+                price: 156.77,
+                change: -0.85,
+                changePercent: -0.54,
+                volume: 45321098,
+                sector: 'Consumer Cyclical',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'NVDA',
+                name: 'NVIDIA Corp',
+                price: 875.15,
+                change: 18.90,
+                changePercent: 2.21,
+                volume: 76543210,
+                sector: 'Technology',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'META',
+                name: 'Meta Platforms',
+                price: 498.37,
+                change: 7.23,
+                changePercent: 1.47,
+                volume: 23456789,
+                sector: 'Communication',
+                exchange: 'NASDAQ'
+            },
+            {
+                symbol: 'BRK.B',
+                name: 'Berkshire Hathaway',
+                price: 432.15,
+                change: 2.45,
+                changePercent: 0.57,
+                volume: 4567890,
+                sector: 'Financial',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'JPM',
+                name: 'JPMorgan Chase',
+                price: 168.45,
+                change: -0.75,
+                changePercent: -0.44,
+                volume: 12345678,
+                sector: 'Financial',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'JNJ',
+                name: 'Johnson & Johnson',
+                price: 162.80,
+                change: 1.10,
+                changePercent: 0.68,
+                volume: 8765432,
+                sector: 'Healthcare',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'V',
+                name: 'Visa Inc',
+                price: 267.90,
+                change: 3.15,
+                changePercent: 1.19,
+                volume: 6543210,
+                sector: 'Financial',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'PG',
+                name: 'Procter & Gamble',
+                price: 155.22,
+                change: -0.33,
+                changePercent: -0.21,
+                volume: 5432109,
+                sector: 'Consumer Defensive',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'UNH',
+                name: 'UnitedHealth Group',
+                price: 542.88,
+                change: 4.67,
+                changePercent: 0.87,
+                volume: 3456789,
+                sector: 'Healthcare',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'HD',
+                name: 'Home Depot',
+                price: 385.44,
+                change: -2.11,
+                changePercent: -0.54,
+                volume: 4321098,
+                sector: 'Consumer Cyclical',
+                exchange: 'NYSE'
+            },
+            {
+                symbol: 'MA',
+                name: 'Mastercard Inc',
+                price: 456.78,
+                change: 5.23,
+                changePercent: 1.16,
+                volume: 2345678,
+                sector: 'Financial',
+                exchange: 'NYSE'
+            }
+        ];
+
+        this.init();
+    }
+
+    init() {
+        this.updateTicker();
+        this.updateMarketStatus();
+        this.simulateRealTimeUpdates();
+
+        // Update ticker every 30 seconds
+        setInterval(() => {
+            this.updateTicker();
+        }, 30000);
+
+        // Update market status every minute
+        setInterval(() => {
+            this.updateMarketStatus();
+        }, 60000);
+    }
+
+    simulateRealTimeUpdates() {
+        // Update prices every 3 seconds to simulate real-time trading
+        setInterval(() => {
+            this.stocks = this.stocks.map(stock => {
+                const volatility = Math.random() * 0.02; // 0-2% volatility
+                const direction = Math.random() > 0.5 ? 1 : -1;
+                const priceChange = stock.price * volatility * direction * 0.1; // Smaller changes
+
+                const newPrice = Math.max(0.01, stock.price + priceChange);
+                const change = newPrice - stock.price;
+                const changePercent = (change / stock.price) * 100;
+
+                return {
+                    ...stock,
+                    price: newPrice,
+                    change: change,
+                    changePercent: changePercent,
+                    volume: stock.volume + Math.floor(Math.random() * 100000)
+                };
             });
-        }, {rootMargin: '200px 0px 200px 0px'});
-        lazyloadBackgrounds.forEach((lazyloadBackground) => {
-            lazyloadBackgroundObserver.observe(lazyloadBackground);
+
+            this.updateTicker();
+        }, 3000);
+    }
+
+    updateTicker() {
+        const tickerContainer = document.getElementById('stock-ticker');
+        if (!tickerContainer) return;
+
+        let tickerHTML = '';
+
+        this.stocks.forEach(stock => {
+            const isPositive = stock.changePercent >= 0;
+            const changeClass = isPositive ? 'text-green-400' : 'text-red-400';
+            const changeBgClass = isPositive ? 'bg-green-500/10' : 'bg-red-500/10';
+            const changeIcon = isPositive ? 'fa-caret-up' : 'fa-caret-down';
+            const borderClass = isPositive ? 'border-green-500/20' : 'border-red-500/20';
+
+            tickerHTML += `
+                <div class="ticker-item flex items-center mr-8 bg-[#1A1428]/50 rounded-lg px-3 py-2 border ${borderClass} hover:bg-[#1A1428] transition-all group">
+                    <div class="flex items-center space-x-3">
+                        <!-- Stock Symbol with Exchange -->
+                        <div class="flex flex-col items-center">
+                            <div class="font-bold text-white text-sm group-hover:text-[#2FE6DE] transition-colors">${stock.symbol}</div>
+                            <div class="text-xs text-gray-500">${stock.exchange}</div>
+                        </div>
+
+                        <!-- Divider -->
+                        <div class="w-px h-8 bg-[#2FE6DE]/20"></div>
+
+                        <!-- Price -->
+                        <div class="text-right">
+                            <div class="font-mono font-semibold text-white text-sm">
+                                ${this.formatCurrency(stock.price)}
+                            </div>
+                        </div>
+
+                        <!-- Change -->
+                        <div class="flex items-center space-x-1 ${changeBgClass} px-2 py-1 rounded-md">
+                            <i class="fas ${changeIcon} ${changeClass} text-xs"></i>
+                            <span class="${changeClass} font-mono text-xs font-medium">
+                                ${this.formatChange(stock.change)}
+                            </span>
+                            <span class="${changeClass} font-mono text-xs">
+                                (${this.formatPercentage(stock.changePercent)})
+                            </span>
+                        </div>
+
+                        <!-- Volume (abbreviated) -->
+                        <div class="text-xs text-gray-400 min-w-0">
+                            <div class="truncate">Vol: ${this.formatVolume(stock.volume)}</div>
+                        </div>
+
+                        <!-- Sector Tag -->
+                        <div class="hidden lg:block">
+                            <span class="px-2 py-1 bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-full text-xs font-medium">
+                                ${stock.sector}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
-    };
-    const events = [
-        'DOMContentLoaded',
-        'elementor/lazyload/observe',
-    ];
-    events.forEach((event) => {
-        document.addEventListener(event, lazyloadRunObserver);
+
+        tickerContainer.innerHTML = tickerHTML;
+        this.updateStats();
+    }
+
+    updateStats() {
+        const gainers = this.stocks.filter(stock => stock.changePercent > 0).length;
+        const losers = this.stocks.filter(stock => stock.changePercent < 0).length;
+
+        const gainersElement = document.getElementById('gainers-count');
+        const losersElement = document.getElementById('losers-count');
+
+        if (gainersElement) gainersElement.textContent = gainers;
+        if (losersElement) losersElement.textContent = losers;
+    }
+
+    updateMarketStatus() {
+        const now = new Date();
+        const marketOpen = new Date();
+        marketOpen.setHours(9, 30, 0, 0); // 9:30 AM EST
+        const marketClose = new Date();
+        marketClose.setHours(16, 0, 0, 0); // 4:00 PM EST
+
+        const isWeekday = now.getDay() >= 1 && now.getDay() <= 5;
+        const isMarketHours = now >= marketOpen && now <= marketClose;
+        const isOpen = isWeekday && isMarketHours;
+
+        const statusElement = document.getElementById('market-status');
+        const timeElement = document.getElementById('market-time');
+
+        if (statusElement) {
+            statusElement.textContent = isOpen ? 'Market Open' : 'Market Closed';
+            statusElement.className = isOpen ? 'text-green-400' : 'text-red-400';
+        }
+
+        if (timeElement) {
+            const timeOptions = {
+                timeZone: 'America/New_York',
+                hour12: true,
+                hour: 'numeric',
+                minute: '2-digit',
+                timeZoneName: 'short'
+            };
+            timeElement.textContent = now.toLocaleTimeString('en-US', timeOptions);
+        }
+    }
+
+    formatCurrency(value) {
+        return '$' + value.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+
+    formatChange(value) {
+        const sign = value >= 0 ? '+' : '';
+        return `${sign}${value.toFixed(2)}`;
+    }
+
+    formatPercentage(value) {
+        const sign = value >= 0 ? '+' : '';
+        return `${sign}${value.toFixed(2)}%`;
+    }
+
+    formatVolume(value) {
+        if (value >= 1e9) {
+            return (value / 1e9).toFixed(1) + 'B';
+        } else if (value >= 1e6) {
+            return (value / 1e6).toFixed(1) + 'M';
+        } else if (value >= 1e3) {
+            return (value / 1e3).toFixed(1) + 'K';
+        } else {
+            return value.toLocaleString();
+        }
+    }
+}
+
+// Initialize the stock ticker when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    new StockTicker();
+});
+
+// Remove the old crypto functions and replace with stock ticker
+function fetchCryptoData() {
+    // This function is now handled by StockTicker class
+    // Keeping empty to avoid errors if called elsewhere
+}
+
+function updateTicker(data) {
+    // This function is now handled by StockTicker class
+    // Keeping empty to avoid errors if called elsewhere
+}
+</script>
+
+<style>
+/* Advanced Ticker Styles */
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    height: 60px;
+    padding: 0;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.ticker {
+    display: flex;
+    white-space: nowrap;
+    padding-right: 100%;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: stockTicker;
+    animation-duration: 45s; /* Slightly slower for better readability */
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 0.5rem;
+    flex-shrink: 0;
+}
+
+@keyframes stockTicker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* Hover effects for ticker items */
+.ticker-item:hover {
+    transform: scale(1.02);
+    z-index: 10;
+    position: relative;
+}
+
+/* Enhanced animations */
+.ticker-item .group-hover\:text-\[\#2FE6DE\]:hover {
+    text-shadow: 0 0 8px rgba(47, 230, 222, 0.5);
+}
+
+/* Loading animation */
+.loading-ticker {
+    background: linear-gradient(-45deg, #2FE6DE, #1A1428, #2FE6DE, #1A1428);
+    background-size: 400% 400%;
+    animation: loadingGradient 2s ease infinite;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@keyframes loadingGradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .ticker-item {
+        padding: 0 0.25rem;
+    }
+
+    .ticker-wrap {
+        height: 50px;
+    }
+
+    .ticker {
+        animation-duration: 35s; /* Faster on mobile */
+    }
+}
+
+/* Market status indicators */
+#market-status {
+    transition: color 0.3s ease;
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: .7;
+    }
+}
+
+/* Smooth transitions for real-time updates */
+.ticker-item * {
+    transition: all 0.2s ease;
+}
+</style>
+    <!-- Main Header -->
+    <header class="bg-[#0D091C] border-b border-[#2FE6DE]/10 shadow-lg sticky top-0 z-40">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center">
+                        <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Logo" class="h-8">
+                    </a>
+                    <nav class="hidden lg:flex ml-10 space-x-6">
+                        <a href="index.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 active">Home</a>
+                        <a href="markets.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 flex items-center ">
+                                Markets
+                            </a>
+                        <div class="dropdown">
+                            <a href="#" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 flex items-center">
+                                Trade
+                                <i class="fas fa-chevron-down text-xs ml-1"></i>
+                            </a>
+                            <div class="dropdown-content py-2">
+                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Spot</a>
+                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Margin</a>
+                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Bot Trading</a>
+                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Copy Trading</a>
+                            </div>
+                        </div>
+                        <a href="about.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">About</a>
+                        <a href="contact.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
+                    </nav>
+                </div>
+
+                <div class="hidden lg:flex items-center space-x-4">
+                                            <a href="login.html" class="btn-secondary">Login</a>
+                        <a href="register.html" class="btn-primary">Sign Up</a>
+                                    </div>
+
+                <!-- Mobile menu button -->
+                <div class="lg:hidden flex items-center">
+                                        <button id="mobileMenuBtn" class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="mobile-nav lg:hidden">
+        <div class="flex justify-between items-center p-4 border-b border-[#2FE6DE]/10">
+            <a href="index.html">
+                <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Logo" class="h-10">
+            </a>
+            <button id="closeMenuBtn" class="text-white focus:outline-none">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+
+        <div class="p-4">
+                            <div class="flex space-x-2 mb-6">
+                    <a href="login.html" class="btn-secondary flex-1 text-center">Login</a>
+                    <a href="register.html" class="btn-primary flex-1 text-center">Sign Up</a>
+                </div>
+
+            <nav class="space-y-1">
+                <a href="index.html" class="block py-3 px-4 rounded-lg bg-[#1A1428] text-[#2FE6DE]">
+                    <i class="fas fa-home mr-2"></i> Home
+                </a>
+                <a href="markets.html" class="block py-3 px-4 rounded-lg text-white">
+                    <i class="fas fa-chart-bar mr-2"></i> Markets
+                </a>
+                <div class="mobile-dropdown">
+                    <button class="w-full text-left py-3 px-4 rounded-lg flex items-center justify-between text-white">
+                        <span><i class="fas fa-exchange-alt mr-2"></i> Trade</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div class="pl-8 pb-2 hidden">
+                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Spot</a>
+                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Margin</a>
+                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Bot Trading</a>
+                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Copy Trading</a>
+                    </div>
+                </div>
+
+                <a href="about.html" class="block py-3 px-4 rounded-lg text-white">
+                    <i class="fas fa-info-circle mr-2"></i> About
+                </a>
+
+                <a href="contact.html" class="block py-3 px-4 rounded-lg text-white">
+                    <i class="fas fa-envelope mr-2"></i> Contact
+                </a>
+            </nav>
+
+            <div class="mt-8 pt-6 border-t border-[#2FE6DE]/10">
+                <div class="flex justify-center space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                        <i class="fab fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                        <i class="fab fa-facebook text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                        <i class="fab fa-instagram text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                        <i class="fab fa-telegram text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  @yield('content')
+
+    <footer class="bg-[#0D091C] border-t border-[#2FE6DE]/10 py-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                <div class="lg:col-span-2">
+                    <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Logo" class="h-8 mb-4">
+                    <p class="text-gray-400 text-sm mb-4">A modern trading platform with advanced features and real-time market data.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                            <i class="fab fa-facebook"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Products</h3>
+                    <ul class="space-y-2">
+                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Spot Trading</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Margin Trading</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Bot Trading</a></li>
+                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Copy Trading</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4 text-white">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="contact/index.html#faq" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">FAQ</a></li>
+                        <li><a href="contact.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Contact Us</a></li>
+                        <li><a href="terms.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Terms of Service</a></li>
+                        <li><a href="privacy.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-10 pt-6 border-t border-[#2FE6DE]/10 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 BlackRock. All rights reserved.</p>
+                <div class="flex items-center space-x-4">
+                    <a href="terms.html" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Terms</a>
+                    <a href="privacy.html" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Privacy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ asset('front/js/crypto-api.js') }}"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Simulate loading progress
+        const progressBar = document.getElementById('loader-progress');
+        let width = 0;
+        const interval = setInterval(function() {
+            if (width >= 100) {
+                clearInterval(interval);
+                // Hide loader when loading is complete
+                setTimeout(function() {
+                    const loader = document.getElementById('site-loader');
+                    if (loader) {
+                        loader.classList.add('opacity-0');
+                        setTimeout(function() {
+                            loader.style.display = 'none';
+                        }, 500);
+                    }
+                }, 200);
+            } else {
+                width += Math.floor(Math.random() * 10) + 1;
+                if (width > 100) width = 100;
+                if (progressBar) progressBar.style.width = width + '%';
+            }
+        }, 150);
     });
 </script>
-<link rel='stylesheet' id='e-animations-css'
-      href='wp-content/plugins/elementor/assets/lib/animations/animations.mind5d5.css?ver=3.23.4' media='all'/>
-<script src='wp-content/themes/hello-elementor/assets/js/hello-frontend.min8a54.js?ver=1.0.0'
-        id='hello-theme-frontend-js'></script>
-<script src='wp-content/plugins/elementor-pro/assets/lib/smartmenus/jquery.smartmenus.min1576.js?ver=1.2.1'
-        id='smartmenus-js'></script>
-<script src='wp-includes/js/imagesloaded.mineda1.js?ver=4.1.4' id='imagesloaded-js'></script>
-<script src='wp-content/plugins/elementor/assets/lib/jquery-numerator/jquery-numerator.min3958.js?ver=0.2.1'
-        id='jquery-numerator-js'></script>
-<script src='wp-content/plugins/elementor-pro/assets/js/webpack-pro.runtime.min225e.js?ver=3.19.0'
-        id='elementor-pro-webpack-runtime-js'></script>
-<script src='wp-content/plugins/elementor/assets/js/webpack.runtime.mind5d5.js?ver=3.23.4'
-        id='elementor-webpack-runtime-js'></script>
-<script src='wp-content/plugins/elementor/assets/js/frontend-modules.mind5d5.js?ver=3.23.4'
-        id='elementor-frontend-modules-js'></script>
-<script src='wp-includes/js/dist/vendor/regenerator-runtime.min3937.js?ver=0.13.9' id='regenerator-runtime-js'></script>
-<script src='wp-includes/js/dist/vendor/wp-polyfill.min2c7c.js?ver=3.15.0' id='wp-polyfill-js'></script>
-<script src='wp-includes/js/dist/hooks.min6c65.js?ver=4169d3cf8e8d95a3d6d5' id='wp-hooks-js'></script>
-<script src='wp-includes/js/dist/i18n.mine57b.js?ver=9e794f35a71bb98672ae' id='wp-i18n-js'></script>
-<script id='wp-i18n-js-after'>
-    wp.i18n.setLocaleData({'text direction\u0004ltr': ['ltr']});
-</script>
-<script id='elementor-pro-frontend-js-before'>
-    var ElementorProFrontendConfig = {
-        "ajaxurl": "https:\/\/demo2.strongtheme.com\/coinone\/wp-admin\/admin-ajax.php",
-        "nonce": "699a5b9f89",
-        "urls": {
-            "assets": "https:\/\/demo2.strongtheme.com\/coinone\/wp-content\/plugins\/elementor-pro\/assets\/",
-            "rest": "https:\/\/demo2.strongtheme.com\/coinone\/wp-json\/"
-        },
-        "shareButtonsNetworks": {
-            "facebook": {"title": "Facebook", "has_counter": true},
-            "twitter": {"title": "Twitter"},
-            "linkedin": {"title": "LinkedIn", "has_counter": true},
-            "pinterest": {"title": "Pinterest", "has_counter": true},
-            "reddit": {"title": "Reddit", "has_counter": true},
-            "vk": {"title": "VK", "has_counter": true},
-            "odnoklassniki": {"title": "OK", "has_counter": true},
-            "tumblr": {"title": "Tumblr"},
-            "digg": {"title": "Digg"},
-            "skype": {"title": "Skype"},
-            "stumbleupon": {"title": "StumbleUpon", "has_counter": true},
-            "mix": {"title": "Mix"},
-            "telegram": {"title": "Telegram"},
-            "pocket": {"title": "Pocket", "has_counter": true},
-            "xing": {"title": "XING", "has_counter": true},
-            "whatsapp": {"title": "WhatsApp"},
-            "email": {"title": "Email"},
-            "print": {"title": "Print"}
-        },
-        "facebook_sdk": {"lang": "en_US", "app_id": ""},
-        "lottie": {"defaultAnimationUrl": "https:\/\/demo2.strongtheme.com\/coinone\/wp-content\/plugins\/elementor-pro\/modules\/lottie\/assets\/animations\/default.json"}
-    };
-</script>
-<script src='wp-content/plugins/elementor-pro/assets/js/frontend.min225e.js?ver=3.19.0'
-        id='elementor-pro-frontend-js'></script>
-<script src='wp-content/plugins/elementor/assets/lib/waypoints/waypoints.min05da.js?ver=4.0.2'
-        id='elementor-waypoints-js'></script>
-<script src='wp-includes/js/jquery/ui/core.min3f14.js?ver=1.13.2' id='jquery-ui-core-js'></script>
-<script id='elementor-frontend-js-before'>
-    var elementorFrontendConfig = {
-        "environmentMode": {"edit": false, "wpPreview": false, "isScriptDebug": false},
-        "i18n": {
-            "shareOnFacebook": "Share on Facebook",
-            "shareOnTwitter": "Share on Twitter",
-            "pinIt": "Pin it",
-            "download": "Download",
-            "downloadImage": "Download image",
-            "fullscreen": "Fullscreen",
-            "zoom": "Zoom",
-            "share": "Share",
-            "playVideo": "Play Video",
-            "previous": "Previous",
-            "next": "Next",
-            "close": "Close",
-            "a11yCarouselWrapperAriaLabel": "Carousel | Horizontal scrolling: Arrow Left & Right",
-            "a11yCarouselPrevSlideMessage": "Previous slide",
-            "a11yCarouselNextSlideMessage": "Next slide",
-            "a11yCarouselFirstSlideMessage": "This is the first slide",
-            "a11yCarouselLastSlideMessage": "This is the last slide",
-            "a11yCarouselPaginationBulletMessage": "Go to slide"
-        },
-        "is_rtl": false,
-        "breakpoints": {"xs": 0, "sm": 480, "md": 768, "lg": 1025, "xl": 1440, "xxl": 1600},
-        "responsive": {
-            "breakpoints": {
-                "mobile": {
-                    "label": "Mobile Portrait",
-                    "value": 767,
-                    "default_value": 767,
-                    "direction": "max",
-                    "is_enabled": true
-                },
-                "mobile_extra": {
-                    "label": "Mobile Landscape",
-                    "value": 880,
-                    "default_value": 880,
-                    "direction": "max",
-                    "is_enabled": false
-                },
-                "tablet": {
-                    "label": "Tablet Portrait",
-                    "value": 1024,
-                    "default_value": 1024,
-                    "direction": "max",
-                    "is_enabled": true
-                },
-                "tablet_extra": {
-                    "label": "Tablet Landscape",
-                    "value": 1200,
-                    "default_value": 1200,
-                    "direction": "max",
-                    "is_enabled": false
-                },
-                "laptop": {
-                    "label": "Laptop",
-                    "value": 1366,
-                    "default_value": 1366,
-                    "direction": "max",
-                    "is_enabled": false
-                },
-                "widescreen": {
-                    "label": "Widescreen",
-                    "value": 2400,
-                    "default_value": 2400,
-                    "direction": "min",
-                    "is_enabled": false
-                }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            // Fetch cryptocurrency data from CoinGecko API
+            fetchCryptoData();
+
+            // Refresh data every 60 seconds
+            setInterval(fetchCryptoData, 60000);
+
+            // Mobile menu toggle
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const closeMenuBtn = document.getElementById('closeMenuBtn');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (mobileMenuBtn && mobileMenu && closeMenuBtn) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+
+                closeMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
             }
-        },
-        "version": "3.23.4",
-        "is_static": false,
-        "experimentalFeatures": {
-            "e_optimized_css_loading": true,
-            "additional_custom_breakpoints": true,
-            "container_grid": true,
-            "e_swiper_latest": true,
-            "e_nested_atomic_repeaters": true,
-            "e_onboarding": true,
-            "theme_builder_v2": true,
-            "hello-theme-header-footer": true,
-            "home_screen": true,
-            "ai-layout": true,
-            "landing-pages": true,
-            "e_lazyload": true,
-            "page-transitions": true,
-            "notes": true,
-            "form-submissions": true,
-            "e_scroll_snap": true
-        },
-        "urls": {
-            "assets": "https:\/\/demo2.strongtheme.com\/coinone\/wp-content\/plugins\/elementor\/assets\/",
-            "ajaxurl": "https:\/\/demo2.strongtheme.com\/coinone\/wp-admin\/admin-ajax.php"
-        },
-        "nonces": {"floatingButtonsClickTracking": "da13c9d64f"},
-        "swiperClass": "swiper",
-        "settings": {"page": [], "editorPreferences": []},
-        "kit": {
-            "body_background_background": "gradient",
-            "active_breakpoints": ["viewport_mobile", "viewport_tablet"],
-            "global_image_lightbox": "yes",
-            "lightbox_enable_counter": "yes",
-            "lightbox_enable_fullscreen": "yes",
-            "lightbox_enable_zoom": "yes",
-            "lightbox_enable_share": "yes",
-            "lightbox_title_src": "title",
-            "lightbox_description_src": "description",
-            "hello_header_logo_type": "logo",
-            "hello_header_menu_layout": "horizontal",
-            "hello_footer_logo_type": "logo"
-        },
-        "post": {"id": 6, "title": "CoinOne%20%E2%80%93%20Cryptocurrency", "excerpt": "", "featuredImage": false}
-    };
+
+            // Mobile dropdowns
+            const mobileDropdowns = document.querySelectorAll('.mobile-dropdown');
+            mobileDropdowns.forEach(dropdown => {
+                const button = dropdown.querySelector('button');
+                const content = dropdown.querySelector('div');
+
+                button.addEventListener('click', () => {
+                    content.classList.toggle('hidden');
+                    const icon = button.querySelector('.fas.fa-chevron-down');
+                    if (icon) {
+                        icon.classList.toggle('fa-chevron-down');
+                        icon.classList.toggle('fa-chevron-up');
+                    }
+                });
+            });
+
+            // Add locale handling for JavaScript
+            window.locale = 'en';
+            window.translations = "investment";
+
+        });
+
+        // Live Activity Notification System
+        function initializeLiveNotifications() {
+            const activities = [
+                {
+                    type: 'investment',
+                    name: 'Michael Johnson',
+                    country: 'United States',
+                    amount: 25000,
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    type: 'withdrawal',
+                    name: 'Sarah Chen',
+                    country: 'Singapore',
+                    amount: 8500,
+                    icon: 'fas fa-money-bill-wave'
+                },
+                {
+                    type: 'deposit',
+                    name: 'David Rodriguez',
+                    country: 'Spain',
+                    amount: 12000,
+                    icon: 'fas fa-plus-circle'
+                },
+                {
+                    type: 'investment',
+                    name: 'Emma Thompson',
+                    country: 'United Kingdom',
+                    amount: 45000,
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    type: 'withdrawal',
+                    name: 'Alex Petrov',
+                    country: 'Russia',
+                    amount: 18500,
+                    icon: 'fas fa-money-bill-wave'
+                },
+                {
+                    type: 'deposit',
+                    name: 'Maria Silva',
+                    country: 'Brazil',
+                    amount: 9200,
+                    icon: 'fas fa-plus-circle'
+                },
+                {
+                    type: 'investment',
+                    name: 'James Wilson',
+                    country: 'Australia',
+                    amount: 33000,
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    type: 'withdrawal',
+                    name: 'Fatima Al-Rashid',
+                    country: 'UAE',
+                    amount: 22000,
+                    icon: 'fas fa-money-bill-wave'
+                },
+                {
+                    type: 'deposit',
+                    name: 'Pierre Dubois',
+                    country: 'France',
+                    amount: 15500,
+                    icon: 'fas fa-plus-circle'
+                },
+                {
+                    type: 'investment',
+                    name: 'Yuki Tanaka',
+                    country: 'Japan',
+                    amount: 28000,
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    type: 'withdrawal',
+                    name: 'Hans Mueller',
+                    country: 'Germany',
+                    amount: 14200,
+                    icon: 'fas fa-money-bill-wave'
+                },
+                {
+                    type: 'deposit',
+                    name: 'Priya Sharma',
+                    country: 'India',
+                    amount: 7800,
+                    icon: 'fas fa-plus-circle'
+                },
+                {
+                    type: 'investment',
+                    name: 'Carlos Mendoza',
+                    country: 'Mexico',
+                    amount: 19500,
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    type: 'withdrawal',
+                    name: 'Anna Kowalski',
+                    country: 'Poland',
+                    amount: 11000,
+                    icon: 'fas fa-money-bill-wave'
+                },
+                {
+                    type: 'deposit',
+                    name: 'Ahmed Hassan',
+                    country: 'Egypt',
+                    amount: 6500,
+                    icon: 'fas fa-plus-circle'
+                },
+                {
+                    type: 'investment',
+                    name: 'Jennifer Lee',
+                    country: 'South Korea',
+                    amount: 38000,
+                    icon: 'fas fa-chart-line'
+                },
+                {
+                    type: 'withdrawal',
+                    name: 'Roberto Rossi',
+                    country: 'Italy',
+                    amount: 16800,
+                    icon: 'fas fa-money-bill-wave'
+                },
+                {
+                    type: 'deposit',
+                    name: 'Olga Petersen',
+                    country: 'Norway',
+                    amount: 23500,
+                    icon: 'fas fa-plus-circle'
+                }
+            ];
+
+            function showRandomNotification() {
+                const activity = activities[Math.floor(Math.random() * activities.length)];
+                const now = new Date();
+
+                // Random time between 1-30 minutes ago
+                const minutesAgo = Math.floor(Math.random() * 30) + 1;
+                const timeAgo = minutesAgo === 1 ? '1 minute ago' : `${minutesAgo} minutes ago`;
+
+                let message, details;
+
+                switch(activity.type) {
+                    case 'investment':
+                        message = `${activity.name} from ${activity.country} just invested`;
+                        details = `Successfully invested ${activity.amount.toLocaleString()} in trading portfolio`;
+                        break;
+                    case 'withdrawal':
+                        message = `${activity.name} from ${activity.country} just withdrew`;
+                        details = `Successfully withdrew ${activity.amount.toLocaleString()} to bank account`;
+                        break;
+                    case 'deposit':
+                        message = `${activity.name} from ${activity.country} just deposited`;
+                        details = `Successfully deposited ${activity.amount.toLocaleString()} to trading account`;
+                        break;
+                }
+
+                showNotification(activity.type, message, details, timeAgo, activity.icon);
+            }
+
+            // Show first notification after 5 seconds
+            setTimeout(showRandomNotification, 5000);
+
+            // Show new notification every 5 seconds
+            setInterval(showRandomNotification, 5000);
+        }
+
+        function showNotification(type, message, details, time, iconClass) {
+            const notification = document.getElementById('live-notification');
+            const icon = document.getElementById('notification-icon');
+            const messageEl = document.getElementById('notification-message');
+            const detailsEl = document.getElementById('notification-details');
+            const timeEl = document.getElementById('notification-time');
+
+            if (!notification) return;
+
+            // Set content
+            messageEl.textContent = message;
+            detailsEl.textContent = details;
+            timeEl.textContent = time;
+
+            // Update icon
+            icon.innerHTML = `<i class="${iconClass}"></i>`;
+
+            // Update styling based on type
+            notification.className = `live-notification ${type}`;
+            icon.className = `notification-icon ${type}`;
+
+            // Show notification
+            notification.style.display = 'block';
+
+            // Auto hide after 4 seconds (to avoid overlap with next notification)
+            setTimeout(() => {
+                hideNotification();
+            }, 4000);
+        }
+
+        function hideNotification() {
+            const notification = document.getElementById('live-notification');
+            if (notification) {
+                notification.classList.add('notification-hide');
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                    notification.classList.remove('notification-hide');
+                }, 300);
+            }
+        }
+
+        function closeNotification() {
+            hideNotification();
+        }
+
+        async function fetchCryptoData() {
+    try {
+        // Fetch data for the top cryptocurrencies
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&amp;order=market_cap_desc&amp;per_page=20&amp;page=1&amp;sparkline=false&amp;price_change_percentage=24h');
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+
+        // Update the ticker
+        updateTicker(data);
+
+        // Update the market overview table and cards
+        updateMarketTable(data);
+        updateMarketCards(data);
+
+    } catch (error) {
+        console.error('Error fetching crypto data:', error);
+
+        // Show error message in table
+        const marketTable = document.querySelector('#crypto-market-table');
+        if (marketTable) {
+            marketTable.innerHTML = `
+                <tr>
+                    <td colspan="7" class="px-6 py-8 text-center text-red-400">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        Unable to load market data. Please try again later.
+                    </td>
+                </tr>
+            `;
+        }
+
+        // Show error message in cards
+        const marketCards = document.querySelector('#crypto-market-cards');
+        if (marketCards) {
+            marketCards.innerHTML = `
+                <div class="bg-[#1A1428] rounded-xl p-4 border border-[#2FE6DE]/10">
+                    <div class="flex justify-center items-center py-8 text-red-400">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <span>Unable to load market data. Please try again later.</span>
+                    </div>
+                </div>
+            `;
+        }
+    }
+}
+
+function updateTicker(data) {
+    const tickerContainer = document.getElementById('crypto-ticker');
+    if (!tickerContainer) return;
+
+    let tickerHTML = '';
+
+    data.forEach(coin => {
+        const priceChangeClass = coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500';
+        const priceChangeIcon = coin.price_change_percentage_24h >= 0 ? 'fa-caret-up' : 'fa-caret-down';
+
+        tickerHTML += `
+            <div class="ticker-item flex items-center mr-8">
+                <img src="${coin.image}" alt="${coin.symbol.toUpperCase()}" class="w-5 h-5 mr-2">
+                <span class="font-medium mr-1">${coin.symbol.toUpperCase()}</span>
+                <span>${formatCurrency(coin.current_price)}</span>
+                <span class="${priceChangeClass} ml-2">
+                    <i class="fas ${priceChangeIcon} mr-1"></i>${formatPercentage(coin.price_change_percentage_24h)}
+                </span>
+            </div>
+        `;
+    });
+
+    tickerContainer.innerHTML = tickerHTML;
+}
+function updateMarketTable(data) {
+    const tableBody = document.querySelector('#crypto-market-table');
+    if (!tableBody) return;
+
+    let tableHTML = '';
+
+    // Generate table rows for each cryptocurrency
+    data.slice(0, 3).forEach((coin, index) => {
+        const priceChangeClass = coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500';
+        const priceChangeBgClass = coin.price_change_percentage_24h >= 0 ? 'bg-green-500/10' : 'bg-red-500/10';
+
+        tableHTML += `
+            <tr class="hover:bg-[#2FE6DE]/5 transition-colors">
+                <td class="px-6 py-4 text-gray-400">${index + 1}</td>
+                <td class="px-6 py-4">
+                    <div class="flex items-center">
+                        <img src="${coin.image}" alt="${coin.symbol.toUpperCase()}" class="w-8 h-8 mr-3">
+                        <div>
+                            <div class="font-medium">${coin.name}</div>
+                            <div class="text-gray-400 text-sm">${coin.symbol.toUpperCase()}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-right font-medium">${formatCurrency(coin.current_price)}</td>
+                <td class="px-6 py-4 text-right">
+                    <span class="px-2 py-1 ${priceChangeBgClass} ${priceChangeClass} rounded-md">${formatPercentage(coin.price_change_percentage_24h)}</span>
+                </td>
+                <td class="px-6 py-4 text-right text-gray-300">${formatVolume(coin.total_volume)}</td>
+                <td class="px-6 py-4 text-right text-gray-300">${formatVolume(coin.market_cap)}</td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="px-4 py-1 bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-lg hover:bg-[#2FE6DE]/20 transition-colors text-sm">Trade</a>
+                </td>
+            </tr>
+        `;
+    });
+
+    tableBody.innerHTML = tableHTML;
+}
+
+function updateMarketCards(data) {
+    const cardsContainer = document.querySelector('#crypto-market-cards');
+    if (!cardsContainer) return;
+
+    let cardsHTML = '';
+
+    // Generate card for each cryptocurrency
+    data.slice(0, 3).forEach((coin, index) => {
+        const priceChangeClass = coin.price_change_percentage_24h >= 0 ? 'text-green-500' : 'text-red-500';
+
+        cardsHTML += `
+            <div class="bg-[#1A1428] rounded-xl p-4 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 mr-3 flex-shrink-0">
+                            <img src="${coin.image}" alt="${coin.symbol.toUpperCase()}" class="w-full h-full">
+                        </div>
+                        <div>
+                            <div class="font-medium">${coin.name}</div>
+                            <div class="text-gray-400 text-xs">${coin.symbol.toUpperCase()}</div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-medium">${formatCurrency(coin.current_price)}</div>
+                        <div class="${priceChangeClass} text-sm">${formatPercentage(coin.price_change_percentage_24h)}</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mb-3">
+                    <div class="bg-[#0D091C]/50 rounded-lg p-2">
+                        <div class="text-xs text-gray-400">24h Volume</div>
+                        <div class="text-sm font-medium">${formatVolume(coin.total_volume)}</div>
+                    </div>
+                    <div class="bg-[#0D091C]/50 rounded-lg p-2">
+                        <div class="text-xs text-gray-400">Market Cap</div>
+                        <div class="text-sm font-medium">${formatVolume(coin.market_cap)}</div>
+                    </div>
+                </div>
+
+                <a href="#" class="block w-full py-2 text-center bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-lg hover:bg-[#2FE6DE]/20 transition-colors text-sm">Trade</a>
+            </div>
+        `;
+    });
+
+    cardsContainer.innerHTML = cardsHTML;
+}
+
+// Helper functions for formatting
+function formatCurrency(value) {
+    // Format based on value size
+    if (value >= 1000) {
+        return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    } else if (value >= 1) {
+        return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 4 });
+    } else {
+        return '$' + value.toLocaleString('en-US', { minimumFractionDigits: 4, maximumFractionDigits: 6 });
+    }
+}
+
+function formatPercentage(value) {
+    const sign = value >= 0 ? '+' : '';
+    return `${sign}${value.toFixed(2)}%`;
+}
+
+function formatVolume(value) {
+    if (value >= 1e9) {
+        return '$' + (value / 1e9).toFixed(1) + 'B';
+    } else if (value >= 1e6) {
+        return '$' + (value / 1e6).toFixed(1) + 'M';
+    } else if (value >= 1e3) {
+        return '$' + (value / 1e3).toFixed(1) + 'K';
+    } else {
+        return '$' + value.toFixed(0);
+    }
+}
 </script>
-<script src='wp-content/plugins/elementor/assets/js/frontend.mind5d5.js?ver=3.23.4' id='elementor-frontend-js'></script>
-<script src='wp-content/plugins/elementor-pro/assets/js/preloaded-elements-handlers.min225e.js?ver=3.19.0'
-        id='pro-preloaded-elements-handlers-js'></script>
+    <!-- TradingView Widget Script -->
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
+<style>
+/* Ticker Animation */
+.ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    height: 40px;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.ticker {
+    display: flex;
+    white-space: nowrap;
+    padding-right: 100%;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+    animation-name: ticker;
+    animation-duration: 30s;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+@keyframes ticker {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+/* Button Styles */
+.btn-primary {
+    display: inline-block;
+    background-color: rgba(47, 230, 222, 0.1);
+    color: #2FE6DE;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: rgba(47, 230, 222, 0.2);
+}
+
+.btn-secondary {
+    display: inline-block;
+    background-color: rgba(47, 230, 222, 0.1);
+    color: #2FE6DE;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(47, 230, 222, 0.3);
+    transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(47, 230, 222, 0.2);
+    border-color: rgba(47, 230, 222, 0.5);
+}
+
+/* Animation */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Line clamp for text truncation */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+    <!-- Livewire Scripts -->
+<script src="livewire/livewire5dd3.js?id=cc800bf4"   data-csrf="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+
 
 </body>
+
+<!-- Mirrored from www.blackrockinvestmentcorporation.com/ by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Aug 2025 18:11:14 GMT -->
 </html>

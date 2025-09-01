@@ -195,6 +195,13 @@
                             </svg>
                             <span>Bot Trading</span>
                         </a>
+                        
+                        <a href="{{ route('user.liveTrading.index') }}" class="flex items-center space-x-3 px-3 py-2 rounded-lg {{ request()->routeIs('user.liveTrading.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span>Live Trading</span>
+                        </a>
                     </div>
                 </div>
             </nav>

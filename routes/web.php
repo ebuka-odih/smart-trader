@@ -17,6 +17,7 @@ use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\HoldingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\KycController;
+use App\Http\Controllers\LiveTradingController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.index')->name('index');
@@ -54,6 +55,12 @@ Route::get('transfer/history', [WithdrawalController::class, 'getTransferHistory
 Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');
 Route::get('kyc', [KycController::class, 'index'])->name('kyc.index');
 Route::post('kyc', [KycController::class, 'store'])->name('kyc.store');
+
+// Live Trading Routes
+Route::get('live-trading', [LiveTradingController::class, 'index'])->name('liveTrading.index');
+Route::post('live-trading', [LiveTradingController::class, 'store'])->name('liveTrading.store');
+Route::post('live-trading/{liveTrade}/cancel', [LiveTradingController::class, 'cancel'])->name('liveTrading.cancel');
+Route::get('live-trading/price', [LiveTradingController::class, 'getPrice'])->name('liveTrading.price');
 
     Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');

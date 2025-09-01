@@ -299,4 +299,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(CopiedTrade::class);
     }
+
+    public function liveTrades()
+    {
+        return $this->hasMany(LiveTrade::class);
+    }
 }
