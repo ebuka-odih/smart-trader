@@ -18,10 +18,23 @@ class SimpleBotTradingEngine
     public function executeBot(BotTrading $bot)
     {
         try {
+            // Check if bot should be active based on trading hours
+            if (!$this->isWithinTradingHours($bot)) {
+                Log::info("Bot {$bot->id} outside trading hours");
+                return null;
+            }
+            
             // Check yield target first
             if ($this->shouldStopForYieldTarget($bot)) {
                 Log::info("Bot {$bot->id} stopping due to yield target reached");
                 $bot->update(['status' => 'stopped']);
+                return null;
+            }
+            
+            // Check daily loss limit
+            if ($this->hasReachedDailyLossLimit($bot)) {
+                Log::info("Bot {$bot->id} stopping due to daily loss limit reached");
+                $bot->update(['status' => 'paused']);
                 return null;
             }
             
@@ -35,6 +48,9 @@ class SimpleBotTradingEngine
                 Log::warning("Invalid price for bot {$bot->id}: {$currentPrice}");
                 return null;
             }
+
+            // Check if we should close existing trades based on stop loss/take profit
+            $this->checkStopLossAndTakeProfit($bot, $currentPrice);
 
             // Simple logic based on strategy
             switch ($bot->strategy) {
@@ -68,62 +84,11 @@ class SimpleBotTradingEngine
         }
     }
 
-    private function executeGridStrategy(BotTrading $bot, $currentPrice)
-    {
-        // Simple grid: Buy when price drops 2%, Sell when price rises 2%
-        $lastTrade = $bot->trades()->latest()->first();
-        
-        if (!$lastTrade) {
-            // First trade - buy
-            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
-        }
-        
-        $priceChange = (($currentPrice - $lastTrade->price) / $lastTrade->price) * 100;
-        
-        if ($priceChange <= -2 && $lastTrade->type === 'sell') {
-            // Price dropped 2% after selling - buy
-            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
-        } elseif ($priceChange >= 2 && $lastTrade->type === 'buy') {
-            // Price rose 2% after buying - sell
-            return $this->createTrade($bot, 'sell', $currentPrice, $bot->min_trade_amount);
-        }
-        
-        return null; // No trade
-    }
 
-    private function executeDCAStrategy(BotTrading $bot, $currentPrice)
-    {
-        // Simple DCA: Buy every 24 hours
-        $lastTrade = $bot->trades()->latest()->first();
-        
-        if (!$lastTrade || $lastTrade->created_at->diffInHours(now()) >= 24) {
-            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
-        }
-        
-        return null; // No trade
-    }
 
-    private function executeScalpingStrategy(BotTrading $bot, $currentPrice)
-    {
-        // Simple scalping: Buy on small dips, sell on small gains
-        $lastTrade = $bot->trades()->latest()->first();
-        
-        if (!$lastTrade) {
-            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
-        }
-        
-        $priceChange = (($currentPrice - $lastTrade->price) / $lastTrade->price) * 100;
-        
-        if ($lastTrade->type === 'buy' && $priceChange >= 1) {
-            // 1% gain - sell
-            return $this->createTrade($bot, 'sell', $currentPrice, $bot->min_trade_amount);
-        } elseif ($lastTrade->type === 'sell' && $priceChange <= -0.5) {
-            // 0.5% dip - buy
-            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
-        }
-        
-        return null; // No trade
-    }
+
+
+
 
     private function executeTrendStrategy(BotTrading $bot, $currentPrice)
     {
@@ -191,15 +156,39 @@ class SimpleBotTradingEngine
             return false;
         }
         
-        // Check max open trades (simplified)
+        // Check if within trading hours
+        if (!$this->isWithinTradingHours($bot)) {
+            return false;
+        }
+        
+        // Check max open trades based on bot configuration
+        $maxOpenTrades = $bot->max_open_trades ?? 3;
+        $openTrades = $bot->trades()->where('status', 'executed')->count();
+        if ($openTrades >= $maxOpenTrades) {
+            return false;
+        }
+        
+        // Check recent trade frequency to prevent overtrading
         $recentTrades = $bot->trades()->where('created_at', '>=', now()->subMinutes(5))->count();
-        if ($recentTrades >= 3) { // Max 3 trades per 5 minutes
+        $maxTradesPerPeriod = $bot->getStrategyConfig('max_trades_per_period') ?? 2;
+        if ($recentTrades >= $maxTradesPerPeriod) {
             return false;
         }
         
         // Check investment limit
         $totalInvested = $bot->trades()->where('type', 'buy')->sum('quote_amount');
         if ($totalInvested + $amount > $bot->max_investment) {
+            return false;
+        }
+        
+        // Check if amount is within min/max trade limits
+        if ($amount < $bot->min_trade_amount || $amount > $bot->max_trade_amount) {
+            return false;
+        }
+        
+        // Check if we have enough available investment
+        $availableInvestment = $bot->getAvailableInvestmentAttribute();
+        if ($amount > $availableInvestment) {
             return false;
         }
         
@@ -353,5 +342,205 @@ class SimpleBotTradingEngine
             default:
                 return 86400; // Default to 24 hours
         }
+    }
+
+    /**
+     * Check if bot is within trading hours
+     */
+    private function isWithinTradingHours(BotTrading $bot)
+    {
+        if ($bot->trading_24_7) {
+            return true;
+        }
+
+        $now = now();
+        $currentTime = $now->format('H:i:s');
+        $currentDay = $now->format('l'); // Monday, Tuesday, etc.
+
+        // Check if current day is in trading days
+        if (!in_array(strtolower($currentDay), array_map('strtolower', $bot->trading_days ?? []))) {
+            return false;
+        }
+
+        // Check if current time is within trading hours
+        if ($bot->trading_start_time && $bot->trading_end_time) {
+            return $currentTime >= $bot->trading_start_time && $currentTime <= $bot->trading_end_time;
+        }
+
+        return true;
+    }
+
+    /**
+     * Check if bot has reached daily loss limit
+     */
+    private function hasReachedDailyLossLimit(BotTrading $bot)
+    {
+        if (!$bot->daily_loss_limit) {
+            return false;
+        }
+
+        $todayStart = now()->startOfDay();
+        $todayLosses = $bot->trades()
+            ->where('created_at', '>=', $todayStart)
+            ->where('profit_loss', '<', 0)
+            ->sum('profit_loss');
+
+        return abs($todayLosses) >= $bot->daily_loss_limit;
+    }
+
+    /**
+     * Check and execute stop loss and take profit
+     */
+    private function checkStopLossAndTakeProfit(BotTrading $bot, $currentPrice)
+    {
+        $openTrades = $bot->trades()
+            ->where('status', 'executed')
+            ->where('type', 'buy')
+            ->get();
+
+        foreach ($openTrades as $trade) {
+            $entryPrice = $trade->price;
+            $priceChange = (($currentPrice - $entryPrice) / $entryPrice) * 100;
+
+            // Check stop loss
+            if ($bot->stop_loss_percentage && $priceChange <= -$bot->stop_loss_percentage) {
+                Log::info("Stop loss triggered for bot {$bot->id} trade {$trade->id}");
+                $this->createTrade($bot, 'sell', $currentPrice, $trade->quote_amount);
+                $trade->update(['status' => 'closed', 'close_reason' => 'stop_loss']);
+                continue;
+            }
+
+            // Check take profit
+            if ($bot->take_profit_percentage && $priceChange >= $bot->take_profit_percentage) {
+                Log::info("Take profit triggered for bot {$bot->id} trade {$trade->id}");
+                $this->createTrade($bot, 'sell', $currentPrice, $trade->quote_amount);
+                $trade->update(['status' => 'closed', 'close_reason' => 'take_profit']);
+                continue;
+            }
+        }
+    }
+
+    /**
+     * Enhanced grid strategy with dynamic grid levels
+     */
+    private function executeGridStrategy(BotTrading $bot, $currentPrice)
+    {
+        $lastTrade = $bot->trades()->latest()->first();
+        
+        if (!$lastTrade) {
+            // First trade - buy
+            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
+        }
+        
+        // Get grid configuration from strategy config
+        $gridSpacing = $bot->getStrategyConfig('grid_spacing') ?? 2; // Default 2%
+        $gridLevels = $bot->getStrategyConfig('grid_levels') ?? 5; // Default 5 levels
+        
+        $priceChange = (($currentPrice - $lastTrade->price) / $lastTrade->price) * 100;
+        
+        // Count current grid positions
+        $currentPositions = $bot->trades()->where('status', 'executed')->count();
+        
+        if ($priceChange <= -$gridSpacing && $lastTrade->type === 'sell' && $currentPositions < $gridLevels) {
+            // Price dropped - buy at lower level
+            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
+        } elseif ($priceChange >= $gridSpacing && $lastTrade->type === 'buy') {
+            // Price rose - sell at higher level
+            return $this->createTrade($bot, 'sell', $currentPrice, $bot->min_trade_amount);
+        }
+        
+        return null; // No trade
+    }
+
+    /**
+     * Enhanced DCA strategy with dynamic amounts
+     */
+    private function executeDCAStrategy(BotTrading $bot, $currentPrice)
+    {
+        $lastTrade = $bot->trades()->latest()->first();
+        
+        if (!$lastTrade || $lastTrade->created_at->diffInHours(now()) >= 24) {
+            // Calculate DCA amount based on strategy config
+            $dcaMultiplier = $bot->getStrategyConfig('dca_multiplier') ?? 1.5; // Increase amount by 50%
+            $baseAmount = $bot->min_trade_amount;
+            
+            // If we have previous trades, increase the amount
+            $previousTrades = $bot->trades()->where('type', 'buy')->count();
+            $dcaAmount = $baseAmount * pow($dcaMultiplier, $previousTrades);
+            
+            // Cap at max trade amount
+            $dcaAmount = min($dcaAmount, $bot->max_trade_amount);
+            
+            return $this->createTrade($bot, 'buy', $currentPrice, $dcaAmount);
+        }
+        
+        return null; // No trade
+    }
+
+    /**
+     * Enhanced scalping strategy with dynamic thresholds
+     */
+    private function executeScalpingStrategy(BotTrading $bot, $currentPrice)
+    {
+        $lastTrade = $bot->trades()->latest()->first();
+        
+        if (!$lastTrade) {
+            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
+        }
+        
+        // Get scalping configuration
+        $buyThreshold = $bot->getStrategyConfig('buy_threshold') ?? 0.5; // Buy on 0.5% dip
+        $sellThreshold = $bot->getStrategyConfig('sell_threshold') ?? 1.0; // Sell on 1% gain
+        
+        $priceChange = (($currentPrice - $lastTrade->price) / $lastTrade->price) * 100;
+        
+        if ($lastTrade->type === 'buy' && $priceChange >= $sellThreshold) {
+            // Take profit
+            return $this->createTrade($bot, 'sell', $currentPrice, $bot->min_trade_amount);
+        } elseif ($lastTrade->type === 'sell' && $priceChange <= -$buyThreshold) {
+            // Buy the dip
+            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
+        }
+        
+        return null; // No trade
+    }
+
+    /**
+     * Enhanced trend following strategy with technical indicators
+     */
+    private function executeTrendStrategy(BotTrading $bot, $currentPrice)
+    {
+        $recentTrades = $bot->trades()->latest()->limit(5)->get();
+        
+        if ($recentTrades->count() < 3) {
+            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
+        }
+        
+        // Get trend configuration
+        $trendPeriod = $bot->getStrategyConfig('trend_period') ?? 3; // Look at last 3 trades
+        $trendThreshold = $bot->getStrategyConfig('trend_threshold') ?? 1.0; // 1% threshold
+        
+        // Calculate trend strength
+        $prices = $recentTrades->take($trendPeriod)->pluck('price')->reverse()->toArray();
+        $trendStrength = 0;
+        
+        for ($i = 1; $i < count($prices); $i++) {
+            $change = (($prices[$i] - $prices[$i-1]) / $prices[$i-1]) * 100;
+            $trendStrength += $change;
+        }
+        
+        $avgTrendStrength = $trendStrength / (count($prices) - 1);
+        $lastTrade = $recentTrades->first();
+        
+        // Strong uptrend - buy
+        if ($avgTrendStrength > $trendThreshold && $lastTrade->type === 'sell') {
+            return $this->createTrade($bot, 'buy', $currentPrice, $bot->min_trade_amount);
+        }
+        // Strong downtrend - sell
+        elseif ($avgTrendStrength < -$trendThreshold && $lastTrade->type === 'buy') {
+            return $this->createTrade($bot, 'sell', $currentPrice, $bot->min_trade_amount);
+        }
+        
+        return null; // No trade
     }
 }
