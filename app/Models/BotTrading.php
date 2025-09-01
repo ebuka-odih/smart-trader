@@ -16,6 +16,7 @@ class BotTrading extends Model
         'name',
         'base_asset',
         'quote_asset',
+        'trading_type',
         'leverage',
         'trade_duration',
         'target_yield_percentage',

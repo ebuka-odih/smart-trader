@@ -19,7 +19,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\KycController;
 use Illuminate\Support\Facades\Route;
 
-Route::view('/', 'welcome')->name('index');
+Route::view('/', 'pages.index')->name('index');
 Route::view('products', 'pages.products')->name('products');
 Route::view('market-caps', 'pages.market')->name('market');
 Route::view('about', 'pages.about')->name('about');

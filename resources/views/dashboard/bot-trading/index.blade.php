@@ -224,8 +224,31 @@
 
             <!-- Modal Body -->
             <div class="p-6 overflow-y-auto flex-1">
+                <!-- Trading Type Tabs -->
+                <div class="mb-6">
+                    <div class="border-b border-gray-700">
+                        <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                            <button type="button" class="trading-tab active border-b-2 border-blue-500 py-2 px-1 text-sm font-medium text-blue-400" data-tab="crypto">
+                                <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                </svg>
+                                Crypto Trading
+                            </button>
+                            <button type="button" class="trading-tab border-b-2 border-transparent py-2 px-1 text-sm font-medium text-gray-400 hover:text-gray-300 hover:border-gray-300" data-tab="forex">
+                                <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                Forex Trading
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
                 <form id="createBotForm" class="space-y-6">
                     @csrf
+                    
+                    <!-- Hidden field for trading type -->
+                    <input type="hidden" name="trading_type" value="crypto">
                     
                     <!-- Basic Information -->
                     <div>
@@ -237,7 +260,8 @@
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Trading Pair</label>
-                                <select name="trading_pair" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <!-- Crypto Trading Pairs -->
+                                <select name="trading_pair" class="crypto-trading-pairs w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
                                     <option value="">Select Trading Pair</option>
                                     <option value="BTC/USDT">BTC/USDT</option>
                                     <option value="ETH/USDT">ETH/USDT</option>
@@ -247,6 +271,21 @@
                                     <option value="DOT/USDT">DOT/USDT</option>
                                     <option value="LINK/USDT">LINK/USDT</option>
                                     <option value="UNI/USDT">UNI/USDT</option>
+                                </select>
+                                
+                                <!-- Forex Trading Pairs -->
+                                <select name="trading_pair" class="forex-trading-pairs hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="">Select Trading Pair</option>
+                                    <option value="EUR/USD">EUR/USD</option>
+                                    <option value="GBP/USD">GBP/USD</option>
+                                    <option value="USD/JPY">USD/JPY</option>
+                                    <option value="USD/CHF">USD/CHF</option>
+                                    <option value="AUD/USD">AUD/USD</option>
+                                    <option value="USD/CAD">USD/CAD</option>
+                                    <option value="NZD/USD">NZD/USD</option>
+                                    <option value="EUR/GBP">EUR/GBP</option>
+                                    <option value="EUR/JPY">EUR/JPY</option>
+                                    <option value="GBP/JPY">GBP/JPY</option>
                                 </select>
                             </div>
                         </div>
@@ -492,6 +531,34 @@
 
 @endsection
 
+@push('styles')
+<style>
+    .forex-trading-pairs.hidden {
+        display: none !important;
+    }
+    
+    /* Tab highlighting styles */
+    .trading-tab {
+        transition: all 0.2s ease-in-out;
+    }
+    
+    .trading-tab.active {
+        border-bottom-color: #3b82f6 !important;
+        color: #60a5fa !important;
+    }
+    
+    .trading-tab:not(.active) {
+        border-bottom-color: transparent !important;
+        color: #9ca3af !important;
+    }
+    
+    .trading-tab:hover:not(.active) {
+        color: #d1d5db !important;
+        border-bottom-color: #d1d5db !important;
+    }
+</style>
+@endpush
+
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -507,11 +574,16 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSuccessModal = document.getElementById('closeSuccessModal');
     const closeErrorModal = document.getElementById('closeErrorModal');
 
+    // Initialize tabs on page load
+    initializeTabs();
+
     // Open create modal
     [createBotBtn, createFirstBotBtn].forEach(btn => {
         if (btn) {
             btn.addEventListener('click', () => {
                 createBotModal.classList.remove('hidden');
+                // Initialize tabs to default state
+                initializeTabs();
             });
         }
     });
@@ -540,6 +612,78 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Initialize tabs function
+    function initializeTabs() {
+        // Reset to crypto tab by default
+        const cryptoTab = document.querySelector('[data-tab="crypto"]');
+        const forexTab = document.querySelector('[data-tab="forex"]');
+        const cryptoTradingPairs = document.querySelector('.crypto-trading-pairs');
+        const forexTradingPairs = document.querySelector('.forex-trading-pairs');
+        const botNameInput = document.querySelector('input[name="name"]');
+        
+        // Set crypto as active
+        cryptoTab.classList.add('active', 'border-blue-500', 'text-blue-400');
+        forexTab.classList.remove('active', 'border-blue-500', 'text-blue-400');
+        forexTab.classList.add('border-transparent', 'text-gray-400');
+        
+        // Show crypto pairs, hide forex pairs
+        cryptoTradingPairs.classList.remove('hidden');
+        forexTradingPairs.classList.add('hidden');
+        
+        // Reset values
+        cryptoTradingPairs.value = '';
+        forexTradingPairs.value = '';
+        botNameInput.placeholder = 'My BTC Bot';
+        
+        // Set trading type
+        document.querySelector('input[name="trading_type"]').value = 'crypto';
+        
+        console.log('Tabs initialized');
+    }
+
+    // Tab switching functionality
+    document.querySelectorAll('.trading-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabType = tab.getAttribute('data-tab');
+            console.log('Tab clicked:', tabType);
+            
+            // Update tab styling
+            document.querySelectorAll('.trading-tab').forEach(t => {
+                t.classList.remove('active', 'border-blue-500', 'text-blue-400');
+                t.classList.add('border-transparent', 'text-gray-400');
+            });
+            tab.classList.add('active', 'border-blue-500', 'text-blue-400');
+            
+            console.log('Active tab classes:', tab.classList.toString());
+            
+            // Update trading type hidden field
+            document.querySelector('input[name="trading_type"]').value = tabType;
+            
+            // Show/hide trading pairs based on tab
+            const cryptoTradingPairs = document.querySelector('.crypto-trading-pairs');
+            const forexTradingPairs = document.querySelector('.forex-trading-pairs');
+            const botNameInput = document.querySelector('input[name="name"]');
+            
+            if (tabType === 'crypto') {
+                cryptoTradingPairs.classList.remove('hidden');
+                forexTradingPairs.classList.add('hidden');
+                // Reset trading pair selection
+                cryptoTradingPairs.value = '';
+                // Update bot name placeholder
+                botNameInput.placeholder = 'My BTC Bot';
+                console.log('Switched to crypto tab');
+            } else if (tabType === 'forex') {
+                cryptoTradingPairs.classList.add('hidden');
+                forexTradingPairs.classList.remove('hidden');
+                // Reset trading pair selection
+                forexTradingPairs.value = '';
+                // Update bot name placeholder
+                botNameInput.placeholder = 'My EUR/USD Bot';
+                console.log('Switched to forex tab');
+            }
+        });
+    });
+
     // Strategy selection
     document.querySelectorAll('.strategy-option').forEach(option => {
         option.addEventListener('click', () => {
@@ -561,24 +705,50 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(createBotForm);
         
         // Add trading pair parsing
-        const tradingPair = formData.get('trading_pair');
+        const activeTab = document.querySelector('.trading-tab.active').getAttribute('data-tab');
+        let tradingPair;
+        
+        if (activeTab === 'crypto') {
+            tradingPair = document.querySelector('.crypto-trading-pairs').value;
+        } else if (activeTab === 'forex') {
+            tradingPair = document.querySelector('.forex-trading-pairs').value;
+        }
+        
         if (tradingPair) {
             const [base, quote] = tradingPair.split('/');
             formData.set('base_asset', base);
             formData.set('quote_asset', quote);
+            // Also set the trading_pair field for validation
+            formData.set('trading_pair', tradingPair);
+        }
+
+        // Add trading type
+        const tradingType = formData.get('trading_type');
+        if (tradingType) {
+            formData.set('trading_type', tradingType);
+        }
+
+        // Debug: Log form data
+        console.log('Form data before validation:');
+        for (let [key, value] of formData.entries()) {
+            console.log(key + ': ' + value);
         }
 
         // Validate required fields
-        const requiredFields = ['name', 'trading_pair', 'leverage', 'trade_duration', 'strategy', 'max_investment', 'min_trade_amount', 'max_trade_amount', 'max_open_trades'];
+        const requiredFields = ['name', 'trading_type', 'trading_pair', 'leverage', 'trade_duration', 'strategy', 'max_investment', 'min_trade_amount', 'max_trade_amount', 'max_open_trades'];
         const missingFields = [];
         
+        console.log('Checking required fields:');
         requiredFields.forEach(field => {
-            if (!formData.get(field)) {
+            const value = formData.get(field);
+            console.log(`${field}: ${value}`);
+            if (!value) {
                 missingFields.push(field.replace('_', ' '));
             }
         });
         
         if (missingFields.length > 0) {
+            console.log('Missing fields:', missingFields);
             showErrorModal('Validation Error', `Please fill in the following fields: ${missingFields.join(', ')}`);
             return;
         }

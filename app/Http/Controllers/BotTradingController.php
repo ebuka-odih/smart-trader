@@ -53,6 +53,7 @@ class BotTradingController extends Controller
         
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
+            'trading_type' => 'required|string|in:crypto,forex',
             'base_asset' => 'required|string|max:10',
             'quote_asset' => 'required|string|max:10',
             'leverage' => 'required|numeric|min:1.00|max:100.00',
@@ -103,6 +104,7 @@ class BotTradingController extends Controller
             $bot = BotTrading::create([
                 'user_id' => $user->id,
                 'name' => $request->name,
+                'trading_type' => $request->trading_type,
                 'base_asset' => strtoupper($request->base_asset),
                 'quote_asset' => strtoupper($request->quote_asset),
                 'leverage' => $request->leverage,
