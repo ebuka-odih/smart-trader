@@ -429,5 +429,8 @@
 
 @yield('scripts')
 </script>
+
+<script src="{{ asset('front/livewire/livewire5dd3.js') }}"   data-csrf="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+
 </body>
 </html>

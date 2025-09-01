@@ -788,9 +788,9 @@ function updateTicker(data) {
                 </div>
 
                 <div class="hidden lg:flex items-center space-x-4">
-                                            <a href="login.html" class="btn-secondary">Login</a>
-                        <a href="register.html" class="btn-primary">Sign Up</a>
-                                    </div>
+                    <a href="{{ route('login') }}" class="btn-secondary">Login</a>
+                    <a href="{{ route('register') }}" class="btn-primary">Sign Up</a>
+                </div>
 
                 <!-- Mobile menu button -->
                 <div class="lg:hidden flex items-center">

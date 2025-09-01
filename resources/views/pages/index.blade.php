@@ -1290,7 +1290,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="py-16 bg-gradient-to-b from-[#0D091C] to-[#0A0714]">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold mb-4">Why Choose <span class="text-[#2FE6DE]">BlackRock</span></h2>
+            <h2 class="text-3xl font-bold mb-4">Why Choose <span class="text-[#2FE6DE]">{{ config('app.name') }}</span></h2>
             <p class="text-gray-400 max-w-2xl mx-auto">Our platform offers a comprehensive suite of tools and features designed to enhance your trading experience.</p>
         </div>
 
