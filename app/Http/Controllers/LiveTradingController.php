@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\LiveTrade;
 use App\Models\Asset;
-use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,7 +22,7 @@ class LiveTradingController extends Controller
         
         // Get available assets for trading
         $cryptoAssets = Asset::where('type', 'crypto')->take(10)->get();
-        $stockAssets = Stock::take(10)->get();
+        $stockAssets = Asset::where('type', 'stock')->take(10)->get();
         
         // For now, forex assets will be hardcoded (can be replaced with API later)
         $forexAssets = collect([

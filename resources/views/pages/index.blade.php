@@ -1119,7 +1119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </li>
     </ul>
 
-                    <a href="register.html" class="block w-full py-3 text-center bg-[#2FE6DE]/10 text-[#2FE6DE] hover:bg-[#2FE6DE]/20 rounded-lg transition-all">
+                    <a href="{{ route('register') }}" class="block w-full py-3 text-center bg-[#2FE6DE]/10 text-[#2FE6DE] hover:bg-[#2FE6DE]/20 rounded-lg transition-all">
                         Get Started
                     </a>
                 </div>
@@ -1171,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </li>
     </ul>
 
-                    <a href="register.html" class="block w-full py-3 text-center bg-[#2FE6DE] text-black hover:brightness-110 rounded-lg transition-all">
+                    <a href="{{ route('register') }}" class="block w-full py-3 text-center bg-[#2FE6DE] text-black hover:brightness-110 rounded-lg transition-all">
                         Get Started
                     </a>
                 </div>
@@ -1194,7 +1194,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="text-xl font-semibold mb-2">Stock Trading</h3>
                 <p class="text-gray-400 mb-4">Trade stocks with advanced charts and real-time market data</p>
-                <a href="login.html" class="text-[#2FE6DE] hover:underline flex items-center text-sm">
+                <a href="{{ route('login') }}" class="text-[#2FE6DE] hover:underline flex items-center text-sm">
                     Trade Now <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
@@ -1205,7 +1205,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="text-xl font-semibold mb-2">Copy Trading</h3>
                 <p class="text-gray-400 mb-4">Automatically copy the trades of successful traders</p>
-                <a href="login.html" class="text-[#2FE6DE] hover:underline flex items-center text-sm">
+                <a href="{{ route('login') }}" class="text-[#2FE6DE] hover:underline flex items-center text-sm">
                     Start Copying <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
@@ -1216,7 +1216,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <h3 class="text-xl font-semibold mb-2">Bot Trading</h3>
                 <p class="text-gray-400 mb-4">Automate your trading with AI-powered bots and strategies</p>
-                <a href="login.html" class="text-[#2FE6DE] hover:underline flex items-center text-sm">
+                <a href="{{ route('login') }}" class="text-[#2FE6DE] hover:underline flex items-center text-sm">
                     Start Bot <i class="fas fa-arrow-right ml-2"></i>
                 </a>
             </div>
@@ -1343,7 +1343,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     Join thousands of traders worldwide and experience the power of our advanced trading platform.
                 </p>
                 <div class="flex flex-col sm:flex-row justify-center gap-4">
-                    <a href="register.html" class="bg-[#2FE6DE] text-black font-medium px-8 py-4 rounded-lg hover:brightness-110 transition-all text-center">
+                    <a href="{{ route('register') }}" class="bg-[#2FE6DE] text-black font-medium px-8 py-4 rounded-lg hover:brightness-110 transition-all text-center">
                         Create Account
                     </a>
                     <a href="{{ route('about') }}" class="bg-transparent text-white font-medium px-8 py-4 rounded-lg border border-[#2FE6DE]/30 hover:bg-[#2FE6DE] transition-colors text-center">
