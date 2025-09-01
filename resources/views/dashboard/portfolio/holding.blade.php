@@ -107,7 +107,7 @@ use App\Helpers\AssetHelper;
                 </thead>
                 <tbody id="holdingsTableBody" class="bg-gray-800 divide-y divide-gray-700">
                     @forelse($holdings ?? [] as $holding)
-                    <tr>
+                    <tr data-holding-id="{{ $holding->id }}" data-asset-id="{{ $holding->asset->id }}">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="flex-shrink-0 h-10 w-10">
@@ -164,6 +164,118 @@ use App\Helpers\AssetHelper;
     </div>
 </div>
 
+<!-- Sell Modal -->
+<div id="sellModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium text-white">Sell Asset</h3>
+                    <button onclick="closeSellModal()" class="text-gray-400 hover:text-white">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="space-y-4">
+                    <input type="hidden" id="sellHoldingId">
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-400">Asset:</span>
+                            <span class="text-white font-medium" id="sellSymbol"></span>
+                        </div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-gray-400">Available:</span>
+                            <span class="text-white" id="sellQuantity"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Current Price:</span>
+                            <span class="text-white" id="sellCurrentPrice"></span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Quantity to Sell</label>
+                        <div class="flex space-x-2">
+                            <input type="number" id="sellQuantityInput" step="0.00000001" min="0.00000001" 
+                                   class="flex-1 bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                                   oninput="updateSellTotal()">
+                            <button onclick="setMaxQuantity()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition-colors">
+                                Max
+                            </button>
+                        </div>
+                        <p class="text-xs text-gray-400 mt-1">Max: <span id="sellMaxQuantity"></span></p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Price per Unit</label>
+                        <input type="number" id="sellPriceInput" step="0.00000001" min="0.00000001" 
+                               class="w-full bg-gray-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-blue-500"
+                               oninput="updateSellTotal()">
+                    </div>
+                    
+                    <div class="bg-gray-700 rounded-lg p-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Total Value:</span>
+                            <span class="text-white font-medium" id="sellTotalValue">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex space-x-3 mt-6">
+                    <button onclick="closeSellModal()" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        Cancel
+                    </button>
+                    <button id="sellAssetBtn" onclick="sellAsset()" class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        Sell Asset
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
+            <div class="p-6 text-center">
+                <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-2" id="successTitle">Success!</h3>
+                <p class="text-gray-400 mb-6" id="successMessage">Operation completed successfully.</p>
+                <button onclick="document.getElementById('successModal').classList.add('hidden')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div id="errorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-gray-800 rounded-lg shadow-xl max-w-md w-full border border-gray-700">
+            <div class="p-6 text-center">
+                <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-medium text-white mb-2" id="errorTitle">Error!</h3>
+                <p class="text-gray-400 mb-6" id="errorMessage">An error occurred. Please try again.</p>
+                <button onclick="document.getElementById('errorModal').classList.add('hidden')" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg font-medium transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
 // Refresh holdings
 document.getElementById('refreshHoldingsBtn').addEventListener('click', function() {
@@ -176,7 +288,118 @@ document.getElementById('buyAssetBtn').addEventListener('click', function() {
 });
 
 function openSellModal(holdingId, symbol, quantity, currentPrice) {
-    alert('Sell functionality will be implemented in the next phase');
+    // Set modal data
+    document.getElementById('sellHoldingId').value = holdingId;
+    document.getElementById('sellSymbol').textContent = symbol;
+    document.getElementById('sellQuantity').textContent = quantity;
+    document.getElementById('sellCurrentPrice').textContent = '$' + parseFloat(currentPrice).toFixed(8);
+    document.getElementById('sellQuantityInput').value = quantity;
+    document.getElementById('sellPriceInput').value = currentPrice;
+    document.getElementById('sellMaxQuantity').textContent = quantity;
+    
+    // Calculate total value
+    const totalValue = quantity * currentPrice;
+    document.getElementById('sellTotalValue').textContent = '$' + totalValue.toFixed(2);
+    
+    // Show modal
+    document.getElementById('sellModal').classList.remove('hidden');
+}
+
+function closeSellModal() {
+    document.getElementById('sellModal').classList.add('hidden');
+}
+
+function updateSellTotal() {
+    const quantity = parseFloat(document.getElementById('sellQuantityInput').value) || 0;
+    const price = parseFloat(document.getElementById('sellPriceInput').value) || 0;
+    const maxQuantity = parseFloat(document.getElementById('sellMaxQuantity').textContent) || 0;
+    
+    // Validate quantity
+    if (quantity > maxQuantity) {
+        document.getElementById('sellQuantityInput').value = maxQuantity;
+        quantity = maxQuantity;
+    }
+    
+    const total = quantity * price;
+    document.getElementById('sellTotalValue').textContent = '$' + total.toFixed(2);
+}
+
+function setMaxQuantity() {
+    const maxQuantity = parseFloat(document.getElementById('sellMaxQuantity').textContent) || 0;
+    document.getElementById('sellQuantityInput').value = maxQuantity;
+    updateSellTotal();
+}
+
+function sellAsset() {
+    const holdingId = document.getElementById('sellHoldingId').value;
+    const quantity = parseFloat(document.getElementById('sellQuantityInput').value);
+    const price = parseFloat(document.getElementById('sellPriceInput').value);
+    
+    if (!quantity || quantity <= 0) {
+        alert('Please enter a valid quantity');
+        return;
+    }
+    
+    if (!price || price <= 0) {
+        alert('Please enter a valid price');
+        return;
+    }
+    
+    // Get the asset ID from the holding
+    const assetId = document.querySelector(`[data-holding-id="${holdingId}"]`).getAttribute('data-asset-id');
+    
+    // Show loading state
+    const sellBtn = document.getElementById('sellAssetBtn');
+    const originalText = sellBtn.innerHTML;
+    sellBtn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Selling...';
+    sellBtn.disabled = true;
+    
+    fetch('/user/holding/sell', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({
+            asset_id: assetId,
+            quantity: quantity,
+            price_per_unit: price
+        })
+    })
+    .then(response => response.json())
+            .then(data => {
+            if (data.success) {
+                closeSellModal();
+                showSuccessModal('Success!', data.message + ' Funds have been added to your trading balance. You can transfer to main balance via the withdrawal section if needed.');
+                // Refresh the page after a short delay
+                setTimeout(() => {
+                    location.reload();
+                }, 1500);
+            } else {
+                showErrorModal('Error!', data.message);
+            }
+        })
+    .catch(error => {
+        console.error('Error:', error);
+        showErrorModal('Error!', 'Failed to sell asset. Please try again.');
+    })
+    .finally(() => {
+        // Reset button state
+        sellBtn.innerHTML = originalText;
+        sellBtn.disabled = false;
+    });
+}
+
+function showSuccessModal(title, message) {
+    document.getElementById('successTitle').textContent = title;
+    document.getElementById('successMessage').textContent = message;
+    document.getElementById('successModal').classList.remove('hidden');
+}
+
+function showErrorModal(title, message) {
+    document.getElementById('errorTitle').textContent = title;
+    document.getElementById('errorMessage').textContent = message;
+    document.getElementById('errorModal').classList.remove('hidden');
 }
 </script>
 

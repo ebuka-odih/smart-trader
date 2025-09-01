@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Asset;
 use App\Models\UserHolding;
+use App\Models\HoldingTransaction;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -137,20 +138,14 @@ class PortfolioCalculationService
             
             $totalAmount = $quantity * $pricePerUnit;
             
-            // Add to user's main balance (not holding balance)
-            $user->increment('balance', $totalAmount);
+            // Add to user's trading balance
+            $user->increment('trading_balance', $totalAmount);
             
             // Update holding
             $newQuantity = $holding->quantity - $quantity;
             
-            if ($newQuantity > 0) {
-                $holding->update(['quantity' => $newQuantity]);
-            } else {
-                $holding->delete();
-            }
-            
-            // Create transaction record
-            $holding->transactions()->create([
+            // Create transaction record first
+            HoldingTransaction::create([
                 'user_id' => $user->id,
                 'asset_id' => $asset->id,
                 'type' => 'sell',
@@ -160,6 +155,14 @@ class PortfolioCalculationService
                 'status' => 'completed',
             ]);
             
+            if ($newQuantity > 0) {
+                $holding->update(['quantity' => $newQuantity]);
+                $result = $holding;
+            } else {
+                $result = $holding;
+                $holding->delete();
+            }
+            
             Log::info('Asset sold successfully', [
                 'user_id' => $user->id,
                 'asset_id' => $asset->id,
@@ -168,7 +171,7 @@ class PortfolioCalculationService
                 'total_amount' => $totalAmount
             ]);
             
-            return $holding;
+            return $result;
         });
     }
 
