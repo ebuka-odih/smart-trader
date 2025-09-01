@@ -40,7 +40,38 @@ class LiveTradingController extends Controller
 
     public function cancel(LiveTrade $liveTrade)
     {
-        return response()->json(['success' => true, 'message' => 'Trade cancelled successfully!']);
+        if ($liveTrade->user_id !== Auth::id()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized access to this trade.'
+            ], 403);
+        }
+
+        if (!$liveTrade->isPending()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Only pending trades can be cancelled.'
+            ], 400);
+        }
+
+        try {
+            $liveTrade->update(['status' => 'cancelled']);
+            
+            // Refund the amount to trading balance
+            $user = Auth::user();
+            $user->increment('trading_balance', $liveTrade->amount);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Trade cancelled successfully!'
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to cancel trade: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function getPrice(Request $request)

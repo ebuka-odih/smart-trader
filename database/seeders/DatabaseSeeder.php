@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AdminSeeder::class);
         $this->call(TradePairSeeder::class);
         $this->call(CopyTraderSeeder::class);
+        $this->call(AssetSeeder::class);
     }
 }

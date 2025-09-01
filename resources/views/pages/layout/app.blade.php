@@ -805,8 +805,8 @@ function updateTicker(data) {
     <!-- Mobile menu -->
     <div id="mobileMenu" class="mobile-nav lg:hidden">
         <div class="flex justify-between items-center p-4 border-b border-[#2FE6DE]/10">
-            <a href="index.html">
-                <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Logo" class="h-10">
+            <a href="{{ route('index') }}">
+                <span class="text-lg font-bold text-[#2FE6DE]">{{ config('app.name') }}</span>
             </a>
             <button id="closeMenuBtn" class="text-white focus:outline-none">
                 <i class="fas fa-times text-xl"></i>
@@ -815,8 +815,8 @@ function updateTicker(data) {
 
         <div class="p-4">
                             <div class="flex space-x-2 mb-6">
-                    <a href="{{ route('login') }}" class="btn-secondary flex-1 text-center">Login</a>
-                    <a href="{{ route('register') }}" class="btn-primary flex-1 text-center">Sign Up</a>
+                    <a href="login.html" class="btn-secondary flex-1 text-center">Login</a>
+                    <a href="register.html" class="btn-primary flex-1 text-center">Sign Up</a>
                 </div>
 
             <nav class="space-y-1">
