@@ -35,7 +35,73 @@ class LiveTradingController extends Controller
 
     public function store(Request $request)
     {
-        return response()->json(['success' => true, 'message' => 'Trade placed successfully!']);
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'asset_type' => 'required|string|in:crypto,stock,forex',
+            'symbol' => 'required|string|max:20',
+            'order_type' => 'required|string|in:limit,market',
+            'side' => 'required|string|in:buy,sell',
+            'quantity' => 'nullable|numeric|min:0.00000001',
+            'price' => 'nullable|numeric|min:0.00000001',
+            'amount' => 'required|numeric|min:1',
+            'leverage' => 'nullable|numeric|min:1|max:100',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        $user = Auth::user();
+        
+        // Check if user has sufficient trading balance
+        if ($request->amount > $user->trading_balance) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient trading balance. You need at least $' . number_format($request->amount, 2) . ' in your trading balance.'
+            ], 400);
+        }
+
+        try {
+            // For limit orders, validate quantity and price
+            if ($request->order_type === 'limit') {
+                if (!$request->quantity || !$request->price) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Price and quantity are required for limit orders.'
+                    ], 400);
+                }
+            }
+
+            $liveTrade = LiveTrade::create([
+                'user_id' => $user->id,
+                'asset_type' => $request->asset_type,
+                'symbol' => $request->symbol,
+                'order_type' => $request->order_type,
+                'side' => $request->side,
+                'quantity' => $request->quantity,
+                'price' => $request->price,
+                'amount' => $request->amount,
+                'leverage' => $request->leverage ?? 1.00,
+                'status' => 'pending'
+            ]);
+
+            // Deduct amount from trading balance
+            $user->decrement('trading_balance', $request->amount);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Trade order placed successfully!',
+                'trade' => $liveTrade
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to place trade: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     public function cancel(LiveTrade $liveTrade)
@@ -76,6 +142,44 @@ class LiveTradingController extends Controller
 
     public function getPrice(Request $request)
     {
-        return response()->json(['success' => true, 'price' => 100.00]);
+        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
+            'asset_type' => 'required|string|in:crypto,stock,forex',
+            'symbol' => 'required|string|max:20',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $price = 0;
+            
+            if ($request->asset_type === 'crypto') {
+                $asset = Asset::where('symbol', $request->symbol)->first();
+                $price = $asset ? $asset->current_price : 0;
+            } elseif ($request->asset_type === 'stock') {
+                $asset = Asset::where('symbol', $request->symbol)->first();
+                $price = $asset ? $asset->current_price : 0;
+            } elseif ($request->asset_type === 'forex') {
+                // For now, return a mock price (can be replaced with forex API)
+                $price = rand(100, 200) / 100; // Random price between 1.00 and 2.00
+            }
+
+            return response()->json([
+                'success' => true,
+                'price' => $price,
+                'symbol' => $request->symbol,
+                'asset_type' => $request->asset_type
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to get price: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

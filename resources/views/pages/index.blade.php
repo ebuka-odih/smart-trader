@@ -1278,7 +1278,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             <div class="lg:w-1/2 relative order-1 lg:order-2">
                 <div class="relative z-10 animate-float">
-                                           <img src="{{ asset('front/public/images/default.svg') }}" alt="Mobile App Mockup" class="mx-auto max-w-xs h-auto w-full">
+                                           <img src="{{ asset('front/images/default.svg') }}" alt="Mobile App Mockup" class="mx-auto max-w-xs h-auto w-full">
                 </div>
                 <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-[#2FE6DE]/10 rounded-full filter blur-3xl -z-10"></div>
             </div>
