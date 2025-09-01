@@ -762,8 +762,8 @@ function updateTicker(data) {
         <div class="container mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
-                    <a href="{{ route('index') }}" class="flex items-center">
-                        <span class="text-xl font-bold text-[#2FE6DE]">{{ config('app.name') }}</span>
+                    <a href="index.html" class="flex items-center">
+                        <img src="storage/settings/bv05CPQdQQcgRWpEAg1CMcA5t2CUohmbPg0XJXUD.png" alt="Logo" class="h-8">
                     </a>
                     <nav class="hidden lg:flex ml-10 space-x-6">
                         <a href="index.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 active">Home</a>
