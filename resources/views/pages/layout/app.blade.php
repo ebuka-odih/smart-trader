@@ -815,8 +815,8 @@ function updateTicker(data) {
 
         <div class="p-4">
                             <div class="flex space-x-2 mb-6">
-                    <a href="login.html" class="btn-secondary flex-1 text-center">Login</a>
-                    <a href="register.html" class="btn-primary flex-1 text-center">Sign Up</a>
+                    <a href="{{ route('login') }}" class="btn-secondary flex-1 text-center">Login</a>
+                    <a href="{{ route('register') }}" class="btn-primary flex-1 text-center">Sign Up</a>
                 </div>
 
             <nav class="space-y-1">
