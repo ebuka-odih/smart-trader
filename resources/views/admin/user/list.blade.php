@@ -116,7 +116,7 @@
                       <span>${{ number_format($item->profit ?? '', 2) }}</span>
                     </td>
                    <td class="text-gray-500 dark:text-gray-400">
-                      <span>{!! $item->status() ?? '' !!}</span>
+                                                      <span>{!! $item->status_badge ?? '' !!}</span>
                     </td>
                      <td class="p-4 space-x-2 whitespace-nowrap">
                          <a href="{{ route('admin.user.show', $item->id) }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

@@ -82,7 +82,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->name;
     }
 
-    public function status()
+    public function getStatusBadgeAttribute()
     {
         if ($this->status == 'active')
         {

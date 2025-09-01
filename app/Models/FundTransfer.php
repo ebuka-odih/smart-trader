@@ -30,7 +30,7 @@ class FundTransfer extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function status()
+    public function getStatusBadgeAttribute()
     {
         switch ($this->status) {
             case 'completed':

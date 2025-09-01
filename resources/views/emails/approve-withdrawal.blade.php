@@ -55,7 +55,7 @@
                   </tr>
                 <tr>
                     <th>Status:</th>
-                    <td>{!! $withdraw->status() !!}</td>
+                    <td>{!! $withdraw->status_badge !!}</td>
                   </tr>
                 </table>
 

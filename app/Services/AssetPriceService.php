@@ -54,8 +54,9 @@ class AssetPriceService
             
             foreach ($stocks as $stock) {
                 $price = $this->getStockPrice($stock->symbol);
-                if ($price && $price['current_price'] != $stock->current_price) {
+                if ($price) {
                     $oldPrice = $stock->current_price;
+                    $oldChange = $stock->price_change_24h;
                     
                     $stock->update([
                         'current_price' => $price['current_price'],
@@ -64,10 +65,11 @@ class AssetPriceService
                         'last_updated' => now()
                     ]);
                     
-                    // Broadcast price update
-                    broadcast(new PriceUpdated($stock, $price['current_price'], $price['price_change_24h']))->toOthers();
-                    
-                    Log::info("Stock price updated: {$stock->symbol} - {$oldPrice} -> {$price['current_price']}");
+                    // Broadcast price update if price or change percentage changed
+                    if ($oldPrice != $price['current_price'] || $oldChange != $price['price_change_24h']) {
+                        broadcast(new PriceUpdated($stock, $price['current_price'], $price['price_change_24h']))->toOthers();
+                        Log::info("Stock price updated: {$stock->symbol} - Price: {$oldPrice} -> {$price['current_price']}, Change: {$oldChange}% -> {$price['price_change_24h']}%");
+                    }
                 }
             }
             
@@ -139,6 +141,50 @@ class AssetPriceService
     private function getStockPrice($symbol)
     {
         try {
+            // Check if API key is configured
+            if (!$this->finnhubApiKey) {
+                Log::warning("Finnhub API key not configured for stock: {$symbol}");
+                
+                // Generate realistic demo data for stocks
+                $basePrices = [
+                    'AAPL' => 150.00,
+                    'MSFT' => 300.00,
+                    'GOOGL' => 2800.00,
+                    'AMZN' => 3300.00,
+                    'TSLA' => 800.00,
+                    'META' => 350.00,
+                    'NVDA' => 500.00,
+                    'BRK.A' => 450000.00,
+                    'JNJ' => 170.00,
+                    'V' => 250.00,
+                    'JPM' => 150.00,
+                    'PG' => 140.00,
+                    'UNH' => 450.00,
+                    'HD' => 350.00,
+                    'MA' => 350.00,
+                    'DIS' => 180.00,
+                    'PYPL' => 250.00,
+                    'ADBE' => 500.00,
+                    'CRM' => 250.00,
+                    'NFLX' => 500.00
+                ];
+                
+                $basePrice = $basePrices[$symbol] ?? 100.00;
+                
+                // Generate a realistic price with some variation
+                $variation = (rand(-50, 50) / 100); // -0.5% to +0.5%
+                $currentPrice = $basePrice * (1 + $variation);
+                
+                // Generate a realistic price change (-5% to +5%)
+                $priceChange = rand(-500, 500) / 100;
+                
+                return [
+                    'current_price' => round($currentPrice, 2),
+                    'price_change_24h' => $priceChange,
+                    'market_cap' => $currentPrice * rand(1000000, 10000000)
+                ];
+            }
+
             $response = Http::get('https://finnhub.io/api/v1/quote', [
                 'symbol' => $symbol,
                 'token' => $this->finnhubApiKey
@@ -147,11 +193,29 @@ class AssetPriceService
             if ($response->successful()) {
                 $data = $response->json();
                 
+                // Log the response for debugging
+                Log::info("Finnhub API response for {$symbol}:", $data);
+                
+                $currentPrice = $data['c'] ?? 0;
+                $priceChange = $data['dp'] ?? 0;
+                $marketCap = $data['market_cap'] ?? 0;
+                
+                Log::info("Stock price data for {$symbol}:", [
+                    'current_price' => $currentPrice,
+                    'price_change_24h' => $priceChange,
+                    'market_cap' => $marketCap
+                ]);
+                
                 return [
-                    'current_price' => $data['c'] ?? 0, // Current price
-                    'price_change_24h' => $data['dp'] ?? 0, // Daily percentage change
-                    'market_cap' => $data['market_cap'] ?? 0
+                    'current_price' => $currentPrice,
+                    'price_change_24h' => $priceChange,
+                    'market_cap' => $marketCap
                 ];
+            } else {
+                Log::error("Finnhub API request failed for {$symbol}:", [
+                    'status' => $response->status(),
+                    'body' => $response->body()
+                ]);
             }
             
             return null;

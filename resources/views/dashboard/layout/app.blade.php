@@ -15,6 +15,9 @@
     <!-- Pusher JS for real-time updates -->
     <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
 
+    <!-- TradingView Widget -->
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
+
     <!-- Vite assets (uncomment when running npm run dev) -->
     {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
     
@@ -416,6 +419,8 @@
                 });
     }
 });
+
+@yield('scripts')
 </script>
 </body>
 </html>

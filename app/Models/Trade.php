@@ -32,7 +32,7 @@ class Trade extends Model
         return $this->belongsTo(TradePair::class);
     }
 
-    public function status()
+    public function getStatusBadgeAttribute()
     {
         if ($this->status == 'open')
         {

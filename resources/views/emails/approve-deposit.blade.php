@@ -42,7 +42,7 @@
                   </tr>
                 <tr>
                     <th>Status:</th>
-                    <td>{!! $deposit->status() !!}</td>
+                    <td>{!! $deposit->status_badge !!}</td>
                   </tr>
                 </table>
 

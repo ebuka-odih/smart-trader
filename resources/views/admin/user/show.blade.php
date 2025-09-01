@@ -53,7 +53,7 @@
               </tr>
               <tr>
                 <th>Status:</th>
-                <td>{!! $user->status() !!}</td>
+                                        <td>{!! $user->status_badge !!}</td>
               </tr>
             </table>
 

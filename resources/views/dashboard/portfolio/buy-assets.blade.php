@@ -1094,8 +1094,9 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeModals() {
     const successModal = document.getElementById('successModal');
     const errorModal = document.getElementById('errorModal');
-    const closeSuccessModal = document.getElementById('closeSuccessModal');
     const closeErrorModal = document.getElementById('closeErrorModal');
+    const portfolioBtn = document.getElementById('portfolioBtn');
+    const buyAgainBtn = document.getElementById('buyAgainBtn');
 
     // Close modals when clicking backdrop
     [successModal, errorModal].forEach(modal => {
@@ -1106,12 +1107,20 @@ function initializeModals() {
         });
     });
 
-    // Close success/error modals
-    [closeSuccessModal, closeErrorModal].forEach(btn => {
-        btn.addEventListener('click', () => {
-            successModal.classList.add('hidden');
-            errorModal.classList.add('hidden');
-        });
+    // Portfolio button - redirect to holdings
+    portfolioBtn.addEventListener('click', () => {
+        successModal.classList.add('hidden');
+        window.location.href = '/user/holding';
+    });
+
+    // Buy Again button - stay on current page
+    buyAgainBtn.addEventListener('click', () => {
+        successModal.classList.add('hidden');
+    });
+
+    // Close error modal
+    closeErrorModal.addEventListener('click', () => {
+        errorModal.classList.add('hidden');
     });
 }
 
@@ -1258,9 +1267,14 @@ function updateAssetPrice(data) {
                 </div>
                 <h3 class="text-lg font-medium text-white mb-2" id="successTitle">Success!</h3>
                 <p class="text-gray-400 mb-6" id="successMessage">Operation completed successfully.</p>
-                <button id="closeSuccessModal" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
-                    Close
-                </button>
+                <div class="flex space-x-3">
+                    <button id="portfolioBtn" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        Portfolio
+                    </button>
+                    <button id="buyAgainBtn" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 rounded-lg font-medium transition-colors">
+                        Buy Again
+                    </button>
+                </div>
             </div>
         </div>
     </div>

@@ -326,9 +326,9 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     @if($transaction->transaction_type === 'withdrawal')
-                                        {!! $transaction->status() !!}
+                                        {!! $transaction->status_badge !!}
                                     @else
-                                        {!! $transaction->status() !!}
+                                        {!! $transaction->status_badge !!}
                                     @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">{{ $transaction->created_at->format('M d, Y') }}</td>

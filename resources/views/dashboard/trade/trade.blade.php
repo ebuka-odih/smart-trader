@@ -881,7 +881,7 @@
                                                 <td>{{ $item->duration ?? ''}} min</td>
                                                 <td>{{ $item->stop_loss ?? 'N/A'}}</td>
                                                 <td>{{ $item->take_profit ?? 'N/A'}}</td>
-                                                <td>{!! $item->status() ?? '' !!}</td>
+                                                <td>{!! $item->status_badge ?? '' !!}</td>
                                                 <td>
                                                     <a href="{{ route('user.closeTrade', $item->id) }}"
                                                        class="btn btn-sm btn-danger">Close</a>
@@ -926,7 +926,7 @@
                                                 <td>{{ $item->duration ?? ''}} min</td>
                                                 <td>{{ $item->stop_loss ?? 'N/A'}}</td>
                                                 <td>{{ $item->take_profit ?? 'N/A'}}</td>
-                                                <td>{!! $item->status() ?? '' !!}</td>
+                                                <td>{!! $item->status_badge ?? '' !!}</td>
                                                 <td>${!! $item->profit_loss ?? '' !!}</td>
                                             </tr>
                                         @endif
