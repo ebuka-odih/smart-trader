@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs">
     <meta name="locale" content="en">
     <meta name="content-language" content="en">
-    <title>BlackRock | Home</title>
+    <title>{{ env('APP_NAME')}} | Home</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{ config('app.name')[0] }}</text></svg>" type="image/svg+xml" />
     <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -893,10 +893,10 @@ function updateTicker(data) {
                 <div>
                     <h3 class="text-lg font-semibold mb-4 text-white">Products</h3>
                     <ul class="space-y-2">
-                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Spot Trading</a></li>
-                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Margin Trading</a></li>
-                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Bot Trading</a></li>
-                        <li><a href="login.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Copy Trading</a></li>
+                        <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Spot Trading</a></li>
+                        <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Margin Trading</a></li>
+                        <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Bot Trading</a></li>
+                        <li><a href="{{ route('login') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Copy Trading</a></li>
                     </ul>
                 </div>
                 <div>
