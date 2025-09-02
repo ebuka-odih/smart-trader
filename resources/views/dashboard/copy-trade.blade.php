@@ -414,4 +414,8 @@
     });
 </script>
 @endpush
+
+<!-- Include Overview Footer -->
+@include('dashboard.overview.partials.footer-menu')
+
 @endsection

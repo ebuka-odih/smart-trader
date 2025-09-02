@@ -50,24 +50,49 @@ class TradeController extends Controller
         return view('admin.trade.closed-trades', compact('trades'));
     }
 
+    public function tradeHistory(){
+        $openTrades = Trade::where('status', 'open')->latest()->get();
+        $closedTrades = Trade::where('status', 'closed')->orderBy('updated_at', 'desc')->get();
+        return view('admin.trade.history', compact('openTrades', 'closedTrades'));
+    }
+
+
+
+    public function editPnl(Request $request, $id)
+    {
+        $request->validate([
+            'profit_loss' => 'required|numeric'
+        ]);
+
+        $trade = Trade::findOrFail($id);
+        $trade->profit_loss = $request->profit_loss;
+        $trade->save();
+
+        return response()->json(['success' => true, 'message' => 'PnL updated successfully']);
+    }
+
     public function closeTrade(Request $request, $id)
     {
         $trade = Trade::findOrFail($id);
-        if ($request->action == 'profit')
-        {
+        
+        if ($request->action == 'profit') {
             $trade->profit_loss = $request->get('profit_loss');
             $trade->status = 'closed';
             $trade->save();
+            
             $user = User::find($trade->user_id);
-            $user->balance += $trade->amount;
+            $user->balance += $trade->amount + $trade->profit_loss;
+            $user->save();
+        } else {
+            $trade->profit_loss = $request->get('profit_loss');
+            $trade->status = 'closed';
+            $trade->save();
+            
+            $user = User::find($trade->user_id);
+            $user->balance += $trade->amount + $trade->profit_loss;
             $user->save();
         }
-        $trade->profit_loss = $request->get('profit_loss');
-        $trade->status = 'closed';
-        $trade->save();
-        $user = User::find($trade->user_id);
-        $user->balance -= $trade->amount;
-        $user->save();
+        
         return redirect()->route('admin.closedTrades')->with('success', 'Trade closed successfully!');
     }
 
