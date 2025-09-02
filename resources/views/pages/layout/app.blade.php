@@ -766,8 +766,8 @@ function updateTicker(data) {
                         <span class="text-xl font-bold text-[#2FE6DE]">{{ config('app.name') }}</span>
                     </a>
                     <nav class="hidden lg:flex ml-10 space-x-6">
-                        <a href="index.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 active">Home</a>
-                        <a href="markets.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 flex items-center ">
+                        <a href="{{ route('index') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 active">Home</a>
+                        <a href="{{ route('market') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 flex items-center ">
                                 Markets
                             </a>
                         <div class="dropdown">
@@ -776,14 +776,14 @@ function updateTicker(data) {
                                 <i class="fas fa-chevron-down text-xs ml-1"></i>
                             </a>
                             <div class="dropdown-content py-2">
-                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Spot</a>
-                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Margin</a>
-                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Bot Trading</a>
-                                <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Copy Trading</a>
+                                <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Spot</a>
+                                <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Margin</a>
+                                <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Bot Trading</a>
+                                <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Copy Trading</a>
                             </div>
                         </div>
                         <a href="{{ route('about') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">About</a>
-                        <a href="{{ route('about') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
+                        <a href="{{ route('contact') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
                     </nav>
                 </div>
 
