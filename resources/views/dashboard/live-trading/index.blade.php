@@ -309,8 +309,12 @@ document.addEventListener('DOMContentLoaded', function() {
         tab.addEventListener('click', () => {
             const targetType = tab.getAttribute('data-type');
             
-            // Update active tab
-            tabs.forEach(t => t.classList.remove('active', 'border-blue-500', 'text-blue-400'));
+            // Update active tab styling
+            tabs.forEach(t => {
+                t.classList.remove('active', 'border-blue-500', 'text-blue-400');
+                t.classList.add('border-transparent', 'text-gray-400');
+            });
+            tab.classList.remove('border-transparent', 'text-gray-400');
             tab.classList.add('active', 'border-blue-500', 'text-blue-400');
             
             // Update active content
