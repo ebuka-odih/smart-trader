@@ -24,6 +24,7 @@ Route::view('/', 'pages.index')->name('index');
 Route::view('products', 'pages.products')->name('products');
 Route::view('market', 'pages.market')->name('market');
 Route::view('about', 'pages.about')->name('about');
+Route::view('contact', 'pages.contact')->name('contact');
 Route::get('loading', [UserController::class, 'loading'])->name('loading');
 
 // Email template preview route (for development/testing)
@@ -62,8 +63,8 @@ Route::get("live-trading/trade", [LiveTradingController::class, "trade"])->name(
 Route::post("live-trading", [LiveTradingController::class, "store"])->name("liveTrading.store");
 Route::post("live-trading/{liveTrade}/cancel", [LiveTradingController::class, "cancel"])->name("liveTrading.cancel");
 Route::get("live-trading/price", [LiveTradingController::class, "getPrice"])->name("liveTrading.price");
-
-    Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
+Route::post("live-trading/refresh-prices", [LiveTradingController::class, "refreshPrices"])->name("liveTrading.refreshPrices");
+Route::get("live-trading/history", [LiveTradingController::class, "history"])->name("liveTrading.history");    Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');
 
     // Plan routes

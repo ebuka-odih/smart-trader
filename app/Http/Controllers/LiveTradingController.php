@@ -212,44 +212,81 @@ class LiveTradingController extends Controller
 
     public function getPrice(Request $request)
     {
-        $validator = \Illuminate\Support\Facades\Validator::make($request->all(), [
-            'asset_type' => 'required|string|in:crypto,stock,forex',
-            'symbol' => 'required|string|max:20',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            $price = 0;
-            
-            if ($request->asset_type === 'crypto') {
-                $asset = Asset::where('symbol', $request->symbol)->first();
-                $price = $asset ? $asset->current_price : 0;
-            } elseif ($request->asset_type === 'stock') {
-                $asset = Asset::where('symbol', $request->symbol)->first();
-                $price = $asset ? $asset->current_price : 0;
-            } elseif ($request->asset_type === 'forex') {
-                // For now, return a mock price (can be replaced with forex API)
-                $price = rand(100, 200) / 100; // Random price between 1.00 and 2.00
+        $assetType = $request->input('asset_type');
+        $symbol = $request->input('symbol');
+        
+        if ($assetType === 'crypto' || $assetType === 'stock') {
+            $asset = Asset::where('type', $assetType)
+                ->where('symbol', $symbol)
+                ->first();
+                
+            if ($asset) {
+                return response()->json([
+                    'success' => true,
+                    'price' => $asset->current_price,
+                    'change_24h' => $asset->price_change_24h
+                ]);
             }
-
+        } else {
+            // For forex, return a mock price
+            $mockPrice = rand(100, 200) / 100;
             return response()->json([
                 'success' => true,
-                'price' => $price,
-                'symbol' => $request->symbol,
-                'asset_type' => $request->asset_type
+                'price' => $mockPrice,
+                'change_24h' => rand(-50, 50) / 10
             ]);
-
+        }
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Asset not found'
+        ], 404);
+    }
+    
+    /**
+     * Refresh all asset prices with real-time data
+     */
+    public function refreshPrices(Request $request)
+    {
+        try {
+            $priceService = new \App\Services\AssetPriceService();
+            
+            // Update crypto prices
+            $priceService->updateCryptoPrices();
+            
+            // Update stock prices
+            $priceService->updateStockPrices();
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Asset prices refreshed successfully'
+            ]);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to get price: ' . $e->getMessage()
+                'message' => 'Failed to refresh prices: ' . $e->getMessage()
             ], 500);
         }
+    }
+    
+    /**
+     * Show trading history with open and closed trades
+     */
+    public function history()
+    {
+        $user = Auth::user();
+        
+        $openTrades = LiveTrade::where('user_id', $user->id)
+            ->where('status', 'pending')
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        $closedTrades = LiveTrade::where('user_id', $user->id)
+            ->whereIn('status', ['filled', 'cancelled'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+            
+        return view('dashboard.live-trading.history', compact('openTrades', 'closedTrades'));
     }
 }

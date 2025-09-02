@@ -19,22 +19,16 @@
     </div>
 
     <!-- Trading Interface -->
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
-        <!-- Chart Section (80% width) -->
+    <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
+        <!-- Chart Section (66% width) -->
         <div class="lg:col-span-4">
             <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                <div class="flex items-center justify-between mb-4">
+                <div class="mb-4">
                     <h2 class="text-lg font-semibold text-white">Price Chart</h2>
-                    <div class="flex space-x-2">
-                        <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded">1H</button>
-                        <button class="px-3 py-1 text-sm bg-gray-700 text-gray-300 rounded hover:bg-gray-600">4H</button>
-                        <button class="px-3 py-1 text-sm bg-gray-700 text-gray-300 rounded hover:bg-gray-600">1D</button>
-                        <button class="px-3 py-1 text-sm bg-gray-700 text-gray-300 rounded hover:bg-gray-600">1W</button>
-                    </div>
                 </div>
                 
                 <!-- TradingView Chart -->
-                <div id="tradingViewChart" class="w-full h-96 bg-gray-900 rounded-lg">
+                <div id="tradingViewChart" class="w-full h-[500px] bg-gray-900 rounded-lg overflow-hidden">
                     <div class="flex items-center justify-center h-full text-gray-400">
                         <div class="text-center">
                             <svg class="w-12 h-12 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
@@ -47,8 +41,8 @@
             </div>
         </div>
 
-        <!-- Trading Panel (20% width) -->
-        <div class="lg:col-span-1">
+        <!-- Trading Panel (33% width) -->
+        <div class="lg:col-span-2">
             <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
                 <h2 class="text-lg font-semibold text-white mb-4">Place Trade</h2>
                 
@@ -250,4 +244,8 @@ function initTradingViewChart(symbol, assetType) {
     });
 }
 </script>
+
+<!-- Include Trading Footer -->
+@include('components.trading-footer')
+
 @endsection

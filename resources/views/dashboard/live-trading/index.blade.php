@@ -33,6 +33,16 @@
                     Forex
                 </button>
             </nav>
+            
+            <!-- Refresh Button -->
+            <div class="flex justify-end mt-4">
+                <button type="button" id="refreshPrices" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors flex items-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Refresh Prices
+                </button>
+            </div>
         </div>
 
         <!-- Crypto Tab Content -->
@@ -299,7 +309,71 @@
     @endif
 </div>
 
-<script>
+    <script>
+        // Refresh Prices Functionality
+        document.getElementById('refreshPrices').addEventListener('click', function() {
+            const button = this;
+            const originalText = button.innerHTML;
+            
+            // Show loading state
+            button.innerHTML = `
+                <svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                Updating...
+            `;
+            button.disabled = true;
+            
+            // Make AJAX request to refresh prices
+            fetch('{{ route("user.liveTrading.refreshPrices") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    button.innerHTML = `
+                        <svg class="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Updated!
+                    `;
+                    button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    button.classList.add('bg-green-700');
+                    
+                    // Reload the page after 2 seconds to show updated prices
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                } else {
+                    throw new Error(data.message || 'Failed to refresh prices');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Show error message
+                button.innerHTML = `
+                    <svg class="w-4 h-4 mr-2 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Error!
+                `;
+                button.classList.remove('bg-green-600', 'hover:bg-green-700');
+                button.classList.add('bg-red-600');
+                
+                // Reset button after 3 seconds
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.disabled = false;
+                    button.classList.remove('bg-red-600');
+                    button.classList.add('bg-green-600', 'hover:bg-green-700');
+                }, 3000);
+            });
+        });
 document.addEventListener('DOMContentLoaded', function() {
     // Tab switching functionality
     const tabs = document.querySelectorAll('.asset-tab');
@@ -424,5 +498,25 @@ function cancelTrade(tradeId) {
 .asset-content.hidden {
     display: none;
 }
+
+/* Tab highlighting styles */
+.asset-tab.active {
+    border-bottom-color: #3b82f6 !important;
+    color: #60a5fa !important;
+}
+
+.asset-tab:not(.active) {
+    border-bottom-color: transparent !important;
+    color: #9ca3af !important;
+}
+
+.asset-tab:hover:not(.active) {
+    color: #d1d5db !important;
+    border-bottom-color: #d1d5db !important;
+}
 </style>
+
+<!-- Include Trading Footer -->
+@include('components.trading-footer')
+
 @endsection

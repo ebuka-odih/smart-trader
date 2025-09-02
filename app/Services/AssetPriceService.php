@@ -112,12 +112,14 @@ class AssetPriceService
                             
                             $asset->update([
                                 'current_price' => $newPrice,
-                                'price_change_24h' => $quote['volume_change_24h'] ?? 0,
+                                'price_change_24h' => $quote['percent_change_24h'] ?? 0,
                                 'price_change_percentage_24h' => $quote['percent_change_24h'] ?? 0,
                                 'market_cap' => $quote['market_cap'] ?? 0,
                                 'volume_24h' => $quote['volume_24h'] ?? 0,
                                 'last_updated' => now(),
                             ]);
+                            
+                            Log::info("Crypto price updated: {$asset->symbol} - Price: {$oldPrice} -> {$newPrice}, Change: {$quote['percent_change_24h']}%");
                             
                             // Broadcast price update if price changed
                             if ($oldPrice != $newPrice) {
@@ -144,45 +146,7 @@ class AssetPriceService
             // Check if API key is configured
             if (!$this->finnhubApiKey) {
                 Log::warning("Finnhub API key not configured for stock: {$symbol}");
-                
-                // Generate realistic demo data for stocks
-                $basePrices = [
-                    'AAPL' => 150.00,
-                    'MSFT' => 300.00,
-                    'GOOGL' => 2800.00,
-                    'AMZN' => 3300.00,
-                    'TSLA' => 800.00,
-                    'META' => 350.00,
-                    'NVDA' => 500.00,
-                    'BRK.A' => 450000.00,
-                    'JNJ' => 170.00,
-                    'V' => 250.00,
-                    'JPM' => 150.00,
-                    'PG' => 140.00,
-                    'UNH' => 450.00,
-                    'HD' => 350.00,
-                    'MA' => 350.00,
-                    'DIS' => 180.00,
-                    'PYPL' => 250.00,
-                    'ADBE' => 500.00,
-                    'CRM' => 250.00,
-                    'NFLX' => 500.00
-                ];
-                
-                $basePrice = $basePrices[$symbol] ?? 100.00;
-                
-                // Generate a realistic price with some variation
-                $variation = (rand(-50, 50) / 100); // -0.5% to +0.5%
-                $currentPrice = $basePrice * (1 + $variation);
-                
-                // Generate a realistic price change (-5% to +5%)
-                $priceChange = rand(-500, 500) / 100;
-                
-                return [
-                    'current_price' => round($currentPrice, 2),
-                    'price_change_24h' => $priceChange,
-                    'market_cap' => $currentPrice * rand(1000000, 10000000)
-                ];
+                return null;
             }
 
             $response = Http::get('https://finnhub.io/api/v1/quote', [
@@ -216,9 +180,10 @@ class AssetPriceService
                     'status' => $response->status(),
                     'body' => $response->body()
                 ]);
+                
+                // Return null instead of demo data when API fails
+                return null;
             }
-            
-            return null;
         } catch (\Exception $e) {
             Log::error("Error fetching stock price for {$symbol}: " . $e->getMessage());
             return null;

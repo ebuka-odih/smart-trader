@@ -34,6 +34,9 @@ Schedule::call(function () {
 // Real-time Price Updates
 Schedule::command('prices:update-scheduled')->everyThirtySeconds();
 
+// Asset Price Updates (Crypto & Stocks)
+Schedule::command('assets:update-prices')->everyFiveMinutes();
+
 // Bot Trading Simulation
 Schedule::command('bot-trading:simulate')->everyMinute();
 
