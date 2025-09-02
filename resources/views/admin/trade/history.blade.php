@@ -46,9 +46,9 @@
     <div class="mb-6">
         <div class="border-b border-gray-200 dark:border-gray-700">
             <nav class="-mb-px flex space-x-8" aria-label="Tabs">
-                <button id="openTradesTab" class="tab-button py-2 px-1 border-b-2 border-blue-500 text-blue-600 font-medium text-sm active">
+                <button id="openTradesTab" class="tab-button py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm">
                     Open Trades
-                    <span class="ml-2 bg-blue-100 text-blue-600 text-xs px-2 py-1 rounded-full">{{ $openTrades->count() }}</span>
+                    <span class="ml-2 bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">{{ $openTrades->count() }}</span>
                 </button>
                 <button id="closedTradesTab" class="tab-button py-2 px-1 border-b-2 border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 font-medium text-sm">
                     Closed Trades
@@ -387,6 +387,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function switchTab(activeTab, activeContent, inactiveTab, inactiveContent) {
         console.log('Switching tab to:', activeTab.id);
+        console.log('Active tab element:', activeTab);
+        console.log('Active content element:', activeContent);
         
         // Reset both tabs to inactive state
         openTradesTab.classList.remove('border-blue-500', 'text-blue-600');
@@ -404,9 +406,20 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Show active content
         activeContent.style.display = 'block';
+        
+        console.log('Tab switch completed. Active tab classes:', activeTab.className);
+        console.log('Active content display:', activeContent.style.display);
     }
 
     if (openTradesTab && closedTradesTab) {
+        // Initialize first tab as active
+        openTradesTab.classList.add('border-blue-500', 'text-blue-600');
+        openTradesTab.classList.remove('border-transparent', 'text-gray-500');
+        
+        // Ensure first tab content is visible
+        openTradesContent.style.display = 'block';
+        closedTradesContent.style.display = 'none';
+        
         openTradesTab.addEventListener('click', () => {
             console.log('Open trades tab clicked');
             switchTab(openTradesTab, openTradesContent, closedTradesTab, closedTradesContent);
