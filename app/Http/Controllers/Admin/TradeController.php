@@ -53,6 +53,14 @@ class TradeController extends Controller
     public function tradeHistory(){
         $openTrades = Trade::where('status', 'open')->latest()->get();
         $closedTrades = Trade::where('status', 'closed')->orderBy('updated_at', 'desc')->get();
+        
+        \Log::info('Trade History Data:', [
+            'open_trades_count' => $openTrades->count(),
+            'closed_trades_count' => $closedTrades->count(),
+            'open_trades' => $openTrades->pluck('id', 'status'),
+            'closed_trades' => $closedTrades->pluck('id', 'status')
+        ]);
+        
         return view('admin.trade.history', compact('openTrades', 'closedTrades'));
     }
 
@@ -98,8 +106,8 @@ class TradeController extends Controller
 
     public function destroy($id)
     {
-        $trades = Trade::findOrFail($id);
-        $trades->delete();
+        $trade = Trade::findOrFail($id);
+        $trade->delete();
         return back()->with('success', 'Trade deleted successfully!');
     }
 

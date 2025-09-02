@@ -20,8 +20,9 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::get('/closed-trades', [AdminTradeController::class, 'closedTrades'])->name('closedTrades');
     Route::get('/trade-history', [AdminTradeController::class, 'tradeHistory'])->name('trade.history');
     Route::get('/trade-room', [AdminTradeController::class, 'index'])->name('trade.index');
-    Route::post('/trade/{trade}/edit-pnl', [AdminTradeController::class, 'editPnl'])->name('trade.edit-pnl');
-    Route::post('/trade/{trade}/close', [AdminTradeController::class, 'closeTrade'])->name('trade.close');
+    Route::post('/trade/{id}/edit-pnl', [AdminTradeController::class, 'editPnl'])->name('trade.edit-pnl');
+    Route::post('/trade/{id}/close', [AdminTradeController::class, 'closeTrade'])->name('trade.close');
+    Route::delete('/trade/{id}', [AdminTradeController::class, 'destroy'])->name('trade.destroy');
     Route::resource('/copy-trader', CopyTraderController::class);
 
     // Admin users management

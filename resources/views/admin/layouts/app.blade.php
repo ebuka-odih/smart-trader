@@ -319,5 +319,6 @@
 
 @livewireScripts
 <script src="{{ asset('src/app.bundle.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

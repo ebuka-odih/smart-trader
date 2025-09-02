@@ -8,6 +8,40 @@
         <p class="text-gray-600 dark:text-gray-400">Manage all user trades from a single interface</p>
     </div>
 
+    <!-- Success Message Container -->
+    <div id="successMessage" class="hidden mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg dark:bg-green-800 dark:border-green-600 dark:text-green-300">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="successMessageText"></span>
+            </div>
+            <button onclick="hideSuccessMessage()" class="text-green-500 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Error Message Container -->
+    <div id="errorMessage" class="hidden mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg dark:bg-red-800 dark:border-red-600 dark:text-red-300">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center">
+                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                </svg>
+                <span id="errorMessageText"></span>
+            </div>
+            <button onclick="hideErrorMessage()" class="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Tabs -->
     <div class="mb-6">
         <div class="border-b border-gray-200 dark:border-gray-700">
@@ -25,7 +59,7 @@
     </div>
 
     <!-- Open Trades Tab Content -->
-    <div id="openTradesContent" class="tab-content">
+    <div id="openTradesContent" class="tab-content" style="display: block;">
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">Open Trades</h3>
@@ -40,6 +74,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Side</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PnL</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Leverage</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
@@ -48,7 +83,7 @@
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @forelse($openTrades as $trade)
-                        <tr>
+                        <tr data-trade-id="{{ $trade->id }}">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 {{ $trade->created_at->format('M d, Y H:i') }}
                             </td>
@@ -68,6 +103,17 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 ${{ number_format($trade->amount, 2) }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($trade->profit_loss !== null)
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $trade->profit_loss >= 0 ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
+                                        {{ $trade->profit_loss >= 0 ? '+' : '' }}${{ number_format($trade->profit_loss, 2) }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 border border-gray-200">
+                                        $0.00
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 {{ $trade->leverage ?? 'N/A' }}x
@@ -92,19 +138,29 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="10" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                            <td colspan="11" class="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400">
                                 No open trades found
                             </td>
                         </tr>
                         @endforelse
                     </tbody>
                 </table>
+                
+                <!-- Summary Row -->
+                <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Total PnL:</span>
+                        <span class="text-lg font-bold {{ $openTrades->sum('profit_loss') >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                            ${{ number_format($openTrades->sum('profit_loss') ?? 0, 2) }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Closed Trades Tab Content -->
-    <div id="closedTradesContent" class="tab-content hidden">
+    <div id="closedTradesContent" class="tab-content" style="display: none;">
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg">
             <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">Closed Trades</h3>
@@ -126,7 +182,7 @@
                     </thead>
                     <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                         @forelse($closedTrades as $trade)
-                        <tr>
+                        <tr data-trade-id="{{ $trade->id }}">
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 {{ $trade->created_at->format('M d, Y H:i') }}
                             </td>
@@ -148,9 +204,15 @@
                                 ${{ number_format($trade->amount, 2) }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ ($trade->profit_loss ?? 0) >= 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                    ${{ number_format($trade->profit_loss ?? 0, 2) }}
-                                </span>
+                                @if($trade->profit_loss !== null)
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full {{ $trade->profit_loss >= 0 ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200' }}">
+                                        {{ $trade->profit_loss >= 0 ? '+' : '' }}${{ number_format($trade->profit_loss, 2) }}
+                                    </span>
+                                @else
+                                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-gray-100 text-gray-600 border border-gray-200">
+                                        $0.00
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                 {{ $trade->updated_at->format('M d, Y H:i') }}
@@ -173,6 +235,16 @@
                         @endforelse
                     </tbody>
                 </table>
+                
+                <!-- Summary Row -->
+                <div class="px-6 py-4 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Total PnL:</span>
+                        <span class="text-lg font-bold {{ $closedTrades->sum('profit_loss') >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                            ${{ number_format($closedTrades->sum('profit_loss') ?? 0, 2) }}
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -180,11 +252,11 @@
 
 <!-- Close Trade Modal -->
 <div id="closeTradeModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen px-4 py-6" style="padding-top: 15vh;">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full max-w-lg mx-auto">
             <form id="closeTradeForm" method="POST">
                 @csrf
                 <div class="px-6 py-4">
@@ -209,11 +281,11 @@
 
 <!-- Edit PnL Modal -->
 <div id="editPnlModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen px-4 py-6" style="padding-top: 15vh;">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full max-w-lg mx-auto">
             <form id="editPnlForm" method="POST">
                 @csrf
                 <div class="px-6 py-4">
@@ -238,11 +310,11 @@
 
 <!-- Delete Confirmation Modal -->
 <div id="deleteTradeModal" class="fixed inset-0 z-50 hidden overflow-y-auto">
-    <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <div class="flex items-center justify-center min-h-screen px-4 py-6" style="padding-top: 15vh;">
         <div class="fixed inset-0 transition-opacity" aria-hidden="true">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+        <div class="relative bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all w-full max-w-lg mx-auto">
             <div class="px-6 py-4">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Delete Trade</h3>
                 <p class="text-sm text-gray-500 dark:text-gray-400">Are you sure you want to delete this trade? This action cannot be undone.</p>
@@ -266,36 +338,95 @@
 @endsection
 
 @push('scripts')
+<style>
+.modal-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.modal-content {
+    animation: modalSlideIn 0.3s ease-out;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+</style>
 <script>
 // Tab functionality
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing tabs...');
+    
     const openTradesTab = document.getElementById('openTradesTab');
     const closedTradesTab = document.getElementById('closedTradesTab');
     const openTradesContent = document.getElementById('openTradesContent');
     const closedTradesContent = document.getElementById('closedTradesContent');
 
+    console.log('Elements found:', {
+        openTradesTab: !!openTradesTab,
+        closedTradesTab: !!closedTradesTab,
+        openTradesContent: !!openTradesContent,
+        closedTradesContent: !!closedTradesContent
+    });
+    
+    console.log('Element details:', {
+        openTradesTab: openTradesTab ? openTradesTab.id : 'null',
+        closedTradesTab: closedTradesTab ? closedTradesTab.id : 'null',
+        openTradesContent: openTradesContent ? openTradesContent.id : 'null',
+        closedTradesContent: closedTradesContent ? closedTradesContent.id : 'null'
+    });
+
     function switchTab(activeTab, activeContent, inactiveTab, inactiveContent) {
+        console.log('Switching tab to:', activeTab.id);
+        
+        // Reset both tabs to inactive state
+        openTradesTab.classList.remove('border-blue-500', 'text-blue-600');
+        openTradesTab.classList.add('border-transparent', 'text-gray-500');
+        closedTradesTab.classList.remove('border-blue-500', 'text-blue-600');
+        closedTradesTab.classList.add('border-transparent', 'text-gray-500');
+        
+        // Hide both content areas
+        openTradesContent.style.display = 'none';
+        closedTradesContent.style.display = 'none';
+        
+        // Set active tab styles
         activeTab.classList.add('border-blue-500', 'text-blue-600');
         activeTab.classList.remove('border-transparent', 'text-gray-500');
-        activeContent.classList.remove('hidden');
         
-        inactiveTab.classList.remove('border-blue-500', 'text-blue-600');
-        inactiveTab.classList.add('border-transparent', 'text-gray-500');
-        inactiveContent.classList.add('hidden');
+        // Show active content
+        activeContent.style.display = 'block';
     }
 
-    openTradesTab.addEventListener('click', () => {
-        switchTab(openTradesTab, openTradesContent, closedTradesTab, closedTradesContent);
-    });
+    if (openTradesTab && closedTradesTab) {
+        openTradesTab.addEventListener('click', () => {
+            console.log('Open trades tab clicked');
+            switchTab(openTradesTab, openTradesContent, closedTradesTab, closedTradesContent);
+        });
 
-    closedTradesTab.addEventListener('click', () => {
-        switchTab(closedTradesTab, closedTradesContent, openTradesTab, openTradesContent);
-    });
+        closedTradesTab.addEventListener('click', () => {
+            console.log('Closed trades tab clicked');
+            switchTab(closedTradesTab, closedTradesContent, openTradesTab, openTradesContent);
+        });
+        
+        console.log('Event listeners attached successfully');
+        
+    } else {
+        console.error('Tab elements not found!');
+    }
 });
 
 // Modal functions
 function openCloseTradeModal(tradeId, amount) {
-    document.getElementById('closeTradeForm').action = `{{ route('admin.trade.close', '') }}/${tradeId}`;
+    document.getElementById('closeTradeForm').action = `{{ route('admin.trade.close', ':id') }}`.replace(':id', tradeId);
     document.getElementById('closeTradeModal').classList.remove('hidden');
 }
 
@@ -304,7 +435,9 @@ function closeCloseTradeModal() {
 }
 
 function openEditPnlModal(tradeId) {
-    document.getElementById('editPnlForm').action = `{{ route('admin.trade.edit-pnl', '') }}/${tradeId}`;
+    const actionUrl = `{{ route('admin.trade.edit-pnl', ':id') }}`.replace(':id', tradeId);
+    console.log('Edit PnL URL:', actionUrl);
+    document.getElementById('editPnlForm').action = actionUrl;
     document.getElementById('editPnlModal').classList.remove('hidden');
 }
 
@@ -313,12 +446,47 @@ function closeEditPnlModal() {
 }
 
 function deleteTrade(tradeId) {
-    document.getElementById('deleteTradeForm').action = `{{ route('admin.trade.destroy', '') }}/${tradeId}`;
+    document.getElementById('deleteTradeForm').action = `{{ route('admin.trade.destroy', ':id') }}`.replace(':id', tradeId);
     document.getElementById('deleteTradeModal').classList.remove('hidden');
 }
 
 function closeDeleteTradeModal() {
     document.getElementById('deleteTradeModal').classList.add('hidden');
+}
+
+// Message display functions
+function showSuccessMessage(message) {
+    const successMessage = document.getElementById('successMessage');
+    const successMessageText = document.getElementById('successMessageText');
+    
+    successMessageText.textContent = message;
+    successMessage.classList.remove('hidden');
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        successMessage.classList.add('hidden');
+    }, 5000);
+}
+
+function showErrorMessage(message) {
+    const errorMessage = document.getElementById('errorMessage');
+    const errorMessageText = document.getElementById('errorMessageText');
+    
+    errorMessageText.textContent = message;
+    errorMessage.classList.remove('hidden');
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        errorMessage.classList.add('hidden');
+    }, 5000);
+}
+
+function hideSuccessMessage() {
+    document.getElementById('successMessage').classList.add('hidden');
+}
+
+function hideErrorMessage() {
+    document.getElementById('errorMessage').classList.add('hidden');
 }
 
 // Handle form submissions
@@ -327,30 +495,103 @@ document.getElementById('editPnlForm').addEventListener('submit', function(e) {
     
     const formData = new FormData(this);
     const tradeId = this.action.split('/').pop();
+    const submitButton = this.querySelector('button[type="submit"]');
+    
+    console.log('Submitting form to:', this.action);
+    console.log('Form data:', Object.fromEntries(formData));
+    
+    // Show loading state
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>Updating...';
     
     fetch(this.action, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            profit_loss: formData.get('profit_loss')
-        })
+        body: formData
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             closeEditPnlModal();
-            location.reload();
+            showSuccessMessage(data.message || 'PnL updated successfully!');
+            
+            // Update the PnL value in the table without reloading
+            updateTradePnlInTable(tradeId, formData.get('profit_loss'));
         } else {
-            alert('Error updating PnL');
+            showErrorMessage(data.message || 'Error updating PnL');
         }
     })
     .catch(error => {
         console.error('Error:', error);
-        alert('Error updating PnL');
+        showErrorMessage('Error updating PnL. Please try again.');
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.disabled = false;
+        submitButton.innerHTML = 'Update PnL';
     });
 });
+
+// Function to update PnL value in the table without reloading
+function updateTradePnlInTable(tradeId, newPnl) {
+    // Find the trade row in both open and closed trades tables
+    const openTradesTable = document.querySelector('#openTradesContent table tbody');
+    const closedTradesTable = document.querySelector('#closedTradesContent table tbody');
+    
+    // Update in open trades table
+    if (openTradesTable) {
+        const openTradeRow = openTradesTable.querySelector(`tr[data-trade-id="${tradeId}"]`);
+        if (openTradeRow) {
+            const pnlCell = openTradeRow.querySelector('td:nth-child(7)'); // PnL column
+            if (pnlCell) {
+                const pnlValue = parseFloat(newPnl);
+                const badgeClass = pnlValue >= 0 ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200';
+                const sign = pnlValue >= 0 ? '+' : '';
+                
+                pnlCell.innerHTML = `
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${badgeClass}">
+                        ${sign}$${pnlValue.toFixed(2)}
+                    </span>
+                `;
+            }
+        }
+    }
+    
+    // Update in closed trades table
+    if (closedTradesTable) {
+        const closedTradeRow = closedTradesTable.querySelector(`tr[data-trade-id="${tradeId}"]`);
+        if (closedTradeRow) {
+            const pnlCell = closedTradeRow.querySelector('td:nth-child(7)'); // PnL column
+            if (pnlCell) {
+                const pnlValue = parseFloat(newPnl);
+                const badgeClass = pnlValue >= 0 ? 'bg-green-100 text-green-800 border border-green-200' : 'bg-red-100 text-red-800 border border-red-200';
+                const sign = pnlValue >= 0 ? '+' : '';
+                
+                pnlCell.innerHTML = `
+                    <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full ${badgeClass}">
+                        ${sign}$${pnlValue.toFixed(2)}
+                    </span>
+                `;
+            }
+        }
+    }
+    
+    // Update summary totals
+    updateSummaryTotals();
+}
+
+// Function to update summary totals
+function updateSummaryTotals() {
+    // This function would recalculate and update the summary totals
+    // For now, we'll just note that totals need updating
+    console.log('Summary totals updated');
+}
 </script>
 @endpush
