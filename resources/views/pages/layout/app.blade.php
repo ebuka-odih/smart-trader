@@ -815,15 +815,15 @@ function updateTicker(data) {
 
         <div class="p-4">
                             <div class="flex space-x-2 mb-6">
-                    <a href="login.html" class="btn-secondary flex-1 text-center">Login</a>
-                    <a href="register.html" class="btn-primary flex-1 text-center">Sign Up</a>
+                    <a href="{{ route('login') }}" class="btn-secondary flex-1 text-center">Login</a>
+                    <a href="{{ route('register') }}" class="btn-primary flex-1 text-center">Sign Up</a>
                 </div>
 
             <nav class="space-y-1">
-                <a href="index.html" class="block py-3 px-4 rounded-lg bg-[#1A1428] text-[#2FE6DE]">
+                <a href="{{ route('index') }}" class="block py-3 px-4 rounded-lg bg-[#1A1428] text-[#2FE6DE]">
                     <i class="fas fa-home mr-2"></i> Home
                 </a>
-                <a href="markets.html" class="block py-3 px-4 rounded-lg text-white">
+                <a href="{{ route('market') }}" class="block py-3 px-4 rounded-lg text-white">
                     <i class="fas fa-chart-bar mr-2"></i> Markets
                 </a>
                 <div class="mobile-dropdown">
@@ -832,18 +832,18 @@ function updateTicker(data) {
                         <i class="fas fa-chevron-down text-xs"></i>
                     </button>
                     <div class="pl-8 pb-2 hidden">
-                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Spot</a>
-                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Margin</a>
-                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Bot Trading</a>
-                        <a href="login.html" class="block py-2 text-gray-400 hover:text-white">Copy Trading</a>
+                        <a href="{{ route('login') }}" class="block py-2 text-gray-400 hover:text-white">Spot</a>
+                        <a href="{{ route('login') }}" class="block py-2 text-gray-400 hover:text-white">Margin</a>
+                        <a href="{{ route('login') }}" class="block py-2 text-gray-400 hover:text-white">Bot Trading</a>
+                        <a href="{{ route('login') }}" class="block py-2 text-gray-400 hover:text-white">Copy Trading</a>
                     </div>
                 </div>
 
-                <a href="about.html" class="block py-3 px-4 rounded-lg text-white">
+                <a href="{{ route('about') }}" class="block py-3 px-4 rounded-lg text-white">
                     <i class="fas fa-info-circle mr-2"></i> About
                 </a>
 
-                <a href="contact.html" class="block py-3 px-4 rounded-lg text-white">
+                <a href="{{ route('contact') }}" class="block py-3 px-4 rounded-lg text-white">
                     <i class="fas fa-envelope mr-2"></i> Contact
                 </a>
             </nav>
@@ -902,8 +902,8 @@ function updateTicker(data) {
                 <div>
                     <h3 class="text-lg font-semibold mb-4 text-white">Support</h3>
                     <ul class="space-y-2">
-                        <li><a href="contact/index.html#faq" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">FAQ</a></li>
-                        <li><a href="contact.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Contact Us</a></li>
+                        <li><a href="{{ route('contact') }}#faq" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">FAQ</a></li>
+                        <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Contact Us</a></li>
                         <li><a href="terms.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Terms of Service</a></li>
                         <li><a href="privacy.html" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Privacy Policy</a></li>
                     </ul>
