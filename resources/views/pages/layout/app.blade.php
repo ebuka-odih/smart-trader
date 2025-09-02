@@ -782,8 +782,8 @@ function updateTicker(data) {
                                 <a href="login.html" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Copy Trading</a>
                             </div>
                         </div>
-                        <a href="about.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">About</a>
-                        <a href="contact.html" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
+                        <a href="{{ route('about') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">About</a>
+                        <a href="{{ route('about') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
                     </nav>
                 </div>
 

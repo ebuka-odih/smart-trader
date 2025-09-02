@@ -37,6 +37,19 @@
 
         <!-- Crypto Tab Content -->
         <div id="crypto-content" class="asset-content active p-6">
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <div class="relative">
+                    <input type="text" id="crypto-search" placeholder="Search crypto assets..." 
+                           class="w-full px-4 py-3 pl-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -92,6 +105,19 @@
 
         <!-- Stock Tab Content -->
         <div id="stock-content" class="asset-content hidden p-6">
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <div class="relative">
+                    <input type="text" id="stock-search" placeholder="Search stock assets..." 
+                           class="w-full px-4 py-3 pl-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -147,6 +173,19 @@
 
         <!-- Forex Tab Content -->
         <div id="forex-content" class="asset-content hidden p-6">
+            <!-- Search Bar -->
+            <div class="mb-6">
+                <div class="relative">
+                    <input type="text" id="forex-search" placeholder="Search forex pairs..." 
+                           class="w-full px-4 py-3 pl-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
@@ -287,7 +326,62 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Search functionality
+    initializeSearch('crypto-search', 'crypto-content');
+    initializeSearch('stock-search', 'stock-content');
+    initializeSearch('forex-search', 'forex-content');
 });
+
+function initializeSearch(searchId, contentId) {
+    const searchInput = document.getElementById(searchId);
+    const contentDiv = document.getElementById(contentId);
+    
+    if (searchInput && contentDiv) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            const tableRows = contentDiv.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                const assetName = row.querySelector('td:first-child div:last-child div:first-child').textContent.toLowerCase();
+                const assetSymbol = row.querySelector('td:first-child div:last-child div:last-child').textContent.toLowerCase();
+                
+                if (assetName.includes(searchTerm) || assetSymbol.includes(searchTerm)) {
+                    row.style.display = '';
+                    row.classList.remove('hidden');
+                } else {
+                    row.style.display = 'none';
+                    row.classList.add('hidden');
+                }
+            });
+            
+            // Show "no results" message if no matches
+            const visibleRows = contentDiv.querySelectorAll('tbody tr:not(.hidden)');
+            const noResultsRow = contentDiv.querySelector('tbody tr.no-results');
+            
+            if (visibleRows.length === 0 && !noResultsRow) {
+                const tbody = contentDiv.querySelector('tbody');
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.className = 'no-results';
+                noResultsRow.innerHTML = '<td colspan="5" class="text-center py-8 text-gray-400">No assets found matching your search</td>';
+                tbody.appendChild(noResultsRow);
+            } else if (visibleRows.length > 0 && noResultsRow) {
+                noResultsRow.remove();
+            }
+        });
+        
+        // Clear search on tab switch
+        searchInput.addEventListener('focus', function() {
+            if (this.value === '') {
+                const tableRows = contentDiv.querySelectorAll('tbody tr');
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.classList.remove('hidden');
+                });
+            }
+        });
+    }
+}
 
 function cancelTrade(tradeId) {
     if (confirm('Are you sure you want to cancel this trade?')) {

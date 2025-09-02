@@ -13,8 +13,8 @@ class LiveTradingController extends Controller
     {
         $user = Auth::user();
         $liveTrades = $user->liveTrades()->latest()->get();
-        $cryptoAssets = Asset::where('type', 'crypto')->take(10)->get();
-        $stockAssets = Asset::where('type', 'stock')->take(10)->get();
+        $cryptoAssets = Asset::where('type', 'crypto')->get();
+        $stockAssets = Asset::where('type', 'stock')->get();
         $forexAssets = collect([
             ['symbol' => 'EUR/USD', 'name' => 'Euro / US Dollar'],
             ['symbol' => 'GBP/USD', 'name' => 'British Pound / US Dollar'],
