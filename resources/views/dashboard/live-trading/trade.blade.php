@@ -245,6 +245,9 @@ function initTradingViewChart(symbol, assetType) {
 }
 </script>
 
+<!-- Bottom Spacing -->
+<div class="pb-16"></div>
+
 <!-- Include Trading Footer -->
 @include('components.trading-footer')
 

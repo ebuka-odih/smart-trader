@@ -910,7 +910,7 @@ function updateTicker(data) {
                 </div>
             </div>
             <div class="mt-10 pt-6 border-t border-[#2FE6DE]/10 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 BlackRock. All rights reserved.</p>
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 {{ env('APP_NAME') }}. All rights reserved.</p>
                 <div class="flex items-center space-x-4">
                     <a href="terms.html" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Terms</a>
                     <a href="privacy.html" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Privacy</a>

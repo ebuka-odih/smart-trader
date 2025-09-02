@@ -18,6 +18,7 @@ use App\Http\Controllers\HoldingController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\LiveTradingController;
+use App\Http\Controllers\OverviewController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.index')->name('index');
@@ -64,7 +65,10 @@ Route::post("live-trading", [LiveTradingController::class, "store"])->name("live
 Route::post("live-trading/{liveTrade}/cancel", [LiveTradingController::class, "cancel"])->name("liveTrading.cancel");
 Route::get("live-trading/price", [LiveTradingController::class, "getPrice"])->name("liveTrading.price");
 Route::post("live-trading/refresh-prices", [LiveTradingController::class, "refreshPrices"])->name("liveTrading.refreshPrices");
-Route::get("live-trading/history", [LiveTradingController::class, "history"])->name("liveTrading.history");    Route::get('subscription/plans', [SubscriptionController::class, 'index'])->name('sub.plans');
+Route::get("live-trading/history", [LiveTradingController::class, "history"])->name("liveTrading.history");
+
+// Overview Routes
+Route::get("overview", [OverviewController::class, "index"])->name("overview.index");
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');
 
     // Plan routes
