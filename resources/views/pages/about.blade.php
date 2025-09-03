@@ -23,7 +23,7 @@
                 <div class="inline-block mb-4 px-6 py-2 bg-[#2FE6DE]/10 rounded-full border border-[#2FE6DE]/20">
                     <span class="text-[#2FE6DE] font-medium">Our Private Partnership</span>
                 </div>
-                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">About <span class="text-[#2FE6DE]">BlackRock</span></h1>
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 leading-tight">About <span class="text-[#2FE6DE]">{{ config('app.name') }}</span></h1>
                 <p class="text-xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
                     Empowering traders with cutting-edge technology and innovative solutions since 2021.
                 </p>
@@ -47,7 +47,7 @@
             </div>
         </div>
     </div>
-    <p>Larry fink Co-founded BlackRock in 1988 and has served as its Chairman and CEO ever since, guiding its transformation into the world's largest asset manager, overseeing over $11.5 trillion in assets</p>
+                    <p>Larry fink Co-founded {{ config('app.name') }} in 1988 and has served as its Chairman and CEO ever since, guiding its transformation into the world's largest asset manager, overseeing over $11.5 trillion in assets</p>
 
     <!-- Our Mission & Vision -->
     <div class="py-16 bg-gradient-to-b from-[#0A0714] to-[#0D091C]">
@@ -75,7 +75,7 @@
                         <p class="text-gray-300">To become the world's leading platform for digital asset trading, known for innovation, security, and exceptional user experience.</p>
                     </div>
 
-                    <p class="text-gray-300">BlackRock was Founded
+                    <p class="text-gray-300">{{ config('app.name') }} was Founded
 1988 (by Larry Fink &amp; team) Private Partnership with ELON REEVE MUSK
 Assets Under Management
 ~$11.5–11.6 trillion (2024–25)
@@ -159,7 +159,7 @@ Heightened data-security measures—especially in China.</p>
                     <span class="text-[#2FE6DE] text-sm font-medium">Our Journey</span>
                 </div>
                 <h2 class="text-3xl md:text-4xl font-bold mb-6">Our <span class="text-[#2FE6DE]">Story</span></h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">The evolution of BlackRock from idea to global trading platform.</p>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">The evolution of {{ config('app.name') }} from idea to global trading platform.</p>
             </div>
 
             <div class="relative">
@@ -173,7 +173,7 @@ Heightened data-security measures—especially in China.</p>
                         <div class="md:w-1/2 md:pr-12 md:text-right mb-6 md:mb-0">
                             <div class="bg-[#1A1428] p-6 rounded-xl border border-[#2FE6DE]/10 inline-block">
                                 <h3 class="text-xl font-semibold mb-2">Foundation</h3>
-                                <p class="text-gray-300">BlackRock was founded by a team of traders and developers with a vision to democratize trading.</p>
+                                <p class="text-gray-300">{{ config('app.name') }} was founded by a team of traders and developers with a vision to democratize trading.</p>
                             </div>
                         </div>
                         <div class="md:w-1/2 md:pl-12 flex flex-col items-center md:items-start">
@@ -303,7 +303,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
                     </div>
                     <div class="p-8">
                         <h3 class="text-xl font-semibold mb-3">Innovation</h3>
-                        <p class="text-gray-300 mb-4">Today, we are hosting our 2025 Investor Day, which offers a look into BlackRock’s long-term vision. Our leadership team shares how we’re positioning the firm to be stronger, more resilient, and drive greater value for clients and stakeholders through 2030&nbsp;and&nbsp;beyond.</p>
+                        <p class="text-gray-300 mb-4">Today, we are hosting our 2025 Investor Day, which offers a look into {{ config('app.name') }}’s long-term vision. Our leadership team shares how we’re positioning the firm to be stronger, more resilient, and drive greater value for clients and stakeholders through 2030&nbsp;and&nbsp;beyond.</p>
                         <ul class="text-gray-400 space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
@@ -379,7 +379,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
                             <i class="fas fa-star"></i>
                         </div>
                     </div>
-                    <p class="text-gray-300 mb-6 italic">"BlackRock has transformed my trading experience. The platform is intuitive, the tools are powerful, and the support team is always there when I need them."</p>
+                    <p class="text-gray-300 mb-6 italic">"{{ config('app.name') }} has transformed my trading experience. The platform is intuitive, the tools are powerful, and the support team is always there when I need them."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 mr-4 flex items-center justify-center text-white font-bold">JM</div>
                         <div>
@@ -425,7 +425,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
                             <i class="fas fa-star-half-alt"></i>
                         </div>
                     </div>
-                    <p class="text-gray-300 mb-6 italic">"As a beginner, I was intimidated by trading platforms, but BlackRock made it easy to get started. The educational resources and community support have been invaluable."</p>
+                    <p class="text-gray-300 mb-6 italic">"As a beginner, I was intimidated by trading platforms, but {{ config('app.name') }} made it easy to get started. The educational resources and community support have been invaluable."</p>
                     <div class="flex items-center">
                         <div class="w-12 h-12 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 mr-4 flex items-center justify-center text-white font-bold">RG</div>
                         <div>
@@ -446,7 +446,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
                     <span class="text-[#2FE6DE] text-sm font-medium">Meet Our Experts</span>
                 </div>
                 <h2 class="text-3xl md:text-4xl font-bold mb-6">Our <span class="text-[#2FE6DE]">Team</span></h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">The talented individuals behind BlackRock.</p>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">The talented individuals behind {{ config('app.name') }}.</p>
             </div>
 
             <!-- First Row - Original 4 Team Members -->

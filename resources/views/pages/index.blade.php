@@ -307,7 +307,7 @@
 <div class="relative rounded-2xl overflow-hidden mb-16 shadow-2xl shadow-[#2FE6DE]/10 border border-[#2FE6DE]/10 group">
                 <div class="absolute inset-0 bg-gradient-to-r from-[#2FE6DE]/20 to-purple-600/20 blur-xl opacity-30 group-hover:opacity-40 transition-opacity"></div>
                 <img src="{{ asset('front/public/images/elon-musk.jpg') }}"
-                     alt="About BlackRock"
+                     alt="About {{ config('app.name') }}"
                      class="w-full h-64 md:h-[500px] object-cover rounded-2xl relative z-10 transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0A0714] via-transparent to-transparent z-20 rounded-2xl"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-30">
@@ -324,7 +324,7 @@
             </div>
         </div>
     </div>
-    <P>Larry fink Co-founded BlackRock in 1988 and has served as its Chairman and CEO ever since, guiding its transformation into the world's largest asset manager, overseeing over $11.5 trillion in assets</P>
+                    <P>Larry fink Co-founded {{ config('app.name') }} in 1988 and has served as its Chairman and CEO ever since, guiding its transformation into the world's largest asset manager, overseeing over $11.5 trillion in assets</P>
 
 <!-- Our Values -->
     <div class="py-16 bg-gradient-to-b from-[#0D091C] to-[#0A0714]">
@@ -397,7 +397,7 @@ Heightened data-security measures—especially in China</p>
                     </div>
                     <div class="p-8">
                         <h3 class="text-xl font-semibold mb-3">Innovation</h3>
-                        <p class="text-gray-300 mb-4">Today, we are hosting our 2025 Investor Day, which offers a look into BlackRock's long-term vision. Our leadership team shares how we're positioning the firm to be stronger, more resilient, and drive greater value for clients and stakeholders through 2030 and beyond.</p>
+                        <p class="text-gray-300 mb-4">Today, we are hosting our 2025 Investor Day, which offers a look into {{ config('app.name') }}'s long-term vision. Our leadership team shares how we're positioning the firm to be stronger, more resilient, and drive greater value for clients and stakeholders through 2030 and beyond.</p>
                         <ul class="text-gray-400 space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>

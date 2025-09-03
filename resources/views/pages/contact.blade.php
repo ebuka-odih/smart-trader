@@ -48,7 +48,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Email Us</h3>
                     <p class="text-gray-300 mb-4">Send us an email and we'll respond within 24 hours</p>
-                    <a href="mailto:info@blackrockinvestmentcorporation.com" class="px-4 py-2 bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-lg border border-[#2FE6DE]/30 hover:bg-[#2FE6DE]/20 transition-colors inline-block">
+                    <a href="mailto:info@{{ config('app.name') }}.com" class="px-4 py-2 bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-lg border border-[#2FE6DE]/30 hover:bg-[#2FE6DE]/20 transition-colors inline-block">
                         Send Email
                     </a>
                 </div>
@@ -81,7 +81,7 @@
                             Send Us a <span class="text-[#2FE6DE] ml-1">Message</span>
                         </h2>
                         
-                        <form action="https://www.blackrockinvestmentcorporation.com/user/contact-support" method="GET" class="space-y-6">
+                        <form action="#" method="GET" class="space-y-6">
                             <input type="hidden" name="_token" value="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs" autocomplete="off">                            
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
