@@ -13,6 +13,10 @@ class CopiedTrade extends Model
         'user_id',
         'copy_trader_id',
         'amount',
+        'trade_count',
+        'win',
+        'loss',
+        'pnl',
         'status',
         'stopped_at'
     ];
@@ -21,6 +25,10 @@ class CopiedTrade extends Model
         'stopped_at' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'trade_count' => 'integer',
+        'win' => 'integer',
+        'loss' => 'integer',
+        'pnl' => 'decimal:2',
     ];
 
     public function copy_trader()

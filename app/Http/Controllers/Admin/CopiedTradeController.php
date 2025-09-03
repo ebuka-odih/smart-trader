@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CopiedTrade;
+use Illuminate\Http\Request;
 
 class CopiedTradeController extends Controller
 {
@@ -11,5 +12,43 @@ class CopiedTradeController extends Controller
     {
         $copiedTrades = CopiedTrade::with(['user', 'copy_trader'])->orderBy('created_at','desc')->paginate(20);
         return view('admin.copy-trade.index', compact('copiedTrades'));
+    }
+
+    public function editPnl(Request $request, $id)
+    {
+        $request->validate([
+            'trade_count' => 'required|integer|min:0',
+            'win' => 'required|integer|min:0',
+            'loss' => 'required|integer|min:0',
+            'pnl' => 'required|numeric',
+        ]);
+
+        $copiedTrade = CopiedTrade::findOrFail($id);
+        
+        // Calculate the PnL difference to add to user's account
+        $oldPnL = $copiedTrade->pnl ?? 0;
+        $newPnL = $request->pnl;
+        $pnlDifference = $newPnL - $oldPnL;
+        
+        // Update the copied trade performance metrics
+        $copiedTrade->update([
+            'trade_count' => $request->trade_count,
+            'win' => $request->win,
+            'loss' => $request->loss,
+            'pnl' => $request->pnl,
+        ]);
+        
+        // Add PnL difference to user's trading account balance
+        if ($pnlDifference != 0) {
+            $user = $copiedTrade->user;
+            $user->balance += $pnlDifference;
+            $user->save();
+            
+            // Log the balance adjustment
+            \Log::info("User {$user->id} balance adjusted by \${$pnlDifference} for copied trade {$copiedTrade->id}. New balance: \${$user->balance}");
+        }
+
+        return redirect()->back()->with('success', 'Performance metrics updated successfully! ' . 
+            ($pnlDifference != 0 ? "User balance adjusted by $" . number_format($pnlDifference, 2) : ""));
     }
 }

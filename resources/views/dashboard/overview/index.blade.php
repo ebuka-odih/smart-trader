@@ -176,8 +176,21 @@
                         <span class="text-white font-semibold">{{ $totalCopyTrades }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
-                        <span class="text-gray-400">Status</span>
-                        <span class="text-green-400 font-semibold">{{ $activeCopyTrades > 0 ? 'Active' : 'Inactive' }}</span>
+                        <span class="text-gray-400">Total Trades</span>
+                        <span class="text-white font-semibold">{{ $totalCopyTradeCount }}</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Win/Loss</span>
+                        <span class="text-white font-semibold">
+                            <span class="text-green-400">{{ $totalCopyWins }}</span> / 
+                            <span class="text-red-400">{{ $totalCopyLosses }}</span>
+                        </span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Total PnL</span>
+                        <span class="{{ $totalCopyPnL >= 0 ? 'text-green-400' : 'text-red-400' }} font-semibold">
+                            {{ $totalCopyPnL >= 0 ? '+' : '' }}${{ number_format($totalCopyPnL, 2) }}
+                        </span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Trading Volume</span>

@@ -83,12 +83,24 @@ class CopyTradingController extends Controller
         // Get trader's recent performance data
         $trader = $copiedTrade->copy_trader;
         
-        // Calculate some additional stats for the detail view
-        $totalTrades = $trader->win + $trader->loss;
-        $profitLoss = $trader->profit_share;
-        $roi = $totalTrades > 0 ? ($profitLoss / $copiedTrade->amount) * 100 : 0;
+        // Use the actual performance metrics from the copied trade (set by admin)
+        $tradeCount = $copiedTrade->trade_count ?? 0;
+        $wins = $copiedTrade->win ?? 0;
+        $losses = $copiedTrade->loss ?? 0;
+        $pnl = $copiedTrade->pnl ?? 0;
+        
+        // Calculate ROI based on actual PnL
+        $roi = $copiedTrade->amount > 0 ? ($pnl / $copiedTrade->amount) * 100 : 0;
 
-        return view('dashboard.copy-trade-detail', compact('copiedTrade', 'trader', 'totalTrades', 'profitLoss', 'roi'));
+        return view('dashboard.copy-trade-detail', compact(
+            'copiedTrade', 
+            'trader', 
+            'tradeCount', 
+            'wins', 
+            'losses', 
+            'pnl', 
+            'roi'
+        ));
     }
 
     public function stop($id)

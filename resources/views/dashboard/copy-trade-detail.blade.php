@@ -59,7 +59,7 @@
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200">
                         {{ $trader->win_rate }}% Win Rate
                     </span>
-                    <span class="text-gray-400 text-sm">{{ $totalTrades }} total trades</span>
+                    <span class="text-gray-400 text-sm">{{ $tradeCount }} total trades</span>
                 </div>
             </div>
             <div class="text-right">
@@ -78,7 +78,7 @@
     </div>
 
     <!-- Trade Details Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
         <!-- Investment Amount -->
         <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
             <div class="flex items-center space-x-3 mb-4">
@@ -94,6 +94,21 @@
             </div>
         </div>
 
+        <!-- Trade Count -->
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2zm0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-sm text-gray-400">Trade Count</div>
+                    <div class="text-xl font-bold text-white">{{ $tradeCount }}</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Profit/Loss -->
         <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
             <div class="flex items-center space-x-3 mb-4">
@@ -104,7 +119,7 @@
                 </div>
                 <div>
                     <div class="text-sm text-gray-400">Profit/Loss</div>
-                    <div class="text-xl font-bold text-green-400">${{ number_format($profitLoss, 2) }}</div>
+                    <div class="text-xl font-bold {{ $pnl >= 0 ? 'text-green-400' : 'text-red-400' }}">${{ number_format($pnl, 2) }}</div>
                 </div>
             </div>
         </div>
@@ -146,11 +161,21 @@
     <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
         <h3 class="text-lg font-semibold text-white mb-6">Trader Performance</h3>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Trade Count -->
+            <div class="text-center p-4 bg-gray-700 rounded-lg">
+                <div class="text-2xl font-bold text-blue-400 mb-2">{{ $tradeCount }}</div>
+                <div class="text-sm text-gray-400">Total Trades</div>
+            </div>
+
             <!-- Win Rate -->
             <div class="text-center p-4 bg-gray-700 rounded-lg">
-                @php $barPercent = min(100, max(0, (int)($trader->win_rate ?? 0))); @endphp
-                <div class="text-2xl font-bold text-green-400 mb-2">{{ $trader->win_rate }}%</div>
+                @php 
+                    $totalTrades = $wins + $losses;
+                    $winRate = $totalTrades > 0 ? round(($wins / $totalTrades) * 100, 1) : 0;
+                    $barPercent = min(100, max(0, $winRate));
+                @endphp
+                <div class="text-2xl font-bold text-green-400 mb-2">{{ $winRate }}%</div>
                 <div class="text-sm text-gray-400">Win Rate</div>
                 <div class="w-full bg-gray-600 rounded-full h-1.5 mt-3 overflow-hidden">
                     <div class="bg-green-500 h-1.5" style="width: {{ $barPercent }}%"></div>
@@ -159,13 +184,13 @@
 
             <!-- Wins -->
             <div class="text-center p-4 bg-gray-700 rounded-lg">
-                <div class="text-2xl font-bold text-green-400 mb-2">{{ $trader->win }}</div>
+                <div class="text-2xl font-bold text-green-400 mb-2">{{ $wins }}</div>
                 <div class="text-sm text-gray-400">Winning Trades</div>
             </div>
 
             <!-- Losses -->
             <div class="text-center p-4 bg-gray-700 rounded-lg">
-                <div class="text-2xl font-bold text-red-400 mb-2">{{ $trader->loss }}</div>
+                <div class="text-2xl font-bold text-red-400 mb-2">{{ $losses }}</div>
                 <div class="text-sm text-gray-400">Losing Trades</div>
             </div>
         </div>

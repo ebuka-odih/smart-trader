@@ -37,6 +37,12 @@ class OverviewController extends Controller
         $totalCopyTrades = $copyTrades->count();
         $copyTradingVolume = $copyTrades->sum('amount');
         
+        // Copy Trading Performance Metrics
+        $totalCopyTradeCount = $copyTrades->sum('trade_count');
+        $totalCopyWins = $copyTrades->sum('win');
+        $totalCopyLosses = $copyTrades->sum('loss');
+        $totalCopyPnL = $copyTrades->sum('pnl');
+        
         // Portfolio Stats
         $holdings = UserHolding::where('user_id', $user->id)->get();
         $totalHoldingsValue = $holdings->sum('current_value');
@@ -46,22 +52,26 @@ class OverviewController extends Controller
         $totalTradingVolume = $liveTradingVolume + $botTradingVolume + $copyTradingVolume;
         $totalProfitLoss = $totalBotProfit; // Only bot trades have P&L for now
         
-        return view('dashboard.overview.index', compact(
-            'openLiveTrades',
-            'closedLiveTrades',
-            'totalLiveTrades',
-            'liveTradingVolume',
-            'activeBots',
-            'totalBots',
-            'totalBotProfit',
-            'botTradingVolume',
-            'activeCopyTrades',
-            'totalCopyTrades',
-            'copyTradingVolume',
-            'totalHoldingsValue',
-            'totalAssets',
-            'totalTradingVolume',
-            'totalProfitLoss'
-        ));
+                            return view('dashboard.overview.index', compact(
+                        'openLiveTrades',
+                        'closedLiveTrades',
+                        'totalLiveTrades',
+                        'liveTradingVolume',
+                        'activeBots',
+                        'totalBots',
+                        'totalBotProfit',
+                        'botTradingVolume',
+                        'activeCopyTrades',
+                        'totalCopyTrades',
+                        'copyTradingVolume',
+                        'totalCopyTradeCount',
+                        'totalCopyWins',
+                        'totalCopyLosses',
+                        'totalCopyPnL',
+                        'totalHoldingsValue',
+                        'totalAssets',
+                        'totalTradingVolume',
+                        'totalProfitLoss'
+                    ));
     }
 }

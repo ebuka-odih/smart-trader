@@ -176,6 +176,9 @@
                     <tr class="border-b border-gray-700">
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Trader</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Amount</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Trade Count</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Win/Loss</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">PnL</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Date Started</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Status</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Actions</th>
@@ -192,6 +195,16 @@
                             </div>
                         </td>
                         <td class="py-4 px-4 text-white">${{ number_format($trade->amount, 2) }}</td>
+                        <td class="py-4 px-4 text-white">{{ $trade->trade_count ?? 0 }}</td>
+                        <td class="py-4 px-4 text-white">
+                            <span class="text-green-400">{{ $trade->win ?? 0 }}</span> / 
+                            <span class="text-red-400">{{ $trade->loss ?? 0 }}</span>
+                        </td>
+                        <td class="py-4 px-4 text-white">
+                            <span class="{{ ($trade->pnl ?? 0) >= 0 ? 'text-green-400' : 'text-red-400' }}">
+                                ${{ number_format($trade->pnl ?? 0, 2) }}
+                            </span>
+                        </td>
                         <td class="py-4 px-4 text-gray-400">{{ date('M d, Y', strtotime($trade->created_at)) }}</td>
                         <td class="py-4 px-4">
                             @if($trade->status == 0)

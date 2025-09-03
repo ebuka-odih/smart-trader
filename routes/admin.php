@@ -52,4 +52,5 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
 
     // Copied trades history
     Route::get('/copied-trades', [CopiedTradeController::class, 'index'])->name('copied-trades.index');
+    Route::post('/copied-trades/{id}/edit-pnl', [CopiedTradeController::class, 'editPnl'])->name('copied-trades.edit-pnl');
 });
