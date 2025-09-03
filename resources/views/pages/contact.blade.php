@@ -59,7 +59,7 @@
                     </div>
                     <h3 class="text-xl font-semibold mb-2">Submit Ticket</h3>
                     <p class="text-gray-300 mb-4">Create a support ticket for technical issues</p>
-                    <a href="login.html" class="px-4 py-2 bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-lg border border-[#2FE6DE]/30 hover:bg-[#2FE6DE]/20 transition-colors inline-block">
+                    <a href="{{ route('login') }}" class="px-4 py-2 bg-[#2FE6DE]/10 text-[#2FE6DE] rounded-lg border border-[#2FE6DE]/30 hover:bg-[#2FE6DE]/20 transition-colors inline-block">
                         Open Ticket
                     </a>
                 </div>

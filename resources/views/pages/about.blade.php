@@ -31,7 +31,7 @@
 
             <div class="relative rounded-2xl overflow-hidden mb-16 shadow-2xl shadow-[#2FE6DE]/10 border border-[#2FE6DE]/10 group">
                 <div class="absolute inset-0 bg-gradient-to-r from-[#2FE6DE]/20 to-purple-600/20 blur-xl opacity-30 group-hover:opacity-40 transition-opacity"></div>
-                <img src="public/images/elon-musk.jpg" alt="About BlackRock" class="w-full h-64 md:h-[500px] object-cover rounded-2xl relative z-10 transition-transform duration-700 group-hover:scale-105">
+                <img src="{{ asset('front/images/elon-musk.jpg') }}" alt="About {{ config('app.name') }}" class="w-full h-64 md:h-[500px] object-cover rounded-2xl relative z-10 transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0A0714] via-transparent to-transparent z-20 rounded-2xl"></div>
                 <div class="absolute bottom-0 left-0 right-0 p-6 md:p-10 z-30">
                     <div class="flex items-center space-x-4 mb-4">
@@ -250,7 +250,7 @@ Heightened data-security measures—especially in China.</p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-[#1A1428] rounded-xl border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all hover:transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#2FE6DE]/5 overflow-hidden">
                     <div class="h-48 relative overflow-hidden">
-                        <img src="public/images/WhatsApp%20Image%202025-07-25%20at%2001.31.58_a689b84d.jpg" alt="ELON REEVE MUSK" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ asset('front/images/WhatsApp%20Image%202025-07-25%20at%2001.31.58_a689b84d.jpg') }}" alt="ELON REEVE MUSK" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1A1428]/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <div class="w-12 h-12 rounded-full bg-[#2FE6DE]/20 flex items-center justify-center">
@@ -293,7 +293,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
 
                 <div class="bg-[#1A1428] rounded-xl border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all hover:transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#2FE6DE]/5 overflow-hidden">
                     <div class="h-48 relative overflow-hidden">
-                        <img src="public/images/WhatsApp%20Image%202025-07-27%20at%2020.44.48_f5568352.jpg" alt="Innovation" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ asset('front/images/WhatsApp%20Image%202025-07-27%20at%2020.44.48_f5568352.jpg') }}" alt="Innovation" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1A1428]/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <div class="w-12 h-12 rounded-full bg-[#F59E0B]/20 flex items-center justify-center">
@@ -323,7 +323,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
 
                 <div class="bg-[#1A1428] rounded-xl border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all hover:transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#2FE6DE]/5 overflow-hidden">
                     <div class="h-48 relative overflow-hidden">
-                        <img src="public/images/WhatsApp%20Image%202025-07-27%20at%2020.42.38_5f5e32e5.jpg" alt="Community" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                        <img src="{{ asset('front/images/WhatsApp%20Image%202025-07-27%20at%2020.42.38_5f5e32e5.jpg') }}" alt="Community" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1A1428]/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <div class="w-12 h-12 rounded-full bg-[#10B981]/20 flex items-center justify-center">
@@ -640,7 +640,7 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
             </div>
 
             <div class="text-center mt-10">
-                <a href="contact.html" class="inline-flex items-center px-6 py-3 bg-[#1A1428] border border-[#2FE6DE]/30 rounded-lg text-white hover:bg-[#2FE6DE]/10 transition-colors">
+                                    <a href="{{ route('contact') }}" class="inline-flex items-center px-6 py-3 bg-[#1A1428] border border-[#2FE6DE]/30 rounded-lg text-white hover:bg-[#2FE6DE]/10 transition-colors">
                     <i class="fas fa-users mr-2"></i>
                     Join Our Team
                 </a>
@@ -704,11 +704,11 @@ Heightened data-security measures—especially&nbsp;in&nbsp;China</p>
                         <p class="text-xl text-gray-300 mb-8">Become part of a growing community of traders and investors shaping the future of finance together.</p>
 
                         <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
-                            <a href="register.html" class="px-8 py-4 bg-[#2FE6DE] text-[#0A0714] rounded-lg hover:bg-[#2FE6DE]/80 transition-colors font-medium text-center flex items-center justify-center">
+                            <a href="{{ route('register') }}" class="px-8 py-4 bg-[#2FE6DE] text-[#0A0714] rounded-lg hover:bg-[#2FE6DE]/80 transition-colors font-medium text-center flex items-center justify-center">
                                 <i class="fas fa-user-plus mr-2"></i>
                                 Create Account
                             </a>
-                            <a href="contact.html" class="px-8 py-4 border border-[#2FE6DE]/30 text-white rounded-lg hover:bg-[#2FE6DE]/10 transition-colors font-medium text-center flex items-center justify-center">
+                            <a href="{{ route('contact') }}" class="px-8 py-4 border border-[#2FE6DE]/30 text-white rounded-lg hover:bg-[#2FE6DE]/10 transition-colors font-medium text-center flex items-center justify-center">
                                 <i class="fas fa-envelope mr-2"></i>
                                 Contact Us
                             </a>
