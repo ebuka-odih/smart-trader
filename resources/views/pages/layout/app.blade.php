@@ -24,22 +24,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
-<style>
-    #site-loader {
-    transition: opacity 0.5s ease-in-out;
-}
-
-@keyframes pulse {
-    0% { opacity: 0.6; transform: scale(0.98); }
-    50% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0.6; transform: scale(0.98); }
-}
-
-.animate-pulse {
-    animation: pulse 2s infinite;
-}
-
-    </style>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap');
 
@@ -251,15 +235,6 @@
 </head>
 
 <body>
-<!-- Add this loader HTML right after the body tag -->
-<div id="site-loader" class="fixed inset-0 flex items-center justify-center bg-[#0A0714] z-50">
-    <div class="flex flex-col items-center">
-        <div class="w-32 h-32 mb-4 bg-[#2FE6DE] rounded-full flex items-center justify-center">
-            <span class="text-4xl font-bold text-black">{{ config('app.name') }}</span>
-        </div>
-
-    </div>
-</div>
 
     <!-- Advanced Stock Market Ticker -->
 <div class="bg-gradient-to-r from-[#0A0714] via-[#0D091C] to-[#0A0714] py-3 overflow-hidden border-b border-[#2FE6DE]/20 shadow-lg">
@@ -920,32 +895,6 @@ function updateTicker(data) {
     </footer>
 
     <script src="{{ asset('front/js/crypto-api.js') }}"></script>
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Simulate loading progress
-        const progressBar = document.getElementById('loader-progress');
-        let width = 0;
-        const interval = setInterval(function() {
-            if (width >= 100) {
-                clearInterval(interval);
-                // Hide loader when loading is complete
-                setTimeout(function() {
-                    const loader = document.getElementById('site-loader');
-                    if (loader) {
-                        loader.classList.add('opacity-0');
-                        setTimeout(function() {
-                            loader.style.display = 'none';
-                        }, 500);
-                    }
-                }, 200);
-            } else {
-                width += Math.floor(Math.random() * 10) + 1;
-                if (width > 100) width = 100;
-                if (progressBar) progressBar.style.width = width + '%';
-            }
-        }, 150);
-    });
-</script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();

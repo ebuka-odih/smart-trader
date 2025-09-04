@@ -175,6 +175,18 @@ Route::get('holding/list', [HoldingController::class, 'getHoldings'])->name('hol
     Route::get('bot-trading/{bot}/performance', [BotTradingController::class, 'performance'])->name('botTrading.performance');
     Route::post('bot-trading/{bot}/execute', [BotTradingController::class, 'execute'])->name('botTrading.execute');
 
+    // Live Trading Routes
+    Route::get("live-trading", [LiveTradingController::class, "index"])->name("liveTrading.index");
+    Route::get("live-trading/trade", [LiveTradingController::class, "trade"])->name("liveTrading.trade");
+    Route::post("live-trading", [LiveTradingController::class, "store"])->name("liveTrading.store");
+    Route::post("live-trading/{liveTrade}/cancel", [LiveTradingController::class, "cancel"])->name("liveTrading.cancel");
+    Route::get("live-trading/price", [LiveTradingController::class, "getPrice"])->name("liveTrading.price");
+    Route::post("live-trading/refresh-prices", [LiveTradingController::class, "refreshPrices"])->name("liveTrading.refreshPrices");
+    Route::get("live-trading/history", [LiveTradingController::class, "history"])->name("liveTrading.history");
+
+    // Overview Routes
+    Route::get("overview", [OverviewController::class, "index"])->name("overview.index");
+
 });
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
