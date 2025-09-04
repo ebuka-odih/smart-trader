@@ -37,6 +37,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     Route::post('update/profile/{id}', [UserController::class, 'updateProfile'])->name('updateProfile');
     Route::post('update/password/', [UserController::class, 'updatePassword'])->name('updatePassword');
 
+    // Notification routes
+    Route::get('notifications', [\App\Http\Controllers\User\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('notifications/{id}/read', [\App\Http\Controllers\User\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('notifications/mark-all-read', [\App\Http\Controllers\User\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
+    Route::delete('notifications/{id}', [\App\Http\Controllers\User\NotificationController::class, 'destroy'])->name('notifications.destroy');
+    Route::delete('notifications/clear-all', [\App\Http\Controllers\User\NotificationController::class, 'clearAll'])->name('notifications.clearAll');
+    Route::get('notifications/unread-count', [\App\Http\Controllers\User\NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
+    Route::get('notifications/recent', [\App\Http\Controllers\User\NotificationController::class, 'getRecent'])->name('notifications.recent');
+
     Route::get('trade', [TradeController::class, 'index'])->name('trade.index');
     Route::get('trade/{id}', [TradeController::class, 'trade'])->name('trade');
     Route::post('place/buy/trade', [TradeController::class, 'placeBuyTrade'])->name('placeBuyTrade');

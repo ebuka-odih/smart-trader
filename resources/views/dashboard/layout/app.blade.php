@@ -25,10 +25,214 @@
 
     <style>
         [x-cloak] { display: none !important; }
+        
+        /* Theme CSS Variables */
+        :root {
+            /* Light theme colors */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-color: #e2e8f0;
+            --border-hover: #cbd5e1;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        
+        .dark {
+            /* Dark theme colors */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #475569;
+            --border-hover: #64748b;
+            --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3);
+        }
+        
+        /* Light theme classes - More specific selectors */
+        .light-theme {
+            background-color: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        .light-theme,
+        .light-theme * {
+            background-color: inherit;
+            color: inherit;
+        }
+        
+        /* Background overrides */
+        .light-theme .bg-gray-900,
+        .light-theme div.bg-gray-900,
+        .light-theme body.bg-gray-900 {
+            background-color: var(--bg-primary) !important;
+        }
+        
+        .light-theme .bg-gray-800,
+        .light-theme div.bg-gray-800,
+        .light-theme header.bg-gray-800,
+        .light-theme nav.bg-gray-800 {
+            background-color: var(--bg-secondary) !important;
+        }
+        
+        .light-theme .bg-gray-700,
+        .light-theme div.bg-gray-700,
+        .light-theme button.bg-gray-700 {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        .light-theme .bg-gray-600 {
+            background-color: var(--border-hover) !important;
+        }
+        
+        /* Text color overrides */
+        .light-theme .text-white,
+        .light-theme h1.text-white,
+        .light-theme h2.text-white,
+        .light-theme h3.text-white,
+        .light-theme span.text-white {
+            color: var(--text-primary) !important;
+        }
+        
+        .light-theme .text-gray-300,
+        .light-theme span.text-gray-300,
+        .light-theme p.text-gray-300 {
+            color: var(--text-secondary) !important;
+        }
+        
+        .light-theme .text-gray-400,
+        .light-theme span.text-gray-400,
+        .light-theme button.text-gray-400 {
+            color: var(--text-muted) !important;
+        }
+        
+        .light-theme .text-gray-200 {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Border overrides */
+        .light-theme .border-gray-700,
+        .light-theme .border-r.border-gray-700,
+        .light-theme .border-b.border-gray-700,
+        .light-theme .border-t.border-gray-700 {
+            border-color: var(--border-color) !important;
+        }
+        
+        .light-theme .border-gray-600 {
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Hover effects */
+        .light-theme .hover\\:bg-gray-700:hover,
+        .light-theme button:hover {
+            background-color: var(--border-hover) !important;
+        }
+        
+        .light-theme .hover\\:bg-gray-600:hover {
+            background-color: var(--border-hover) !important;
+        }
+        
+        .light-theme .hover\\:bg-gray-800:hover {
+            background-color: var(--bg-tertiary) !important;
+        }
+        
+        .light-theme .hover\\:text-white:hover,
+        .light-theme button:hover {
+            color: var(--text-primary) !important;
+        }
+        
+        .light-theme .hover\\:text-gray-300:hover {
+            color: var(--text-secondary) !important;
+        }
+        
+        /* Specific component overrides */
+        .light-theme #sidebar {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        .light-theme header {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        .light-theme main {
+            background-color: var(--bg-primary) !important;
+        }
+        
+        /* Dropdown menus */
+        .light-theme .bg-gray-800.border.border-gray-700 {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+        
+        /* Buttons and interactive elements */
+        .light-theme button {
+            color: var(--text-muted) !important;
+        }
+        
+        .light-theme button:hover {
+            background-color: var(--border-hover) !important;
+            color: var(--text-primary) !important;
+        }
+        
+        /* Additional light theme overrides for better coverage */
+        .light-theme .min-h-screen {
+            background-color: var(--bg-primary) !important;
+        }
+        
+        .light-theme .h-screen {
+            background-color: var(--bg-primary) !important;
+        }
+        
+        .light-theme .flex {
+            color: inherit;
+        }
+        
+        .light-theme .flex-1 {
+            background-color: inherit;
+        }
+        
+        .light-theme .overflow-hidden {
+            background-color: inherit;
+        }
+        
+        .light-theme .overflow-x-hidden {
+            background-color: inherit;
+        }
+        
+        .light-theme .overflow-y-auto {
+            background-color: inherit;
+        }
+        
+        /* Force light theme on all elements */
+        .light-theme * {
+            color: inherit !important;
+        }
+        
+        .light-theme div,
+        .light-theme section,
+        .light-theme article,
+        .light-theme aside,
+        .light-theme nav,
+        .light-theme header,
+        .light-theme main,
+        .light-theme footer {
+            background-color: inherit !important;
+        }
+        
+        /* Theme transition */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
     </style>
 </head>
 
-<body class="bg-gray-900 text-white min-h-screen">
+<body class="bg-gray-900 text-white min-h-screen dark">
     <div class="h-screen bg-gray-900">
         <!-- Sidebar Backdrop -->
         <div id="sidebarBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
@@ -227,6 +431,20 @@
                     
                     <!-- Right side - Notification and user profile -->
                     <div class="flex items-center space-x-1 sm:space-x-2 ml-auto -mr-2 sm:-mr-4">
+                        
+
+                        <!-- Theme Toggle -->
+                        <button id="themeToggle" class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
+                            <!-- Sun icon (visible in dark mode) -->
+                            <svg id="sunIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <!-- Moon icon (visible in light mode) -->
+                            <svg id="moonIcon" class="w-6 h-6 hidden" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+                            </svg>
+                        </button>
+
                         <!-- Notifications -->
                         <button class="relative p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
@@ -318,10 +536,74 @@
     
     <!-- User Dropdown Script -->
     <script src="{{ asset('js/user-dropdown.js') }}"></script>
-    @stack('scripts')
     
-    <!-- User Dropdown Script -->
-    <script src="{{ asset('js/user-dropdown.js') }}"></script>
+    <!-- Theme Toggle Script -->
+    <script>
+        // Theme management
+        class ThemeManager {
+            constructor() {
+                this.themeToggle = document.getElementById('themeToggle');
+                this.sunIcon = document.getElementById('sunIcon');
+                this.moonIcon = document.getElementById('moonIcon');
+                this.body = document.body;
+                
+                this.init();
+            }
+            
+            init() {
+                // Get saved theme or default to dark
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                this.setTheme(savedTheme);
+                
+                // Add click event listener
+                this.themeToggle.addEventListener('click', () => {
+                    this.toggleTheme();
+                });
+            }
+            
+            setTheme(theme) {
+                if (theme === 'light') {
+                    this.body.classList.remove('dark');
+                    this.body.classList.add('light-theme');
+                    this.sunIcon.classList.add('hidden');
+                    this.moonIcon.classList.remove('hidden');
+                    
+                    // Force update the document element
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light-theme');
+                } else {
+                    this.body.classList.remove('light-theme');
+                    this.body.classList.add('dark');
+                    this.sunIcon.classList.remove('hidden');
+                    this.moonIcon.classList.add('hidden');
+                    
+                    // Force update the document element
+                    document.documentElement.classList.remove('light-theme');
+                    document.documentElement.classList.add('dark');
+                }
+                
+                // Save theme preference
+                localStorage.setItem('theme', theme);
+                
+                // Debug log
+                console.log('Theme set to:', theme);
+                console.log('Body classes:', this.body.className);
+            }
+            
+            toggleTheme() {
+                const currentTheme = localStorage.getItem('theme') || 'dark';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                this.setTheme(newTheme);
+            }
+        }
+        
+        // Initialize theme manager when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new ThemeManager();
+        });
+    </script>
+    
+    @stack('scripts')
 
 <script>
         // Sidebar toggle functionality
