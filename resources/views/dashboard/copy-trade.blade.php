@@ -3,34 +3,6 @@
 @section('content')
 <div class="space-y-6">
 
-    @if(session('success'))
-        <div class="rounded-md border border-green-500 bg-green-600 text-white px-4 py-3">
-            <div class="font-medium">{{ session('success') }}</div>
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="rounded-md border border-red-500 bg-red-600 text-white px-4 py-3">
-            <div class="font-medium">{{ session('error') }}</div>
-        </div>
-    @endif
-
-    @if(session('warning'))
-        <div class="rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
-            <div class="font-medium">{{ session('warning') }}</div>
-        </div>
-    @endif
-
-    @if ($errors->any())
-        <div class="rounded-md border border-yellow-500 bg-yellow-600 text-white px-4 py-3">
-            <div class="font-semibold mb-1">Please fix the following:</div>
-            <ul class="list-disc list-inside space-y-1">
-                @foreach ($errors->all() as $message)
-                    <li>{{ $message }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
 
     <!-- Page Header -->
     <div class="flex items-center justify-between">
