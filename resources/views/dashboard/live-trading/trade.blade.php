@@ -276,13 +276,15 @@ function initTradingViewChart(symbol, assetType) {
     window.addEventListener('resize', () => {
         clearTimeout(resizeTimeout);
         resizeTimeout = setTimeout(() => {
-            // Reinitialize chart on resize for better responsiveness
+            // Update container height on resize for better responsiveness
             if (window.innerWidth < 640) {
                 container.style.height = '400px';
             } else if (window.innerWidth < 1024) {
                 container.style.height = '500px';
+            } else if (window.innerWidth < 1280) {
+                container.style.height = '700px';
             } else {
-                container.style.height = '600px';
+                container.style.height = '800px';
             }
         }, 250);
     });
