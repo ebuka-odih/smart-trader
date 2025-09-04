@@ -71,9 +71,16 @@ class RegisteredUserController extends Controller
             'expires_at' => now()->addMinutes(10)->format('H:i'),
         ];
 
-        Mail::send('emails.verification', $data, function ($message) use ($user) {
-            $message->to($user->email)
-                    ->subject('Verify Your Email Address');
-        });
+        try {
+            Mail::send('emails.verification', $data, function ($message) use ($user) {
+                $message->to($user->email)
+                        ->subject('Verify Your Email Address');
+            });
+            
+            \Log::info('Verification email sent successfully to: ' . $user->email);
+        } catch (\Exception $e) {
+            \Log::error('Failed to send verification email to: ' . $user->email . ' Error: ' . $e->getMessage());
+            throw $e;
+        }
     }
 }

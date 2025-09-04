@@ -58,17 +58,6 @@ Route::get('transactions', [TransactionController::class, 'index'])->name('trans
 Route::get('kyc', [KycController::class, 'index'])->name('kyc.index');
 Route::post('kyc', [KycController::class, 'store'])->name('kyc.store');
 
-// Live Trading Routes
-Route::get("live-trading", [LiveTradingController::class, "index"])->name("liveTrading.index");
-Route::get("live-trading/trade", [LiveTradingController::class, "trade"])->name("liveTrading.trade");
-Route::post("live-trading", [LiveTradingController::class, "store"])->name("liveTrading.store");
-Route::post("live-trading/{liveTrade}/cancel", [LiveTradingController::class, "cancel"])->name("liveTrading.cancel");
-Route::get("live-trading/price", [LiveTradingController::class, "getPrice"])->name("liveTrading.price");
-Route::post("live-trading/refresh-prices", [LiveTradingController::class, "refreshPrices"])->name("liveTrading.refreshPrices");
-Route::get("live-trading/history", [LiveTradingController::class, "history"])->name("liveTrading.history");
-
-// Overview Routes
-Route::get("overview", [OverviewController::class, "index"])->name("overview.index");
     Route::post('activate/plan', [SubscriptionController::class, 'store'])->name('activatePlan');
 
     // Plan routes
@@ -190,6 +179,23 @@ Route::get('holding/list', [HoldingController::class, 'getHoldings'])->name('hol
 });
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+
+// Test email route
+Route::get('/test-email', function () {
+    try {
+        Mail::send('emails.verification', [
+            'name' => 'Test User',
+            'code' => '123456',
+            'expires_at' => now()->addMinutes(10)->format('H:i'),
+        ], function ($message) {
+            $message->to('test@example.com')
+                    ->subject('Test Verification Email');
+        });
+        return 'Email sent successfully!';
+    } catch (Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
