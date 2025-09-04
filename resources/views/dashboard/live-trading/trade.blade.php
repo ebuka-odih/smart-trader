@@ -22,19 +22,21 @@
     <div class="grid grid-cols-1 lg:grid-cols-6 gap-6">
         <!-- Chart Section (66% width) -->
         <div class="lg:col-span-4">
-            <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+            <div class="bg-gray-800 rounded-lg border border-gray-700 p-4 sm:p-6">
                 <div class="mb-4">
                     <h2 class="text-lg font-semibold text-white">Price Chart</h2>
                 </div>
                 
-                <!-- TradingView Chart -->
-                <div id="tradingViewChart" class="w-full h-[500px] bg-gray-900 rounded-lg overflow-hidden">
-                    <div class="flex items-center justify-center h-full text-gray-400">
-                        <div class="text-center">
-                            <svg class="w-12 h-12 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                            </svg>
-                            <p>Loading chart...</p>
+                <!-- TradingView Chart Container -->
+                <div class="relative w-full">
+                    <div id="tradingViewChart" class="w-full h-[400px] sm:h-[500px] lg:h-[700px] xl:h-[800px] bg-gray-900 rounded-lg overflow-hidden border border-gray-600">
+                        <div class="flex items-center justify-center h-full text-gray-400">
+                            <div class="text-center">
+                                <svg class="w-12 h-12 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p>Loading chart...</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -222,25 +224,67 @@ function initTradingViewChart(symbol, assetType) {
         tradingViewSymbol = `FX:${symbol}`;
     }
     
+    // Get the container element
+    const container = document.getElementById('tradingViewChart');
+    if (!container) {
+        console.error('TradingView container not found');
+        return;
+    }
+    
+    // Clear any existing content
+    container.innerHTML = '';
+    
+    // Get responsive height based on screen size
+    const getChartHeight = () => {
+        if (window.innerWidth < 640) return 400; // Mobile
+        if (window.innerWidth < 1024) return 500; // Tablet
+        if (window.innerWidth < 1280) return 700; // Large Desktop
+        return 800; // Extra Large Desktop
+    };
+    
     new TradingView.widget({
         "width": "100%",
-        "height": "100%",
+        "height": getChartHeight(),
         "symbol": tradingViewSymbol,
         "interval": "D",
         "timezone": "Etc/UTC",
         "theme": "dark",
         "style": "1",
         "locale": "en",
-        "toolbar_bg": "#f1f3f6",
+        "toolbar_bg": "#374151",
         "enable_publishing": false,
         "hide_side_toolbar": false,
         "allow_symbol_change": true,
         "container_id": "tradingViewChart",
+        "autosize": true,
         "studies": [
             "RSI@tv-basicstudies",
             "MACD@tv-basicstudies",
             "Volume@tv-basicstudies"
-        ]
+        ],
+        "overrides": {
+            "paneProperties.background": "#1f2937",
+            "paneProperties.vertGridProperties.color": "#374151",
+            "paneProperties.horzGridProperties.color": "#374151",
+            "symbolWatermarkProperties.transparency": 90,
+            "scalesProperties.textColor": "#9ca3af"
+        }
+    });
+    
+    // Handle window resize
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            // Reinitialize chart on resize for better responsiveness
+            if (window.innerWidth < 640) {
+                container.style.height = '400px';
+            } else if (window.innerWidth < 1024) {
+                container.style.height = '500px';
+            } else {
+                container.style.height = '600px';
+            }
+        }, 250);
     });
 }
 </script>
