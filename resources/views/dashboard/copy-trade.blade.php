@@ -81,8 +81,9 @@
                 <div class="p-6 border-b border-gray-600">
                     <div class="flex items-center space-x-4">
                         <div class="relative">
-                            <img src="{{ asset($trader->avatar) }}" alt="{{ $trader->name }}" 
-                                 class="w-16 h-16 rounded-full object-cover border-2 border-gray-600">
+                            <img src="{{ $trader->avatar_url }}" alt="{{ $trader->name }}" 
+                                 class="w-16 h-16 rounded-full object-cover border-2 border-gray-600"
+                                 onerror="this.src='{{ asset('img/trader.jpg') }}'">
                             <div class="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-gray-700"></div>
                         </div>
                         <div class="flex-1">
@@ -189,8 +190,9 @@
                     <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
                         <td class="py-4 px-4">
                             <div class="flex items-center space-x-3">
-                                <img src="{{ asset($trade->copy_trader->avatar ?? '') }}" alt="" 
-                                     class="w-8 h-8 rounded-full object-cover">
+                                <img src="{{ $trade->copy_trader->avatar_url }}" alt="" 
+                                     class="w-8 h-8 rounded-full object-cover"
+                                     onerror="this.src='{{ asset('img/trader.jpg') }}'">
                                 <span class="text-white">{{ $trade->copy_trader->name ?? 'Unknown' }}</span>
                             </div>
                         </td>

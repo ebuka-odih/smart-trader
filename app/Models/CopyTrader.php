@@ -57,6 +57,16 @@ class CopyTrader extends Model
 
     public function getAvatarUrlAttribute()
     {
+        if (!$this->avatar) {
+            return asset('img/trader.jpg');
+        }
+        
+        // If avatar starts with 'files/', it's an uploaded image in storage
+        if (str_starts_with($this->avatar, 'files/')) {
+            return asset('storage/' . $this->avatar);
+        }
+        
+        // Otherwise, it's a seeded image in public directory
         return asset($this->avatar);
     }
 }

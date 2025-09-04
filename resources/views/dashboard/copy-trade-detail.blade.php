@@ -48,8 +48,9 @@
     <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
         <div class="flex items-center space-x-6">
             <div class="relative">
-                <img src="{{ asset($trader->avatar) }}" alt="{{ $trader->name }}" 
-                     class="w-20 h-20 rounded-full object-cover border-2 border-gray-600">
+                <img src="{{ $trader->avatar_url }}" alt="{{ $trader->name }}" 
+                     class="w-20 h-20 rounded-full object-cover border-2 border-gray-600"
+                     onerror="this.src='{{ asset('img/trader.jpg') }}'">
                 <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-gray-700"></div>
             </div>
             <div class="flex-1">
