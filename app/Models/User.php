@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
         'role',
@@ -38,12 +39,15 @@ class User extends Authenticatable implements MustVerifyEmail
         'staking_balance',
         'profit',
         'phone',
+        'country',
         'telegram',
         'avatar',
         'subscription',
         'package_id',
         'trader',
         'trade_count',
+        'verification_code',
+        'verification_code_expires_at',
     ];
 
     /**

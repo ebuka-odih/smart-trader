@@ -62,6 +62,31 @@
                     @enderror
                 </div>
 
+                <!-- Username Field -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-300 mb-2">Username</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            id="username" 
+                            name="username" 
+                            type="text" 
+                            value="{{ old('username') }}"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('username') border-red-500 focus:ring-red-500 @enderror"
+                            placeholder="Enter unique username"
+                            required 
+                            autocomplete="username"
+                        >
+                    </div>
+                    @error('username')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Email Field -->
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-2">Email</label>
@@ -84,6 +109,85 @@
                         >
                     </div>
                     @error('email')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Phone Field -->
+                <div>
+                    <label for="phone" class="block text-sm font-medium text-gray-300 mb-2">Phone Number</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path>
+                            </svg>
+                        </div>
+                        <input 
+                            id="phone" 
+                            name="phone" 
+                            type="tel" 
+                            value="{{ old('phone') }}"
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('phone') border-red-500 focus:ring-red-500 @enderror"
+                            placeholder="Enter your phone number"
+                            required 
+                            autocomplete="tel"
+                        >
+                    </div>
+                    @error('phone')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Country Field -->
+                <div>
+                    <label for="country" class="block text-sm font-medium text-gray-300 mb-2">Country</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <select 
+                            id="country" 
+                            name="country" 
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('country') border-red-500 focus:ring-red-500 @enderror"
+                            required 
+                        >
+                            <option value="">Select your country</option>
+                            <option value="United States" {{ old('country') == 'United States' ? 'selected' : '' }}>🇺🇸 United States</option>
+                            <option value="United Kingdom" {{ old('country') == 'United Kingdom' ? 'selected' : '' }}>🇬🇧 United Kingdom</option>
+                            <option value="Canada" {{ old('country') == 'Canada' ? 'selected' : '' }}>🇨🇦 Canada</option>
+                            <option value="Germany" {{ old('country') == 'Germany' ? 'selected' : '' }}>🇩🇪 Germany</option>
+                            <option value="France" {{ old('country') == 'France' ? 'selected' : '' }}>🇫🇷 France</option>
+                            <option value="Australia" {{ old('country') == 'Australia' ? 'selected' : '' }}>🇦🇺 Australia</option>
+                            <option value="Japan" {{ old('country') == 'Japan' ? 'selected' : '' }}>🇯🇵 Japan</option>
+                            <option value="South Korea" {{ old('country') == 'South Korea' ? 'selected' : '' }}>🇰🇷 South Korea</option>
+                            <option value="Singapore" {{ old('country') == 'Singapore' ? 'selected' : '' }}>🇸🇬 Singapore</option>
+                            <option value="Netherlands" {{ old('country') == 'Netherlands' ? 'selected' : '' }}>🇳🇱 Netherlands</option>
+                            <option value="Switzerland" {{ old('country') == 'Switzerland' ? 'selected' : '' }}>🇨🇭 Switzerland</option>
+                            <option value="Sweden" {{ old('country') == 'Sweden' ? 'selected' : '' }}>🇸🇪 Sweden</option>
+                            <option value="Norway" {{ old('country') == 'Norway' ? 'selected' : '' }}>🇳🇴 Norway</option>
+                            <option value="Denmark" {{ old('country') == 'Denmark' ? 'selected' : '' }}>🇩🇰 Denmark</option>
+                            <option value="Finland" {{ old('country') == 'Finland' ? 'selected' : '' }}>🇫🇮 Finland</option>
+                            <option value="Belgium" {{ old('country') == 'Belgium' ? 'selected' : '' }}>🇧🇪 Belgium</option>
+                            <option value="Austria" {{ old('country') == 'Austria' ? 'selected' : '' }}>🇦🇹 Austria</option>
+                            <option value="Italy" {{ old('country') == 'Italy' ? 'selected' : '' }}>🇮🇹 Italy</option>
+                            <option value="Spain" {{ old('country') == 'Spain' ? 'selected' : '' }}>🇪🇸 Spain</option>
+                            <option value="Portugal" {{ old('country') == 'Portugal' ? 'selected' : '' }}>🇵🇹 Portugal</option>
+                            <option value="Ireland" {{ old('country') == 'Ireland' ? 'selected' : '' }}>🇮🇪 Ireland</option>
+                            <option value="New Zealand" {{ old('country') == 'New Zealand' ? 'selected' : '' }}>🇳🇿 New Zealand</option>
+                            <option value="Hong Kong" {{ old('country') == 'Hong Kong' ? 'selected' : '' }}>🇭🇰 Hong Kong</option>
+                            <option value="Taiwan" {{ old('country') == 'Taiwan' ? 'selected' : '' }}>🇹🇼 Taiwan</option>
+                            <option value="Israel" {{ old('country') == 'Israel' ? 'selected' : '' }}>🇮🇱 Israel</option>
+                            <option value="United Arab Emirates" {{ old('country') == 'United Arab Emirates' ? 'selected' : '' }}>🇦🇪 United Arab Emirates</option>
+                            <option value="Saudi Arabia" {{ old('country') == 'Saudi Arabia' ? 'selected' : '' }}>🇸🇦 Saudi Arabia</option>
+                            <option value="Brazil" {{ old('country') == 'Brazil' ? 'selected' : '' }}>🇧🇷 Brazil</option>
+                            <option value="Mexico" {{ old('country') == 'Mexico' ? 'selected' : '' }}>🇲🇽 Mexico</option>
+                            <option value="India" {{ old('country') == 'India' ? 'selected' : '' }}>🇮🇳 India</option>
+                            <option value="China" {{ old('country') == 'China' ? 'selected' : '' }}>🇨🇳 China</option>
+                        </select>
+                    </div>
+                    @error('country')
                         <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                     @enderror
                 </div>

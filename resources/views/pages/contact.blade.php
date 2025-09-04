@@ -162,7 +162,7 @@
                                 </div>
                                 <div>
                                     <h3 class="font-semibold mb-1">Email</h3>
-                                    <p class="text-gray-300">info@blackrockinvestmentcorporation.com</p>
+                                    <p class="text-gray-300">info@{{ config('app.name') }}.com</p>
                                 </div>
                             </div>
                             
