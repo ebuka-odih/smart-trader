@@ -455,13 +455,13 @@
                                             </div>
 
     <!-- Bottom spacing for fixed menu -->
-    <div class="h-24"></div>
+    <div class="h-20"></div>
 
     <!-- Bottom Menu (Mobile & Desktop) -->
     <div class="fixed bottom-0 left-0 right-0 bg-gray-900 border-t border-gray-700 z-50">
         <div class="flex justify-around items-center py-2 px-3">
             <!-- Trade -->
-            <a href="{{ route('user.liveTrading.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-blue-400 transition-colors">
+            <a href="{{ route('user.liveTrading.index') }}" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-blue-400 transition-colors">
                 <div class="w-7 h-7 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
                     <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
@@ -471,8 +471,8 @@
             </a>
 
             <!-- Deposit -->
-            <a href="{{ route('user.deposit') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-green-400 transition-colors">
-                <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
+            <a href="{{ route('user.deposit') }}" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-green-400 transition-colors">
+                <div class="w-7 h-7 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-green-600 transition-colors">
                     <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                     </svg>
@@ -481,8 +481,8 @@
             </a>
 
             <!-- Portfolio -->
-            <a href="{{ route('user.portfolio.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-purple-400 transition-colors">
-                <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors">
+            <a href="{{ route('user.portfolio.index') }}" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-purple-400 transition-colors">
+                <div class="w-7 h-7 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-purple-600 transition-colors">
                     <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                     </svg>
@@ -491,8 +491,8 @@
             </a>
 
             <!-- Holdings -->
-            <a href="{{ route('user.holding.index') }}" class="flex flex-col items-center space-y-1 text-gray-400 hover:text-orange-400 transition-colors">
-                <div class="w-8 h-8 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors">
+            <a href="{{ route('user.holding.index') }}" class="flex flex-col items-center space-y-0.5 text-gray-400 hover:text-orange-400 transition-colors">
+                <div class="w-7 h-7 bg-gray-700 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors">
                     <svg class="w-4 h-4 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
                         <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                     </svg>
