@@ -37,6 +37,14 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
 
     Route::get('/transactions/deposits', [AdminTransactionController::class, 'deposits'])->name('transactions.deposits');
     Route::get('/transactions/withdrawals', [AdminTransactionController::class, 'withdrawals'])->name('transactions.withdrawals');
+    
+    // Deposit management routes
+    Route::get('/deposit/{id}/details', [AdminTransactionController::class, 'getDepositDetails'])->name('deposit.details');
+    Route::post('/deposit/{id}/approve', [AdminTransactionController::class, 'approveDeposit'])->name('deposit.approve');
+    Route::post('/deposit/{id}/decline', [AdminTransactionController::class, 'declineDeposit'])->name('deposit.decline');
+    Route::delete('/deposit/{id}/delete', [AdminTransactionController::class, 'deleteDeposit'])->name('deposit.delete');
+    
+    // Withdrawal management routes
     Route::post('/transactions/withdrawals/{withdrawal}/approve', [AdminTransactionController::class, 'approveWithdrawal'])->name('transactions.withdrawals.approve');
     Route::post('/transactions/withdrawals/{withdrawal}/reject', [AdminTransactionController::class, 'rejectWithdrawal'])->name('transactions.withdrawals.reject');
 

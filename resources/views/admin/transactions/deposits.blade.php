@@ -33,7 +33,7 @@
             </a>
     </li>
     <li class="w-full focus-within:z-10">
-            <a href="{{ route('admin.transactions.withdrawal') }}" class="inline-block w-full p-4 bg-white border-r border-gray-200 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
+            <a href="{{ route('admin.transactions.withdrawals') }}" class="inline-block w-full p-4 bg-white border-r border-gray-200 dark:border-gray-700 hover:text-gray-700 hover:bg-gray-50 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700">
                 Withdrawal
             </a>
     </li>

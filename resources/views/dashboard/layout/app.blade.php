@@ -446,12 +446,40 @@
                         </button>
 
                         <!-- Notifications -->
-                        <button class="relative p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
-                            </svg>
-                            <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400"></span>
-                        </button>
+                        <div class="relative" id="notificationDropdown">
+                            <button id="notificationButton" class="relative p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path>
+                                </svg>
+                                <span id="notificationBadge" class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400 hidden"></span>
+                                <span id="notificationCount" class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+                            </button>
+                            
+                            <!-- Notification Dropdown -->
+                            <div id="notificationDropdownMenu" class="absolute right-0 mt-2 w-80 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50 opacity-0 invisible transform scale-95 transition-all duration-200">
+                                <div class="p-4 border-b border-gray-700">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="text-lg font-semibold text-white">Notifications</h3>
+                                        <a href="{{ route('user.notifications.index') }}" class="text-sm text-blue-400 hover:text-blue-300">View All</a>
+                                    </div>
+                                </div>
+                                
+                                <div id="notificationList" class="max-h-96 overflow-y-auto">
+                                    <!-- Notifications will be loaded here -->
+                                    <div class="p-4 text-center text-gray-400">
+                                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto"></div>
+                                        <p class="mt-2">Loading notifications...</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="p-3 border-t border-gray-700">
+                                    <div class="flex justify-between">
+                                        <button id="markAllReadBtn" class="text-sm text-blue-400 hover:text-blue-300">Mark all as read</button>
+                                        <button id="clearAllBtn" class="text-sm text-red-400 hover:text-red-300">Clear all</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <!-- User Dropdown -->
                         <div class="relative" id="userDropdown">
@@ -535,7 +563,6 @@
 @livewireScripts
     
     <!-- User Dropdown Script -->
-    <script src="{{ asset('js/user-dropdown.js') }}"></script>
     
     <!-- Theme Toggle Script -->
     <script>
@@ -719,6 +746,7 @@
             const userDropdownMenu = document.getElementById('userDropdownMenu');
             const userDropdownArrow = document.getElementById('userDropdownArrow');
 
+
             if (userDropdownButton && userDropdownMenu && userDropdownArrow) {
                 userDropdownButton.addEventListener('click', function(e) {
                     e.preventDefault();
@@ -758,6 +786,188 @@
                 });
             }
         });
+
+        // Notification dropdown functionality
+        const notificationDropdown = document.getElementById('notificationDropdown');
+        const notificationButton = document.getElementById('notificationButton');
+        const notificationDropdownMenu = document.getElementById('notificationDropdownMenu');
+        const notificationList = document.getElementById('notificationList');
+        const notificationBadge = document.getElementById('notificationBadge');
+        const notificationCount = document.getElementById('notificationCount');
+
+
+        if (notificationDropdown && notificationButton && notificationDropdownMenu) {
+            let isOpen = false;
+
+            // Toggle notification dropdown
+            notificationButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                isOpen = !isOpen;
+                
+                if (isOpen) {
+                    notificationDropdownMenu.classList.remove('opacity-0', 'invisible', 'scale-95');
+                    notificationDropdownMenu.classList.add('opacity-100', 'visible', 'scale-100');
+                    loadNotifications();
+                } else {
+                    notificationDropdownMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                    notificationDropdownMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+                }
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!notificationDropdown.contains(e.target)) {
+                    isOpen = false;
+                    notificationDropdownMenu.classList.remove('opacity-100', 'visible', 'scale-100');
+                    notificationDropdownMenu.classList.add('opacity-0', 'invisible', 'scale-95');
+                }
+            });
+
+            // Load notifications
+            function loadNotifications() {
+                fetch('/user/notifications/recent')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.notifications && data.notifications.length > 0) {
+                            notificationList.innerHTML = data.notifications.map(notification => `
+                                <div class="p-3 border-b border-gray-700 hover:bg-gray-700 transition-colors">
+                                    <div class="flex items-start space-x-3">
+                                        <div class="flex-shrink-0">
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center ${getNotificationIconClass(notification.type)}">
+                                                ${getNotificationIcon(notification.type)}
+                                            </div>
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-sm font-medium text-white truncate">${notification.title}</p>
+                                            <p class="text-xs text-gray-400 mt-1">${notification.message}</p>
+                                            <p class="text-xs text-gray-500 mt-1">${formatTime(notification.created_at)}</p>
+                                        </div>
+                                        ${!notification.read_at ? '<div class="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>' : ''}
+                                    </div>
+                                </div>
+                            `).join('');
+                        } else {
+                            notificationList.innerHTML = `
+                                <div class="p-4 text-center text-gray-400">
+                                    <svg class="w-8 h-8 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-6H4v6z"></path>
+                                    </svg>
+                                    <p>No notifications</p>
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error loading notifications:', error);
+                        notificationList.innerHTML = `
+                            <div class="p-4 text-center text-red-400">
+                                <p>Error loading notifications</p>
+                            </div>
+                        `;
+                    });
+            }
+
+            // Load unread count
+            function loadUnreadCount() {
+                fetch('/user/notifications/unread-count')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.count > 0) {
+                            notificationCount.textContent = data.count > 99 ? '99+' : data.count;
+                            notificationCount.classList.remove('hidden');
+                            notificationBadge.classList.remove('hidden');
+                        } else {
+                            notificationCount.classList.add('hidden');
+                            notificationBadge.classList.add('hidden');
+                        }
+                    })
+                    .catch(error => console.error('Error loading unread count:', error));
+            }
+
+            // Mark all as read
+            document.getElementById('markAllReadBtn')?.addEventListener('click', function() {
+                fetch('/user/notifications/mark-all-read', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        loadNotifications();
+                        loadUnreadCount();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+
+            // Clear all notifications
+            document.getElementById('clearAllBtn')?.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all notifications?')) {
+                    fetch('/user/notifications/clear-all', {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Content-Type': 'application/json',
+                        },
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            loadNotifications();
+                            loadUnreadCount();
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                }
+            });
+
+            // Helper functions
+            function getNotificationIconClass(type) {
+                const classes = {
+                    'deposit': 'bg-green-600',
+                    'withdrawal': 'bg-red-600',
+                    'trading': 'bg-blue-600',
+                    'copy_trade': 'bg-purple-600',
+                    'bot_trade': 'bg-yellow-600',
+                    'system': 'bg-gray-600',
+                    'security': 'bg-orange-600'
+                };
+                return classes[type] || 'bg-gray-600';
+            }
+
+            function getNotificationIcon(type) {
+                const icons = {
+                    'deposit': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>',
+                    'withdrawal': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m16 0l-4-4m4 4l-4 4"></path></svg>',
+                    'trading': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>',
+                    'copy_trade': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>',
+                    'bot_trade': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>',
+                    'system': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>',
+                    'security': '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>'
+                };
+                return icons[type] || '<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-6H4v6z"></path></svg>';
+            }
+
+            function formatTime(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffInSeconds = Math.floor((now - date) / 1000);
+                
+                if (diffInSeconds < 60) return 'Just now';
+                if (diffInSeconds < 3600) return Math.floor(diffInSeconds / 60) + 'm ago';
+                if (diffInSeconds < 86400) return Math.floor(diffInSeconds / 3600) + 'h ago';
+                return Math.floor(diffInSeconds / 86400) + 'd ago';
+            }
+
+            // Load initial data
+            loadUnreadCount();
+            
+            // Refresh unread count every 30 seconds
+            setInterval(loadUnreadCount, 30000);
+        }
 
 @yield('scripts')
 </script>

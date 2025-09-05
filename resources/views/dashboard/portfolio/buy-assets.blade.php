@@ -63,6 +63,301 @@
     50% { opacity: 0.7; }
     100% { opacity: 1; }
 }
+
+/* Light theme overrides for asset cards */
+.light-theme .bg-gray-700 {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.light-theme .bg-gray-800 {
+    background-color: var(--bg-secondary) !important;
+}
+
+.light-theme .text-white {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .text-gray-400 {
+    color: var(--text-muted) !important;
+}
+
+.light-theme .text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+.light-theme .border-gray-600 {
+    border-color: var(--border-color) !important;
+}
+
+.light-theme .border-gray-700 {
+    border-color: var(--border-color) !important;
+}
+
+.light-theme .hover\\:border-gray-500:hover {
+    border-color: var(--border-hover) !important;
+}
+
+.light-theme .bg-gray-600 {
+    background-color: var(--border-hover) !important;
+}
+
+.light-theme .hover\\:bg-gray-500:hover {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.light-theme .hover\\:bg-gray-600:hover {
+    background-color: var(--border-hover) !important;
+}
+
+.light-theme .hover\\:bg-gray-700:hover {
+    background-color: var(--border-hover) !important;
+}
+
+/* Asset card specific overrides */
+.light-theme .asset-price {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .asset-change {
+    color: inherit !important;
+}
+
+/* Modal overrides */
+.light-theme .bg-gray-800.border.border-gray-700 {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+}
+
+.light-theme .bg-gray-700.rounded-lg {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.light-theme input.bg-gray-700 {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.light-theme input.border-gray-600 {
+    border-color: var(--border-color) !important;
+}
+
+.light-theme .text-green-400 {
+    color: #16a34a !important; /* Keep green for positive changes */
+}
+
+.light-theme .text-red-400 {
+    color: #dc2626 !important; /* Keep red for negative changes */
+}
+
+/* Search bar overrides */
+.light-theme .bg-gray-800.rounded-lg {
+    background-color: var(--bg-secondary) !important;
+}
+
+.light-theme input.bg-gray-700 {
+    background-color: var(--bg-tertiary) !important;
+    color: var(--text-primary) !important;
+}
+
+.light-theme input.placeholder-gray-400::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Tab overrides */
+.light-theme .tab-button {
+    color: var(--text-muted) !important;
+}
+
+.light-theme .tab-button.border-blue-500 {
+    border-color: #3b82f6 !important;
+}
+
+.light-theme .tab-button.text-blue-400 {
+    color: #3b82f6 !important;
+}
+
+.light-theme .tab-button:hover {
+    color: var(--text-secondary) !important;
+}
+
+/* Additional modal and form overrides */
+.light-theme .bg-gray-800.rounded-lg.shadow-xl {
+    background-color: var(--bg-secondary) !important;
+}
+
+.light-theme .border-b.border-gray-700 {
+    border-color: var(--border-color) !important;
+}
+
+.light-theme .text-gray-400 {
+    color: var(--text-muted) !important;
+}
+
+.light-theme .text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+.light-theme .bg-gray-700.rounded-lg.p-4 {
+    background-color: var(--bg-tertiary) !important;
+}
+
+.light-theme .text-2xl.font-bold.text-white {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .text-xl.font-bold.text-white {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .text-lg.font-medium.text-white {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .text-sm.font-medium.text-gray-300 {
+    color: var(--text-secondary) !important;
+}
+
+.light-theme .text-xs.text-green-400 {
+    color: #16a34a !important;
+}
+
+.light-theme .bg-blue-600 {
+    background-color: #2563eb !important;
+}
+
+.light-theme .hover\\:bg-blue-700:hover {
+    background-color: #1d4ed8 !important;
+}
+
+.light-theme .hover\\:bg-blue-600:hover {
+    background-color: #2563eb !important;
+}
+
+/* Loading spinner overrides */
+.light-theme .text-white.shadow {
+    color: var(--text-primary) !important;
+}
+
+.light-theme .animate-spin.text-white {
+    color: var(--text-primary) !important;
+}
+
+/* Empty state overrides */
+.light-theme .text-gray-400.text-lg {
+    color: var(--text-muted) !important;
+}
+
+.light-theme .text-gray-600 {
+    color: var(--text-muted) !important;
+}
+
+.light-theme .text-gray-500 {
+    color: var(--text-muted) !important;
+}
+
+/* Asset icon badge overrides for light theme */
+.light-theme .w-10.h-10.rounded-full.flex.items-center.justify-center .text-white {
+    color: white !important; /* Keep white text on colored backgrounds */
+}
+
+/* Ensure asset icon backgrounds remain colored in light theme */
+.light-theme .bg-yellow-500,
+.light-theme .bg-blue-500,
+.light-theme .bg-blue-600,
+.light-theme .bg-black,
+.light-theme .bg-green-500,
+.light-theme .bg-blue-400,
+.light-theme .bg-yellow-400,
+.light-theme .bg-purple-500,
+.light-theme .bg-pink-500,
+.light-theme .bg-red-500,
+.light-theme .bg-purple-600,
+.light-theme .bg-blue-700,
+.light-theme .bg-pink-400,
+.light-theme .bg-gray-500,
+.light-theme .bg-orange-500,
+.light-theme .bg-purple-400,
+.light-theme .bg-indigo-500,
+.light-theme .bg-green-400,
+.light-theme .bg-blue-800,
+.light-theme .bg-red-600,
+.light-theme .bg-green-600,
+.light-theme .bg-orange-600,
+.light-theme .bg-gray-600,
+.light-theme .bg-purple-700,
+.light-theme .bg-gray-400,
+.light-theme .bg-green-700,
+.light-theme .bg-teal-500,
+.light-theme .bg-pink-600,
+.light-theme .bg-purple-800,
+.light-theme .bg-blue-900,
+.light-theme .bg-pink-300,
+.light-theme .bg-orange-400,
+.light-theme .bg-blue-300,
+.light-theme .bg-yellow-600,
+.light-theme .bg-pink-700,
+.light-theme .bg-cyan-500,
+.light-theme .bg-indigo-600,
+.light-theme .bg-blue-200,
+.light-theme .bg-red-400,
+.light-theme .bg-gray-300,
+.light-theme .bg-gray-700,
+.light-theme .bg-purple-300,
+.light-theme .bg-blue-100,
+.light-theme .bg-orange-300,
+.light-theme .bg-yellow-300,
+.light-theme .bg-purple-200,
+.light-theme .bg-red-300,
+.light-theme .bg-green-300,
+.light-theme .bg-orange-200,
+.light-theme .bg-yellow-700,
+.light-theme .bg-purple-100,
+.light-theme .bg-green-200,
+.light-theme .bg-orange-100,
+.light-theme .bg-gray-200,
+.light-theme .bg-purple-900,
+.light-theme .bg-green-800,
+.light-theme .bg-red-200,
+.light-theme .bg-brown-600 {
+    /* Keep original colors for asset icons - don't override */
+    background-color: inherit !important;
+}
+
+/* Specific text color for asset icon badges */
+.light-theme .w-10.h-10.rounded-full span {
+    color: white !important;
+    font-weight: bold !important;
+}
+
+/* Override any text color inheritance for asset icon badges */
+.light-theme .w-10.h-10.rounded-full .text-sm.font-bold.text-white {
+    color: white !important;
+}
+
+/* Ensure asset icon containers maintain their colored backgrounds */
+.light-theme .w-10.h-10.rounded-full.flex.items-center.justify-center {
+    /* Don't override background colors - let them inherit from their specific color classes */
+}
+
+/* Fix for any text color inheritance issues - override global light theme color inheritance */
+.light-theme .w-10.h-10.rounded-full * {
+    color: white !important;
+}
+
+/* More specific override to counter global light theme color inheritance */
+.light-theme .w-10.h-10.rounded-full.flex.items-center.justify-center * {
+    color: white !important;
+}
+
+/* Override the global light theme color inheritance for asset icon badges */
+.light-theme .w-10.h-10.rounded-full span.text-sm.font-bold.text-white {
+    color: white !important;
+}
+
+/* Ensure asset icon text is always white regardless of theme */
+.light-theme .w-10.h-10.rounded-full .text-white {
+    color: white !important;
+}
 </style>
 
 <div class="space-y-6">

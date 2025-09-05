@@ -189,22 +189,42 @@ Route::get('holding/list', [HoldingController::class, 'getHoldings'])->name('hol
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
-// Test email route
-Route::get('/test-email', function () {
-    try {
-        Mail::send('emails.verification', [
-            'name' => 'Test User',
-            'code' => '123456',
-            'expires_at' => now()->addMinutes(10)->format('H:i'),
-        ], function ($message) {
-            $message->to('test@example.com')
-                    ->subject('Test Verification Email');
-        });
-        return 'Email sent successfully!';
-    } catch (Exception $e) {
-        return 'Error: ' . $e->getMessage();
-    }
-});
+    // Test email route
+    Route::get('/test-email', function () {
+        try {
+            Mail::send('emails.verification', [
+                'name' => 'Test User',
+                'code' => '123456',
+                'expires_at' => now()->addMinutes(10)->format('H:i'),
+            ], function ($message) {
+                $message->to('test@example.com')
+                        ->subject('Test Verification Email');
+            });
+            return 'Email sent successfully!';
+        } catch (Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    });
+
+    // Test notification route
+    Route::get('/test-notification', function () {
+        if (!auth()->check()) {
+            return 'Please login first';
+        }
+        
+        $user = auth()->user();
+        
+        // Create a test notification
+        \App\Models\UserNotification::create([
+            'user_id' => $user->id,
+            'type' => 'system',
+            'title' => 'Test Notification',
+            'message' => 'This is a test notification created at ' . now()->format('H:i:s'),
+            'data' => ['test' => true, 'timestamp' => now()->toISOString()]
+        ]);
+        
+        return 'Test notification created successfully! Check your notification dropdown.';
+    });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
