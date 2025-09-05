@@ -108,10 +108,6 @@
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Account Information</h3>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">User ID</label>
-                        <p class="mt-1 text-sm text-gray-900 dark:text-white font-mono">{{ $user->id }}</p>
-                    </div>
-                    <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Role</label>
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300' : 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' }}">
                             {{ ucfirst($user->role) }}
@@ -245,13 +241,13 @@
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                             placeholder="Enter amount">
                     </div>
-                    <div class="flex space-x-3">
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                         <button type="submit" name="action_type" value="add" 
-                            class="flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            class="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors">
                             Add Funds
                         </button>
                         <button type="submit" name="action_type" value="defund" 
-                            class="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors">
+                            class="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors">
                             Remove Funds
                         </button>
                     </div>
