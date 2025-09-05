@@ -816,31 +816,38 @@
 
                     <!-- Signal Plan Specific Fields -->
                     <div id="modal_signal-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-4">Signal Plan Settings</h3>
-                        
-                        <!-- Numeric Fields - 2 per row -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_signal_strength" class="block text-sm font-medium text-gray-300 mb-1">Signal Strength (1-5)</label>
-                                <input type="number" id="modal_signal_strength" name="signal_strength" min="1" max="5" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 4">
-                            </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                Signal Plan Settings
+                            </h4>
                             
-                            <div>
-                                <label for="modal_daily_signals" class="block text-sm font-medium text-gray-300 mb-1">Daily Signals</label>
-                                <input type="number" id="modal_daily_signals" name="daily_signals" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2">
+                            <!-- First Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_signal_strength" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal Strength (1-5)</label>
+                                    <input type="number" id="modal_signal_strength" name="signal_strength" min="1" max="5" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 4">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_daily_signals" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Daily Signals</label>
+                                    <input type="number" id="modal_daily_signals" name="daily_signals" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 2">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- More Numeric Fields - 2 per row -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_success_rate" class="block text-sm font-medium text-gray-300 mb-1">Success Rate (%)</label>
-                                <input type="number" id="modal_success_rate" name="success_rate" step="0.01" min="0" max="100" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 85.5">
-                            </div>
-                            
-                            <div>
-                                <label for="modal_signal_duration" class="block text-sm font-medium text-gray-300 mb-1">Duration (Days)</label>
-                                <input type="number" id="modal_signal_duration" name="signal_duration" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 30">
+                            <!-- Second Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="modal_success_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Success Rate (%)</label>
+                                    <input type="number" id="modal_success_rate" name="success_rate" step="0.01" min="0" max="100" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 85.5">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_signal_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (Days)</label>
+                                    <input type="number" id="modal_signal_duration" name="signal_duration" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -850,88 +857,111 @@
 
                     <!-- Mining Plan Specific Fields -->
                     <div id="modal_mining-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-4">Mining Plan Settings</h3>
-                        
-                        <!-- First Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_hashrate" class="block text-sm font-medium text-gray-300 mb-1">Hashrate</label>
-                                <input type="text" id="modal_hashrate" name="hashrate" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1000 TH/s">
-                            </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                Mining Plan Settings
+                            </h4>
                             
-                            <div>
-                                <label for="modal_equipment" class="block text-sm font-medium text-gray-300 mb-1">Equipment</label>
-                                <input type="text" id="modal_equipment" name="equipment" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10 Antminer S19">
+                            <!-- First Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_hashrate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hashrate</label>
+                                    <input type="text" id="modal_hashrate" name="hashrate" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 1000 TH/s">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_equipment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Equipment</label>
+                                    <input type="text" id="modal_equipment" name="equipment" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 10 Antminer S19">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Second Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_downtime" class="block text-sm font-medium text-gray-300 mb-1">Downtime</label>
-                                <input type="text" id="modal_downtime" name="downtime" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 99.9% Uptime">
+                            <!-- Second Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_downtime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Downtime</label>
+                                    <input type="text" id="modal_downtime" name="downtime" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 99.9% Uptime">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_electricity_costs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Electricity Costs</label>
+                                    <input type="text" id="modal_electricity_costs" name="electricity_costs" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., Included">
+                                </div>
                             </div>
-                            
-                            <div>
-                                <label for="modal_electricity_costs" class="block text-sm font-medium text-gray-300 mb-1">Electricity Costs</label>
-                                <input type="text" id="modal_electricity_costs" name="electricity_costs" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Included">
-                            </div>
-                        </div>
 
-                        <!-- Third Row - 1 input -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_mining_duration" class="block text-sm font-medium text-gray-300 mb-1">Duration (Days)</label>
-                                <input type="number" id="modal_mining_duration" name="mining_duration" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 30">
+                            <!-- Third Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="modal_mining_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (Days)</label>
+                                    <input type="number" id="modal_mining_duration" name="mining_duration" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Staking Plan Specific Fields -->
                     <div id="modal_staking-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-4">Staking Plan Settings</h3>
-                        
-                        <!-- First Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_apy_rate" class="block text-sm font-medium text-gray-300 mb-1">APY Rate (%)</label>
-                                <input type="number" id="modal_apy_rate" name="apy_rate" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 12.5">
-                            </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                </svg>
+                                Staking Plan Settings
+                            </h4>
                             
-                            <div>
-                                <label for="modal_minimum_amount" class="block text-sm font-medium text-gray-300 mb-1">Minimum Amount</label>
-                                <input type="number" id="modal_minimum_amount" name="minimum_amount" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
+                            <!-- First Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_apy_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">APY Rate (%)</label>
+                                    <input type="number" id="modal_apy_rate" name="apy_rate" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 12.5">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_minimum_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Amount</label>
+                                    <input type="number" id="modal_minimum_amount" name="minimum_amount" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 100.00">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Second Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_reward_frequency" class="block text-sm font-medium text-gray-300 mb-1">Reward Frequency</label>
-                                <input type="text" id="modal_reward_frequency" name="reward_frequency" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Daily">
+                            <!-- Second Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_reward_frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reward Frequency</label>
+                                    <input type="text" id="modal_reward_frequency" name="reward_frequency" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., Daily">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_lock_period" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Lock Period (Days)</label>
+                                    <input type="number" id="modal_lock_period" name="lock_period" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                </div>
                             </div>
-                            
-                            <div>
-                                <label for="modal_lock_period" class="block text-sm font-medium text-gray-300 mb-1">Lock Period (Days)</label>
-                                <input type="number" id="modal_lock_period" name="lock_period" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 30">
-                            </div>
-                        </div>
 
-                        <!-- Third Row - 1 input -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_staking_duration" class="block text-sm font-medium text-gray-300 mb-1">Staking Duration (Days)</label>
-                                <input type="number" id="modal_staking_duration" name="staking_duration" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 365">
+                            <!-- Third Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="modal_staking_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Staking Duration (Days)</label>
+                                    <input type="number" id="modal_staking_duration" name="staking_duration" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 365">
+                                </div>
                             </div>
                         </div>
                     </div>
 
-
+                    <!-- Plan Status -->
+                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Plan Status
+                        </h4>
                         
-                        <div class="flex items-center mt-4">
-                            <input type="checkbox" id="modal_is_active" name="is_active" value="1" checked class="w-4 h-4 text-blue-600 bg-gray-700 border-gray-600 rounded focus:ring-blue-500 focus:ring-2">
-                            <label for="modal_is_active" class="ml-2 text-sm font-medium text-gray-300">Active Plan</label>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="modal_is_active" name="is_active" value="1" checked class="w-5 h-5 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200">
+                            <label for="modal_is_active" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Active Plan</label>
                         </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Uncheck to create an inactive plan that won't be visible to users</p>
                     </div>
 
                 </form>
@@ -950,7 +980,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script>

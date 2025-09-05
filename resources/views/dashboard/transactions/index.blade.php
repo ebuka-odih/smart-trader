@@ -91,13 +91,13 @@
                         <div class="flex justify-between items-center">
                             <div>
                                 <div class="text-sm text-gray-400">Payment Method</div>
-                                <div class="text-white">{{ ucfirst($deposit->payment_method ?? 'N/A') }}</div>
+                                <div class="text-white">{{ $deposit->payment_method ? $deposit->payment_method->crypto_display_name ?? 'N/A' : 'N/A' }}</div>
                             </div>
                             <div class="text-right">
                                 <span class="px-2 py-1 text-xs font-semibold rounded-full 
-                                    {{ $deposit->status === 'completed' ? 'bg-green-100 text-green-800' : 
-                                       ($deposit->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                    {{ ucfirst($deposit->status ?? 'N/A') }}
+                                    {{ $deposit->status == 1 ? 'bg-green-100 text-green-800' : 
+                                       ($deposit->status == 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                    {{ $deposit->status == 1 ? 'Completed' : ($deposit->status == 0 ? 'Pending' : 'Rejected') }}
                                 </span>
                             </div>
                         </div>
@@ -123,7 +123,7 @@
                 
                 <!-- Desktop Table View -->
                 <div class="hidden md:block overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-700">
+                    <table class="min-w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
                         <thead class="bg-gray-700">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
@@ -143,13 +143,13 @@
                                     ${{ number_format($deposit->amount, 2) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                    {{ ucfirst($deposit->payment_method ?? 'N/A') }}
+                                    {{ $deposit->payment_method ? $deposit->payment_method->crypto_display_name ?? 'N/A' : 'N/A' }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $deposit->status === 'completed' ? 'bg-green-100 text-green-800' : 
-                                           ($deposit->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                        {{ ucfirst($deposit->status ?? 'N/A') }}
+                                        {{ $deposit->status == 1 ? 'bg-green-100 text-green-800' : 
+                                           ($deposit->status == 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                        {{ $deposit->status == 1 ? 'Completed' : ($deposit->status == 0 ? 'Pending' : 'Rejected') }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
@@ -179,7 +179,7 @@
             <!-- Withdrawals Tab -->
             <div id="withdrawalsContent" class="tab-content hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-700">
+                    <table class="min-w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
                         <thead class="bg-gray-700">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
@@ -206,9 +206,9 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $withdrawal->status === 'completed' ? 'bg-green-100 text-green-800' : 
-                                           ($withdrawal->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
-                                        {{ ucfirst($withdrawal->status ?? 'N/A') }}
+                                        {{ $withdrawal->status == 1 ? 'bg-green-100 text-green-800' : 
+                                           ($withdrawal->status == 0 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                        {{ $withdrawal->status == 1 ? 'Completed' : ($withdrawal->status == 0 ? 'Pending' : 'Rejected') }}
                                     </span>
                                 </td>
                             </tr>
@@ -262,7 +262,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                        {{ $transfer->status === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                        {{ $transfer->status === 'completed' ? 'bg-green-100 text-green-800' : 
+                                           ($transfer->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
                                         {{ ucfirst($transfer->status ?? 'N/A') }}
                                     </span>
                                 </td>
@@ -380,7 +381,7 @@
                                     {{ number_format($transaction->quantity, 8) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                    ${{ number_format($transaction->price, 8) }}
+                                    ${{ number_format($transaction->price_per_unit, 8) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                                     ${{ number_format($transaction->total_amount, 2) }}
