@@ -32,27 +32,11 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         // Deposit Events
-        DepositSubmitted::class => [
-            SendDepositSubmittedNotification::class,
-        ],
-
-        DepositApproved::class => [
-            SendDepositApprovedNotification::class,
-        ],
-
         DepositCompleted::class => [
             SendDepositNotification::class,
         ],
 
         // Withdrawal Events
-        WithdrawalSubmitted::class => [
-            SendWithdrawalSubmittedNotification::class,
-        ],
-
-        WithdrawalApproved::class => [
-            SendWithdrawalApprovedNotification::class,
-        ],
-
         WithdrawalCompleted::class => [
             SendWithdrawalNotification::class,
         ],
@@ -63,7 +47,11 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Manually register events to avoid duplicates
+        Event::listen(DepositSubmitted::class, SendDepositSubmittedNotification::class);
+        Event::listen(DepositApproved::class, SendDepositApprovedNotification::class);
+        Event::listen(WithdrawalSubmitted::class, SendWithdrawalSubmittedNotification::class);
+        Event::listen(WithdrawalApproved::class, SendWithdrawalApprovedNotification::class);
     }
 
     /**
@@ -71,6 +59,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents(): bool
     {
-        return false;
+        return true;
     }
 }

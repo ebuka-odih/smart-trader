@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\WithdrawalSubmitted;
 use App\Services\NotificationService;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class SendWithdrawalSubmittedNotification
 {
