@@ -28,6 +28,8 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     // Admin users management
     Route::resource('/user', AdminUserController::class)->names('user');
     Route::delete('/user/{id}/delete', [AdminUserController::class, 'deleteUser'])->name('deleteUser');
+    Route::post('/user/{id}/update-balance', [AdminUserController::class, 'updateBalance'])->name('updateBalance');
+    Route::post('/user/{id}/update-status', [AdminUserController::class, 'updateStatus'])->name('updateStatus');
 
     Route::resource('/payment-method', AdminPaymentMethodController::class);
     Route::get('/security', [AdminController::class, 'security'])->name('security');

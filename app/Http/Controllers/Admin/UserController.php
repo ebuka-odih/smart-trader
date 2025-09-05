@@ -51,6 +51,18 @@ class UserController extends Controller
        return redirect()->back()->with('success', 'User has been deleted');
    }
 
+   public function updateStatus(Request $request, $id)
+   {
+       $request->validate([
+           'status' => 'required|in:active,inactive',
+       ]);
 
+       $user = User::findOrFail($id);
+       $user->status = $request->status;
+       $user->save();
+
+       $statusText = $request->status === 'active' ? 'activated' : 'deactivated';
+       return redirect()->back()->with('success', "User account has been {$statusText} successfully");
+   }
 
 }
