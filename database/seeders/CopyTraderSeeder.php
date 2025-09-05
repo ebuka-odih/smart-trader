@@ -21,6 +21,7 @@ class CopyTraderSeeder extends Seeder
                 'profit_share' => 876.00,
                 'win' => 270,
                 'loss' => 371,
+                'status' => 'active',
             ],
             [
                 'name' => 'Blossom Rocha',
@@ -30,6 +31,7 @@ class CopyTraderSeeder extends Seeder
                 'profit_share' => 656.00,
                 'win' => 638,
                 'loss' => 719,
+                'status' => 'active',
             ],
             [
                 'name' => 'Orion Vega',
@@ -39,6 +41,7 @@ class CopyTraderSeeder extends Seeder
                 'profit_share' => 312.50,
                 'win' => 120,
                 'loss' => 98,
+                'status' => 'active',
             ],
         ];
 

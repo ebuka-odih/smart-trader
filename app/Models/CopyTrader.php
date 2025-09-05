@@ -18,7 +18,8 @@ class CopyTrader extends Model
         'win_rate', 
         'profit_share', 
         'win', 
-        'loss'
+        'loss',
+        'status'
     ];
 
     protected $casts = [
