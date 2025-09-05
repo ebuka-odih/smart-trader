@@ -590,181 +590,127 @@
 </div>
 
 <!-- Create Plan Modal -->
-<div id="createPlanModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-    <div class="relative min-h-screen flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700">
+<div id="createPlanModal" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
             <!-- Modal Header -->
-            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-t-2xl flex-shrink-0">
-                <div>
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white" id="modalTitle">Create Plan</h3>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Configure your new plan settings</p>
+            <div class="flex-shrink-0 flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2 bg-white bg-opacity-20 rounded-lg">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold">Create New Plan</h3>
+                    </div>
                 </div>
-                <button onclick="closeCreateModal()" class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                <button onclick="closeCreateModal()" class="p-2 hover:bg-white hover:bg-opacity-20 rounded-lg transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            
-            <!-- Modal Body - Scrollable -->
-            <div class="flex-1 overflow-y-auto p-6">
-                    
-                @if ($errors->any())
-                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="font-medium">Please fix the following errors:</span>
-                        </div>
-                        <ul class="list-disc list-inside mt-2 space-y-1">
-                            @foreach ($errors->all() as $error)
-                                <li class="text-sm">{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                
-                @if (session('error'))
-                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                            </svg>
-                            <span class="font-medium">{{ session('error') }}</span>
-                        </div>
-                    </div>
-                @endif
-                
-                <form id="createPlanForm" action="{{ route('admin.plans.store') }}" data-default-action="{{ route('admin.plans.store') }}" method="POST" class="space-y-6" onsubmit="return validateForm()">
+
+            <!-- Modal Body -->
+            <div class="flex-1 overflow-y-auto">
+                <form id="createPlanForm" action="{{ route('admin.plans.store') }}" method="POST" class="p-6 space-y-6">
                     @csrf
                     
-                    <!-- Basic Plan Information -->
+                    <!-- Plan Type Selection -->
                     <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
                         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                             </svg>
+                            Plan Type
+                        </h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="type" value="trading" class="sr-only" onchange="showPlanFields('trading')">
+                                <div class="p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-blue-500 transition-colors plan-type-card">
+                                    <div class="text-center">
+                                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                            <svg class="w-4 h-4 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white">Trading</h5>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Forex & Crypto</p>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="type" value="signal" class="sr-only" onchange="showPlanFields('signal')">
+                                <div class="p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-purple-500 transition-colors plan-type-card">
+                                    <div class="text-center">
+                                        <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                            <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white">Signal</h5>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Trading Signals</p>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="type" value="staking" class="sr-only" onchange="showPlanFields('staking')">
+                                <div class="p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-green-500 transition-colors plan-type-card">
+                                    <div class="text-center">
+                                        <div class="w-8 h-8 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white">Staking</h5>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Crypto Staking</p>
+                                    </div>
+                                </div>
+                            </label>
+                            
+                            <label class="relative cursor-pointer">
+                                <input type="radio" name="type" value="mining" class="sr-only" onchange="showPlanFields('mining')">
+                                <div class="p-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg hover:border-orange-500 transition-colors plan-type-card">
+                                    <div class="text-center">
+                                        <div class="w-8 h-8 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mx-auto mb-2">
+                                            <svg class="w-4 h-4 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                        <h5 class="text-sm font-medium text-gray-900 dark:text-white">Mining</h5>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">Crypto Mining</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Basic Information -->
+                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
                             Basic Information
                         </h4>
-                        
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label for="modal_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Plan Type <span class="text-red-500">*</span></label>
-                                <select id="modal_type" name="type" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" onchange="showTypeSpecificFields()">
-                                    <option value="">Select Plan Type</option>
-                                    <option value="trading">Trading</option>
-                                    <option value="signal">Signal</option>
-                                    <option value="staking">Staking</option>
-                                    <option value="mining">Mining</option>
-                                </select>
+                                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Plan Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="name" name="name" required class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Enter plan name">
                             </div>
-                            
                             <div>
-                                <label for="modal_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Plan Name <span class="text-red-500">*</span></label>
-                                <input type="text" id="modal_name" name="name" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Enter plan name">
-                            </div>
-                        </div>
-
-                        <div class="mt-4">
-                            <label for="modal_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
-                            <textarea id="modal_description" name="description" rows="3" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none" placeholder="Plan description..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Pricing (for non-signal plans) -->
-                    <div id="modal_pricing_fields" class="type-specific-fields">
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
-                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
-                                </svg>
-                                Pricing & Funding
-                            </h4>
-                            
-                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <div>
-                                    <label for="modal_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price <span class="text-red-500">*</span></label>
-                                    <input type="number" id="modal_price" name="price" step="0.01" min="0" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
-                                    <select id="modal_currency" name="currency" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
-                                        <option value="USD">USD</option>
-                                        <option value="EUR">EUR</option>
-                                        <option value="GBP">GBP</option>
-                                        <option value="JPY">JPY</option>
-                                        <option value="CAD">CAD</option>
-                                        <option value="AUD">AUD</option>
-                                        <option value="CHF">CHF</option>
-                                        <option value="CNY">CNY</option>
-                                        <option value="SGD">SGD</option>
-                                        <option value="NZD">NZD</option>
-                                    </select>
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_original_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Original Price <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                    <input type="number" id="modal_original_price" name="original_price" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
-                                </div>
-                            </div>
-
-                            <!-- Funding Range -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                                <div>
-                                    <label for="modal_min_funding" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Funding <span class="text-red-500">*</span></label>
-                                    <input type="number" id="modal_min_funding" name="min_funding" step="0.01" min="0" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_max_funding" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Funding <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                    <input type="number" id="modal_max_funding" name="max_funding" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00 for unlimited">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave empty or set to 0 for unlimited funding</p>
-                                </div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                                <textarea id="description" name="description" rows="3" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none" placeholder="Enter plan description"></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Signal Pricing (for signal plans only) -->
-                    <div id="modal_signal_pricing" class="type-specific-fields hidden">
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
-                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                                </svg>
-                                Signal Pricing
-                            </h4>
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="modal_signal_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal Amount <span class="text-red-500">*</span></label>
-                                    <input type="number" id="modal_signal_amount" name="min_funding" step="0.01" min="0" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Amount users pay for signal entry</p>
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_signal_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
-                                    <select id="modal_signal_currency" name="currency" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
-                                        <option value="USD">USD</option>
-                                        <option value="EUR">EUR</option>
-                                        <option value="GBP">GBP</option>
-                                        <option value="JPY">JPY</option>
-                                        <option value="CAD">CAD</option>
-                                        <option value="AUD">AUD</option>
-                                        <option value="CHF">CHF</option>
-                                        <option value="CNY">CNY</option>
-                                        <option value="SGD">SGD</option>
-                                        <option value="NZD">NZD</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Trading Plan Specific Fields -->
-                    <div id="modal_trading-fields" class="type-specific-fields hidden">
+                    <!-- Trading Plan Fields -->
+                    <div id="trading-fields" class="plan-fields hidden">
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
                             <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                                 <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
@@ -772,50 +718,37 @@
                                 </svg>
                                 Trading Plan Settings
                             </h4>
-                            
-                            <!-- First Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="modal_pairs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Trading Pairs</label>
-                                    <input type="text" id="modal_pairs" name="pairs" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 50+ Trading Pairs">
+                                    <label for="pairs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Trading Pairs</label>
+                                    <input type="text" id="pairs" name="pairs" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 50+ Trading Pairs">
                                 </div>
-                                
                                 <div>
-                                    <label for="modal_leverage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Leverage</label>
-                                    <input type="text" id="modal_leverage" name="leverage" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 100.00">
+                                    <label for="leverage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Leverage</label>
+                                    <input type="text" id="leverage" name="leverage" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 1:100">
                                 </div>
-                            </div>
-
-                            <!-- Second Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label for="modal_spreads" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Spreads</label>
-                                    <input type="text" id="modal_spreads" name="spreads" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 1.5">
+                                    <label for="spreads" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Spreads</label>
+                                    <input type="text" id="spreads" name="spreads" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., From 1.5 pips">
                                 </div>
-                                
                                 <div>
-                                    <label for="modal_swap_fees" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Swap Fees</label>
-                                    <input type="text" id="modal_swap_fees" name="swap_fees" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 2.5">
+                                    <label for="swap_fees" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Swap Fees</label>
+                                    <input type="text" id="swap_fees" name="swap_fees" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 2.5%">
                                 </div>
-                            </div>
-
-                            <!-- Third Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="modal_minimum_deposit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Deposit</label>
-                                    <input type="number" id="modal_minimum_deposit" name="minimum_deposit" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                    <label for="minimum_deposit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Deposit</label>
+                                    <input type="number" id="minimum_deposit" name="minimum_deposit" step="0.01" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
                                 </div>
-                                
                                 <div>
-                                    <label for="modal_max_lot_size" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Lot Size</label>
-                                    <input type="text" id="modal_max_lot_size" name="max_lot_size" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 10 lots">
+                                    <label for="max_lot_size" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Lot Size</label>
+                                    <input type="text" id="max_lot_size" name="max_lot_size" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 10 lots">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Signal Plan Specific Fields -->
-                    <div id="modal_signal-fields" class="type-specific-fields hidden">
+                    <!-- Signal Plan Fields -->
+                    <div id="signal-fields" class="plan-fields hidden">
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
                             <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                                 <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
@@ -823,86 +756,33 @@
                                 </svg>
                                 Signal Plan Settings
                             </h4>
-                            
-                            <!-- First Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="modal_signal_strength" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal Strength (1-5)</label>
-                                    <input type="number" id="modal_signal_strength" name="signal_strength" min="1" max="5" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 4">
+                                    <label for="signal_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal Amount <span class="text-red-500">*</span></label>
+                                    <input type="number" id="signal_amount" name="signal_amount" step="0.01" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Amount users pay for signal entry</p>
                                 </div>
-                                
                                 <div>
-                                    <label for="modal_daily_signals" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Daily Signals</label>
-                                    <input type="number" id="modal_daily_signals" name="daily_signals" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 2">
-                                </div>
-                            </div>
-
-                            <!-- Second Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="modal_success_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Success Rate (%)</label>
-                                    <input type="number" id="modal_success_rate" name="success_rate" step="0.01" min="0" max="100" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 85.5">
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_signal_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (Days)</label>
-                                    <input type="number" id="modal_signal_duration" name="signal_duration" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                    <label for="signal_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+                                    <select id="signal_currency" name="signal_currency" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                        <option value="JPY">JPY</option>
+                                        <option value="CAD">CAD</option>
+                                        <option value="AUD">AUD</option>
+                                        <option value="CHF">CHF</option>
+                                        <option value="CNY">CNY</option>
+                                        <option value="SGD">SGD</option>
+                                        <option value="NZD">NZD</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-
-                    </div>
-
-                    <!-- Mining Plan Specific Fields -->
-                    <div id="modal_mining-fields" class="type-specific-fields hidden">
-                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
-                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-                                <svg class="w-5 h-5 mr-2 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
-                                </svg>
-                                Mining Plan Settings
-                            </h4>
-                            
-                            <!-- First Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label for="modal_hashrate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hashrate</label>
-                                    <input type="text" id="modal_hashrate" name="hashrate" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 1000 TH/s">
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_equipment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Equipment</label>
-                                    <input type="text" id="modal_equipment" name="equipment" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 10 Antminer S19">
-                                </div>
-                            </div>
-
-                            <!-- Second Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label for="modal_downtime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Downtime</label>
-                                    <input type="text" id="modal_downtime" name="downtime" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 99.9% Uptime">
-                                </div>
-                                
-                                <div>
-                                    <label for="modal_electricity_costs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Electricity Costs</label>
-                                    <input type="text" id="modal_electricity_costs" name="electricity_costs" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., Included">
-                                </div>
-                            </div>
-
-                            <!-- Third Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="modal_mining_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (Days)</label>
-                                    <input type="number" id="modal_mining_duration" name="mining_duration" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Staking Plan Specific Fields -->
-                    <div id="modal_staking-fields" class="type-specific-fields hidden">
+                    <!-- Staking Plan Fields -->
+                    <div id="staking-fields" class="plan-fields hidden">
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
                             <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                                 <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -911,80 +791,250 @@
                                 </svg>
                                 Staking Plan Settings
                             </h4>
-                            
-                            <!-- First Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="modal_apy_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">APY Rate (%)</label>
-                                    <input type="number" id="modal_apy_rate" name="apy_rate" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 12.5">
+                                    <label for="staking_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Staking Currency <span class="text-red-500">*</span></label>
+                                    <select id="staking_currency" name="staking_currency" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Currency</option>
+                                        <option value="BTC">Bitcoin (BTC)</option>
+                                        <option value="ETH">Ethereum (ETH)</option>
+                                        <option value="USDT">Tether (USDT)</option>
+                                        <option value="USDC">USD Coin (USDC)</option>
+                                        <option value="BNB">Binance Coin (BNB)</option>
+                                        <option value="ADA">Cardano (ADA)</option>
+                                        <option value="SOL">Solana (SOL)</option>
+                                        <option value="DOT">Polkadot (DOT)</option>
+                                        <option value="MATIC">Polygon (MATIC)</option>
+                                        <option value="AVAX">Avalanche (AVAX)</option>
+                                    </select>
                                 </div>
-                                
                                 <div>
-                                    <label for="modal_minimum_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Amount</label>
-                                    <input type="number" id="modal_minimum_amount" name="minimum_amount" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 100.00">
+                                    <label for="apy_rate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">APY Rate (%)</label>
+                                    <input type="number" id="apy_rate" name="apy_rate" step="0.01" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 12.5">
                                 </div>
-                            </div>
-
-                            <!-- Second Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                                 <div>
-                                    <label for="modal_reward_frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reward Frequency</label>
-                                    <input type="text" id="modal_reward_frequency" name="reward_frequency" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., Daily">
+                                    <label for="minimum_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Amount</label>
+                                    <input type="number" id="minimum_amount" name="minimum_amount" step="0.01" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 100.00">
                                 </div>
-                                
                                 <div>
-                                    <label for="modal_lock_period" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Lock Period (Days)</label>
-                                    <input type="number" id="modal_lock_period" name="lock_period" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                    <label for="reward_frequency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Reward Frequency</label>
+                                    <input type="text" id="reward_frequency" name="reward_frequency" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., Daily">
                                 </div>
-                            </div>
-
-                            <!-- Third Row -->
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label for="modal_staking_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Staking Duration (Days)</label>
-                                    <input type="number" id="modal_staking_duration" name="staking_duration" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 365">
+                                    <label for="lock_period" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Lock Period (Days)</label>
+                                    <input type="number" id="lock_period" name="lock_period" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                </div>
+                                <div>
+                                    <label for="staking_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Staking Duration (Days)</label>
+                                    <input type="number" id="staking_duration" name="staking_duration" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 365">
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Plan Status & Actions -->
+                    <!-- Mining Plan Fields -->
+                    <div id="mining-fields" class="plan-fields hidden">
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4zM18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                Mining Plan Settings
+                            </h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="hashrate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hashrate</label>
+                                    <input type="text" id="hashrate" name="hashrate" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 1000 TH/s">
+                                </div>
+                                <div>
+                                    <label for="equipment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Equipment</label>
+                                    <input type="text" id="equipment" name="equipment" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 10 Antminer S19">
+                                </div>
+                                <div>
+                                    <label for="downtime" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Uptime</label>
+                                    <input type="text" id="downtime" name="downtime" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 99.9% Uptime">
+                                </div>
+                                <div>
+                                    <label for="electricity_costs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Electricity Costs</label>
+                                    <input type="text" id="electricity_costs" name="electricity_costs" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., Included">
+                                </div>
+                                <div>
+                                    <label for="mining_duration" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Duration (Days)</label>
+                                    <input type="number" id="mining_duration" name="mining_duration" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 30">
+                                </div>
+                                <div>
+                                    <label for="mining_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mining Currency</label>
+                                    <select id="mining_currency" name="mining_currency" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="">Select Currency</option>
+                                        <option value="BTC">Bitcoin (BTC)</option>
+                                        <option value="ETH">Ethereum (ETH)</option>
+                                        <option value="LTC">Litecoin (LTC)</option>
+                                        <option value="BCH">Bitcoin Cash (BCH)</option>
+                                        <option value="DASH">Dash (DASH)</option>
+                                        <option value="ZEC">Zcash (ZEC)</option>
+                                        <option value="XMR">Monero (XMR)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pricing & Funding -->
+                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                            </svg>
+                            Pricing & Funding
+                        </h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price <span class="text-red-500">*</span></label>
+                                <input type="number" id="price" name="price" step="0.01" min="0" required class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                            </div>
+                            <div>
+                                <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+                                <select id="currency" name="currency" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                    <option value="USD">USD</option>
+                                    <option value="EUR">EUR</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="JPY">JPY</option>
+                                    <option value="CAD">CAD</option>
+                                    <option value="AUD">AUD</option>
+                                    <option value="CHF">CHF</option>
+                                    <option value="CNY">CNY</option>
+                                    <option value="SGD">SGD</option>
+                                    <option value="NZD">NZD</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="original_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Original Price <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <input type="number" id="original_price" name="original_price" step="0.01" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                            <div>
+                                <label for="min_funding" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Funding <span class="text-red-500">*</span></label>
+                                <input type="number" id="min_funding" name="min_funding" step="0.01" min="0" required class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                            </div>
+                            <div>
+                                <label for="max_funding" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Funding <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                <input type="number" id="max_funding" name="max_funding" step="0.01" min="0" class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00 for unlimited">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave empty or set to 0 for unlimited funding</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Plan Status -->
                     <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
                         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
-                            Plan Status & Actions
+                            Plan Status
                         </h4>
-                        
-                        <div class="space-y-4">
-                            <!-- Plan Status -->
-                            <div class="flex items-center">
-                                <input type="checkbox" id="modal_is_active" name="is_active" value="1" checked class="w-5 h-5 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200">
-                                <label for="modal_is_active" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Active Plan</label>
-                            </div>
-                            <p class="text-xs text-gray-500 dark:text-gray-400">Uncheck to create an inactive plan that won't be visible to users</p>
-                            
-                            <!-- Action Buttons -->
-                            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
-                                <button type="button" onclick="closeCreateModal()" class="w-full sm:w-auto bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium transition-all duration-200">
-                                    Cancel
-                                </button>
-                                <button type="submit" form="createPlanForm" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
-                                    Create Plan
-                                </button>
-                            </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="is_active" name="is_active" value="1" checked class="w-5 h-5 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200">
+                            <label for="is_active" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Active Plan</label>
                         </div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Uncheck to create an inactive plan that won't be visible to users</p>
                     </div>
-
                 </form>
             </div>
-            
+
+            <!-- Modal Footer -->
+            <div class="flex-shrink-0 flex items-center justify-end space-x-4 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+                <button type="button" onclick="closeCreateModal()" class="px-6 py-3 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg font-medium transition-all duration-200">
+                    Cancel
+                </button>
+                <button type="submit" form="createPlanForm" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
+                    Create Plan
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
+
 <script>
+// Modal functionality
+function openCreateModal(planType = null) {
+    document.getElementById('createPlanModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+    
+    // If a specific plan type is provided, select it
+    if (planType) {
+        const typeRadio = document.querySelector(`input[name="type"][value="${planType}"]`);
+        if (typeRadio) {
+            typeRadio.checked = true;
+            showPlanFields(planType);
+        }
+    }
+}
+
+function closeCreateModal() {
+    document.getElementById('createPlanModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    // Reset form
+    document.getElementById('createPlanForm').reset();
+    // Hide all plan fields
+    document.querySelectorAll('.plan-fields').forEach(field => {
+        field.classList.add('hidden');
+    });
+    // Reset plan type selection
+    document.querySelectorAll('input[name="type"]').forEach(radio => {
+        radio.checked = false;
+    });
+}
+
+// Plan type selection
+function showPlanFields(planType) {
+    // Hide all plan fields
+    document.querySelectorAll('.plan-fields').forEach(field => {
+        field.classList.add('hidden');
+    });
+    
+    // Show selected plan fields
+    const selectedFields = document.getElementById(planType + '-fields');
+    if (selectedFields) {
+        selectedFields.classList.remove('hidden');
+    }
+    
+    // Update plan type card styling
+    document.querySelectorAll('.plan-type-card').forEach(card => {
+        card.classList.remove('border-blue-500', 'border-purple-500', 'border-green-500', 'border-orange-500');
+        card.classList.add('border-gray-200', 'dark:border-gray-600');
+    });
+    
+    // Add active styling to selected card
+    const selectedCard = document.querySelector(`input[value="${planType}"]`).closest('.plan-type-card');
+    if (selectedCard) {
+        selectedCard.classList.remove('border-gray-200', 'dark:border-gray-600');
+        const colors = {
+            'trading': 'border-blue-500',
+            'signal': 'border-purple-500', 
+            'staking': 'border-green-500',
+            'mining': 'border-orange-500'
+        };
+        selectedCard.classList.add(colors[planType]);
+    }
+}
+
+// Close modal on escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeCreateModal();
+    }
+});
+
+// Close modal on backdrop click
+document.getElementById('createPlanModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeCreateModal();
+    }
+});
+
 // Tab functionality
 function switchTab(tabName) {
     // Hide all tab contents
@@ -1040,132 +1090,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Create plan modal functionality
-function openCreateModal(type = null) {
-    const modal = document.getElementById('createPlanModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const typeSelect = document.getElementById('modal_type');
-    
-    // Set the plan type if provided
-    if (type) {
-        typeSelect.value = type;
-        modalTitle.textContent = `Create ${type.charAt(0).toUpperCase() + type.slice(1)} Plan`;
-    } else {
-        modalTitle.textContent = 'Create Plan';
-    }
-    
-    // Show the modal
-    modal.classList.remove('hidden');
-    
-    // Show type-specific fields
-    showTypeSpecificFields();
-}
 
-function closeCreateModal() {
-    const modal = document.getElementById('createPlanModal');
-    const form = document.getElementById('createPlanForm');
-    modal.classList.add('hidden');
-    
-    // Reset form and restore action/method
-    form.reset();
-    const defaultAction = form.getAttribute('data-default-action') || form.action;
-    form.action = defaultAction;
-    const methodInput = form.querySelector('input[name="_method"]');
-    if (methodInput) methodInput.remove();
-    
-    // Hide all type-specific fields
-    document.querySelectorAll('.type-specific-fields').forEach(field => {
-        field.classList.add('hidden');
-    });
-}
 
-// Edit existing plan (prefill form and switch to PUT)
-function openEditModal(planId) {
-    const form = document.getElementById('createPlanForm');
-    const modal = document.getElementById('createPlanModal');
-    const modalTitle = document.getElementById('modalTitle');
-    const typeSelect = document.getElementById('modal_type');
-    const plan = window.__PLAN_MAP ? window.__PLAN_MAP[planId] : null;
-    if (!plan) { alert('Unable to load this plan for editing.'); return; }
-    
-    // Switch action and method
-    form.action = plan.update_url;
-    let methodInput = form.querySelector('input[name="_method"]');
-    if (!methodInput) {
-        methodInput = document.createElement('input');
-        methodInput.type = 'hidden';
-        methodInput.name = '_method';
-        form.appendChild(methodInput);
-    }
-    methodInput.value = 'PUT';
-    
-    // Base fields
-    document.getElementById('modal_name').value = plan.name || '';
-    document.getElementById('modal_description').value = plan.description || '';
-    document.getElementById('modal_currency').value = plan.currency || 'USD';
-    document.getElementById('modal_price').value = plan.price ?? 0;
-    document.getElementById('modal_sort_order').value = plan.sort_order ?? 0;
-    
-    // Type and type-specific fields
-    typeSelect.value = plan.type;
-    showTypeSpecificFields();
-    modalTitle.textContent = `Edit ${plan.type.charAt(0).toUpperCase() + plan.type.slice(1)} Plan`;
-    
-    if (plan.type === 'signal') {
-        const qty = document.getElementById('modal_signal_quantity');
-        const dur = document.getElementById('modal_signal_duration');
-        const str = document.getElementById('modal_signal_strength');
-        const rate = document.getElementById('modal_success_rate');
-        const daily = document.getElementById('modal_daily_signals');
-        const maxDaily = document.getElementById('modal_max_daily_signals');
-        const market = document.getElementById('modal_signal_market_type') || document.getElementById('modal_market_type');
-        const features = document.getElementById('modal_signal_features');
-        if (qty) qty.value = plan.signal_quantity ?? '';
-        if (dur) dur.value = plan.signal_duration ?? '';
-        if (str) str.value = plan.signal_strength ?? '';
-        if (rate) rate.value = plan.success_rate ?? '';
-        if (daily) daily.value = plan.daily_signals ?? '';
-        if (maxDaily) maxDaily.value = plan.max_daily_signals ?? '';
-        if (market) market.value = plan.signal_market_type ?? '';
-        if (features) features.value = JSON.stringify(plan.signal_features || []);
-    }
-    
-    // Show modal
-    modal.classList.remove('hidden');
-}
 
-// Modal field visibility function
-function showTypeSpecificFields() {
-    const type = document.getElementById('modal_type').value;
-    
-    // Hide all type-specific fields
-    document.querySelectorAll('.type-specific-fields').forEach(field => {
-        field.classList.add('hidden');
-    });
-    
-    // Show fields for selected type
-    if (type) {
-        const targetField = document.getElementById(`modal_${type}-fields`);
-        if (targetField) {
-            targetField.classList.remove('hidden');
-        }
-        
-        // Show/hide market type container and pricing fields based on plan type
-        const marketTypeContainer = document.getElementById('modal_market_type_container');
-        const pricingFields = document.getElementById('modal_pricing_fields');
-        const signalPricing = document.getElementById('modal_signal_pricing');
-        
-        if (type === 'signal') {
-            marketTypeContainer.classList.remove('hidden');
-            pricingFields.classList.add('hidden'); // Hide regular pricing for signal plans
-            signalPricing.classList.remove('hidden'); // Show signal-specific pricing
-        } else {
-            marketTypeContainer.classList.add('hidden');
-            pricingFields.classList.remove('hidden');
-            signalPricing.classList.add('hidden');
-        }
-    }
-}
 
 
 
@@ -1190,6 +1117,7 @@ function validateForm() {
     const planType = formData.get('type');
     const planName = formData.get('name');
     const price = formData.get('price');
+    const minFunding = formData.get('min_funding');
     
     if (!planType) {
         alert('Please select a plan type');
@@ -1206,7 +1134,34 @@ function validateForm() {
         return false;
     }
     
+    if (!minFunding || minFunding <= 0) {
+        alert('Please enter a valid minimum funding amount');
+        return false;
+    }
+    
+    // Plan-specific validation
+    if (planType === 'signal') {
+        const signalAmount = formData.get('signal_amount');
+        if (!signalAmount || signalAmount <= 0) {
+            alert('Please enter a valid signal amount');
+            return false;
+        }
+    }
+    
     return true;
 }
+
+// Add form submission handler
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('createPlanForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (!validateForm()) {
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+});
 </script>
 @endsection

@@ -50,7 +50,7 @@ class OverviewController extends Controller
         
         // Overall Stats
         $totalTradingVolume = $liveTradingVolume + $botTradingVolume + $copyTradingVolume;
-        $totalProfitLoss = $totalBotProfit; // Only bot trades have P&L for now
+        $totalProfitLoss = $totalBotProfit + $totalCopyPnL; // Include both bot and copy trade P&L
         
                             return view('dashboard.overview.index', compact(
                         'openLiveTrades',
