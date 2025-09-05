@@ -110,13 +110,17 @@
     <!-- Action Buttons -->
     @if($deposit->status == 0)
         <div class="flex space-x-3 pt-4 border-t border-gray-200 dark:border-gray-600">
-            <a href="{{ route('admin.deposit.approve', $deposit->id) }}" 
-               class="flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300">
-                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                Approve Deposit
-            </a>
+            <form method="POST" action="{{ route('admin.deposit.approve', $deposit->id) }}" class="flex-1">
+                @csrf
+                <button type="submit" 
+                        class="w-full inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300"
+                        onclick="return confirm('Are you sure you want to approve this deposit? This will credit the user\'s account.')">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Approve Deposit
+                </button>
+            </form>
             <a href="{{ route('admin.deposit.decline', $deposit->id) }}" 
                class="flex-1 inline-flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-300">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

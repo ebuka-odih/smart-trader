@@ -310,7 +310,21 @@
             'Approve',
             'bg-green-600 hover:bg-green-700',
             () => {
-                window.location.href = `/admin/deposit/${depositId}/approve`;
+                // Create a form to submit POST request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/deposit/${depositId}/approve`;
+                
+                // Add CSRF token
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                const csrfInput = document.createElement('input');
+                csrfInput.type = 'hidden';
+                csrfInput.name = '_token';
+                csrfInput.value = csrfToken;
+                form.appendChild(csrfInput);
+                
+                document.body.appendChild(form);
+                form.submit();
             }
         );
     }

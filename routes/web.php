@@ -219,11 +219,25 @@ Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'ind
             'user_id' => $user->id,
             'type' => 'system',
             'title' => 'Test Notification',
-            'message' => 'This is a test notification created at ' . now()->format('H:i:s'),
-            'data' => ['test' => true, 'timestamp' => now()->toISOString()]
+            'message' => 'This is a test notification created at ' . now()->format('H:i:s') . ' for user: ' . $user->name,
+            'data' => ['test' => true, 'timestamp' => now()->toISOString(), 'user_id' => $user->id]
         ]);
         
-        return 'Test notification created successfully! Check your notification dropdown.';
+        return 'Test notification created successfully for ' . $user->name . '! Check your notification dropdown.';
+    });
+
+    // Test notification count route (no auth required for testing)
+    Route::get('/test-notification-count', function () {
+        $adminUserId = '916b7fbf-290b-4fb8-9383-bc7d159571b4';
+        $count = \App\Models\UserNotification::where('user_id', $adminUserId)
+            ->whereNull('read_at')
+            ->count();
+        
+        return response()->json([
+            'user_id' => $adminUserId,
+            'unread_count' => $count,
+            'total_notifications' => \App\Models\UserNotification::where('user_id', $adminUserId)->count()
+        ]);
     });
 
 Route::middleware('auth')->group(function () {

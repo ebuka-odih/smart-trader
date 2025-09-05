@@ -482,18 +482,18 @@
                         </div>
 
                         <!-- User Dropdown -->
-                        <div class="relative" id="userDropdown">
-                            <button id="userDropdownButton" class="flex items-center space-x-1 sm:space-x-2 p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
+                        <div class="relative group" id="userDropdown">
+                            <button class="flex items-center space-x-1 sm:space-x-2 p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
                                 <div class="w-7 h-7 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
                                     <span class="text-white font-semibold text-sm">{{ substr(auth()->user()->name, 0, 1) }}</span>
                                 </div>
-                                <svg class="w-4 h-4 transition-transform duration-200" id="userDropdownArrow" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-4 h-4 transition-transform duration-200 group-hover:rotate-180" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                                 </svg>
                             </button>
                             
                             <!-- Dropdown Menu -->
-                            <div id="userDropdownMenu" class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50 opacity-0 invisible transform scale-95 transition-all duration-200">
+                            <div class="absolute right-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transform scale-95 group-hover:scale-100 transition-all duration-200">
                                 <div class="py-1">
                                     <a href="{{ route('user.profile') }}" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
                                         <svg class="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -794,6 +794,7 @@
         const notificationList = document.getElementById('notificationList');
         const notificationBadge = document.getElementById('notificationBadge');
         const notificationCount = document.getElementById('notificationCount');
+
 
 
         if (notificationDropdown && notificationButton && notificationDropdownMenu) {

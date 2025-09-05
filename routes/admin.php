@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
 
     // Admin users management
     Route::resource('/user', AdminUserController::class)->names('user');
+    Route::delete('/user/{id}/delete', [AdminUserController::class, 'deleteUser'])->name('deleteUser');
 
     Route::resource('/payment-method', AdminPaymentMethodController::class);
     Route::get('/security', [AdminController::class, 'security'])->name('security');
