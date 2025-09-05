@@ -1,26 +1,19 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en" class="dark">
-  <head>
-    <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Get started with a free and open-source admin dashboard layout built with Tailwind CSS and Flowbite featuring charts, widgets, CRUD layouts, authentication pages, and more">
-<meta name="author" content="Themesberg">
-<meta name="generator" content="Hugo 0.58.2">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>{{ env('APP_NAME') }} - Admin Dashboard</title>
+  <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
+    
+  <!-- Tailwind CSS CDN for immediate styling -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<title>{{ env('APP_NAME') }} | Admin</title>
-
-<link rel="canonical" href="https://flowbite-admin-dashboard.vercel.app/">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-{{--<link rel="stylesheet" href="https://flowbite-admin-dashboard.vercel.app//app.css">--}}
-<link rel="stylesheet" href="{{ asset('src/app.css') }}">
-
-    <meta name="msapplication-TileColor" content="#ffffff">
-<meta name="theme-color" content="#ffffff">
-<meta name="csrf-token" content="{{ csrf_token() }}">
+  <!-- Pusher JS for real-time updates -->
+  <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
 <script>
 
     if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {

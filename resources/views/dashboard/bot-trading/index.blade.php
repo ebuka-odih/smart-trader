@@ -408,7 +408,9 @@
                                     <option value="4h">4 Hours</option>
                                     <option value="24h" selected>24 Hours</option>
                                     <option value="1w">1 Week</option>
+                                    <option value="2w">2 Weeks</option>
                                     <option value="1m">1 Month</option>
+                                    <option value="2m">2 Months</option>
                                 </select>
 
                             </div>
