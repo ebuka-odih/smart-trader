@@ -52,12 +52,12 @@
             <div class="flex items-start space-x-4">
                 <!-- Notification Icon -->
                 <div class="flex-shrink-0">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' ? 'bg-green-600' : ($notification->type === 'withdrawal' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : 'bg-gray-600')) }}">
-                        @if($notification->type === 'deposit')
+                    <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : 'bg-gray-600')) }}">
+                        @if($notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved')
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                        @elseif($notification->type === 'withdrawal')
+                        @elseif($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved')
                             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m16 0l-4-4m4 4l-4 4"></path>
                             </svg>

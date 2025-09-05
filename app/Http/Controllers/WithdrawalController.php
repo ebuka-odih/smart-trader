@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WithdrawalSubmitted;
 use App\Mail\WithdrawalRequestMail;
 use App\Mail\TransferActionMail;
 use App\Models\User;
@@ -165,6 +166,9 @@ class WithdrawalController extends Controller
             }
 
             $withdraw->save();
+
+            // Fire the WithdrawalSubmitted event
+            event(new WithdrawalSubmitted($withdraw));
 
             // Deduct from user's account
             $user->$fromAccount -= $amount;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\DepositSubmitted;
 use App\Mail\AdminDepositNotificationMail;
 use App\Models\Deposit;
 use App\Models\PaymentMethod;
@@ -71,6 +72,9 @@ class DepositController extends Controller
                 'proof' => $proofPath,
                 'status' => 0, // Pending by default
             ]);
+
+            // Fire the DepositSubmitted event
+            event(new DepositSubmitted($deposit));
 
             // Send email notification to admin
             try {

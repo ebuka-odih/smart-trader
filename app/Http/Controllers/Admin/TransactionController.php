@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\DepositApproved;
+use App\Events\WithdrawalApproved;
 use App\Http\Controllers\Controller;
 use App\Mail\DepositApprovalMail;
 use App\Models\Deposit;
@@ -80,6 +82,9 @@ class TransactionController extends Controller
                     $user->balance += $deposit->amount; // Default to trading balance
             }
         $user->save();
+
+            // Fire the DepositApproved event
+            event(new DepositApproved($deposit));
 
             // Send approval email to user
             try {
@@ -183,6 +188,9 @@ class TransactionController extends Controller
 
             $withdrawal->status = 1;
             $withdrawal->save();
+
+            // Fire the WithdrawalApproved event
+            event(new WithdrawalApproved($withdrawal));
 
             try {
                 Mail::to($withdrawal->user->email)->send(new ApproveWithdrawalMail($withdrawal));
