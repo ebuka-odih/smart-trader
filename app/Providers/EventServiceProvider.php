@@ -31,12 +31,11 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        // Deposit Events
+        // Only register events that are not auto-discovered
         DepositCompleted::class => [
             SendDepositNotification::class,
         ],
 
-        // Withdrawal Events
         WithdrawalCompleted::class => [
             SendWithdrawalNotification::class,
         ],
@@ -47,11 +46,7 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Manually register events to avoid duplicates
-        Event::listen(DepositSubmitted::class, SendDepositSubmittedNotification::class);
-        Event::listen(DepositApproved::class, SendDepositApprovedNotification::class);
-        Event::listen(WithdrawalSubmitted::class, SendWithdrawalSubmittedNotification::class);
-        Event::listen(WithdrawalApproved::class, SendWithdrawalApprovedNotification::class);
+        //
     }
 
     /**

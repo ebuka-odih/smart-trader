@@ -22,6 +22,20 @@ class SendWithdrawalApprovedNotification
      */
     public function handle(WithdrawalApproved $event): void
     {
+        // Check if notification already exists to prevent duplicates
+        $existingNotification = \App\Models\UserNotification::where('user_id', $event->user->id)
+            ->where('type', 'withdrawal_approved')
+            ->where('data->withdrawal_id', $event->withdrawal->id)
+            ->first();
+
+        if ($existingNotification) {
+            \Log::info('Withdrawal approval notification already exists, skipping duplicate', [
+                'withdrawal_id' => $event->withdrawal->id,
+                'user_id' => $event->user->id
+            ]);
+            return;
+        }
+
         // Create notification for the user whose withdrawal was approved
         $this->notificationService->createNotification(
             $event->user,

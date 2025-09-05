@@ -22,6 +22,20 @@ class SendDepositApprovedNotification
      */
     public function handle(DepositApproved $event): void
     {
+        // Check if notification already exists to prevent duplicates
+        $existingNotification = \App\Models\UserNotification::where('user_id', $event->user->id)
+            ->where('type', 'deposit_approved')
+            ->where('data->deposit_id', $event->deposit->id)
+            ->first();
+
+        if ($existingNotification) {
+            \Log::info('Deposit approval notification already exists, skipping duplicate', [
+                'deposit_id' => $event->deposit->id,
+                'user_id' => $event->user->id
+            ]);
+            return;
+        }
+
         // Create notification for the user whose deposit was approved
         $this->notificationService->createNotification(
             $event->user,

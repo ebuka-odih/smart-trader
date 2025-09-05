@@ -33,6 +33,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
 
     Route::resource('/payment-method', AdminPaymentMethodController::class);
     Route::get('/security', [AdminController::class, 'security'])->name('security');
+    Route::post('/reset-password', [AdminController::class, 'resetPassword'])->name('resetPassword');
 
     Route::resource('/plans', AdminPlanController::class)->names('plans');
     Route::post('/plans/{plan}/toggle-status', [AdminPlanController::class, 'toggleStatus'])->name('plans.toggle-status');
