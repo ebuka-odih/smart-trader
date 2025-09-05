@@ -235,7 +235,7 @@
             <!-- Transfers Tab -->
             <div id="transfersContent" class="tab-content hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-700">
+                    <table class="min-w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
                         <thead class="bg-gray-700">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
@@ -291,7 +291,7 @@
             <!-- Trades Tab -->
             <div id="tradesContent" class="tab-content hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-700">
+                    <table class="min-w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
                         <thead class="bg-gray-700">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>
@@ -352,7 +352,7 @@
             <!-- Holdings Tab -->
             <div id="holdingsContent" class="tab-content hidden">
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-700">
+                    <table class="min-w-full divide-y divide-gray-700 bg-gray-800 rounded-lg">
                         <thead class="bg-gray-700">
                             <tr>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date</th>

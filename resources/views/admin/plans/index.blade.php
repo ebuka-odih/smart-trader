@@ -948,36 +948,38 @@
                         </div>
                     </div>
 
-                    <!-- Plan Status -->
+                    <!-- Plan Status & Actions -->
                     <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
                         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-indigo-600" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                             </svg>
-                            Plan Status
+                            Plan Status & Actions
                         </h4>
                         
-                        <div class="flex items-center">
-                            <input type="checkbox" id="modal_is_active" name="is_active" value="1" checked class="w-5 h-5 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200">
-                            <label for="modal_is_active" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Active Plan</label>
+                        <div class="space-y-4">
+                            <!-- Plan Status -->
+                            <div class="flex items-center">
+                                <input type="checkbox" id="modal_is_active" name="is_active" value="1" checked class="w-5 h-5 text-blue-600 bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200">
+                                <label for="modal_is_active" class="ml-3 text-sm font-medium text-gray-700 dark:text-gray-300">Active Plan</label>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Uncheck to create an inactive plan that won't be visible to users</p>
+                            
+                            <!-- Action Buttons -->
+                            <div class="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200 dark:border-gray-600">
+                                <button type="button" onclick="closeCreateModal()" class="w-full sm:w-auto bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium transition-all duration-200">
+                                    Cancel
+                                </button>
+                                <button type="submit" form="createPlanForm" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
+                                    Create Plan
+                                </button>
+                            </div>
                         </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">Uncheck to create an inactive plan that won't be visible to users</p>
                     </div>
 
                 </form>
             </div>
             
-            <!-- Modal Footer - Fixed at bottom -->
-            <div class="flex-shrink-0 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-b-2xl">
-                <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
-                    <button type="button" onclick="closeCreateModal()" class="w-full sm:w-auto bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium transition-all duration-200">
-                        Cancel
-                    </button>
-                    <button type="submit" form="createPlanForm" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
-                        Create Plan
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </div>
