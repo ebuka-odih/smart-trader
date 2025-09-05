@@ -62,7 +62,7 @@
               <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-600">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white hidden sm:table-cell">
                                         ID
                     </th>
                     <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
@@ -71,13 +71,13 @@
                     <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
                       Amount
                     </th>
-                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white hidden md:table-cell">
                                         Wallet
                                     </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white hidden lg:table-cell">
                                         Payment Method
                                     </th>
-                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
+                                    <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white hidden sm:table-cell">
                                         Date
                     </th>
                     <th scope="col" class="p-4 text-xs font-medium tracking-wider text-left text-gray-500 uppercase dark:text-white">
@@ -91,15 +91,16 @@
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-600">
                                 @forelse($deposits as $deposit)
                                     <tr class="hover:bg-gray-50 dark:hover:bg-gray-700">
-                                        <td class="p-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            #{{ $deposit->id }}
+                                        <td class="p-4 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white hidden sm:table-cell">
+                                            #{{ substr($deposit->id, 0, 6) }}
                     </td>
                                         <td class="p-4 whitespace-nowrap">
                                             <div class="flex items-center">
-                                                <img class="w-10 h-10 rounded-full" src="{{ asset($deposit->user->avatar ?? '/img/trader.jpg') }}" alt="{{ $deposit->user->name }}">
+                                                <img class="w-10 h-10 rounded-full" src="{{ $deposit->user->avatar_url }}" alt="{{ $deposit->user->name }}">
                                                 <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
                                                         {{ $deposit->user->name }}
+                                                        <span class="sm:hidden text-xs text-gray-500 ml-2">#{{ substr($deposit->id, 0, 6) }}</span>
                                                     </div>
                                                     <div class="text-sm text-gray-500 dark:text-gray-400">
                                                         {{ $deposit->user->email }}
@@ -110,7 +111,7 @@
                                         <td class="p-4 text-sm font-semibold text-gray-900 whitespace-nowrap dark:text-white">
                                             ${{ number_format($deposit->amount, 2) }}
                                         </td>
-                                        <td class="p-4 whitespace-nowrap">
+                                        <td class="p-4 whitespace-nowrap hidden md:table-cell">
                                             @if($deposit->wallet_type == 'trading')
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                                                     Trading Balance
@@ -127,10 +128,10 @@
                                                 <span class="text-gray-400">N/A</span>
                                             @endif
                     </td>
-                                        <td class="p-4 text-sm text-gray-900 whitespace-nowrap dark:text-white">
+                                        <td class="p-4 text-sm text-gray-900 whitespace-nowrap dark:text-white hidden lg:table-cell">
                                             {{ optional($deposit->payment_method)->crypto_display_name ?? 'N/A' }}
                     </td>
-                                        <td class="p-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400">
+                                        <td class="p-4 text-sm text-gray-500 whitespace-nowrap dark:text-gray-400 hidden sm:table-cell">
                                             {{ $deposit->created_at ? $deposit->created_at->format('M d, Y H:i') : 'N/A' }}
                     </td>
                     <td class="p-4 whitespace-nowrap">

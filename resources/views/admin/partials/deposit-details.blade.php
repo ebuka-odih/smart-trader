@@ -1,12 +1,8 @@
-<div class="space-y-6">
+<div class="max-h-96 overflow-y-auto space-y-6">
     <!-- Deposit Information -->
     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Deposit Information</h4>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Transaction ID</label>
-                <p class="text-sm text-gray-900 dark:text-white font-mono">#{{ $deposit->id }}</p>
-            </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount</label>
                 <p class="text-lg font-semibold text-green-600 dark:text-green-400">${{ number_format($deposit->amount, 2) }}</p>
@@ -64,11 +60,10 @@
     <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">User Information</h4>
         <div class="flex items-center space-x-4">
-            <img class="w-12 h-12 rounded-full" src="{{ asset($deposit->user->avatar ?? '/img/trader.jpg') }}" alt="{{ $deposit->user->name }}">
+            <img class="w-12 h-12 rounded-full" src="{{ $deposit->user->avatar_url }}" alt="{{ $deposit->user->name }}">
             <div>
                 <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $deposit->user->name }}</p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">{{ $deposit->user->email }}</p>
-                <p class="text-xs text-gray-400">User ID: {{ $deposit->user->id }}</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">{{ $deposit->user->phone ?? 'No phone' }}</p>
             </div>
         </div>
     </div>

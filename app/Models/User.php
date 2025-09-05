@@ -207,6 +207,24 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Get the user's avatar URL
+     */
+    public function getAvatarUrlAttribute()
+    {
+        if (!$this->avatar) {
+            return asset('assets/img/avatar.svg');
+        }
+        
+        // If avatar starts with 'files/', it's stored in storage
+        if (str_starts_with($this->avatar, 'files/')) {
+            return asset('storage/' . $this->avatar);
+        }
+        
+        // Otherwise, treat it as a direct asset path
+        return asset($this->avatar);
+    }
+
+    /**
      * Balance management methods
      */
     public function addToBalance($amount, $type = 'holding')

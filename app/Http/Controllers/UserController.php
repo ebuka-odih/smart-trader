@@ -109,20 +109,25 @@ class UserController extends Controller
     public function updateProfile(Request $request, $id)
     {
         $validated = $request->validate([
-           'first_name' => 'nullable|string',
-           'last_name' => 'nullable|string',
-           'phone' => 'nullable|string',
-           'telegram' => 'nullable|string',
+           'name' => 'nullable|string|max:255',
+           'phone' => 'nullable|string|max:20',
+           'telegram' => 'nullable|string|max:255',
            'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        
         $user = User::findOrFail($id);
+        
         if ($request->hasFile('avatar')) {
-        if ($user->avatar) {
-            Storage::delete($user->avatar);
-        }
+            // Delete old avatar if exists
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+            
+            // Store new avatar
             $avatarPath = $request->file('avatar')->store('files', 'public');
             $validated['avatar'] = $avatarPath;
         }
+        
         $user->update($validated);
         return redirect()->back()->with('success', 'Profile updated successfully');
     }

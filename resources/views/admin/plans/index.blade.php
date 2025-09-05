@@ -591,178 +591,225 @@
 
 <!-- Create Plan Modal -->
 <div id="createPlanModal" class="fixed inset-0 z-50 hidden">
-    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
     <div class="relative min-h-screen flex items-center justify-center p-4">
-        <div class="bg-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] flex flex-col">
-            <div class="p-6 flex-1 overflow-y-auto max-h-[calc(90vh-120px)]">
-                                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-xl font-bold text-white" id="modalTitle">Create Plan</h3>
-                        <button onclick="closeCreateModal()" class="text-gray-400 hover:text-white transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col border border-gray-200 dark:border-gray-700">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-t-2xl flex-shrink-0">
+                <div>
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white" id="modalTitle">Create Plan</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Configure your new plan settings</p>
+                </div>
+                <button onclick="closeCreateModal()" class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all duration-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Modal Body - Scrollable -->
+            <div class="flex-1 overflow-y-auto p-6">
+                    
+                @if ($errors->any())
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                             </svg>
-                        </button>
+                            <span class="font-medium">Please fix the following errors:</span>
+                        </div>
+                        <ul class="list-disc list-inside mt-2 space-y-1">
+                            @foreach ($errors->all() as $error)
+                                <li class="text-sm">{{ $error }}</li>
+                            @endforeach
+                        </ul>
                     </div>
-                    
-                    @if ($errors->any())
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                            <ul class="list-disc list-inside">
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                @endif
+                
+                @if (session('error'))
+                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg mb-6">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <span class="font-medium">{{ session('error') }}</span>
                         </div>
-                    @endif
-                    
-                    @if (session('error'))
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    
-                                    <form id="createPlanForm" action="{{ route('admin.plans.store') }}" data-default-action="{{ route('admin.plans.store') }}" method="POST" class="space-y-4" onsubmit="return validateForm()">
+                    </div>
+                @endif
+                
+                <form id="createPlanForm" action="{{ route('admin.plans.store') }}" data-default-action="{{ route('admin.plans.store') }}" method="POST" class="space-y-6" onsubmit="return validateForm()">
                     @csrf
                     
-                    <!-- Basic Plan Information - 2 per row -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div>
-                            <label for="modal_type" class="block text-sm font-medium text-gray-300 mb-1">Plan Type</label>
-                            <select id="modal_type" name="type" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" onchange="showTypeSpecificFields()">
-                                <option value="">Select Plan Type</option>
-                                <option value="trading">Trading</option>
-                                <option value="signal">Signal</option>
-                                <option value="staking">Staking</option>
-                                <option value="mining">Mining</option>
-                            </select>
-                        </div>
+                    <!-- Basic Plan Information -->
+                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                        <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                            <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            Basic Information
+                        </h4>
                         
-                        <div>
-                            <label for="modal_name" class="block text-sm font-medium text-gray-300 mb-1">Plan Name</label>
-                            <input type="text" id="modal_name" name="name" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter plan name">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="modal_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Plan Type <span class="text-red-500">*</span></label>
+                                <select id="modal_type" name="type" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" onchange="showTypeSpecificFields()">
+                                    <option value="">Select Plan Type</option>
+                                    <option value="trading">Trading</option>
+                                    <option value="signal">Signal</option>
+                                    <option value="staking">Staking</option>
+                                    <option value="mining">Mining</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="modal_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Plan Name <span class="text-red-500">*</span></label>
+                                <input type="text" id="modal_name" name="name" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="Enter plan name">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Description -->
-                    <div class="grid grid-cols-1 gap-4 mb-4">
-                        <div>
-                            <label for="modal_description" class="block text-sm font-medium text-gray-300 mb-1">Description</label>
-                            <textarea id="modal_description" name="description" rows="2" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Plan description..."></textarea>
+                        <div class="mt-4">
+                            <label for="modal_description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Description</label>
+                            <textarea id="modal_description" name="description" rows="3" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none" placeholder="Plan description..."></textarea>
                         </div>
                     </div>
 
                     <!-- Pricing (for non-signal plans) -->
                     <div id="modal_pricing_fields" class="type-specific-fields">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <label for="modal_price" class="block text-sm font-medium text-gray-300 mb-1">Price</label>
-                                <input type="number" id="modal_price" name="price" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                            </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                                </svg>
+                                Pricing & Funding
+                            </h4>
                             
-                            <div>
-                                <label for="modal_currency" class="block text-sm font-medium text-gray-300 mb-1">Currency</label>
-                                <select id="modal_currency" name="currency" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="USD">USD</option>
-                                    <option value="EUR">EUR</option>
-                                    <option value="GBP">GBP</option>
-                                    <option value="JPY">JPY</option>
-                                    <option value="CAD">CAD</option>
-                                    <option value="AUD">AUD</option>
-                                    <option value="CHF">CHF</option>
-                                    <option value="CNY">CNY</option>
-                                    <option value="SGD">SGD</option>
-                                    <option value="NZD">NZD</option>
-                                </select>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div>
+                                    <label for="modal_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price <span class="text-red-500">*</span></label>
+                                    <input type="number" id="modal_price" name="price" step="0.01" min="0" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+                                    <select id="modal_currency" name="currency" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                        <option value="JPY">JPY</option>
+                                        <option value="CAD">CAD</option>
+                                        <option value="AUD">AUD</option>
+                                        <option value="CHF">CHF</option>
+                                        <option value="CNY">CNY</option>
+                                        <option value="SGD">SGD</option>
+                                        <option value="NZD">NZD</option>
+                                    </select>
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_original_price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Original Price <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                    <input type="number" id="modal_original_price" name="original_price" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                </div>
                             </div>
-                            
-                            <div>
-                                <label for="modal_original_price" class="block text-sm font-medium text-gray-300 mb-1">Original Price <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                <input type="number" id="modal_original_price" name="original_price" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                            </div>
-                        </div>
 
-                        <!-- Funding Range (for non-signal plans) -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                            <div>
-                                <label for="modal_min_funding" class="block text-sm font-medium text-gray-300 mb-1">Min Funding</label>
-                                <input type="number" id="modal_min_funding" name="min_funding" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                            </div>
-                            
-                            <div>
-                                <label for="modal_max_funding" class="block text-sm font-medium text-gray-300 mb-1">Max Funding <span class="text-gray-500 text-xs">(Optional)</span></label>
-                                <input type="number" id="modal_max_funding" name="max_funding" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00 for unlimited">
-                                <p class="text-xs text-gray-400 mt-1">Leave empty or set to 0 for unlimited funding</p>
+                            <!-- Funding Range -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                                <div>
+                                    <label for="modal_min_funding" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Funding <span class="text-red-500">*</span></label>
+                                    <input type="number" id="modal_min_funding" name="min_funding" step="0.01" min="0" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_max_funding" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Funding <span class="text-gray-500 text-xs">(Optional)</span></label>
+                                    <input type="number" id="modal_max_funding" name="max_funding" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00 for unlimited">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Leave empty or set to 0 for unlimited funding</p>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Signal Pricing (for signal plans only) -->
                     <div id="modal_signal_pricing" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-4">Signal Pricing</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div>
-                                <label for="modal_signal_amount" class="block text-sm font-medium text-gray-300 mb-1">Signal Amount <span class="text-gray-500 text-xs">(Required)</span></label>
-                                <input type="number" id="modal_signal_amount" name="min_funding" step="0.01" min="0" required class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                                <p class="text-xs text-gray-400 mt-1">Amount users pay for signal entry</p>
-                            </div>
-                            
-                            <div>
-                                <label for="modal_signal_currency" class="block text-sm font-medium text-gray-300 mb-1">Currency</label>
-                                <select id="modal_signal_currency" name="currency" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="USD">USD</option>
-                                    <option value="EUR">EUR</option>
-                                    <option value="GBP">GBP</option>
-                                    <option value="JPY">JPY</option>
-                                    <option value="CAD">CAD</option>
-                                    <option value="AUD">AUD</option>
-                                    <option value="CHF">CHF</option>
-                                    <option value="CNY">CNY</option>
-                                    <option value="SGD">SGD</option>
-                                    <option value="NZD">NZD</option>
-                                </select>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+                                </svg>
+                                Signal Pricing
+                            </h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="modal_signal_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Signal Amount <span class="text-red-500">*</span></label>
+                                    <input type="number" id="modal_signal_amount" name="min_funding" step="0.01" min="0" required class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Amount users pay for signal entry</p>
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_signal_currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency</label>
+                                    <select id="modal_signal_currency" name="currency" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200">
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                        <option value="JPY">JPY</option>
+                                        <option value="CAD">CAD</option>
+                                        <option value="AUD">AUD</option>
+                                        <option value="CHF">CHF</option>
+                                        <option value="CNY">CNY</option>
+                                        <option value="SGD">SGD</option>
+                                        <option value="NZD">NZD</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Trading Plan Specific Fields -->
                     <div id="modal_trading-fields" class="type-specific-fields hidden">
-                        <h3 class="text-base font-semibold text-white mb-4">Trading Plan Settings</h3>
-                        
-                        <!-- First Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_pairs" class="block text-sm font-medium text-gray-300 mb-1">Trading Pairs</label>
-                                <input type="text" id="modal_pairs" name="pairs" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 50+ Trading Pairs">
-                            </div>
+                        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-6">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path>
+                                </svg>
+                                Trading Plan Settings
+                            </h4>
                             
-                            <div>
-                                <label for="modal_leverage" class="block text-sm font-medium text-gray-300 mb-1">Leverage</label>
-                                <input type="text" id="modal_leverage" name="leverage" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 100.00">
+                            <!-- First Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_pairs" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Trading Pairs</label>
+                                    <input type="text" id="modal_pairs" name="pairs" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 50+ Trading Pairs">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_leverage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Leverage</label>
+                                    <input type="text" id="modal_leverage" name="leverage" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 100.00">
+                                </div>
                             </div>
-                        </div>
 
-                        <!-- Second Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_spreads" class="block text-sm font-medium text-gray-300 mb-1">Spreads</label>
-                                <input type="text" id="modal_spreads" name="spreads" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 1.5">
+                            <!-- Second Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="modal_spreads" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Spreads</label>
+                                    <input type="text" id="modal_spreads" name="spreads" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 1.5">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_swap_fees" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Swap Fees</label>
+                                    <input type="text" id="modal_swap_fees" name="swap_fees" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 2.5">
+                                </div>
                             </div>
-                            
-                            <div>
-                                <label for="modal_swap_fees" class="block text-sm font-medium text-gray-300 mb-1">Swap Fees</label>
-                                <input type="text" id="modal_swap_fees" name="swap_fees" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2.5">
-                            </div>
-                        </div>
 
-                        <!-- Third Row - 2 inputs -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                            <div>
-                                <label for="modal_minimum_deposit" class="block text-sm font-medium text-gray-300 mb-1">Minimum Deposit</label>
-                                <input type="number" id="modal_minimum_deposit" name="minimum_deposit" step="0.01" min="0" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="0.00">
-                            </div>
-                            
-                            <div>
-                                <label for="modal_max_lot_size" class="block text-sm font-medium text-gray-300 mb-1">Max Lot Size</label>
-                                <input type="text" id="modal_max_lot_size" name="max_lot_size" class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 10 lots">
+                            <!-- Third Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label for="modal_minimum_deposit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Minimum Deposit</label>
+                                    <input type="number" id="modal_minimum_deposit" name="minimum_deposit" step="0.01" min="0" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="0.00">
+                                </div>
+                                
+                                <div>
+                                    <label for="modal_max_lot_size" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Lot Size</label>
+                                    <input type="text" id="modal_max_lot_size" name="max_lot_size" class="w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200" placeholder="e.g., 10 lots">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -890,13 +937,13 @@
                 </form>
             </div>
             
-            <!-- Submit Button - Fixed at bottom -->
-            <div class="p-6 border-t border-gray-700 bg-gray-800">
-                <div class="flex justify-end space-x-3">
-                    <button type="button" onclick="closeCreateModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <!-- Modal Footer - Fixed at bottom -->
+            <div class="flex-shrink-0 p-6 border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 rounded-b-2xl">
+                <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+                    <button type="button" onclick="closeCreateModal()" class="w-full sm:w-auto bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-6 py-3 rounded-lg font-medium transition-all duration-200">
                         Cancel
                     </button>
-                    <button type="submit" form="createPlanForm" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                    <button type="submit" form="createPlanForm" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-200 shadow-lg hover:shadow-xl">
                         Create Plan
                     </button>
                 </div>

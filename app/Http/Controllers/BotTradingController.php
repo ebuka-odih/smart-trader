@@ -57,7 +57,7 @@ class BotTradingController extends Controller
             'base_asset' => 'required|string|max:10',
             'quote_asset' => 'required|string|max:10',
             'leverage' => 'required|numeric|min:1.00|max:100.00',
-            'trade_duration' => 'required|string|in:1h,4h,24h,1w,1m',
+            'trade_duration' => 'required|string|in:1h,4h,24h,1w,2w,1m,2m',
             'target_yield_percentage' => 'nullable|numeric|min:0.1|max:100',
             'auto_close' => 'nullable',
             'strategy' => ['required', Rule::in(['grid', 'dca', 'scalping', 'trend_following'])],
@@ -191,7 +191,7 @@ class BotTradingController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'leverage' => 'required|numeric|min:1.00|max:100.00',
-            'trade_duration' => 'required|string|in:1h,4h,24h,1w,1m',
+            'trade_duration' => 'required|string|in:1h,4h,24h,1w,2w,1m,2m',
             'target_yield_percentage' => 'nullable|numeric|min:0.1|max:100',
             'auto_close' => 'nullable',
             'max_investment' => 'required|numeric|min:10|max:1000000',

@@ -17,7 +17,7 @@
                 <div class="text-center">
                     <div class="relative inline-block">
                         <img class="w-24 h-24 rounded-full mx-auto mb-4" 
-                             src="{{ asset($user->avatar ?? 'assets/img/avatar.svg') }}" 
+                             src="{{ $user->avatar_url }}" 
                              alt="Profile Photo">
                         <div class="absolute bottom-4 right-0">
                             <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
