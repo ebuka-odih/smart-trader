@@ -23,14 +23,72 @@
 
         <!-- Success/Error Messages -->
         @if(session('success'))
-            <div class="bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg">
-                {{ session('success') }}
+            <div id="success-message" class="bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ session('success') }}
+                </div>
+                <button onclick="hideMessage('success-message')" class="ml-4 text-green-200 hover:text-white">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
             </div>
         @endif
 
         @if(session('error'))
-            <div class="bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg">
-                {{ session('error') }}
+            <div id="error-message" class="bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between">
+                <div class="flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    {{ session('error') }}
+                </div>
+                <button onclick="hideMessage('error-message')" class="ml-4 text-red-200 hover:text-white">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div id="validation-errors" class="bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg">
+                <div class="flex items-center mb-2">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span class="font-semibold">Please fix the following errors:</span>
+                </div>
+                <ul class="list-disc list-inside space-y-1">
+                    @foreach($errors->all() as $error)
+                        <li class="text-sm">{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <!-- Debug Panel (only show in development) -->
+        @if(config('app.debug') && session('debug_info'))
+            <div class="bg-yellow-600 text-white px-4 py-3 rounded-lg shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                        </svg>
+                        <span class="font-semibold">Debug Information:</span>
+                    </div>
+                    <button onclick="hideMessage('debug-info')" class="ml-4 text-yellow-200 hover:text-white">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="mt-2 text-sm">
+                    <pre class="whitespace-pre-wrap">{{ session('debug_info') }}</pre>
+                </div>
             </div>
         @endif
 
@@ -1151,17 +1209,102 @@ function validateForm() {
     return true;
 }
 
+// Message handling functions
+function hideMessage(messageId) {
+    const message = document.getElementById(messageId);
+    if (message) {
+        message.style.display = 'none';
+    }
+}
+
+// Debug logging function
+function debugLog(message, data = null) {
+    if (data) {
+        console.log(`[Plan Debug] ${message}:`, data);
+    } else {
+        console.log(`[Plan Debug] ${message}`);
+    }
+}
+
+function showMessage(type, message) {
+    // Remove existing messages
+    const existingMessages = document.querySelectorAll('#success-message, #error-message, #validation-errors');
+    existingMessages.forEach(msg => msg.remove());
+    
+    // Create new message element
+    const messageDiv = document.createElement('div');
+    messageDiv.id = type === 'success' ? 'success-message' : 'error-message';
+    messageDiv.className = type === 'success' 
+        ? 'bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between'
+        : 'bg-red-600 text-white px-4 py-3 rounded-lg shadow-lg flex items-center justify-between';
+    
+    const icon = type === 'success' 
+        ? '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>'
+        : '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>';
+    
+    const closeColor = type === 'success' ? 'text-green-200' : 'text-red-200';
+    
+    messageDiv.innerHTML = `
+        <div class="flex items-center">
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                ${icon}
+            </svg>
+            ${message}
+        </div>
+        <button onclick="hideMessage('${messageDiv.id}')" class="ml-4 ${closeColor} hover:text-white">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+            </svg>
+        </button>
+    `;
+    
+    // Insert message after the page header
+    const header = document.querySelector('.flex.flex-col.sm\\:flex-row.justify-between');
+    if (header) {
+        header.parentNode.insertBefore(messageDiv, header.nextSibling);
+    }
+    
+    // Auto-hide after 5 seconds
+    setTimeout(() => {
+        if (messageDiv.parentNode) {
+            messageDiv.remove();
+        }
+    }, 5000);
+}
+
 // Add form submission handler
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('createPlanForm');
     if (form) {
         form.addEventListener('submit', function(e) {
+            // Show loading state
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Creating...';
+            submitBtn.disabled = true;
+            
+            // Validate form
             if (!validateForm()) {
                 e.preventDefault();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
                 return false;
             }
+            
+            // If validation passes, let the form submit naturally
+            // The server will handle the response and show appropriate messages
         });
     }
+    
+    // Auto-hide messages after 5 seconds
+    setTimeout(() => {
+        const messages = document.querySelectorAll('#success-message, #error-message, #validation-errors');
+        messages.forEach(msg => {
+            if (msg.parentNode) {
+                msg.remove();
+            }
+        });
+    }, 5000);
 });
 </script>
 @endsection
