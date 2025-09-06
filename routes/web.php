@@ -46,6 +46,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     Route::get('notifications/unread-count', [\App\Http\Controllers\User\NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
     Route::get('notifications/recent', [\App\Http\Controllers\User\NotificationController::class, 'getRecent'])->name('notifications.recent');
 
+    // Support routes
+    Route::get('support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support.index');
+
     Route::get('trade', [TradeController::class, 'index'])->name('trade.index');
     Route::get('trade/{id}', [TradeController::class, 'trade'])->name('trade');
     Route::post('place/buy/trade', [TradeController::class, 'placeBuyTrade'])->name('placeBuyTrade');
