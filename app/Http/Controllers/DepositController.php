@@ -99,12 +99,23 @@ class DepositController extends Controller
                 throw new \Exception('Database error: Failed to save deposit. Please try again.');
             }
 
-            // Fire the DepositSubmitted event
+            // Create notification directly
             try {
-                event(new DepositSubmitted($deposit));
+                \App\Models\UserNotification::create([
+                    'user_id' => Auth::id(),
+                    'type' => 'deposit_submitted',
+                    'title' => 'Deposit Submitted',
+                    'message' => "Your deposit of " . auth()->user()->formatAmount($validated['amount']) . " to your " . ucfirst($validated['wallet_type']) . " wallet has been submitted and is pending approval.",
+                    'data' => [
+                        'amount' => $validated['amount'],
+                        'wallet_type' => $validated['wallet_type'],
+                        'deposit_id' => $deposit->id,
+                        'status' => 'pending'
+                    ]
+                ]);
             } catch (\Exception $e) {
-                \Log::error('Failed to fire DepositSubmitted event: ' . $e->getMessage());
-                // Don't fail the deposit for event issues, just log it
+                \Log::error('Failed to create deposit notification: ' . $e->getMessage());
+                // Don't fail the deposit for notification issues, just log it
             }
 
             // Send email notification to admin

@@ -31,9 +31,26 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
 
-        // Only register events that are not auto-discovered
+        // Deposit events
+        DepositSubmitted::class => [
+            SendDepositSubmittedNotification::class,
+        ],
+
+        DepositApproved::class => [
+            SendDepositApprovedNotification::class,
+        ],
+
         DepositCompleted::class => [
             SendDepositNotification::class,
+        ],
+
+        // Withdrawal events
+        WithdrawalSubmitted::class => [
+            SendWithdrawalSubmittedNotification::class,
+        ],
+
+        WithdrawalApproved::class => [
+            SendWithdrawalApprovedNotification::class,
         ],
 
         WithdrawalCompleted::class => [

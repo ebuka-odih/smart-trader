@@ -49,82 +49,87 @@
              data-type="{{ $notification->type }}" 
              data-id="{{ $notification->id }}">
             
-            <div class="flex items-start space-x-4">
-                <!-- Notification Icon -->
-                <div class="flex-shrink-0">
-                    <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : 'bg-gray-600')) }}">
-                        @if($notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved')
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                        @elseif($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved')
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m16 0l-4-4m4 4l-4 4"></path>
-                            </svg>
-                        @elseif($notification->type === 'trading')
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-                            </svg>
-                        @else
-                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-6H4v6z"></path>
-                            </svg>
+            <div class="flex flex-col space-y-4">
+                <!-- Top Section: Icon, Title and Message -->
+                <div class="flex items-start space-x-4">
+                    <!-- Notification Icon -->
+                    <div class="flex-shrink-0">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : 'bg-gray-600')) }}">
+                            @if($notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved')
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            @elseif($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved')
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m16 0l-4-4m4 4l-4 4"></path>
+                                </svg>
+                            @elseif($notification->type === 'trading')
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            @else
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-5 5v-5zM4 19h6v-6H4v6z"></path>
+                                </svg>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Notification Content -->
+                    <div class="flex-1 min-w-0">
+                        <h3 class="text-lg font-semibold text-white">{{ $notification->title }}</h3>
+                        <p class="text-gray-300 mt-1">{{ $notification->message }}</p>
+                        
+                        @if($notification->data)
+                            <div class="mt-3 p-3 bg-gray-700 rounded-lg">
+                                @if(isset($notification->data['amount']))
+                                    <div class="text-sm text-gray-300">
+                                        <span class="font-medium">Amount:</span> {{ auth()->user()->formatAmount($notification->data['amount']) }}
+                                    </div>
+                                @endif
+                                @if(isset($notification->data['status']))
+                                    <div class="text-sm text-gray-300 mt-1">
+                                        <span class="font-medium">Status:</span> 
+                                        <span class="px-2 py-1 rounded text-xs {{ $notification->data['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
+                                            {{ ucfirst($notification->data['status']) }}
+                                        </span>
+                                    </div>
+                                @endif
+                                @if(isset($notification->data['symbol']))
+                                    <div class="text-sm text-gray-300 mt-1">
+                                        <span class="font-medium">Symbol:</span> {{ $notification->data['symbol'] }}
+                                    </div>
+                                @endif
+                            </div>
                         @endif
                     </div>
                 </div>
 
-                <!-- Notification Content -->
-                <div class="flex-1 min-w-0">
-                    <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-white">{{ $notification->title }}</h3>
-                        <div class="flex items-center space-x-2">
-                            @if(!$notification->read_at)
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    New
-                                </span>
-                            @endif
-                            <span class="text-sm text-gray-400">{{ $notification->created_at->diffForHumans() }}</span>
-                        </div>
+                <!-- Bottom Section: Time, Status Badge, and Action Buttons -->
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2 border-t border-gray-700">
+                    <!-- Time and Status -->
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm text-gray-400">{{ $notification->created_at->diffForHumans() }}</span>
+                        @if(!$notification->read_at)
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                New
+                            </span>
+                        @endif
                     </div>
                     
-                    <p class="text-gray-300 mt-1">{{ $notification->message }}</p>
-                    
-                    @if($notification->data)
-                        <div class="mt-3 p-3 bg-gray-700 rounded-lg">
-                            @if(isset($notification->data['amount']))
-                                <div class="text-sm text-gray-300">
-                                    <span class="font-medium">Amount:</span> {{ auth()->user()->formatAmount($notification->data['amount']) }}
-                                </div>
-                            @endif
-                            @if(isset($notification->data['status']))
-                                <div class="text-sm text-gray-300 mt-1">
-                                    <span class="font-medium">Status:</span> 
-                                    <span class="px-2 py-1 rounded text-xs {{ $notification->data['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' }}">
-                                        {{ ucfirst($notification->data['status']) }}
-                                    </span>
-                                </div>
-                            @endif
-                            @if(isset($notification->data['symbol']))
-                                <div class="text-sm text-gray-300 mt-1">
-                                    <span class="font-medium">Symbol:</span> {{ $notification->data['symbol'] }}
-                                </div>
-                            @endif
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex-shrink-0 flex items-center space-x-2">
-                    @if(!$notification->read_at)
-                        <button class="mark-read-btn px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
+                    <!-- Action Buttons -->
+                    <div class="flex items-center space-x-2">
+                        @if(!$notification->read_at)
+                            <button class="mark-read-btn px-3 py-1 text-xs bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors" 
+                                    data-id="{{ $notification->id }}">
+                                Mark Read
+                            </button>
+                        @endif
+                        <button class="delete-notification-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors" 
                                 data-id="{{ $notification->id }}">
-                            Mark Read
+                            Delete
                         </button>
-                    @endif
-                    <button class="delete-notification-btn px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition-colors" 
-                            data-id="{{ $notification->id }}">
-                        Delete
-                    </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -55,8 +54,6 @@ class RegisteredUserController extends Controller
 
         // Send verification email
         $this->sendVerificationEmail($user, $verificationCode);
-
-        event(new Registered($user));
 
         // Redirect to verification page instead of logging in
         return redirect()->route('verification.show', ['email' => $user->email])->with('success', 'Registration successful! Please check your email for the verification code.');

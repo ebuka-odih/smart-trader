@@ -86,8 +86,23 @@ class TransactionController extends Controller
             }
         $user->save();
 
-            // Fire the DepositApproved event
-            event(new DepositApproved($deposit));
+            // Create notification directly
+            try {
+                \App\Models\UserNotification::create([
+                    'user_id' => $deposit->user_id,
+                    'type' => 'deposit_approved',
+                    'title' => 'Deposit Approved',
+                    'message' => "Your deposit of " . $deposit->user->formatAmount($deposit->amount) . " to your " . ucfirst($deposit->wallet_type) . " wallet has been approved and credited to your account.",
+                    'data' => [
+                        'amount' => $deposit->amount,
+                        'wallet_type' => $deposit->wallet_type,
+                        'deposit_id' => $deposit->id,
+                        'status' => 'approved'
+                    ]
+                ]);
+            } catch (\Exception $e) {
+                \Log::error('Failed to create deposit approval notification: ' . $e->getMessage());
+            }
 
             // Send approval email to user
             try {
