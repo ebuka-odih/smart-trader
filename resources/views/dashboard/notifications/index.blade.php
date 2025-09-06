@@ -54,7 +54,7 @@
                 <div class="flex items-start space-x-4">
                     <!-- Notification Icon -->
                     <div class="flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : ($notification->type === 'bot_trade' || $notification->type === 'bot_trade_executed' || $notification->type === 'bot_paused' ? 'bg-yellow-600' : ($notification->type === 'bot_created' || $notification->type === 'bot_resumed' ? 'bg-green-600' : ($notification->type === 'bot_stopped' ? 'bg-red-600' : 'bg-gray-600'))))) }}">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : ($notification->type === 'bot_trade' || $notification->type === 'bot_trade_executed' || $notification->type === 'bot_paused' ? 'bg-yellow-600' : ($notification->type === 'bot_created' || $notification->type === 'bot_started' || $notification->type === 'bot_resumed' ? 'bg-green-600' : ($notification->type === 'bot_stopped' ? 'bg-red-600' : 'bg-gray-600'))))) }}">
                             @if($notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved')
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -74,6 +74,10 @@
                             @elseif($notification->type === 'bot_created')
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            @elseif($notification->type === 'bot_started')
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             @elseif($notification->type === 'bot_paused')
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

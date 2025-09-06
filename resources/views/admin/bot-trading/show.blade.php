@@ -141,6 +141,13 @@
                     </svg>
                     Stop Bot
                 </button>
+                @elseif($bot->status === 'stopped')
+                <button onclick="startBot({{ $bot->id }})" class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Start Bot
+                </button>
                 @endif
             </div>
         </div>
@@ -700,6 +707,31 @@ function stopBot(botId) {
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred while stopping the bot');
+        });
+    }
+}
+
+function startBot(botId) {
+    if (confirm('Are you sure you want to start this bot? It will begin trading immediately.')) {
+        fetch(`/admin/bot-trading/${botId}/start`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Bot started successfully!');
+                location.reload();
+            } else {
+                alert('Failed to start bot: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while starting the bot');
         });
     }
 }

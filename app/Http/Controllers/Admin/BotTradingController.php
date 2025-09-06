@@ -608,4 +608,50 @@ class BotTradingController extends Controller
 
         return response()->json($stats);
     }
+
+    /**
+     * Start a stopped bot (Admin only)
+     */
+    public function start(BotTrading $bot)
+    {
+        if ($bot->isStopped()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bot is permanently stopped and cannot be restarted.'
+            ], 400);
+        }
+
+        if ($bot->isActive()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bot is already active.'
+            ], 400);
+        }
+
+        $bot->update([
+            'status' => 'active',
+            'stopped_at' => null
+        ]);
+
+        // Create notification for the user
+        $user = $bot->user;
+        $user->createNotification(
+            'bot_started',
+            'Bot Started by Admin',
+            "Your bot '{$bot->name}' has been started by an administrator and is now active.",
+            [
+                'bot_id' => $bot->id,
+                'bot_name' => $bot->name,
+                'action' => 'started',
+                'started_by' => 'admin'
+            ]
+        );
+
+        \Log::info("Admin started bot {$bot->id} for user {$user->id}");
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Bot started successfully!'
+        ]);
+    }
 }

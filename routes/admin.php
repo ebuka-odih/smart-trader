@@ -58,6 +58,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::resource('/bot-trading', BotTradingController::class)->names('bot-trading')->parameters(['bot-trading' => 'bot']);
     Route::post('/bot-trading/{bot}/pause', [BotTradingController::class, 'pause'])->name('bot-trading.pause');
     Route::post('/bot-trading/{bot}/resume', [BotTradingController::class, 'resume'])->name('bot-trading.resume');
+    Route::post('/bot-trading/{bot}/start', [BotTradingController::class, 'start'])->name('bot-trading.start');
     Route::post('/bot-trading/{bot}/stop', [BotTradingController::class, 'stop'])->name('bot-trading.stop');
     Route::post('/bot-trading/{bot}/execute', [BotTradingController::class, 'execute'])->name('bot-trading.execute');
     Route::post('/bot-trading/{bot}/create-trade', [BotTradingController::class, 'storeTrade'])->name('bot-trading.create-trade');
