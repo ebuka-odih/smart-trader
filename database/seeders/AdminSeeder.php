@@ -33,6 +33,7 @@ class AdminSeeder extends Seeder
                 'email' => 'admin@site.com',
                 'email_verified_at' => \Carbon\Carbon::now(),
                 'password' => Hash::make('ADMINPASS123'),
+                'currency' => 'USD',
             ]);
         }
     }
