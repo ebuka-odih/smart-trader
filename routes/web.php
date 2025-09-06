@@ -39,12 +39,12 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
 
     // Notification routes
     Route::get('notifications', [\App\Http\Controllers\User\NotificationController::class, 'index'])->name('notifications.index');
-    Route::post('notifications/{id}/read', [\App\Http\Controllers\User\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::post('notifications/mark-all-read', [\App\Http\Controllers\User\NotificationController::class, 'markAllAsRead'])->name('notifications.markAllRead');
-    Route::delete('notifications/{id}', [\App\Http\Controllers\User\NotificationController::class, 'destroy'])->name('notifications.destroy');
     Route::delete('notifications/clear-all', [\App\Http\Controllers\User\NotificationController::class, 'clearAll'])->name('notifications.clearAll');
     Route::get('notifications/unread-count', [\App\Http\Controllers\User\NotificationController::class, 'getUnreadCount'])->name('notifications.unreadCount');
     Route::get('notifications/recent', [\App\Http\Controllers\User\NotificationController::class, 'getRecent'])->name('notifications.recent');
+    Route::post('notifications/{id}/read', [\App\Http\Controllers\User\NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::delete('notifications/{id}', [\App\Http\Controllers\User\NotificationController::class, 'destroy'])->name('notifications.destroy');
 
     // Support routes
     Route::get('support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support.index');
