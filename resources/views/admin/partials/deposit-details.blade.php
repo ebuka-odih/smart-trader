@@ -10,7 +10,11 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Wallet Type</label>
                 <p class="text-sm text-gray-900 dark:text-white">
-                    @if($deposit->wallet_type == 'trading')
+                    @if($deposit->wallet_type == 'balance')
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300">
+                            Main Balance
+                        </span>
+                    @elseif($deposit->wallet_type == 'trading')
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
                             Trading Balance
                         </span>

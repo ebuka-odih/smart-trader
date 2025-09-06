@@ -69,8 +69,11 @@ class TransactionController extends Controller
             // Credit user's account based on wallet type
             $user = $deposit->user;
             switch ($deposit->wallet_type) {
+                case 'balance':
+                    $user->balance += $deposit->amount;
+                    break;
                 case 'trading':
-        $user->balance += $deposit->amount;
+                    $user->balance += $deposit->amount;
                     break;
                 case 'holding':
                     $user->holding_balance += $deposit->amount;
@@ -79,7 +82,7 @@ class TransactionController extends Controller
                     $user->staking_balance += $deposit->amount;
                     break;
                 default:
-                    $user->balance += $deposit->amount; // Default to trading balance
+                    $user->balance += $deposit->amount; // Default to main balance
             }
         $user->save();
 

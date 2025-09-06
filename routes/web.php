@@ -244,6 +244,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Debug route for deposit issues (only in debug mode)
+    if (config('app.debug')) {
+        Route::get('/debug/deposit', [DepositController::class, 'debugDeposit'])->name('debug.deposit');
+    }
 });
 
 

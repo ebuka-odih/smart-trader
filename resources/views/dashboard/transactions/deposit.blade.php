@@ -83,7 +83,11 @@
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-white">${{ number_format($deposit->amount, 2) }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                                @if($deposit->wallet_type == 'trading')
+                                @if($deposit->wallet_type == 'balance')
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                        Main Balance
+                                    </span>
+                                @elseif($deposit->wallet_type == 'trading')
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                                         Trading Balance
                                     </span>
@@ -220,6 +224,7 @@
                                 required
                                 class="block w-full py-3 px-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                             <option value="">Choose a wallet</option>
+                            <option value="balance" {{ old('wallet_type') == 'balance' ? 'selected' : '' }}>Main Balance</option>
                             <option value="trading" {{ old('wallet_type') == 'trading' ? 'selected' : '' }}>Trading Balance</option>
                             <option value="holding" {{ old('wallet_type') == 'holding' ? 'selected' : '' }}>Holding Balance</option>
                             <option value="staking" {{ old('wallet_type') == 'staking' ? 'selected' : '' }}>Staking Balance</option>

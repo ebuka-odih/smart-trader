@@ -35,11 +35,19 @@ class DepositController extends Controller
      */
     public function payment(Request $request)
     {
+        \Log::info('Deposit payment request started', [
+            'user_id' => Auth::id(),
+            'amount' => $request->input('amount'),
+            'wallet_type' => $request->input('wallet_type'),
+            'payment_method_id' => $request->input('payment_method_id'),
+            'has_proof_file' => $request->hasFile('proof')
+        ]);
+        
         try {
         $validated = $request->validate([
                 'amount' => 'required|numeric|min:0.01',
                 'payment_method_id' => 'required|exists:payment_methods,id',
-                'wallet_type' => 'required|in:trading,holding,staking',
+                'wallet_type' => 'required|in:balance,trading,holding,staking',
                 'proof' => 'required|file|mimes:jpeg,png,jpg,gif,svg,pdf|max:10240',
             ], [
                 'amount.required' => 'Please enter an amount.',
@@ -57,24 +65,47 @@ class DepositController extends Controller
 
             // Handle file upload
             $proofPath = null;
-        if ($request->hasFile('proof')) {
-                $file = $request->file('proof');
-                $fileName = time() . '_' . $file->getClientOriginalName();
-                $proofPath = $file->storeAs('deposits', $fileName, 'public');
+            if ($request->hasFile('proof')) {
+                try {
+                    $file = $request->file('proof');
+                    $fileName = time() . '_' . $file->getClientOriginalName();
+                    $proofPath = $file->storeAs('deposits', $fileName, 'public');
+                    
+                    if (!$proofPath) {
+                        throw new \Exception('Failed to store the uploaded file. Please try again.');
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('File upload failed: ' . $e->getMessage());
+                    throw new \Exception('File upload failed: ' . $e->getMessage());
+                }
             }
 
             // Create deposit record
-            $deposit = Deposit::create([
-                'user_id' => Auth::id(),
-                'amount' => $validated['amount'],
-                'payment_method_id' => $validated['payment_method_id'],
-                'wallet_type' => $validated['wallet_type'],
-                'proof' => $proofPath,
-                'status' => 0, // Pending by default
-            ]);
+            try {
+                $deposit = Deposit::create([
+                    'user_id' => Auth::id(),
+                    'amount' => $validated['amount'],
+                    'payment_method_id' => $validated['payment_method_id'],
+                    'wallet_type' => $validated['wallet_type'],
+                    'proof' => $proofPath,
+                    'status' => 0, // Pending by default
+                ]);
+                
+                if (!$deposit) {
+                    throw new \Exception('Failed to create deposit record in database.');
+                }
+            } catch (\Exception $e) {
+                \Log::error('Deposit creation failed: ' . $e->getMessage());
+                throw new \Exception('Database error: Failed to save deposit. Please try again.');
+            }
 
             // Fire the DepositSubmitted event
-            event(new DepositSubmitted($deposit));
+            try {
+                event(new DepositSubmitted($deposit));
+            } catch (\Exception $e) {
+                \Log::error('Failed to fire DepositSubmitted event: ' . $e->getMessage());
+                // Don't fail the deposit for event issues, just log it
+            }
 
             // Send email notification to admin
             try {
@@ -95,9 +126,34 @@ class DepositController extends Controller
                            ->withInput()
                            ->with('error', 'Please correct the errors below.');
         } catch (\Exception $e) {
-            \Log::error('Deposit creation failed: ' . $e->getMessage());
+            \Log::error('Deposit creation failed: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'amount' => $request->input('amount'),
+                'wallet_type' => $request->input('wallet_type'),
+                'payment_method_id' => $request->input('payment_method_id'),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            $errorMessage = 'An error occurred while processing your deposit. ';
+            
+            // Provide more specific error messages based on the exception
+            if (str_contains($e->getMessage(), 'file')) {
+                $errorMessage .= 'There was an issue with the file upload. Please check your file and try again.';
+            } elseif (str_contains($e->getMessage(), 'database') || str_contains($e->getMessage(), 'SQL')) {
+                $errorMessage .= 'Database error occurred. Please try again or contact support.';
+            } elseif (str_contains($e->getMessage(), 'mail') || str_contains($e->getMessage(), 'email')) {
+                $errorMessage .= 'Deposit was created but notification email failed. Your deposit is still pending approval.';
+            } else {
+                // In development, show the actual error message
+                if (config('app.debug')) {
+                    $errorMessage .= 'Error details: ' . $e->getMessage();
+                } else {
+                    $errorMessage .= 'Please try again or contact support if the problem persists.';
+                }
+            }
+            
             return redirect()->route('user.deposit')
-                           ->with('error', 'An error occurred while processing your deposit. Please try again.')
+                           ->with('error', $errorMessage)
                            ->withInput();
         }
     }
@@ -189,6 +245,36 @@ class DepositController extends Controller
                 'success' => false,
                 'message' => 'Failed to generate QR code: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    /**
+     * Debug method to test deposit creation (temporary)
+     */
+    public function debugDeposit(Request $request)
+    {
+        if (!config('app.debug')) {
+            abort(404);
+        }
+
+        try {
+            $user = Auth::user();
+            $wallets = PaymentMethod::all();
+            
+            return response()->json([
+                'user_id' => $user->id,
+                'user_balance' => $user->balance,
+                'available_wallets' => $wallets->pluck('crypto_display_name', 'id'),
+                'storage_disk' => config('filesystems.default'),
+                'storage_path' => storage_path('app/public'),
+                'deposits_table_exists' => \Schema::hasTable('deposits'),
+                'deposits_columns' => \Schema::getColumnListing('deposits')
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
     }
 }

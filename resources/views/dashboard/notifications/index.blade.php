@@ -3,16 +3,16 @@
 @section('content')
 <div class="space-y-6">
     <!-- Page Header -->
-    <div class="flex items-center justify-between">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
             <h1 class="text-2xl font-bold text-white">Notifications</h1>
             <p class="text-gray-400 mt-1">Stay updated with your account activities</p>
         </div>
-        <div class="flex items-center space-x-3">
-            <button id="markAllReadBtn" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-2">
+            <button id="markAllReadBtn" class="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                 Mark All as Read
             </button>
-            <button id="clearAllBtn" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+            <button id="clearAllBtn" class="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
                 Clear All
             </button>
         </div>
@@ -152,6 +152,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Tab switching functionality
     const tabs = document.querySelectorAll('.tab-button');
     const notificationItems = document.querySelectorAll('.notification-item');
+    
+    // Get button references
+    const markAllReadBtn = document.getElementById('markAllReadBtn');
+    const clearAllBtn = document.getElementById('clearAllBtn');
 
     tabs.forEach(tab => {
         tab.addEventListener('click', function() {
@@ -201,16 +205,25 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Mark all as read
-    document.getElementById('markAllReadBtn').addEventListener('click', function() {
-        markAllAsRead();
-    });
+    if (markAllReadBtn) {
+        markAllReadBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            markAllAsRead();
+        });
+    }
 
     // Clear all notifications
-    document.getElementById('clearAllBtn').addEventListener('click', function() {
-        if (confirm('Are you sure you want to clear all notifications?')) {
-            clearAllNotifications();
-        }
-    });
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            if (confirm('Are you sure you want to clear all notifications? This action cannot be undone.')) {
+                clearAllNotifications();
+            }
+        });
+    }
 
     function markAsRead(notificationId) {
         fetch(`/user/notifications/${notificationId}/read`, {
@@ -220,16 +233,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success) {
                 location.reload();
+            } else {
+                alert('Failed to mark notification as read');
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while marking notification as read');
+        });
     }
 
     function markAllAsRead() {
+        console.log('markAllAsRead function called');
+        const button = document.getElementById('markAllReadBtn');
+        button.disabled = true;
+        button.textContent = 'Processing...';
+        
+        console.log('Making fetch request to mark all as read');
         fetch('/user/notifications/mark-all-read', {
             method: 'POST',
             headers: {
@@ -237,13 +266,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response received:', response.status);
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Response data:', data);
             if (data.success) {
+                console.log('Successfully marked all as read, reloading page');
                 location.reload();
+            } else {
+                console.log('Failed to mark all as read:', data);
+                alert('Failed to mark all notifications as read');
+                button.disabled = false;
+                button.textContent = 'Mark All as Read';
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error marking all as read:', error);
+            alert('An error occurred while marking notifications as read: ' + error.message);
+            button.disabled = false;
+            button.textContent = 'Mark All as Read';
+        });
     }
 
     function deleteNotification(notificationId) {
@@ -264,6 +311,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function clearAllNotifications() {
+        console.log('clearAllNotifications function called');
+        const button = document.getElementById('clearAllBtn');
+        button.disabled = true;
+        button.textContent = 'Processing...';
+        
+        console.log('Making fetch request to clear all notifications');
         fetch('/user/notifications/clear-all', {
             method: 'DELETE',
             headers: {
@@ -271,13 +324,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json',
             },
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response received:', response.status);
+            if (!response.ok) {
+                throw new Error('Network response was not ok: ' + response.status);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Response data:', data);
             if (data.success) {
+                console.log('Successfully cleared all notifications, reloading page');
                 location.reload();
+            } else {
+                console.log('Failed to clear notifications:', data);
+                alert('Failed to clear all notifications');
+                button.disabled = false;
+                button.textContent = 'Clear All';
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            console.error('Error clearing notifications:', error);
+            alert('An error occurred while clearing notifications: ' + error.message);
+            button.disabled = false;
+            button.textContent = 'Clear All';
+        });
     }
 });
 </script>
