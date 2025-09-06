@@ -127,6 +127,20 @@ class BotTradingController extends Controller
 
             \Log::info('Bot created successfully:', ['bot_id' => $bot->id, 'bot_name' => $bot->name]);
 
+            // Create notification for the user
+            $user->createNotification(
+                'bot_created',
+                'Bot Created Successfully',
+                "Your bot '{$bot->name}' has been created successfully and is ready to start trading!",
+                [
+                    'bot_id' => $bot->id,
+                    'bot_name' => $bot->name,
+                    'trading_pair' => $bot->base_asset . '/' . $bot->quote_asset,
+                    'strategy' => $bot->strategy,
+                    'max_investment' => $bot->max_investment
+                ]
+            );
+
             return response()->json([
                 'success' => true,
                 'message' => 'Bot created successfully!',
