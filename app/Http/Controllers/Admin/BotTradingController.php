@@ -144,20 +144,127 @@ class BotTradingController extends Controller
     }
 
     /**
-     * Stop the specified bot
+     * Pause the specified bot
+     */
+    public function pause(BotTrading $bot)
+    {
+        try {
+            // Check if bot is active
+            if ($bot->status !== 'active') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bot must be active to pause'
+                ], 400);
+            }
+
+            $bot->update([
+                'status' => 'paused',
+                'stopped_at' => now()
+            ]);
+
+            // Create notification for the user
+            $user = $bot->user;
+            $user->createNotification(
+                'bot_paused',
+                'Bot Paused',
+                "Your bot '{$bot->name}' has been paused by an administrator. You can resume it later.",
+                [
+                    'bot_id' => $bot->id,
+                    'bot_name' => $bot->name,
+                    'action' => 'paused'
+                ]
+            );
+
+            Log::info("Admin paused bot {$bot->id} by user " . auth()->id());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bot paused successfully!'
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Admin bot pause failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to pause bot: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Resume the specified bot
+     */
+    public function resume(BotTrading $bot)
+    {
+        try {
+            // Check if bot is paused
+            if ($bot->status !== 'paused') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bot must be paused to resume'
+                ], 400);
+            }
+
+            $bot->update([
+                'status' => 'active',
+                'stopped_at' => null
+            ]);
+
+            // Create notification for the user
+            $user = $bot->user;
+            $user->createNotification(
+                'bot_resumed',
+                'Bot Resumed',
+                "Your bot '{$bot->name}' has been resumed and is now active again.",
+                [
+                    'bot_id' => $bot->id,
+                    'bot_name' => $bot->name,
+                    'action' => 'resumed'
+                ]
+            );
+
+            Log::info("Admin resumed bot {$bot->id} by user " . auth()->id());
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Bot resumed successfully!'
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Admin bot resume failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to resume bot: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Stop the specified bot permanently
      */
     public function stop(BotTrading $bot)
     {
         try {
+            // Check if bot is already stopped
+            if ($bot->status === 'stopped') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Bot is already stopped'
+                ], 400);
+            }
+
+            $profitTransferred = false;
+            $profitAmount = 0;
+
             // Transfer profits to user's trading balance before stopping
             if ($bot->total_profit > 0) {
                 $user = $bot->user;
-                $user->increment('trading_balance', $bot->total_profit);
+                $profitAmount = $bot->total_profit;
+                $user->increment('trading_balance', $profitAmount);
+                $profitTransferred = true;
                 
-                Log::info("Bot profits transferred to user on manual stop", [
+                Log::info("Bot profits transferred to user on permanent stop", [
                     'bot_id' => $bot->id,
                     'user_id' => $user->id,
-                    'profit_transferred' => $bot->total_profit,
+                    'profit_transferred' => $profitAmount,
                     'new_trading_balance' => $user->fresh()->trading_balance
                 ]);
             }
@@ -167,11 +274,32 @@ class BotTradingController extends Controller
                 'stopped_at' => now()
             ]);
 
-            Log::info("Admin stopped bot {$bot->id} by user " . auth()->id());
+            // Create notification for the user
+            $user = $bot->user;
+            $profitMessage = $profitTransferred ? 
+                " Profits of $" . number_format($profitAmount, 2) . " have been transferred to your trading balance." : 
+                "";
+            
+            $user->createNotification(
+                'bot_stopped',
+                'Bot Stopped Permanently',
+                "Your bot '{$bot->name}' has been permanently stopped by an administrator.{$profitMessage}",
+                [
+                    'bot_id' => $bot->id,
+                    'bot_name' => $bot->name,
+                    'action' => 'stopped',
+                    'profit_transferred' => $profitTransferred,
+                    'profit_amount' => $profitAmount
+                ]
+            );
+
+            Log::info("Admin permanently stopped bot {$bot->id} by user " . auth()->id());
 
             return response()->json([
                 'success' => true,
-                'message' => 'Bot stopped successfully!' . ($bot->total_profit > 0 ? ' Profits have been transferred to your trading balance.' : '')
+                'message' => 'Bot stopped permanently!' . ($profitTransferred ? ' Profits have been transferred to your trading balance.' : ''),
+                'profit_transferred' => $profitTransferred,
+                'profit_amount' => $profitAmount
             ]);
         } catch (\Exception $e) {
             Log::error("Admin bot stop failed: " . $e->getMessage());
@@ -342,6 +470,121 @@ class BotTradingController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Failed to delete bot: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Create a new trade for the specified bot
+     */
+    public function storeTrade(Request $request, BotTrading $bot)
+    {
+        $validator = Validator::make($request->all(), [
+            'type' => 'required|in:buy,sell',
+            'status' => 'required|in:pending,executed,cancelled,failed',
+            'base_asset' => 'required|string|max:10',
+            'quote_asset' => 'required|string|max:10',
+            'base_amount' => 'required|numeric|min:0.00000001',
+            'price' => 'required|numeric|min:0.01',
+            'quote_amount' => 'required|numeric|min:0.01',
+            'execution_type' => 'nullable|in:market,limit',
+            'profit_loss' => 'nullable|numeric',
+            'profit_loss_percentage' => 'nullable|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            // Generate unique trade ID
+            $tradeId = BotTrade::generateTradeId();
+
+            // Create the trade
+            $trade = BotTrade::create([
+                'bot_trading_id' => $bot->id,
+                'user_id' => $bot->user_id,
+                'trade_id' => $tradeId,
+                'type' => $request->type,
+                'base_asset' => $request->base_asset,
+                'quote_asset' => $request->quote_asset,
+                'base_amount' => $request->base_amount,
+                'quote_amount' => $request->quote_amount,
+                'price' => $request->price,
+                'status' => $request->status,
+                'execution_type' => $request->execution_type ?? 'market',
+                'profit_loss' => $request->profit_loss ?? 0,
+                'profit_loss_percentage' => $request->profit_loss_percentage ?? 0,
+                'executed_at' => $request->status === 'executed' ? now() : null,
+            ]);
+
+            // Update bot statistics if trade is executed
+            if ($request->status === 'executed') {
+                $bot->increment('total_trades');
+                
+                if ($request->profit_loss > 0) {
+                    $bot->increment('successful_trades');
+                }
+                
+                if ($request->profit_loss) {
+                    $bot->increment('total_profit', $request->profit_loss);
+                }
+                
+                // Recalculate success rate
+                $totalTrades = $bot->total_trades;
+                $successfulTrades = $bot->successful_trades;
+                $bot->update([
+                    'success_rate' => $totalTrades > 0 ? ($successfulTrades / $totalTrades) * 100 : 0,
+                    'last_trade_at' => now()
+                ]);
+
+                // Create notification for the user
+                $user = $bot->user;
+                $profitLossText = $request->profit_loss > 0 ? 
+                    "Profit: $" . number_format($request->profit_loss, 2) : 
+                    ($request->profit_loss < 0 ? "Loss: $" . number_format(abs($request->profit_loss), 2) : "Break Even");
+                
+                $user->createNotification(
+                    'bot_trade_executed',
+                    'Bot Trade Executed',
+                    "Your bot '{$bot->name}' executed a {$request->type} trade for {$request->base_amount} {$request->base_asset} at $" . number_format($request->price, 2) . ". {$profitLossText}.",
+                    [
+                        'bot_id' => $bot->id,
+                        'bot_name' => $bot->name,
+                        'trade_id' => $trade->id,
+                        'trade_type' => $request->type,
+                        'base_asset' => $request->base_asset,
+                        'quote_asset' => $request->quote_asset,
+                        'base_amount' => $request->base_amount,
+                        'price' => $request->price,
+                        'profit_loss' => $request->profit_loss,
+                        'execution_type' => $request->execution_type
+                    ]
+                );
+            }
+
+            Log::info("Admin created trade for bot {$bot->id} by user " . auth()->id(), [
+                'trade_id' => $trade->id,
+                'trade_type' => $trade->type,
+                'trade_amount' => $trade->quote_amount,
+                'trade_profit' => $trade->profit_loss,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Trade created successfully!',
+                'trade' => $trade,
+                'bot' => $bot->fresh()
+            ]);
+        } catch (\Exception $e) {
+            Log::error("Admin trade creation failed: " . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create trade: ' . $e->getMessage()
             ], 500);
         }
     }

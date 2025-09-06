@@ -82,7 +82,27 @@
             
             <!-- Action Buttons -->
             <div class="space-y-3">
-                @if($bot->status !== 'stopped')
+                @if($bot->status === 'active')
+                <button onclick="pauseBot({{ $bot->id }})" class="w-full inline-flex items-center justify-center px-4 py-2 bg-yellow-600 hover:bg-yellow-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Pause Bot
+                </button>
+                <button onclick="stopBot({{ $bot->id }})" class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    Stop Bot
+                </button>
+                @elseif($bot->status === 'paused')
+                <button onclick="resumeBot({{ $bot->id }})" class="w-full inline-flex items-center justify-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Resume Bot
+                </button>
                 <button onclick="stopBot({{ $bot->id }})" class="w-full inline-flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
@@ -305,7 +325,15 @@
     <!-- Recent Trades - Full Width -->
     <div class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
         <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Trades</h3>
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Trades</h3>
+                <button onclick="openCreateTradeModal()" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Create Trade
+                </button>
+            </div>
         </div>
         <div class="overflow-x-auto">
             <table class="w-full divide-y divide-gray-200 dark:divide-gray-700">
@@ -452,11 +480,179 @@
             </div>
         </div>
     </div>
+
+    <!-- Create Trade Modal -->
+    <div id="createTradeModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Create New Trade</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manually create a trade for {{ $bot->name ?? 'this bot' }}</p>
+                </div>
+                <form id="createTradeForm" class="p-6 space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Trade Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Trade Type <span class="text-red-500">*</span></label>
+                            <select name="type" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                <option value="">Select Type</option>
+                                <option value="buy">Buy</option>
+                                <option value="sell">Sell</option>
+                            </select>
+                        </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status <span class="text-red-500">*</span></label>
+                            <select name="status" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                <option value="">Select Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="executed">Executed</option>
+                                <option value="cancelled">Cancelled</option>
+                                <option value="failed">Failed</option>
+                            </select>
+                        </div>
+
+                        <!-- Base Asset -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Base Asset <span class="text-red-500">*</span></label>
+                            <input type="text" name="base_asset" value="{{ $bot->base_asset }}" required 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   placeholder="e.g., BTC">
+                        </div>
+
+                        <!-- Quote Asset -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quote Asset <span class="text-red-500">*</span></label>
+                            <input type="text" name="quote_asset" value="{{ $bot->quote_asset }}" required 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   placeholder="e.g., USDT">
+                        </div>
+
+                        <!-- Base Amount -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Base Amount <span class="text-red-500">*</span></label>
+                            <input type="number" name="base_amount" step="0.00000001" required 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   placeholder="e.g., 0.001">
+                        </div>
+
+                        <!-- Price -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price ({{ $bot->quote_asset ?? 'USD' }}) <span class="text-red-500">*</span></label>
+                            <input type="number" name="price" step="0.01" required 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   placeholder="e.g., 45000.00">
+                        </div>
+
+                        <!-- Quote Amount -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quote Amount ({{ $bot->quote_asset ?? 'USD' }}) <span class="text-red-500">*</span></label>
+                            <input type="number" name="quote_amount" step="0.01" required 
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                   placeholder="e.g., 45.00">
+                        </div>
+
+                        <!-- Execution Type -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Execution Type</label>
+                            <select name="execution_type" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                                <option value="market">Market</option>
+                                <option value="limit">Limit</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Profit/Loss Section -->
+                    <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Profit/Loss (Optional)</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit/Loss ({{ $bot->quote_asset ?? 'USD' }})</label>
+                                <input type="number" name="profit_loss" step="0.01" 
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                       placeholder="e.g., 5.50">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit/Loss Percentage (%)</label>
+                                <input type="number" name="profit_loss_percentage" step="0.01" 
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                                       placeholder="e.g., 12.25">
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-3 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <button type="button" onclick="closeCreateTradeModal()" 
+                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                                class="px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors duration-200">
+                            Create Trade
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+function pauseBot(botId) {
+    if (confirm('Are you sure you want to pause this bot? It can be resumed later.')) {
+        fetch(`/admin/bot-trading/${botId}/pause`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Bot paused successfully!');
+                location.reload();
+            } else {
+                alert('Failed to pause bot: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while pausing the bot');
+        });
+    }
+}
+
+function resumeBot(botId) {
+    if (confirm('Are you sure you want to resume this bot?')) {
+        fetch(`/admin/bot-trading/${botId}/resume`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                'Content-Type': 'application/json',
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Bot resumed successfully!');
+                location.reload();
+            } else {
+                alert('Failed to resume bot: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while resuming the bot');
+        });
+    }
+}
+
 function stopBot(botId) {
-    if (confirm('Are you sure you want to stop this bot?')) {
+    if (confirm('Are you sure you want to PERMANENTLY STOP this bot? This action cannot be undone and all profits will be transferred to your trading balance.')) {
         fetch(`/admin/bot-trading/${botId}/stop`, {
             method: 'POST',
             headers: {
@@ -467,6 +663,7 @@ function stopBot(botId) {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
+                alert('Bot stopped permanently! ' + (data.profit_transferred ? 'Profits have been transferred to your trading balance.' : ''));
                 location.reload();
             } else {
                 alert('Failed to stop bot: ' + data.message);
@@ -618,6 +815,85 @@ document.getElementById('editBotPnlModal').addEventListener('click', function(e)
 document.getElementById('editTradePnlModal').addEventListener('click', function(e) {
     if (e.target === this) {
         closeEditTradePnlModal();
+    }
+});
+
+// Create Trade Modal Functions
+function openCreateTradeModal() {
+    document.getElementById('createTradeModal').classList.remove('hidden');
+    // Reset form
+    document.getElementById('createTradeForm').reset();
+    // Pre-fill bot assets
+    document.querySelector('input[name="base_asset"]').value = '{{ $bot->base_asset }}';
+    document.querySelector('input[name="quote_asset"]').value = '{{ $bot->quote_asset }}';
+}
+
+function closeCreateTradeModal() {
+    document.getElementById('createTradeModal').classList.add('hidden');
+}
+
+// Create Trade Form Submission
+document.getElementById('createTradeForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = {
+        type: formData.get('type'),
+        status: formData.get('status'),
+        base_asset: formData.get('base_asset'),
+        quote_asset: formData.get('quote_asset'),
+        base_amount: parseFloat(formData.get('base_amount')),
+        price: parseFloat(formData.get('price')),
+        quote_amount: parseFloat(formData.get('quote_amount')),
+        execution_type: formData.get('execution_type'),
+        profit_loss: formData.get('profit_loss') ? parseFloat(formData.get('profit_loss')) : null,
+        profit_loss_percentage: formData.get('profit_loss_percentage') ? parseFloat(formData.get('profit_loss_percentage')) : null,
+    };
+
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    const originalContent = submitBtn.innerHTML;
+    submitBtn.innerHTML = `
+        <svg class="w-4 h-4 mr-2 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+        </svg>
+        Creating...
+    `;
+    submitBtn.disabled = true;
+
+    fetch(`/admin/bot-trading/{{ $bot->id }}/create-trade`, {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Trade created successfully!');
+            closeCreateTradeModal();
+            location.reload();
+        } else {
+            alert('Failed to create trade: ' + (data.message || 'Unknown error'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while creating the trade');
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.innerHTML = originalContent;
+        submitBtn.disabled = false;
+    });
+});
+
+// Close create trade modal when clicking outside
+document.getElementById('createTradeModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeCreateTradeModal();
     }
 });
 

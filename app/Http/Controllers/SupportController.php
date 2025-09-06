@@ -15,3 +15,5 @@ class SupportController extends Controller
         return view('dashboard.support.index');
     }
 }
+
+
