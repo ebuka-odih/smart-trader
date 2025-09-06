@@ -33,7 +33,7 @@
 
             <!-- Total Balance -->
             <div class="mb-6">
-                <div class="text-3xl font-bold text-white animate-pulse">${{ number_format($totalPortfolio, 2) }}</div>
+                <div class="text-3xl font-bold text-white animate-pulse">{{ auth()->user()->formatAmount($totalPortfolio) }}</div>
                 <div class="text-sm text-gray-400">Total Portfolio Value</div>
             </div>
 
@@ -44,7 +44,7 @@
                         <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
                         <span class="text-sm text-gray-300">Wallet Balance</span>
                     </div>
-                    <span class="text-sm font-semibold text-white">${{ number_format($walletBalance, 2) }}</span>
+                    <span class="text-sm font-semibold text-white">{{ auth()->user()->formatAmount($walletBalance) }}</span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 px-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
@@ -52,7 +52,7 @@
                         <div class="w-3 h-3 bg-blue-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
                         <span class="text-sm text-gray-300">Trading Balance</span>
                     </div>
-                    <span class="text-sm font-semibold text-white">${{ number_format($tradingBalance, 2) }}</span>
+                    <span class="text-sm font-semibold text-white">{{ auth()->user()->formatAmount($tradingBalance) }}</span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 px-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
@@ -60,7 +60,7 @@
                         <div class="w-3 h-3 bg-yellow-500 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
                         <span class="text-sm text-gray-300">Holdings</span>
                     </div>
-                    <span class="text-sm font-semibold text-white">${{ number_format($holdingsBalance, 2) }}</span>
+                    <span class="text-sm font-semibold text-white">{{ auth()->user()->formatAmount($holdingsBalance) }}</span>
                 </div>
                 
                 <div class="flex justify-between items-center py-2 px-3 bg-gray-700 rounded-lg hover:bg-gray-600 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
@@ -68,7 +68,7 @@
                         <div class="w-3 h-3 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 1.5s;"></div>
                         <span class="text-sm text-gray-300">Staking</span>
                     </div>
-                    <span class="text-sm font-semibold text-white">${{ number_format($staking, 2) }}</span>
+                    <span class="text-sm font-semibold text-white">{{ auth()->user()->formatAmount($staking) }}</span>
                 </div>
             </div>
 
@@ -210,7 +210,7 @@
             <div class="space-y-3">
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Total Value</span>
-                    <span class="text-white font-semibold">${{ number_format($totalHoldingsValue, 2) }}</span>
+                    <span class="text-white font-semibold">{{ auth()->user()->formatAmount($totalHoldingsValue) }}</span>
                 </div>
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Assets Held</span>

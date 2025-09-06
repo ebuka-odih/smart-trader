@@ -192,6 +192,40 @@
                     @enderror
                 </div>
 
+                <!-- Currency Field -->
+                <div>
+                    <label for="currency" class="block text-sm font-medium text-gray-300 mb-2">Preferred Currency</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <select 
+                            id="currency" 
+                            name="currency" 
+                            class="block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('currency') border-red-500 focus:ring-red-500 @enderror"
+                            required
+                        >
+                            <option value="">Select your preferred currency</option>
+                            <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>🇺🇸 USD - US Dollar</option>
+                            <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>🇪🇺 EUR - Euro</option>
+                            <option value="GBP" {{ old('currency') == 'GBP' ? 'selected' : '' }}>🇬🇧 GBP - British Pound</option>
+                            <option value="JPY" {{ old('currency') == 'JPY' ? 'selected' : '' }}>🇯🇵 JPY - Japanese Yen</option>
+                            <option value="CAD" {{ old('currency') == 'CAD' ? 'selected' : '' }}>🇨🇦 CAD - Canadian Dollar</option>
+                            <option value="AUD" {{ old('currency') == 'AUD' ? 'selected' : '' }}>🇦🇺 AUD - Australian Dollar</option>
+                            <option value="CHF" {{ old('currency') == 'CHF' ? 'selected' : '' }}>🇨🇭 CHF - Swiss Franc</option>
+                            <option value="CNY" {{ old('currency') == 'CNY' ? 'selected' : '' }}>🇨🇳 CNY - Chinese Yuan</option>
+                            <option value="INR" {{ old('currency') == 'INR' ? 'selected' : '' }}>🇮🇳 INR - Indian Rupee</option>
+                            <option value="BRL" {{ old('currency') == 'BRL' ? 'selected' : '' }}>🇧🇷 BRL - Brazilian Real</option>
+                        </select>
+                    </div>
+                    @error('currency')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Password Field -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>

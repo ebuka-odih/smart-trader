@@ -44,10 +44,23 @@ class User extends Authenticatable implements MustVerifyEmail
         'avatar',
         'subscription',
         'package_id',
+        'currency',
         'trader',
         'trade_count',
         'verification_code',
         'verification_code_expires_at',
+        // KYC fields
+        'date_of_birth',
+        'nationality',
+        'street_address',
+        'city',
+        'state',
+        'postal_code',
+        'id_type',
+        'id_number',
+        'id_front',
+        'id_back',
+        'selfie',
     ];
 
     /**
@@ -325,5 +338,53 @@ class User extends Authenticatable implements MustVerifyEmail
     public function liveTrades()
     {
         return $this->hasMany(LiveTrade::class);
+    }
+
+    /**
+     * Get currency symbol for the user's preferred currency
+     */
+    public function getCurrencySymbolAttribute()
+    {
+        $symbols = [
+            'USD' => '$',
+            'EUR' => '€',
+            'GBP' => '£',
+            'JPY' => '¥',
+            'CAD' => 'C$',
+            'AUD' => 'A$',
+            'CHF' => 'CHF',
+            'CNY' => '¥',
+            'INR' => '₹',
+            'BRL' => 'R$',
+        ];
+
+        return $symbols[$this->currency] ?? '$';
+    }
+
+    /**
+     * Format amount with user's currency
+     */
+    public function formatAmount($amount, $decimals = 2)
+    {
+        return $this->currency_symbol . number_format($amount, $decimals);
+    }
+
+    /**
+     * Get available currencies
+     */
+    public static function getAvailableCurrencies()
+    {
+        return [
+            'USD' => '🇺🇸 USD - US Dollar',
+            'EUR' => '🇪🇺 EUR - Euro',
+            'GBP' => '🇬🇧 GBP - British Pound',
+            'JPY' => '🇯🇵 JPY - Japanese Yen',
+            'CAD' => '🇨🇦 CAD - Canadian Dollar',
+            'AUD' => '🇦🇺 AUD - Australian Dollar',
+            'CHF' => '🇨🇭 CHF - Swiss Franc',
+            'CNY' => '🇨🇳 CNY - Chinese Yuan',
+            'INR' => '🇮🇳 INR - Indian Rupee',
+            'BRL' => '🇧🇷 BRL - Brazilian Real',
+        ];
     }
 }

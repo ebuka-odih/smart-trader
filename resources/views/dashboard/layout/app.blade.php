@@ -396,8 +396,8 @@
                             <span>Live Trading</span>
                         </a>
                         <a href="{{ route('user.copyTrading.index') }}" class="flex items-center space-x-3 px-3 py-1.5 rounded-lg {{ request()->routeIs('user.copyTrading.*') ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-gray-700' }}">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor">
+                                <path d="M11.5 4a3.5 3.5 0 1 0 0 7a3.5 3.5 0 0 0 0-7M6 7.5a5.5 5.5 0 1 1 11 0a5.5 5.5 0 0 1-11 0m8.382 6h7.236l2.081 4.162L18 23.995l-5.7-6.333zm1.236 2l-.919 1.838L18 21.005l3.3-3.667l-.918-1.838zM8 16a4 4 0 0 0-4 4h7.05v2H2v-2a6 6 0 0 1 6-6h3v2z"/>
                             </svg>
                             <span>Copy Trading</span>
                         </a>

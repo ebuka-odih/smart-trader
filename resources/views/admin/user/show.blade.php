@@ -136,27 +136,99 @@
 
             <!-- KYC Information -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">KYC Information</h3>
-                <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4 mb-4">
-                    <div class="flex items-center">
-                        <svg class="w-5 h-5 text-yellow-600 dark:text-yellow-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="text-sm text-yellow-800 dark:text-yellow-200">KYC system not yet implemented. This section will show verification status when available.</span>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">KYC Information</h3>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
+                        {{ $kycStatus['overall_status'] === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 
+                           ($kycStatus['overall_status'] === 'in_progress' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300') }}">
+                        {{ ucfirst(str_replace('_', ' ', $kycStatus['overall_status'])) }}
+                    </span>
+                </div>
+                
+                <!-- Personal Information -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Personal Information</h4>
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                            {{ $kycStatus['personal_info']['status'] === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' }}">
+                            {{ ucfirst($kycStatus['personal_info']['status']) }}
+                        </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">Date of Birth:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['personal_info']['date_of_birth'] ?: 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">Nationality:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['personal_info']['nationality'] ?: 'Not provided' }}</span>
+                        </div>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Identity Verification</label>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300">
-                            Not Available
+
+                <!-- Address Information -->
+                <div class="mb-6">
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Address Information</h4>
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                            {{ $kycStatus['address_info']['status'] === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' }}">
+                            {{ ucfirst($kycStatus['address_info']['status']) }}
                         </span>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address Verification</label>
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300">
-                            Not Available
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <div class="md:col-span-2">
+                            <span class="text-gray-500 dark:text-gray-400">Street Address:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['address_info']['street_address'] ?: 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">City:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['address_info']['city'] ?: 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">State:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['address_info']['state'] ?: 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">Postal Code:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['address_info']['postal_code'] ?: 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">Country:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['address_info']['country'] ?: 'Not provided' }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Identity Documents -->
+                <div>
+                    <div class="flex items-center justify-between mb-3">
+                        <h4 class="text-sm font-medium text-gray-700 dark:text-gray-300">Identity Documents</h4>
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium 
+                            {{ $kycStatus['id_info']['status'] === 'completed' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' }}">
+                            {{ ucfirst($kycStatus['id_info']['status']) }}
                         </span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">ID Type:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['id_info']['id_type'] ? ucfirst(str_replace('_', ' ', $kycStatus['id_info']['id_type'])) : 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">ID Number:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['id_info']['id_number'] ?: 'Not provided' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">ID Front:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['id_info']['id_front'] ? 'Uploaded' : 'Not uploaded' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">ID Back:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['id_info']['id_back'] ? 'Uploaded' : 'Not uploaded' }}</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-500 dark:text-gray-400">Selfie:</span>
+                            <span class="text-gray-900 dark:text-white ml-2">{{ $kycStatus['id_info']['selfie'] ? 'Uploaded' : 'Not uploaded' }}</span>
+                        </div>
                     </div>
                 </div>
             </div>
