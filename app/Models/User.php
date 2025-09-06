@@ -385,4 +385,23 @@ class User extends Authenticatable
             'BRL' => 'BRL',
         ];
     }
+
+    /**
+     * Create a notification for this user
+     */
+    public function createNotification($type, $title, $message, $data = [])
+    {
+        try {
+            return \App\Models\UserNotification::create([
+                'user_id' => $this->id,
+                'type' => $type,
+                'title' => $title,
+                'message' => $message,
+                'data' => $data
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Failed to create notification for user ' . $this->id . ': ' . $e->getMessage());
+            return null;
+        }
+    }
 }

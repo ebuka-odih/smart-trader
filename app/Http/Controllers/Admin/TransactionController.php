@@ -87,22 +87,17 @@ class TransactionController extends Controller
         $user->save();
 
             // Create notification directly
-            try {
-                \App\Models\UserNotification::create([
-                    'user_id' => $deposit->user_id,
-                    'type' => 'deposit_approved',
-                    'title' => 'Deposit Approved',
-                    'message' => "Your deposit of " . $deposit->user->formatAmount($deposit->amount) . " to your " . ucfirst($deposit->wallet_type) . " wallet has been approved and credited to your account.",
-                    'data' => [
-                        'amount' => $deposit->amount,
-                        'wallet_type' => $deposit->wallet_type,
-                        'deposit_id' => $deposit->id,
-                        'status' => 'approved'
-                    ]
-                ]);
-            } catch (\Exception $e) {
-                \Log::error('Failed to create deposit approval notification: ' . $e->getMessage());
-            }
+            $deposit->user->createNotification(
+                'deposit_approved',
+                'Deposit Approved',
+                "Your deposit of " . $deposit->user->formatAmount($deposit->amount) . " to your " . ucfirst($deposit->wallet_type) . " wallet has been approved and credited to your account.",
+                [
+                    'amount' => $deposit->amount,
+                    'wallet_type' => $deposit->wallet_type,
+                    'deposit_id' => $deposit->id,
+                    'status' => 'approved'
+                ]
+            );
 
             // Send approval email to user
             try {
@@ -207,8 +202,17 @@ class TransactionController extends Controller
             $withdrawal->status = 1;
             $withdrawal->save();
 
-            // Fire the WithdrawalApproved event
-            event(new WithdrawalApproved($withdrawal));
+            // Create notification directly
+            $withdrawal->user->createNotification(
+                'withdrawal_approved',
+                'Withdrawal Approved',
+                "Your withdrawal request of " . $withdrawal->user->formatAmount($withdrawal->amount) . " has been approved and will be processed shortly.",
+                [
+                    'amount' => $withdrawal->amount,
+                    'withdrawal_id' => $withdrawal->id,
+                    'status' => 'approved'
+                ]
+            );
 
             try {
                 Mail::to($withdrawal->user->email)->send(new ApproveWithdrawalMail($withdrawal));

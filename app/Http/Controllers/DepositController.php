@@ -100,23 +100,17 @@ class DepositController extends Controller
             }
 
             // Create notification directly
-            try {
-                \App\Models\UserNotification::create([
-                    'user_id' => Auth::id(),
-                    'type' => 'deposit_submitted',
-                    'title' => 'Deposit Submitted',
-                    'message' => "Your deposit of " . auth()->user()->formatAmount($validated['amount']) . " to your " . ucfirst($validated['wallet_type']) . " wallet has been submitted and is pending approval.",
-                    'data' => [
-                        'amount' => $validated['amount'],
-                        'wallet_type' => $validated['wallet_type'],
-                        'deposit_id' => $deposit->id,
-                        'status' => 'pending'
-                    ]
-                ]);
-            } catch (\Exception $e) {
-                \Log::error('Failed to create deposit notification: ' . $e->getMessage());
-                // Don't fail the deposit for notification issues, just log it
-            }
+            auth()->user()->createNotification(
+                'deposit_submitted',
+                'Deposit Submitted',
+                "Your deposit of " . auth()->user()->formatAmount($validated['amount']) . " to your " . ucfirst($validated['wallet_type']) . " wallet has been submitted and is pending approval.",
+                [
+                    'amount' => $validated['amount'],
+                    'wallet_type' => $validated['wallet_type'],
+                    'deposit_id' => $deposit->id,
+                    'status' => 'pending'
+                ]
+            );
 
             // Send email notification to admin
             try {

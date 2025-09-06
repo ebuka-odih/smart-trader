@@ -167,8 +167,18 @@ class WithdrawalController extends Controller
 
             $withdraw->save();
 
-            // Fire the WithdrawalSubmitted event
-            event(new WithdrawalSubmitted($withdraw));
+            // Create notification directly
+            auth()->user()->createNotification(
+                'withdrawal_submitted',
+                'Withdrawal Submitted',
+                "Your withdrawal request of " . auth()->user()->formatAmount($amount) . " from your " . ucfirst(str_replace('_', ' ', $fromAccount)) . " has been submitted and is pending approval.",
+                [
+                    'amount' => $amount,
+                    'from_account' => $fromAccount,
+                    'withdrawal_id' => $withdraw->id,
+                    'status' => 'pending'
+                ]
+            );
 
             // Deduct from user's account
             $user->$fromAccount -= $amount;
