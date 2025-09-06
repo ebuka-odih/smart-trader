@@ -122,7 +122,7 @@ class BotTradingController extends Controller
                 'daily_loss_limit' => $request->daily_loss_limit,
                 'trading_24_7' => $request->boolean('trading_24_7', true),
                 'auto_restart' => $request->boolean('auto_restart', false),
-                'status' => 'stopped', // Start stopped by default
+                'status' => 'active', // Start active by default
             ]);
 
             \Log::info('Bot created successfully:', ['bot_id' => $bot->id, 'bot_name' => $bot->name]);
