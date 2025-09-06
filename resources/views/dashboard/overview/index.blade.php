@@ -35,7 +35,7 @@
                         </svg>
                     </div>
                 </div>
-                <div class="text-3xl font-bold text-white mb-2">${{ number_format($totalTradingVolume, 2) }}</div>
+                <div class="text-3xl font-bold text-white mb-2">{{ auth()->user()->formatAmount($totalTradingVolume) }}</div>
                 <div class="text-blue-100 text-sm">All Trading Activities</div>
             </div>
 
@@ -49,7 +49,7 @@
                         </svg>
                     </div>
                 </div>
-                <div class="text-3xl font-bold text-white mb-2">{{ $totalProfitLoss >= 0 ? '+' : '' }}${{ number_format($totalProfitLoss, 2) }}</div>
+                <div class="text-3xl font-bold text-white mb-2">{{ $totalProfitLoss >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($totalProfitLoss) }}</div>
                 <div class="text-green-100 text-sm">{{ $totalProfitLoss >= 0 ? 'Profit' : 'Loss' }}</div>
             </div>
 
@@ -63,7 +63,7 @@
                         </svg>
                     </div>
                 </div>
-                <div class="text-3xl font-bold text-white mb-2">${{ number_format($totalHoldingsValue, 2) }}</div>
+                <div class="text-3xl font-bold text-white mb-2">{{ auth()->user()->formatAmount($totalHoldingsValue) }}</div>
                 <div class="text-purple-100 text-sm">{{ $totalAssets }} Assets</div>
             </div>
 
@@ -105,7 +105,7 @@
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Total Volume</span>
-                        <span class="text-white font-semibold">${{ number_format($liveTradingVolume, 2) }}</span>
+                        <span class="text-white font-semibold">{{ auth()->user()->formatAmount($liveTradingVolume) }}</span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Total Trades</span>
@@ -141,12 +141,12 @@
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Total Profit</span>
                         <span class="{{ $totalBotProfit >= 0 ? 'text-green-400' : 'text-red-400' }} font-semibold">
-                            {{ $totalBotProfit >= 0 ? '+' : '' }}${{ number_format($totalBotProfit, 2) }}
+                            {{ $totalBotProfit >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($totalBotProfit) }}
                         </span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Trading Volume</span>
-                        <span class="text-white font-semibold">${{ number_format($botTradingVolume, 2) }}</span>
+                        <span class="text-white font-semibold">{{ auth()->user()->formatAmount($botTradingVolume) }}</span>
                     </div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-gray-700">
@@ -189,12 +189,12 @@
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Total PnL</span>
                         <span class="{{ $totalCopyPnL >= 0 ? 'text-green-400' : 'text-red-400' }} font-semibold">
-                            {{ $totalCopyPnL >= 0 ? '+' : '' }}${{ number_format($totalCopyPnL, 2) }}
+                            {{ $totalCopyPnL >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($totalCopyPnL) }}
                         </span>
                     </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Trading Volume</span>
-                        <span class="text-white font-semibold">${{ number_format($copyTradingVolume, 2) }}</span>
+                        <span class="text-white font-semibold">{{ auth()->user()->formatAmount($copyTradingVolume) }}</span>
                     </div>
                 </div>
                 <div class="mt-4 pt-3 border-t border-gray-700">

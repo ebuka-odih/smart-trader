@@ -27,9 +27,8 @@ class OverviewController extends Controller
         $botTradings = BotTrading::where('user_id', $user->id);
         $activeBots = $botTradings->where('status', 'active')->count();
         $totalBots = $botTradings->count();
-        $botTrades = BotTrade::where('user_id', $user->id);
-        $totalBotProfit = $botTrades->sum('profit_loss');
-        $botTradingVolume = $botTrades->sum('quote_amount');
+        $totalBotProfit = $botTradings->sum('total_profit');
+        $botTradingVolume = $botTradings->sum('total_invested');
         
         // Copy Trading Stats
         $copyTrades = CopiedTrade::where('user_id', $user->id);

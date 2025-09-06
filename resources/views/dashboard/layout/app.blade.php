@@ -526,6 +526,12 @@
                                         </svg>
                                         Profile
                                     </a>
+                                    <a href="{{ route('user.support.index') }}" class="flex items-center px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                                        <svg class="w-4 h-4 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-2 0c0 .993-.241 1.929-.668 2.754l-1.524-1.525a3.997 3.997 0 00.078-2.183l1.562-1.562C15.759 8.071 16 9.007 16 10zm-5.165 3.913l1.58 1.58A5.98 5.98 0 0110 16a5.976 5.976 0 01-2.516-.552l1.562-1.562a4.006 4.006 0 001.789.027zm-4.677-2.796a3.998 3.998 0 00-.027-1.789l-1.562 1.562C4.241 8.071 4 9.007 4 10c0 .993.241 1.929.668 2.754l1.524-1.525zm11.33-4.753l-1.562 1.562a4.006 4.006 0 00-1.789-.027l-1.58-1.58a5.98 5.98 0 012.516-.552 5.976 5.976 0 012.415.597zM4.668 7.246l1.525 1.525a3.997 3.997 0 00-.078 2.183l-1.562 1.562C4.241 11.929 4 10.993 4 10c0-.993.241-1.929.668-2.754z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        Support
+                                    </a>
                                     <form method="POST" action="{{ route('logout') }}">
                                         @csrf
                                         <button type="submit" class="flex items-center w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
