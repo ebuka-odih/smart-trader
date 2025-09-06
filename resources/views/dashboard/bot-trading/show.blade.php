@@ -100,22 +100,32 @@
 
             <!-- Bot Controls -->
             <div class="mt-6 space-y-2">
-                @if($bot->status === 'stopped')
-                    <button onclick="startBot({{ $bot->id }})" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                        Start Bot
-                    </button>
-                @elseif($bot->status === 'active')
+                @if($bot->status === 'active')
                     <button onclick="pauseBot({{ $bot->id }})" class="w-full bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                         Pause Bot
                     </button>
                     <button onclick="stopBot({{ $bot->id }})" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
                         Stop Bot
                     </button>
                 @elseif($bot->status === 'paused')
-                    <button onclick="startBot({{ $bot->id }})" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                    <button onclick="resumeBot({{ $bot->id }})" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
                         Resume Bot
                     </button>
                     <button onclick="stopBot({{ $bot->id }})" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                        <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                        </svg>
                         Stop Bot
                     </button>
                 @endif
@@ -425,39 +435,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Bot control functions
-    window.startBot = async (botId) => {
-        console.log('Starting bot:', botId);
-        try {
-            const response = await fetch(`/user/bot-trading/${botId}/start`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            console.log('Response status:', response.status);
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log('Response result:', result);
-
-            if (result.success) {
-                showSuccessModal('Bot Started!', result.message);
-                setTimeout(() => window.location.reload(), 2000);
-            } else {
-                showErrorModal('Start Failed', result.message);
-            }
-        } catch (error) {
-            console.error('Error starting bot:', error);
-            showErrorModal('Error', 'Failed to start bot: ' + error.message);
-        }
-    };
-
     window.pauseBot = async (botId) => {
+        if (!confirm('Are you sure you want to pause this bot? It can be resumed later.')) return;
+
         try {
             const response = await fetch(`/user/bot-trading/${botId}/pause`, {
                 method: 'POST',
@@ -480,8 +460,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
 
+    window.resumeBot = async (botId) => {
+        if (!confirm('Are you sure you want to resume this bot?')) return;
+
+        try {
+            const response = await fetch(`/user/bot-trading/${botId}/resume`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                showSuccessModal('Bot Resumed!', result.message);
+                setTimeout(() => window.location.reload(), 2000);
+            } else {
+                showErrorModal('Resume Failed', result.message);
+            }
+        } catch (error) {
+            showErrorModal('Error', 'Failed to resume bot');
+        }
+    };
+
     window.stopBot = async (botId) => {
-        if (!confirm('Are you sure you want to stop this bot?')) return;
+        if (!confirm('Are you sure you want to PERMANENTLY STOP this bot? This action cannot be undone and all profits will be transferred to your trading balance.')) return;
 
         try {
             const response = await fetch(`/user/bot-trading/${botId}/stop`, {
@@ -495,7 +500,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const result = await response.json();
 
             if (result.success) {
-                showSuccessModal('Bot Stopped!', result.message);
+                const message = result.message + (result.profit_transferred ? ' Profits have been transferred to your trading balance.' : '');
+                showSuccessModal('Bot Stopped!', message);
                 setTimeout(() => window.location.reload(), 2000);
             } else {
                 showErrorModal('Stop Failed', result.message);

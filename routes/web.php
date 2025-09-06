@@ -169,6 +169,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     // Bot Control Routes
     Route::post('bot-trading/{bot}/start', [BotTradingController::class, 'start'])->name('botTrading.start');
     Route::post('bot-trading/{bot}/pause', [BotTradingController::class, 'pause'])->name('botTrading.pause');
+    Route::post('bot-trading/{bot}/resume', [BotTradingController::class, 'resume'])->name('botTrading.resume');
     Route::post('bot-trading/{bot}/stop', [BotTradingController::class, 'stop'])->name('botTrading.stop');
     
     // Bot Data Routes

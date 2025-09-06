@@ -176,12 +176,7 @@
                                         Stop
                                     </button>
                                 @else
-                                    <button onclick="startBot({{ $bot->id }})" class="bg-green-600 hover:bg-green-700 text-white py-2 px-3 rounded text-sm transition-colors">
-                                        Start
-                                    </button>
-                                    <button onclick="deleteBot({{ $bot->id }})" class="bg-red-600 hover:bg-red-700 text-white py-2 px-3 rounded text-sm transition-colors">
-                                        Delete
-                                    </button>
+                                    <!-- Bot is stopped - no action buttons available -->
                                 @endif
                             </div>
                         </div>

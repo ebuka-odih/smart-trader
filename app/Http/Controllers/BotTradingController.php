@@ -333,11 +333,69 @@ class BotTradingController extends Controller
 
         $bot->update([
             'status' => 'paused',
+            'stopped_at' => now()
         ]);
+
+        // Create notification for the user
+        $user = Auth::user();
+        $user->createNotification(
+            'bot_paused',
+            'Bot Paused',
+            "Your bot '{$bot->name}' has been paused. You can resume it later.",
+            [
+                'bot_id' => $bot->id,
+                'bot_name' => $bot->name,
+                'action' => 'paused'
+            ]
+        );
+
+        \Log::info("User paused bot {$bot->id} by user " . Auth::id());
 
         return response()->json([
             'success' => true,
             'message' => 'Bot paused successfully!'
+        ]);
+    }
+
+    /**
+     * Resume the bot
+     */
+    public function resume(BotTrading $bot)
+    {
+        if ($bot->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this bot.');
+        }
+        
+        if (!$bot->isPaused()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bot is not currently paused.'
+            ], 400);
+        }
+
+        $bot->update([
+            'status' => 'active',
+            'stopped_at' => null
+        ]);
+
+        // Create notification for the user
+        $user = Auth::user();
+        $user->createNotification(
+            'bot_resumed',
+            'Bot Resumed',
+            "Your bot '{$bot->name}' has been resumed and is now active again.",
+            [
+                'bot_id' => $bot->id,
+                'bot_name' => $bot->name,
+                'action' => 'resumed'
+            ]
+        );
+
+        \Log::info("User resumed bot {$bot->id} by user " . Auth::id());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Bot resumed successfully!'
         ]);
     }
 
@@ -358,15 +416,20 @@ class BotTradingController extends Controller
         }
 
         try {
+            $profitTransferred = false;
+            $profitAmount = 0;
+
             // Transfer profits to user's trading balance before stopping
             if ($bot->total_profit > 0) {
                 $user = Auth::user();
-                $user->increment('trading_balance', $bot->total_profit);
+                $profitAmount = $bot->total_profit;
+                $user->increment('trading_balance', $profitAmount);
+                $profitTransferred = true;
                 
                 \Log::info('Bot profits transferred to user on manual stop', [
                     'bot_id' => $bot->id,
                     'user_id' => $user->id,
-                    'profit_transferred' => $bot->total_profit,
+                    'profit_transferred' => $profitAmount,
                     'new_trading_balance' => $user->fresh()->trading_balance
                 ]);
             }
@@ -376,9 +439,32 @@ class BotTradingController extends Controller
                 'stopped_at' => now(),
             ]);
 
+            // Create notification for the user
+            $user = Auth::user();
+            $profitMessage = $profitTransferred ? 
+                " Profits of $" . number_format($profitAmount, 2) . " have been transferred to your trading balance." : 
+                "";
+            
+            $user->createNotification(
+                'bot_stopped',
+                'Bot Stopped Permanently',
+                "Your bot '{$bot->name}' has been permanently stopped.{$profitMessage}",
+                [
+                    'bot_id' => $bot->id,
+                    'bot_name' => $bot->name,
+                    'action' => 'stopped',
+                    'profit_transferred' => $profitTransferred,
+                    'profit_amount' => $profitAmount
+                ]
+            );
+
+            \Log::info("User permanently stopped bot {$bot->id} by user " . Auth::id());
+
             return response()->json([
                 'success' => true,
-                'message' => 'Bot stopped successfully!' . ($bot->total_profit > 0 ? ' Profits have been transferred to your trading balance.' : '')
+                'message' => 'Bot stopped successfully!' . ($profitTransferred ? ' Profits have been transferred to your trading balance.' : ''),
+                'profit_transferred' => $profitTransferred,
+                'profit_amount' => $profitAmount
             ]);
         } catch (\Exception $e) {
             \Log::error('Bot stop failed: ' . $e->getMessage());
@@ -449,6 +535,7 @@ class BotTradingController extends Controller
             'stats' => $stats
         ]);
     }
+
 
     /**
      * Manually trigger bot execution (for testing)

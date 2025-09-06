@@ -23,7 +23,38 @@
 <div class="p-4 bg-gray-50 dark:bg-gray-900 min-h-screen">
     <!-- Page Header -->
     <div class="mb-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
+        <!-- Mobile Layout -->
+        <div class="block sm:hidden">
+            <!-- Back Button - Full Width on Mobile -->
+            <div class="mb-4">
+                <a href="{{ route('admin.bot-trading.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700 w-full justify-center">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Bots
+                </a>
+            </div>
+            
+            <!-- Title Section - Centered on Mobile -->
+            <div class="text-center mb-4">
+                <h1 class="text-xl font-bold text-gray-900 dark:text-white">Bot Details</h1>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $bot->name ?? 'Unnamed Bot' }}</p>
+                <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">{{ $bot->user->name ?? 'Unknown User' }} - Admin Panel</p>
+            </div>
+            
+            <!-- Action Button - Full Width on Mobile -->
+            <div>
+                <a href="{{ route('admin.bot-trading.edit', $bot) }}" class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 w-full">
+                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                    </svg>
+                    Edit Bot
+                </a>
+            </div>
+        </div>
+        
+        <!-- Desktop Layout -->
+        <div class="hidden sm:flex sm:items-center sm:justify-between">
             <div class="flex items-center space-x-4">
                 <a href="{{ route('admin.bot-trading.index') }}" class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -111,12 +142,6 @@
                     Stop Bot
                 </button>
                 @endif
-                <button onclick="executeBot({{ $bot->id }})" class="w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors duration-200">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    Execute Bot
-                </button>
             </div>
         </div>
 
@@ -535,6 +560,7 @@
                             <input type="number" name="base_amount" step="0.00000001" required 
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                    placeholder="e.g., 0.001">
+                            <p class="text-xs text-blue-500 dark:text-blue-400 mt-1">The quantity of the base asset (e.g., BTC, ETH, EUR/USD) being traded</p>
                         </div>
 
                         <!-- Price -->
@@ -543,6 +569,7 @@
                             <input type="number" name="price" step="0.01" required 
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                    placeholder="e.g., 45000.00">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">The price per unit of the base asset in the quote currency</p>
                         </div>
 
                         <!-- Quote Amount -->
@@ -551,6 +578,7 @@
                             <input type="number" name="quote_amount" step="0.01" required 
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                    placeholder="e.g., 45.00">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">The total value of the trade in the quote currency (Base Amount × Price)</p>
                         </div>
 
                         <!-- Execution Type -->

@@ -168,42 +168,12 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                     </svg>
-                                    View
+                                    View Details
                                 </a>
-                                
-                                <!-- Edit Button -->
-                                <a href="{{ route('admin.bot-trading.edit', $bot) }}" 
-                                   class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                    Edit
-                                </a>
-                                
-                                <!-- Edit PnL Button -->
-                                <button onclick="openEditPnlModal({{ $bot->id }}, {{ $bot->total_profit ?? 0 }}, {{ $bot->total_invested ?? 0 }}, {{ $bot->successful_trades ?? 0 }}, {{ $bot->success_rate ?? 0 }})" 
-                                        class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                                    </svg>
-                                    Edit PnL
-                                </button>
-                                
-                                @if($bot->status !== 'stopped')
-                                <!-- Stop Button -->
-                                <button onclick="stopBot({{ $bot->id }})" 
-                                        class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                    Stop
-                                </button>
-                                @endif
                                 
                                 <!-- Delete Button -->
                                 <button onclick="deleteBot({{ $bot->id }})" 
-                                        class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-red-800 hover:bg-red-900 dark:bg-red-700 dark:hover:bg-red-800 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                                        class="inline-flex items-center px-3 py-2 text-xs font-medium text-white bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </svg>
@@ -230,92 +200,9 @@
         </div>
     </div>
 
-    <!-- Edit PnL Modal -->
-    <div id="editPnlModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full">
-                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Edit Bot PnL</h3>
-                </div>
-                <form id="editPnlForm" class="p-6 space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Profit ($)</label>
-                        <input type="number" step="0.01" id="totalProfit" name="total_profit" 
-                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Total Invested ($)</label>
-                        <input type="number" step="0.01" id="totalInvested" name="total_invested" 
-                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Successful Trades</label>
-                        <input type="number" id="successfulTrades" name="successful_trades" 
-                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Success Rate (%)</label>
-                        <input type="number" step="0.1" id="successRate" name="success_rate" 
-                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
-                    </div>
-                    <div class="flex justify-end space-x-3 pt-4">
-                        <button type="button" onclick="closeEditPnlModal()" 
-                                class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors duration-200">
-                            Cancel
-                        </button>
-                        <button type="submit" 
-                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                            Update PnL
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 
 <script>
-function stopBot(botId) {
-    if (confirm('Are you sure you want to stop this bot?')) {
-        fetch(`/admin/bot-trading/${botId}/stop`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-                'Content-Type': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                location.reload();
-            } else {
-                alert('Failed to stop bot: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while stopping the bot');
-        });
-    }
-}
-
-// PnL Editing Functions
-let currentBotId = null;
-
-function openEditPnlModal(botId, totalProfit, totalInvested, successfulTrades, successRate) {
-    currentBotId = botId;
-    document.getElementById('totalProfit').value = totalProfit;
-    document.getElementById('totalInvested').value = totalInvested;
-    document.getElementById('successfulTrades').value = successfulTrades;
-    document.getElementById('successRate').value = successRate;
-    document.getElementById('editPnlModal').classList.remove('hidden');
-}
-
-function closeEditPnlModal() {
-    document.getElementById('editPnlModal').classList.add('hidden');
-    currentBotId = null;
-}
-
 function deleteBot(botId) {
     if (confirm('Are you sure you want to delete this bot? This action cannot be undone.')) {
         fetch(`/admin/bot-trading/${botId}`, {
@@ -340,4 +227,5 @@ function deleteBot(botId) {
     }
 }
 </script>
+
 @endsection
