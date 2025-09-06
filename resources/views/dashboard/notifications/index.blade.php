@@ -93,7 +93,7 @@
                         <div class="mt-3 p-3 bg-gray-700 rounded-lg">
                             @if(isset($notification->data['amount']))
                                 <div class="text-sm text-gray-300">
-                                    <span class="font-medium">Amount:</span> ${{ number_format($notification->data['amount'], 2) }}
+                                    <span class="font-medium">Amount:</span> {{ auth()->user()->formatAmount($notification->data['amount']) }}
                                 </div>
                             @endif
                             @if(isset($notification->data['status']))

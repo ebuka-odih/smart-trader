@@ -27,15 +27,15 @@
                 <div class="p-6">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-white">${{ number_format($user->balance, 2) }}</div>
+                            <div class="text-2xl font-bold text-white">{{ $user->formatAmount($user->balance) }}</div>
                             <div class="text-sm text-gray-400">Available Balance</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-blue-400">${{ number_format($user->trading_balance, 2) }}</div>
+                            <div class="text-2xl font-bold text-blue-400">{{ $user->formatAmount($user->trading_balance) }}</div>
                             <div class="text-sm text-gray-400">Trading Balance</div>
                         </div>
                         <div class="text-center">
-                            <div class="text-2xl font-bold text-green-400">${{ number_format($user->getTotalBalanceAttribute(), 2) }}</div>
+                            <div class="text-2xl font-bold text-green-400">{{ $user->formatAmount($user->getTotalBalanceAttribute()) }}</div>
                             <div class="text-sm text-gray-400">Total Balance</div>
                         </div>
                     </div>

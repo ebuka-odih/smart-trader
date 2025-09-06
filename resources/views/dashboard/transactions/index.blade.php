@@ -85,7 +85,7 @@
                             </div>
                             <div class="text-right">
                                 <div class="text-sm text-gray-400">Amount</div>
-                                <div class="text-white font-bold">${{ number_format($deposit->amount, 2) }}</div>
+                                <div class="text-white font-bold">{{ auth()->user()->formatAmount($deposit->amount) }}</div>
                             </div>
                         </div>
                         <div class="flex justify-between items-center">
@@ -140,7 +140,7 @@
                                     {{ $deposit->created_at->format('M d, Y H:i') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                    ${{ number_format($deposit->amount, 2) }}
+                                    {{ auth()->user()->formatAmount($deposit->amount) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                                     {{ $deposit->payment_method ? $deposit->payment_method->crypto_display_name ?? 'N/A' : 'N/A' }}
@@ -196,7 +196,7 @@
                                     {{ $withdrawal->created_at->format('M d, Y H:i') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                    ${{ number_format($withdrawal->amount, 2) }}
+                                    {{ auth()->user()->formatAmount($withdrawal->amount) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                                     {{ ucfirst(str_replace('_', ' ', $withdrawal->from_account ?? 'N/A')) }}

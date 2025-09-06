@@ -11,7 +11,7 @@
                         <div class="col text-left">
                             <h6>
                                 <span class="text-left">Balance: </span>
-                                <strong>${{ number_format($user->balance, 2) }}</strong>
+                                <strong>{{ $user->formatAmount($user->balance) }}</strong>
                             </h6>
                         </div>
                         <!-- BTC Balance -->

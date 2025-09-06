@@ -209,16 +209,16 @@
                             required
                         >
                             <option value="">Select your preferred currency</option>
-                            <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>🇺🇸 USD - US Dollar</option>
-                            <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>🇪🇺 EUR - Euro</option>
-                            <option value="GBP" {{ old('currency') == 'GBP' ? 'selected' : '' }}>🇬🇧 GBP - British Pound</option>
-                            <option value="JPY" {{ old('currency') == 'JPY' ? 'selected' : '' }}>🇯🇵 JPY - Japanese Yen</option>
-                            <option value="CAD" {{ old('currency') == 'CAD' ? 'selected' : '' }}>🇨🇦 CAD - Canadian Dollar</option>
-                            <option value="AUD" {{ old('currency') == 'AUD' ? 'selected' : '' }}>🇦🇺 AUD - Australian Dollar</option>
-                            <option value="CHF" {{ old('currency') == 'CHF' ? 'selected' : '' }}>🇨🇭 CHF - Swiss Franc</option>
-                            <option value="CNY" {{ old('currency') == 'CNY' ? 'selected' : '' }}>🇨🇳 CNY - Chinese Yuan</option>
-                            <option value="INR" {{ old('currency') == 'INR' ? 'selected' : '' }}>🇮🇳 INR - Indian Rupee</option>
-                            <option value="BRL" {{ old('currency') == 'BRL' ? 'selected' : '' }}>🇧🇷 BRL - Brazilian Real</option>
+                            <option value="USD" {{ old('currency') == 'USD' ? 'selected' : '' }}>USD</option>
+                            <option value="EUR" {{ old('currency') == 'EUR' ? 'selected' : '' }}>EUR</option>
+                            <option value="GBP" {{ old('currency') == 'GBP' ? 'selected' : '' }}>GBP</option>
+                            <option value="JPY" {{ old('currency') == 'JPY' ? 'selected' : '' }}>JPY</option>
+                            <option value="CAD" {{ old('currency') == 'CAD' ? 'selected' : '' }}>CAD</option>
+                            <option value="AUD" {{ old('currency') == 'AUD' ? 'selected' : '' }}>AUD</option>
+                            <option value="CHF" {{ old('currency') == 'CHF' ? 'selected' : '' }}>CHF</option>
+                            <option value="CNY" {{ old('currency') == 'CNY' ? 'selected' : '' }}>CNY</option>
+                            <option value="INR" {{ old('currency') == 'INR' ? 'selected' : '' }}>INR</option>
+                            <option value="BRL" {{ old('currency') == 'BRL' ? 'selected' : '' }}>BRL</option>
                         </select>
                     </div>
                     @error('currency')

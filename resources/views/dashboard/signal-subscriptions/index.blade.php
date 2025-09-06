@@ -61,7 +61,7 @@
                         </div>
                         <div class="ml-4">
                             <p class="text-sm font-medium text-gray-400">Total Spent</p>
-                            <p class="text-2xl font-bold text-white">${{ number_format($signalSubscriptions->sum('amount_paid'), 2) }}</p>
+                            <p class="text-2xl font-bold text-white">{{ auth()->user()->formatAmount($signalSubscriptions->sum('amount_paid')) }}</p>
                         </div>
                     </div>
                 </div>

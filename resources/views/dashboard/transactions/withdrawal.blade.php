@@ -17,7 +17,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-400 text-sm">Main Balance</p>
-                    <p class="text-white text-xl font-bold">${{ number_format(auth()->user()->balance, 2) }}</p>
+                    <p class="text-white text-xl font-bold">{{ auth()->user()->formatAmount(auth()->user()->balance) }}</p>
                 </div>
                 <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -33,7 +33,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-400 text-sm">Trading Balance</p>
-                    <p class="text-white text-xl font-bold">${{ number_format(auth()->user()->trading_balance ?? 0, 2) }}</p>
+                    <p class="text-white text-xl font-bold">{{ auth()->user()->formatAmount(auth()->user()->trading_balance ?? 0) }}</p>
                 </div>
                 <div class="w-10 h-10 bg-green-500 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -48,7 +48,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-400 text-sm">Holding Balance</p>
-                    <p class="text-white text-xl font-bold">${{ number_format(auth()->user()->holding_balance ?? 0, 2) }}</p>
+                    <p class="text-white text-xl font-bold">{{ auth()->user()->formatAmount(auth()->user()->holding_balance ?? 0) }}</p>
                     <p class="text-xs text-gray-500 mt-1">Portfolio value (not available for withdrawal)</p>
                 </div>
                 <div class="w-10 h-10 bg-purple-500 rounded-lg flex items-center justify-center">
@@ -64,7 +64,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-400 text-sm">Mining Balance</p>
-                    <p class="text-white text-xl font-bold">${{ number_format(auth()->user()->mining_balance ?? 0, 2) }}</p>
+                    <p class="text-white text-xl font-bold">{{ auth()->user()->formatAmount(auth()->user()->mining_balance ?? 0) }}</p>
                 </div>
                 <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -302,7 +302,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">${{ number_format($transaction->amount, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">{{ auth()->user()->formatAmount($transaction->amount) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                                     @if($transaction->transaction_type === 'withdrawal')
                                         {{ ucfirst($transaction->payment_method) }}

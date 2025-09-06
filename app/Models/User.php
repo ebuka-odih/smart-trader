@@ -375,16 +375,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public static function getAvailableCurrencies()
     {
         return [
-            'USD' => '🇺🇸 USD - US Dollar',
-            'EUR' => '🇪🇺 EUR - Euro',
-            'GBP' => '🇬🇧 GBP - British Pound',
-            'JPY' => '🇯🇵 JPY - Japanese Yen',
-            'CAD' => '🇨🇦 CAD - Canadian Dollar',
-            'AUD' => '🇦🇺 AUD - Australian Dollar',
-            'CHF' => '🇨🇭 CHF - Swiss Franc',
-            'CNY' => '🇨🇳 CNY - Chinese Yuan',
-            'INR' => '🇮🇳 INR - Indian Rupee',
-            'BRL' => '🇧🇷 BRL - Brazilian Real',
+            'USD' => 'USD',
+            'EUR' => 'EUR',
+            'GBP' => 'GBP',
+            'JPY' => 'JPY',
+            'CAD' => 'CAD',
+            'AUD' => 'AUD',
+            'CHF' => 'CHF',
+            'CNY' => 'CNY',
+            'INR' => 'INR',
+            'BRL' => 'BRL',
         ];
     }
 }

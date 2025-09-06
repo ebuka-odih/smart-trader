@@ -116,7 +116,7 @@
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Avg. Profit</span>
                         <span class="{{ $avgProfit >= 0 ? 'text-green-400' : 'text-red-400' }}">
-                            {{ $avgProfit >= 0 ? '+' : '' }}${{ number_format($avgProfit, 2) }}
+                            {{ $avgProfit >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($avgProfit) }}
                         </span>
                     </div>
                 </div>
@@ -248,7 +248,7 @@
                 <div class="flex justify-between text-sm">
                     <span class="text-gray-400">Total Profit</span>
                     <span class="{{ $totalBotProfit >= 0 ? 'text-green-400' : 'text-red-400' }} font-semibold">
-                        {{ $totalBotProfit >= 0 ? '+' : '' }}${{ number_format($totalBotProfit, 2) }}
+                        {{ $totalBotProfit >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($totalBotProfit) }}
                     </span>
                 </div>
                 <div class="flex justify-between text-sm">
@@ -352,16 +352,16 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                            ${{ number_format($trade->amount, 2) }}
+                                            {{ auth()->user()->formatAmount($trade->amount) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                                             {{ $trade->leverage ?? 'N/A' }}x
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                            ${{ number_format($trade->entry_price ?? 0, 8) }}
+                                            {{ auth()->user()->formatAmount($trade->entry_price ?? 0, 8) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm {{ ($trade->profit_loss ?? 0) >= 0 ? 'text-green-400' : 'text-red-400' }}">
-                                            {{ ($trade->profit_loss ?? 0) >= 0 ? '+' : '' }}${{ number_format($trade->profit_loss ?? 0, 2) }}
+                                            {{ ($trade->profit_loss ?? 0) >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($trade->profit_loss ?? 0) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <button class="text-red-400 hover:text-red-300">Close</button>
@@ -414,16 +414,16 @@
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                            ${{ number_format($trade->amount, 2) }}
+                                            {{ auth()->user()->formatAmount($trade->amount) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                            ${{ number_format($trade->entry_price ?? 0, 8) }}
+                                            {{ auth()->user()->formatAmount($trade->entry_price ?? 0, 8) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
-                                            ${{ number_format($trade->exit_price ?? 0, 8) }}
+                                            {{ auth()->user()->formatAmount($trade->exit_price ?? 0, 8) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm {{ ($trade->profit_loss ?? 0) >= 0 ? 'text-green-400' : 'text-red-400' }}">
-                                            {{ ($trade->profit_loss ?? 0) >= 0 ? '+' : '' }}${{ number_format($trade->profit_loss ?? 0, 2) }}
+                                            {{ ($trade->profit_loss ?? 0) >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($trade->profit_loss ?? 0) }}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-white">
                                             {{ $trade->updated_at ? $trade->updated_at->format('M d, Y') : 'N/A' }}

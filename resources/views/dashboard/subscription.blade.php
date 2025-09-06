@@ -53,7 +53,7 @@
                     <h5 class="card-title"><i style="color: #6c6cf3; font-size: 30px" class="icon ion-md-cash"></i> Main Balance</h5>
                     <div>
                         <h5>
-                            <small>USD</small><strong> {{ number_format($user->balance, 2) }}</strong>
+                            <small>{{ $user->currency }}</small><strong> {{ $user->formatAmount($user->balance) }}</strong>
                         </h5>
 
                          <h5>
