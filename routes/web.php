@@ -107,11 +107,30 @@ Route::get('debug-notifications', function () {
                 }
             } catch (Exception $e) {
                 echo "❌ Error creating notification: " . $e->getMessage() . "<br>";
+                echo "Error details: " . $e->getFile() . " (Line: " . $e->getLine() . ")<br>";
+                echo "<pre>" . $e->getTraceAsString() . "</pre>";
             }
         }
         
-        // Test 7: Check existing notifications
-        echo "<h3>6. Existing Notifications Test</h3>";
+        // Test 7: Direct Database Insert Test
+        echo "<h3>6. Direct Database Insert Test</h3>";
+        try {
+            $directInsertId = DB::table('user_notifications')->insertGetId([
+                'user_id' => $testUser->id,
+                'type' => 'test_direct',
+                'title' => 'Direct Database Test',
+                'message' => 'This notification was created directly in the database',
+                'data' => json_encode(['test' => true]),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            echo "✅ Direct database insert successful! ID: {$directInsertId}<br>";
+        } catch (Exception $e) {
+            echo "❌ Direct database insert failed: " . $e->getMessage() . "<br>";
+        }
+        
+        // Test 8: Check existing notifications
+        echo "<h3>7. Existing Notifications Test</h3>";
         $notificationCount = \App\Models\UserNotification::count();
         echo "Total notifications in database: {$notificationCount}<br>";
         
