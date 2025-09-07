@@ -8,6 +8,9 @@ use App\Http\Controllers\TradeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WithdrawalController;
+use App\Models\User;
+use App\Models\UserNotification;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\UserPlanController;
 use App\Http\Controllers\UserSignalController;
 use App\Http\Controllers\SignalSubscriptionController;
@@ -36,9 +39,6 @@ Route::get('debug-notifications', function () {
     echo "<h2>Notification System Debug</h2>";
     
     try {
-        use App\Models\User;
-        use App\Models\UserNotification;
-        use Illuminate\Support\Facades\DB;
         
         // Test 1: Database Connection
         echo "<h3>1. Database Connection Test</h3>";
@@ -72,11 +72,11 @@ Route::get('debug-notifications', function () {
         
         // Test 4: Check if we have users
         echo "<h3>4. Users Test</h3>";
-        $userCount = User::count();
+        $userCount = \App\Models\User::count();
         echo "Total users: {$userCount}<br>";
         
         if ($userCount > 0) {
-            $testUser = User::first();
+            $testUser = \App\Models\User::first();
             echo "Test user ID: {$testUser->id}<br>";
             
             // Test 5: Try to create a notification
@@ -94,7 +94,7 @@ Route::get('debug-notifications', function () {
                     echo "Notification ID: {$notification->id}<br>";
                     
                     // Test 6: Check if notification was saved
-                    $savedNotification = UserNotification::find($notification->id);
+                    $savedNotification = \App\Models\UserNotification::find($notification->id);
                     if ($savedNotification) {
                         echo "✅ Notification saved to database<br>";
                         echo "Title: {$savedNotification->title}<br>";
@@ -112,11 +112,11 @@ Route::get('debug-notifications', function () {
         
         // Test 7: Check existing notifications
         echo "<h3>6. Existing Notifications Test</h3>";
-        $notificationCount = UserNotification::count();
+        $notificationCount = \App\Models\UserNotification::count();
         echo "Total notifications in database: {$notificationCount}<br>";
         
         if ($notificationCount > 0) {
-            $recentNotifications = UserNotification::latest()->take(5)->get();
+            $recentNotifications = \App\Models\UserNotification::latest()->take(5)->get();
             echo "<h4>Recent Notifications:</h4>";
             foreach ($recentNotifications as $notif) {
                 echo "- ID: {$notif->id}, Type: {$notif->type}, Title: {$notif->title}, Created: {$notif->created_at}<br>";
