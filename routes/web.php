@@ -142,8 +142,32 @@ Route::get('debug-notifications', function () {
             }
         }
         
-        // Test 8: Check Laravel logs
-        echo "<h3>7. Log File Test</h3>";
+        // Test 8: Check Foreign Key Constraints
+        echo "<h3>7. Foreign Key Constraints Test</h3>";
+        try {
+            $foreignKeys = DB::select("
+                SELECT CONSTRAINT_NAME 
+                FROM information_schema.KEY_COLUMN_USAGE 
+                WHERE TABLE_SCHEMA = DATABASE() 
+                AND TABLE_NAME = 'user_notifications' 
+                AND COLUMN_NAME = 'user_id' 
+                AND REFERENCED_TABLE_NAME IS NOT NULL
+            ");
+            
+            if (count($foreignKeys) > 0) {
+                echo "Found foreign key constraints:<br>";
+                foreach ($foreignKeys as $fk) {
+                    echo "- Constraint Name: {$fk->CONSTRAINT_NAME}<br>";
+                }
+            } else {
+                echo "No foreign key constraints found on user_id column<br>";
+            }
+        } catch (Exception $e) {
+            echo "Error checking foreign keys: " . $e->getMessage() . "<br>";
+        }
+        
+        // Test 9: Check Laravel logs
+        echo "<h3>8. Log File Test</h3>";
         $logPath = storage_path('logs/laravel.log');
         if (file_exists($logPath)) {
             echo "✅ Log file exists: {$logPath}<br>";
