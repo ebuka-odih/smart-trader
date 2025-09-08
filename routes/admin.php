@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\TransactionController as AdminTransactionControll
 use App\Http\Controllers\Admin\SignalController as AdminSignalController;
 use App\Http\Controllers\Admin\CopiedTradeController;
 use App\Http\Controllers\Admin\BotTradingController;
+use App\Http\Controllers\Admin\MiningController;
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -72,4 +73,13 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::post('/copied-trades/{id}/activate', [CopiedTradeController::class, 'activate'])->name('copied-trades.activate');
     Route::post('/copied-trades/{id}/deactivate', [CopiedTradeController::class, 'deactivate'])->name('copied-trades.deactivate');
     Route::delete('/copied-trades/{id}', [CopiedTradeController::class, 'destroy'])->name('copied-trades.destroy');
+
+    // Mining management
+    Route::get('/mining', [MiningController::class, 'index'])->name('mining.index');
+    Route::put('/mining/{id}', [MiningController::class, 'update'])->name('mining.update');
+    Route::post('/mining/{id}/suspend', [MiningController::class, 'suspend'])->name('mining.suspend');
+    Route::post('/mining/{id}/resume', [MiningController::class, 'resume'])->name('mining.resume');
+    Route::post('/mining/{id}/cancel', [MiningController::class, 'cancel'])->name('mining.cancel');
+    Route::delete('/mining/{id}', [MiningController::class, 'destroy'])->name('mining.destroy');
+    Route::get('/mining-statistics', [MiningController::class, 'statistics'])->name('mining.statistics');
 });
