@@ -7,7 +7,7 @@
                 <div class="market-pairs">
                      <div class="m-2">
                     <div class="row align-items-center">
-                        <!-- USD Balance -->
+                        <!-- {{ auth()->user()->currency ?? 'USD' }} Balance -->
                         <div class="col text-left">
                             <h6>
                                 <span class="text-left">Balance: </span>
@@ -379,7 +379,7 @@
                                             <input type="number" name="amount" class="form-control"
                                                    placeholder="Amount" required>
                                             <div class="input-group-append">
-                                                <span class="input-group-text">USD</span>
+                                                <span class="input-group-text">{{ auth()->user()->currency ?? 'USD' }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -490,7 +490,7 @@
                                                        class="form-control">
                                             </div>
                                         </div>
-                                        <p>Bal: <span>{{ number_format($user->balance, 2) }} USD</span></p>
+                                        <p>Bal: <span>{{ $user->formatAmount($user->balance) }}</span></p>
                                         <button class="btn buy" type="submit" name="action_type" value="buy">Buy
                                         </button>
                                     </form>
@@ -503,7 +503,7 @@
                                             <input type="number" name="amount" class="form-control"
                                                    placeholder="Amount" required>
                                             <div class="input-group-append">
-                                                <span class="input-group-text">USD</span>
+                                                <span class="input-group-text">{{ auth()->user()->currency ?? 'USD' }}</span>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -614,7 +614,7 @@
                                                        class="form-control">
                                             </div>
                                         </div>
-                                        <p>Bal: <span>{{ number_format($user->balance, 2) }} USD</span></p>
+                                        <p>Bal: <span>{{ $user->formatAmount($user->balance) }}</span></p>
                                         <button class="btn sell" type="submit" name="action_type" value="sell">
                                             Sell
                                         </button>

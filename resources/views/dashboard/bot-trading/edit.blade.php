@@ -199,7 +199,7 @@
                         <h4 class="text-lg font-medium text-white mb-4">Investment Settings</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Investment (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Investment ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="max_investment" value="{{ $bot->max_investment }}" step="0.01" min="10" max="1000000" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1000.00">
                             </div>
                             <div>
@@ -244,7 +244,7 @@
                                 <input type="number" name="take_profit_percentage" value="{{ $bot->take_profit_percentage }}" step="0.1" min="0.1" max="1000" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="20.0">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Daily Loss Limit (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Daily Loss Limit ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="daily_loss_limit" value="{{ $bot->daily_loss_limit }}" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100.00">
                             </div>
                             <div>
@@ -259,11 +259,11 @@
                         <h4 class="text-lg font-medium text-white mb-4">Trade Amounts</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Min Trade Amount (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Min Trade Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="min_trade_amount" value="{{ $bot->min_trade_amount }}" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="10.00">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Trade Amount (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Trade Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="max_trade_amount" value="{{ $bot->max_trade_amount }}" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100.00">
                             </div>
                         </div>

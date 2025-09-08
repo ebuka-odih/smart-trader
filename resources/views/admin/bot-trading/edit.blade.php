@@ -66,17 +66,17 @@
                         <h4 class="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider">Investment Settings</h4>
                         
                         <div>
-                            <label for="max_investment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Investment (USD)</label>
+                            <label for="max_investment" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Investment ({{ auth()->user()->currency ?? 'USD' }})</label>
                             <input type="number" step="0.01" name="max_investment" id="max_investment" value="{{ old('max_investment', $bot->max_investment) }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         </div>
 
                         <div>
-                            <label for="min_trade_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Trade Amount (USD)</label>
+                            <label for="min_trade_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Min Trade Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                             <input type="number" step="0.01" name="min_trade_amount" id="min_trade_amount" value="{{ old('min_trade_amount', $bot->min_trade_amount) }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         </div>
 
                         <div>
-                            <label for="max_trade_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Trade Amount (USD)</label>
+                            <label for="max_trade_amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Max Trade Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                             <input type="number" step="0.01" name="max_trade_amount" id="max_trade_amount" value="{{ old('max_trade_amount', $bot->max_trade_amount) }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         </div>
                     </div>
@@ -87,7 +87,7 @@
                     <h4 class="text-sm font-medium text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-4">Risk Management</h4>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label for="daily_loss_limit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Daily Loss Limit (USD)</label>
+                            <label for="daily_loss_limit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Daily Loss Limit ({{ auth()->user()->currency ?? 'USD' }})</label>
                             <input type="number" step="0.01" name="daily_loss_limit" id="daily_loss_limit" value="{{ old('daily_loss_limit', $bot->daily_loss_limit) }}" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
                         </div>
 

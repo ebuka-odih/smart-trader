@@ -338,10 +338,10 @@
                         <h4 class="text-lg font-medium text-white mb-4">Investment Settings</h4>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Investment (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Investment ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="max_investment" step="0.01" min="10" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="1000.00">
                                 <div class="mt-1 text-xs text-green-400">
-                                    Trading Balance: ${{ number_format(auth()->user()->trading_balance, 2) }}
+                                    Trading Balance: {{ auth()->user()->formatAmount(auth()->user()->trading_balance) }}
                                 </div>
                                 <div class="mt-1 text-xs text-blue-400">
                                     💡 Total USD limit for this bot's trading activities.
@@ -352,7 +352,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Min Trade Amount (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Min Trade Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="min_trade_amount" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="10.00">
                                 <div class="mt-1 text-xs text-blue-400">
                                     💡 Bot will buy/sell the equivalent value in the base currency.
@@ -363,7 +363,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Trade Amount (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Max Trade Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="max_trade_amount" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100.00">
                                 <div class="mt-1 text-xs text-blue-400">
                                     💡 Bot will buy/sell the equivalent value in the base currency.
@@ -436,7 +436,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-300 mb-2">Daily Loss Limit (USD)</label>
+                                <label class="block text-sm font-medium text-gray-300 mb-2">Daily Loss Limit ({{ auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="daily_loss_limit" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100.00">
                                 <div class="mt-1 text-xs text-red-400">
                                     📊 Maximum daily loss before stopping

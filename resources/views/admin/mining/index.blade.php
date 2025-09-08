@@ -286,7 +286,7 @@
 
                     <!-- Current Value -->
                     <div>
-                        <label for="current_value" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Value (USD)</label>
+                        <label for="current_value" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current Value ({{ auth()->user()->currency ?? 'USD' }})</label>
                         <input type="number" 
                                id="current_value" 
                                name="current_value" 

@@ -62,7 +62,7 @@
                                            class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
                                            placeholder="Enter amount to invest">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                        <span class="text-gray-500 text-sm" id="currency-display">USD</span>
+                                        <span class="text-gray-500 text-sm" id="currency-display">{{ auth()->user()->currency ?? 'USD' }}</span>
                                     </div>
                                 </div>
                                 @error('amount_invested')
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const plan = miningPlans.find(p => p.id == planId);
         
         if (plan) {
-            currencyDisplay.textContent = plan.currency || 'USD';
+            currencyDisplay.textContent = plan.currency || '{{ auth()->user()->currency ?? 'USD' }}';
             
             planDetails.innerHTML = `
                 <div class="space-y-4">
@@ -256,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
         } else {
-            currencyDisplay.textContent = 'USD';
+            currencyDisplay.textContent = '{{ auth()->user()->currency ?? 'USD' }}';
             planDetails.innerHTML = `
                 <div class="text-center py-8">
                     <div class="text-gray-400 mb-4">

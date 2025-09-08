@@ -108,7 +108,7 @@
                     <!-- Market Order Fields -->
                     <div id="marketOrderFields">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Amount (USD)</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Amount ({{ auth()->user()->currency ?? 'USD' }})</label>
                             <input type="number" name="amount" step="0.01" min="1" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="100.00">
                         </div>
                     </div>

@@ -572,7 +572,7 @@
 
                         <!-- Price -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price ({{ $bot->quote_asset ?? 'USD' }}) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price ({{ $bot->quote_asset ?? auth()->user()->currency ?? 'USD' }}) <span class="text-red-500">*</span></label>
                             <input type="number" name="price" step="0.01" required 
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                    placeholder="e.g., 45000.00">
@@ -581,7 +581,7 @@
 
                         <!-- Quote Amount -->
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quote Amount ({{ $bot->quote_asset ?? 'USD' }}) <span class="text-red-500">*</span></label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Quote Amount ({{ $bot->quote_asset ?? auth()->user()->currency ?? 'USD' }}) <span class="text-red-500">*</span></label>
                             <input type="number" name="quote_amount" step="0.01" required 
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                    placeholder="e.g., 45.00">
@@ -603,7 +603,7 @@
                         <h4 class="text-md font-medium text-gray-900 dark:text-white mb-4">Profit/Loss (Optional)</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit/Loss ({{ $bot->quote_asset ?? 'USD' }})</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit/Loss ({{ $bot->quote_asset ?? auth()->user()->currency ?? 'USD' }})</label>
                                 <input type="number" name="profit_loss" step="0.01" 
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
                                        placeholder="e.g., 5.50">

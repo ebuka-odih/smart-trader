@@ -211,7 +211,7 @@
                                    class="block w-full pl-7 pr-12 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                    placeholder="0.00">
                             <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                                <span class="text-gray-400 sm:text-sm">USD</span>
+                                <span class="text-gray-400 sm:text-sm">{{ auth()->user()->currency ?? 'USD' }}</span>
                                 </div>
                         </div>
                     </div>

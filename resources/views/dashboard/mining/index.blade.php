@@ -84,7 +84,7 @@
                                             </div>
                                             <div class="flex items-center justify-between mb-4">
                                                 <div>
-                                                    <div class="text-2xl font-bold text-white">${{ number_format($plan->price, 2) }}</div>
+                                                    <div class="text-2xl font-bold text-white">{{ auth()->user()->formatAmount($plan->price) }}</div>
                                                     <div class="text-sm text-gray-400">per month</div>
                                                 </div>
                                             </div>
