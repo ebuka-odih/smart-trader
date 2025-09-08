@@ -12,7 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('copied_trades', function (Blueprint $table) {
-            $table->timestamp('stopped_at')->nullable()->after('status');
+            if (!Schema::hasColumn('copied_trades', 'stopped_at')) {
+                $table->timestamp('stopped_at')->nullable()->after('status');
+            }
         });
     }
 
@@ -22,7 +24,9 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('copied_trades', function (Blueprint $table) {
-            $table->dropColumn('stopped_at');
+            if (Schema::hasColumn('copied_trades', 'stopped_at')) {
+                $table->dropColumn('stopped_at');
+            }
         });
     }
 };
