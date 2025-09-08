@@ -51,4 +51,96 @@ class CopiedTradeController extends Controller
         return redirect()->back()->with('success', 'Performance metrics updated successfully! ' . 
             ($pnlDifference != 0 ? "User balance adjusted by $" . number_format($pnlDifference, 2) : ""));
     }
+
+    public function activate($id)
+    {
+        $copiedTrade = CopiedTrade::findOrFail($id);
+        $copiedTrade->update(['status' => 1]);
+        
+        // Send notification to user
+        $copiedTrade->user->createNotification(
+            'copy_trade_started',
+            'Copy Trade Started',
+            "Your copy trade with {$copiedTrade->copy_trader->name} has been started by admin.",
+            [
+                'copied_trade_id' => $copiedTrade->id,
+                'trader_name' => $copiedTrade->copy_trader->name,
+                'amount' => $copiedTrade->amount
+            ]
+        );
+        
+        return redirect()->back()->with('success', 'Copied trade activated successfully!');
+    }
+
+    public function deactivate($id)
+    {
+        $copiedTrade = CopiedTrade::findOrFail($id);
+        
+        // Transfer PnL to user's trading balance when stopping
+        if ($copiedTrade->status == 1 && ($copiedTrade->pnl ?? 0) > 0) {
+            $user = $copiedTrade->user;
+            $pnlAmount = $copiedTrade->pnl;
+            $user->balance += $pnlAmount;
+            $user->save();
+            
+            // Reset PnL to 0 after transfer
+            $copiedTrade->update([
+                'status' => 0,
+                'pnl' => 0,
+                'stopped_at' => now()
+            ]);
+            
+            // Send notification to user
+            $copiedTrade->user->createNotification(
+                'copy_trade_stopped',
+                'Copy Trade Stopped',
+                "Your copy trade with {$copiedTrade->copy_trader->name} has been stopped. PnL of $" . number_format($pnlAmount, 2) . " has been transferred to your balance.",
+                [
+                    'copied_trade_id' => $copiedTrade->id,
+                    'trader_name' => $copiedTrade->copy_trader->name,
+                    'amount' => $copiedTrade->amount,
+                    'pnl_transferred' => $pnlAmount
+                ]
+            );
+            
+            \Log::info("Copied trade {$id} stopped. PnL of \${$pnlAmount} transferred to user {$user->id} balance. New balance: \${$user->balance}");
+            
+            return redirect()->back()->with('success', "Copied trade stopped successfully! PnL of $" . number_format($pnlAmount, 2) . " transferred to user's trading balance.");
+        } else {
+            $copiedTrade->update([
+                'status' => 0,
+                'stopped_at' => now()
+            ]);
+            
+            // Send notification to user
+            $copiedTrade->user->createNotification(
+                'copy_trade_stopped',
+                'Copy Trade Stopped',
+                "Your copy trade with {$copiedTrade->copy_trader->name} has been stopped.",
+                [
+                    'copied_trade_id' => $copiedTrade->id,
+                    'trader_name' => $copiedTrade->copy_trader->name,
+                    'amount' => $copiedTrade->amount
+                ]
+            );
+            
+            return redirect()->back()->with('success', 'Copied trade stopped successfully!');
+        }
+    }
+
+    public function destroy($id)
+    {
+        $copiedTrade = CopiedTrade::findOrFail($id);
+        
+        // Return the amount to user's balance if the trade was active
+        if ($copiedTrade->status == 1) {
+            $user = $copiedTrade->user;
+            $user->balance += $copiedTrade->amount;
+            $user->save();
+        }
+        
+        $copiedTrade->delete();
+        
+        return redirect()->back()->with('success', 'Copied trade deleted successfully!');
+    }
 }

@@ -54,7 +54,7 @@
                 <div class="flex items-start space-x-4">
                     <!-- Notification Icon -->
                     <div class="flex-shrink-0">
-                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : ($notification->type === 'bot_trade' || $notification->type === 'bot_trade_executed' || $notification->type === 'bot_paused' ? 'bg-yellow-600' : ($notification->type === 'bot_created' || $notification->type === 'bot_started' || $notification->type === 'bot_resumed' ? 'bg-green-600' : ($notification->type === 'bot_stopped' ? 'bg-red-600' : 'bg-gray-600'))))) }}">
+                        <div class="w-10 h-10 rounded-full flex items-center justify-center {{ $notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved' ? 'bg-green-600' : ($notification->type === 'withdrawal' || $notification->type === 'withdrawal_submitted' || $notification->type === 'withdrawal_approved' ? 'bg-red-600' : ($notification->type === 'trading' ? 'bg-blue-600' : ($notification->type === 'copy_trade' || $notification->type === 'copy_trade_started' ? 'bg-purple-600' : ($notification->type === 'copy_trade_stopped' ? 'bg-red-600' : ($notification->type === 'bot_trade' || $notification->type === 'bot_trade_executed' || $notification->type === 'bot_paused' ? 'bg-yellow-600' : ($notification->type === 'bot_created' || $notification->type === 'bot_started' || $notification->type === 'bot_resumed' ? 'bg-green-600' : ($notification->type === 'bot_stopped' ? 'bg-red-600' : 'bg-gray-600'))))))) }}">
                             @if($notification->type === 'deposit' || $notification->type === 'deposit_submitted' || $notification->type === 'deposit_approved')
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -66,6 +66,14 @@
                             @elseif($notification->type === 'trading')
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                                </svg>
+                            @elseif($notification->type === 'copy_trade' || $notification->type === 'copy_trade_started')
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            @elseif($notification->type === 'copy_trade_stopped')
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
                                 </svg>
                             @elseif($notification->type === 'bot_trade' || $notification->type === 'bot_trade_executed')
                                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

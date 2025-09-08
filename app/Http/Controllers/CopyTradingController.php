@@ -18,7 +18,15 @@ class CopyTradingController extends Controller
             ->with('copy_trader')
             ->orderBy('created_at', 'desc')
             ->get();
-        return view('dashboard.copy-trade', compact('traders', 'user', 'copiedTrades'));
+            
+        // Get stopped copy trades for this user
+        $stoppedCopyTrades = CopiedTrade::whereUserId(auth()->id())
+            ->where('status', 0)
+            ->whereNotNull('stopped_at')
+            ->pluck('copy_trader_id')
+            ->toArray();
+            
+        return view('dashboard.copy-trade', compact('traders', 'user', 'copiedTrades', 'stoppedCopyTrades'));
     }
 
     public function store(Request $request)
@@ -37,7 +45,30 @@ class CopyTradingController extends Controller
 
             // Check if user has sufficient balance
             if ($copyTrader->amount > $user->balance) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'error' => true,
+                        'message' => 'Insufficient balance. You need at least $' . number_format($copyTrader->amount, 2)
+                    ]);
+                }
                 return redirect()->back()->with('error', 'Insufficient balance. You need at least $' . number_format($copyTrader->amount, 2));
+            }
+
+            // Check if user has a stopped copy trade for this trader (only admin can restart)
+            $stoppedCopy = CopiedTrade::where('user_id', $user->id)
+                ->where('copy_trader_id', $traderId)
+                ->where('status', 0)
+                ->whereNotNull('stopped_at')
+                ->first();
+
+            if ($stoppedCopy) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'error' => true,
+                        'message' => 'This copy trade has been stopped and cannot be restarted.'
+                    ]);
+                }
+                return redirect()->back()->withInput()->with('error', 'This copy trade has been stopped and cannot be restarted.');
             }
 
             // Check if user is already copying this trader
@@ -47,6 +78,12 @@ class CopyTradingController extends Controller
                 ->first();
 
             if ($existingCopy) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'warning' => true,
+                        'message' => 'You are already copying this trader.'
+                    ]);
+                }
                 return redirect()->back()->withInput()->with('warning', 'You are already copying this trader.');
             }
 
@@ -62,13 +99,39 @@ class CopyTradingController extends Controller
             $user->balance -= $request->amount;
             $user->save();
 
+            // Create notification for successful copy trade
+            $user->createNotification(
+                'copy_trade_started',
+                'Copy Trade Started',
+                'You have successfully started copying ' . $copyTrader->name . ' with $' . number_format($request->amount, 2),
+                [
+                    'trader_id' => $copyTrader->id,
+                    'trader_name' => $copyTrader->name,
+                    'amount' => $request->amount,
+                    'copied_trade_id' => $copiedTrade->id
+                ]
+            );
+
             DB::commit();
 
+            if ($request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Successfully started copying ' . $copyTrader->name . ' with $' . number_format($request->amount, 2)
+                ]);
+            }
             return redirect()->back()->with('success', 'Successfully started copying ' . $copyTrader->name . ' with $' . number_format($request->amount, 2));
 
         } catch (\Exception $e) {
             DB::rollback();
             \Log::error('Copy trading error: ' . $e->getMessage());
+            
+            if ($request->ajax()) {
+                return response()->json([
+                    'error' => true,
+                    'message' => 'An error occurred while processing your request. Please try again.'
+                ]);
+            }
             return redirect()->back()->with('error', 'An error occurred while processing your request. Please try again.');
         }
     }

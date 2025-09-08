@@ -220,6 +220,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     Route::post('notifications/{id}/read', [\App\Http\Controllers\User\NotificationController::class, 'markAsRead'])->name('notifications.read');
     Route::delete('notifications/{id}', [\App\Http\Controllers\User\NotificationController::class, 'destroy'])->name('notifications.destroy');
 
+    // Copy Trading Routes
+    Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
+    Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');
+    Route::get('copy-trading/{id}', [CopyTradingController::class, 'detail'])->name('copyTrading.detail');
+    Route::post('copy-trading/{id}/stop', [CopyTradingController::class, 'stop'])->name('copyTrading.stop');
+    
+
     // Support routes
     Route::get('support', [\App\Http\Controllers\SupportController::class, 'index'])->name('support.index');
 
@@ -326,10 +333,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
 
 
 
-    Route::get('copy-trading', [CopyTradingController::class, 'index'])->name('copyTrading.index');
-    Route::post('store/copy-trading', [CopyTradingController::class, 'store'])->name('copyTrading.store');
-    Route::get('copy-trading/{id}', [CopyTradingController::class, 'detail'])->name('copyTrading.detail');
-    Route::post('copy-trading/{id}/stop', [CopyTradingController::class, 'stop'])->name('copyTrading.stop');
 
     // Bot Trading Routes
     Route::get('bot-trading', [BotTradingController::class, 'index'])->name('botTrading.index');

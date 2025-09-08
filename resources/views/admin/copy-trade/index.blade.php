@@ -62,19 +62,23 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
               <div class="inline-flex items-center gap-2">
-                <button onclick="openEditModal({{ $trade->id }}, {{ $trade->trade_count ?? 0 }}, {{ $trade->win ?? 0 }}, {{ $trade->loss ?? 0 }}, {{ $trade->pnl ?? 0 }})" class="px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700">Edit PnL</button>
-                <a href="{{ route('admin.copy-trader.index') }}" class="px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">Trader</a>
+                <button onclick="openEditModal({{ $trade->id }}, {{ $trade->trade_count ?? 0 }}, {{ $trade->win ?? 0 }}, {{ $trade->loss ?? 0 }}, {{ $trade->pnl ?? 0 }})" class="px-3 py-1.5 text-xs rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors">Edit PnL</button>
                 @if($trade->status == 1)
-                  <form method="POST" action="#" onsubmit="return confirm('Mark this copied trade as inactive?');">
+                  <form method="POST" action="{{ route('admin.copied-trades.deactivate', $trade->id) }}" onsubmit="return confirm('Stop this copied trade? PnL will be transferred to user balance.');" class="inline">
                     @csrf
-                    <button type="submit" class="px-3 py-1.5 rounded-md bg-red-600 text-white hover:bg-red-700">Deactivate</button>
+                    <button type="submit" class="px-3 py-1.5 text-xs rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors">Stop</button>
                   </form>
                 @else
-                  <form method="POST" action="#" onsubmit="return confirm('Mark this copied trade as active?');">
+                  <form method="POST" action="{{ route('admin.copied-trades.activate', $trade->id) }}" onsubmit="return confirm('Start this copied trade? Only admin can restart stopped trades.');" class="inline">
                     @csrf
-                    <button type="submit" class="px-3 py-1.5 rounded-md bg-green-600 text-white hover:bg-green-700">Activate</button>
+                    <button type="submit" class="px-3 py-1.5 text-xs rounded-md bg-green-600 text-white hover:bg-green-700 transition-colors">Start</button>
                   </form>
                 @endif
+                <form method="POST" action="{{ route('admin.copied-trades.destroy', $trade->id) }}" onsubmit="return confirm('Are you sure you want to delete this copied trade? This action cannot be undone.');" class="inline">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="px-3 py-1.5 text-xs rounded-md bg-red-600 text-white hover:bg-red-700 transition-colors">Delete</button>
+                </form>
               </div>
             </td>
           </tr>

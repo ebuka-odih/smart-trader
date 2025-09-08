@@ -11,6 +11,42 @@
         </div>
     </div>
 
+
+    <!-- Copy Trading Modal -->
+    <div id="copyTradingModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 max-w-md w-full mx-4">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-700">
+                <h3 id="modalTitle" class="text-lg font-semibold text-white">Copy Trading</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6">
+                <div id="modalContent" class="flex items-start space-x-3">
+                    <!-- Icon will be inserted here -->
+                    <div id="modalIcon" class="flex-shrink-0">
+                        <!-- Icon will be dynamically inserted -->
+                    </div>
+                    <div class="flex-1">
+                        <p id="modalMessage" class="text-gray-300"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="flex justify-end space-x-3 p-6 border-t border-gray-700">
+                <button id="modalCloseBtn" class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Tabs -->
     <div class="border-b border-gray-700">
         <nav class="-mb-px flex space-x-8">
@@ -25,10 +61,10 @@
 
     <!-- Available Traders Section -->
     <div id="tradersSection" class="tab-content">
-        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-semibold text-white">Available Traders</h2>
-                <div class="text-sm text-gray-400">{{ count($traders) }} traders available</div>
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-white">Available Traders</h2>
+            <div class="text-sm text-gray-400">{{ count($traders) }} traders available</div>
             </div>
 
         <!-- Search Box -->
@@ -106,41 +142,56 @@
                     </div>
 
                     <!-- Copy Trade Button -->
-                    <form action="{{ route('user.copyTrading.store') }}" method="POST" class="pt-2 copy-trade-form" data-trader="{{ $trader->id }}">
-                        @csrf
-                        <input type="hidden" name="trader_id" value="{{ $trader->id }}">
-                        <input type="hidden" name="amount" value="{{ $trader->amount }}">
-                        
-                        <button type="submit" 
-                                class="copy-trade-btn w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
-                            <!-- Default state -->
-                            <svg class="copy-trade-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                            <span class="copy-trade-text">Copy Trade</span>
+                    @if(in_array($trader->id, $stoppedCopyTrades))
+                        <!-- Stopped - Cannot Copy -->
+                        <div class="pt-2">
+                            <button disabled 
+                                    class="w-full bg-gray-600 text-gray-400 font-semibold py-3 px-4 rounded-lg cursor-not-allowed flex items-center justify-center space-x-2">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728L5.636 5.636m12.728 12.728L18.364 5.636M5.636 18.364l12.728-12.728"></path>
+                                </svg>
+                                <span>Stopped</span>
+                            </button>
+                            <p class="text-xs text-gray-500 mt-2 text-center">Cannot copy this trader</p>
+                        </div>
+                    @else
+                        <!-- Normal Copy Trade Button -->
+                        <form action="{{ route('user.copyTrading.store') }}" method="POST" class="pt-2 copy-trade-form" data-trader="{{ $trader->id }}">
+                            @csrf
+                            <input type="hidden" name="trader_id" value="{{ $trader->id }}">
+                            <input type="hidden" name="amount" value="{{ $trader->amount }}">
                             
-                            <!-- Loading state (hidden by default) -->
-                            <svg class="copy-trade-spinner hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span class="copy-trade-loading hidden">Processing...</span>
-                        </button>
-                    </form>
+                            <button type="submit" 
+                                    class="copy-trade-btn w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                                <!-- Default state -->
+                                <svg class="copy-trade-icon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                <span class="copy-trade-text">Copy Trade</span>
+                                
+                                <!-- Loading state (hidden by default) -->
+                                <svg class="copy-trade-spinner hidden w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span class="copy-trade-loading hidden">Processing...</span>
+                            </button>
+                        </form>
+                    @endif
                 </div>
             </div>
             @endforeach
         </div>
-    </div>
+        </div>
     </div>
 
     <!-- My Copied Trades Section -->
     <div id="historySection" class="tab-content hidden">
-        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-semibold text-white">My Copied Trades</h2>
-                <div class="text-sm text-gray-400">{{ count($copiedTrades) }} active trades</div>
-            </div>
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-xl font-semibold text-white">My Copied Trades</h2>
+            <div class="text-sm text-gray-400">{{ count($copiedTrades) }} active trades</div>
+        </div>
 
         @if(count($copiedTrades) > 0)
         <div class="overflow-x-auto">
@@ -154,6 +205,7 @@
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">PnL</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Date Started</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Status</th>
+                        <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Stopped At</th>
                         <th class="text-left py-3 px-4 text-sm font-semibold text-gray-400">Actions</th>
                     </tr>
                 </thead>
@@ -181,7 +233,11 @@
                         </td>
                         <td class="py-4 px-4 text-gray-400">{{ date('M d, Y', strtotime($trade->created_at)) }}</td>
                         <td class="py-4 px-4">
-                            @if($trade->status == 0)
+                            @if($trade->status == 0 && $trade->stopped_at)
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-900 text-red-200">
+                                    Stopped
+                                </span>
+                            @elseif($trade->status == 0)
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-900 text-yellow-200">
                                     Pending
                                 </span>
@@ -189,6 +245,13 @@
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-900 text-green-200">
                                     Active
                                 </span>
+                            @endif
+                        </td>
+                        <td class="py-4 px-4 text-gray-400">
+                            @if($trade->stopped_at)
+                                {{ date('M d, Y H:i', strtotime($trade->stopped_at)) }}
+                            @else
+                                -
                             @endif
                         </td>
                         <td class="py-4 px-4">
@@ -220,6 +283,7 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        
         // Tab functionality
         const tradersTab = document.getElementById('tradersTab');
         const historyTab = document.getElementById('historyTab');
@@ -275,13 +339,73 @@
             showTab('traders'); // Default to traders tab
         }
 
-        // Log any flash messages present in DOM
-        const successEl = document.getElementById('alert-success');
-        const errorEl = document.getElementById('alert-error');
-        const validationEl = document.getElementById('alert-validation');
-        if (successEl) console.log('[CopyTrading] Success message:', successEl.textContent.trim());
-        if (errorEl) console.log('[CopyTrading] Error message:', errorEl.textContent.trim());
-        if (validationEl) console.log('[CopyTrading] Validation errors present');
+
+        // Modal functionality
+        const modal = document.getElementById('copyTradingModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalIcon = document.getElementById('modalIcon');
+        const closeModal = document.getElementById('closeModal');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        function showModal(type, message) {
+            modalTitle.textContent = 'Copy Trading';
+            modalMessage.textContent = message;
+            
+            // Clear previous icon
+            modalIcon.innerHTML = '';
+            
+            if (type === 'success') {
+                modalTitle.textContent = 'Success!';
+                modalIcon.innerHTML = `
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                `;
+            } else if (type === 'warning') {
+                modalTitle.textContent = 'Already Copying';
+                modalIcon.innerHTML = `
+                    <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 18.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                        </svg>
+                    </div>
+                `;
+            } else if (type === 'error') {
+                modalTitle.textContent = 'Error';
+                modalIcon.innerHTML = `
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                `;
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        function hideModal() {
+            modal.classList.add('hidden');
+        }
+
+        // Close modal events
+        closeModal.addEventListener('click', hideModal);
+        modalCloseBtn.addEventListener('click', hideModal);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                hideModal();
+            }
+        });
+
+        // Escape key to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                hideModal();
+            }
+        });
 
         // Function to reset copy trade button state
         function resetCopyTradeButton(form) {
@@ -300,8 +424,13 @@
         }
 
         // Copy trade form submission with loading state
-        document.querySelectorAll('.copy-trade-form').forEach(function(form){
+        const copyTradeForms = document.querySelectorAll('.copy-trade-form');
+        
+        copyTradeForms.forEach(function(form, index){
+            
             form.addEventListener('submit', function(e){
+                e.preventDefault(); // Prevent default form submission
+                
                 const traderId = form.getAttribute('data-trader');
                 const amount = form.querySelector('input[name="amount"]').value;
                 const submitBtn = form.querySelector('.copy-trade-btn');
@@ -310,7 +439,6 @@
                 const spinner = form.querySelector('.copy-trade-spinner');
                 const loadingText = form.querySelector('.copy-trade-loading');
                 
-                console.log('[CopyTrading] Submitting copy trade:', { traderId, amount, action: form.action, method: form.method });
                 
                 // Show loading state
                 submitBtn.disabled = true;
@@ -320,20 +448,42 @@
                 spinner.classList.remove('hidden');
                 loadingText.classList.remove('hidden');
                 
-                // Prevent double submission
-                e.preventDefault();
+                // Prepare form data
+                const formData = new FormData(form);
                 
-                // Submit the form after a brief delay to show loading state
-                setTimeout(() => {
-                    form.submit();
-                }, 100);
-                
-                // Fallback: Reset button state if form submission takes too long
-                setTimeout(() => {
-                    if (submitBtn.disabled) {
-                        resetCopyTradeButton(form);
+                // Submit via AJAX
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     }
-                }, 10000); // Reset after 10 seconds if still loading
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Reset button state
+                    resetCopyTradeButton(form);
+                    
+                    // Show appropriate modal
+                    if (data.success) {
+                        showModal('success', data.message);
+                        // Refresh the page after 2 seconds to update the UI
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    } else if (data.warning) {
+                        showModal('warning', data.message);
+                    } else if (data.error) {
+                        showModal('error', data.message);
+                    } else {
+                        showModal('error', 'An unexpected error occurred. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    resetCopyTradeButton(form);
+                    showModal('error', 'An error occurred while processing your request. Please try again.');
+                });
             });
         });
 

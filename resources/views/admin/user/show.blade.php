@@ -275,7 +275,7 @@
                         </span>
                     </div>
                 </div>
-            </div>
+     </div>
 
             <!-- Balance Management -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
@@ -290,17 +290,17 @@
                             <div>
                                 <h4 class="text-sm font-medium text-red-800 dark:text-red-200">Please correct the following errors:</h4>
                                 <ul class="mt-2 text-sm text-red-700 dark:text-red-300 list-disc list-inside">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
                             </div>
                         </div>
                     </div>
                 @endif
 
                 <form action="{{ route('admin.updateBalance', $user->id) }}" method="POST" class="space-y-4">
-                    @csrf
+                 @csrf
                     <div>
                         <label for="balance" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Main Balance</label>
                         <input type="number" step="0.01" name="balance" id="balance" value="{{ old('balance') }}"
@@ -371,7 +371,7 @@
             </div>
         </div>
     </div>
-</div>
+         </div>
 
 <!-- Delete Confirmation Modal -->
 <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
