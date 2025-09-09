@@ -24,6 +24,36 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Honeypot validation - if any honeypot field is filled, it's likely a bot
+        $honeypotFields = ['website', 'phone_alt', 'company'];
+        $filledHoneypotFields = [];
+        
+        foreach ($honeypotFields as $field) {
+            if (!empty($request->input($field))) {
+                $filledHoneypotFields[] = $field;
+            }
+        }
+        
+        // Time-based honeypot - if form is submitted too quickly (less than 2 seconds), it's likely a bot
+        $loginTime = $request->input('login_time');
+        $currentTime = time();
+        $timeDifference = $currentTime - $loginTime;
+        
+        if (!empty($filledHoneypotFields) || $timeDifference < 2) {
+            \Log::warning('Bot detected during login attempt', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'filled_honeypot_fields' => $filledHoneypotFields,
+                'time_difference' => $timeDifference,
+                'timestamp' => now()
+            ]);
+            
+            // Return a generic error message to avoid revealing the honeypot
+            return redirect()->back()
+                ->withInput($request->except('password'))
+                ->withErrors(['email' => 'Login failed. Please try again.']);
+        }
+
         $request->authenticate();
         $request->session()->regenerate();
 

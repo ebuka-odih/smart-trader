@@ -850,20 +850,6 @@ function updateTicker(data) {
                 <div class="lg:col-span-2">
                     <span class="text-2xl font-bold text-[#2FE6DE] mb-4 block">{{ config('app.name') }}</span>
                     <p class="text-gray-400 text-sm mb-4">Advanced trading platform offering stocks, crypto, AI bots, copy trading, and professional tools for traders worldwide.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
-                            <i class="fab fa-twitter"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
-                            <i class="fab fa-facebook"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
-                            <i class="fab fa-telegram"></i>
-                        </a>
-                    </div>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold mb-4 text-white">Products</h3>

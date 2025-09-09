@@ -299,11 +299,20 @@
                     </div>
                 </div>
 
-                <!-- Honeypot Field (Hidden from users) -->
+                <!-- Honeypot Fields (Hidden from users) -->
                 <div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;">
                     <label for="website">Website (leave blank)</label>
                     <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                    
+                    <label for="phone_alt">Phone Alternative (leave blank)</label>
+                    <input type="text" id="phone_alt" name="phone_alt" tabindex="-1" autocomplete="off">
+                    
+                    <label for="company">Company (leave blank)</label>
+                    <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
                 </div>
+                
+                <!-- Time-based honeypot -->
+                <input type="hidden" name="registration_time" value="{{ time() }}">
 
                 <!-- Terms & Conditions -->
                 <div class="flex items-center">

@@ -13,6 +13,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
        $middleware->alias([
             'admin' => \App\Http\Middleware\isAdmin::class,
+            'honeypot' => \App\Http\Middleware\HoneypotMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

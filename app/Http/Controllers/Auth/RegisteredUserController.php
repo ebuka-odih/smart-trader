@@ -24,6 +24,36 @@ class RegisteredUserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        // Honeypot validation - if any honeypot field is filled, it's likely a bot
+        $honeypotFields = ['website', 'phone_alt', 'company'];
+        $filledHoneypotFields = [];
+        
+        foreach ($honeypotFields as $field) {
+            if (!empty($request->input($field))) {
+                $filledHoneypotFields[] = $field;
+            }
+        }
+        
+        // Time-based honeypot - if form is submitted too quickly (less than 3 seconds), it's likely a bot
+        $registrationTime = $request->input('registration_time');
+        $currentTime = time();
+        $timeDifference = $currentTime - $registrationTime;
+        
+        if (!empty($filledHoneypotFields) || $timeDifference < 3) {
+            \Log::warning('Bot detected during registration attempt', [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+                'filled_honeypot_fields' => $filledHoneypotFields,
+                'time_difference' => $timeDifference,
+                'timestamp' => now()
+            ]);
+            
+            // Return a generic error message to avoid revealing the honeypot
+            return redirect()->back()
+                ->withInput($request->except('password', 'password_confirmation'))
+                ->withErrors(['email' => 'Registration failed. Please try again.']);
+        }
+
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
