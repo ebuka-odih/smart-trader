@@ -7,7 +7,6 @@
             <!-- Header -->
             <div class="text-center mb-12">
                 <h1 class="text-4xl font-bold text-white mb-4">Privacy <span class="text-[#2FE6DE]">Policy</span></h1>
-                <p class="text-gray-400 text-lg">Last updated: {{ date('F d, Y') }}</p>
             </div>
 
             <!-- Content -->
