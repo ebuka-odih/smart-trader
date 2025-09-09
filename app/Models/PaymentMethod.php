@@ -30,10 +30,11 @@ class PaymentMethod extends Model
         'polygon' => 'Polygon (MATIC)'
     ];
 
-    protected $fillable = ['wallet', 'crypto_type', 'address', 'bank'];
+    protected $fillable = ['wallet', 'crypto_type', 'address', 'bank', 'is_active'];
 
     protected $casts = [
-        'bank' => 'array'
+        'bank' => 'array',
+        'is_active' => 'boolean'
     ];
 
     public function deposits()

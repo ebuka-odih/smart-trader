@@ -322,7 +322,7 @@
                         <label class="block text-sm font-medium text-gray-300 mb-2">Payment Method</label>
                         <select name="payment_method_id" required class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                             @foreach(\App\Models\PaymentMethod::where('is_active', true)->get() as $method)
-                                <option value="{{ $method->id }}">{{ $method->name }}</option>
+                                <option value="{{ $method->id }}">{{ $method->crypto_display_name }}</option>
                             @endforeach
                         </select>
                     </div>

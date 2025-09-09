@@ -21,7 +21,7 @@ class DepositController extends Controller
      public function deposit()
     {
         $user = Auth::user();
-        $wallets = PaymentMethod::all();
+        $wallets = PaymentMethod::where('is_active', true)->get();
         $deposits = Deposit::whereUserId(auth()->id())
                           ->with('payment_method')
                           ->latest()
@@ -264,7 +264,7 @@ class DepositController extends Controller
 
         try {
             $user = Auth::user();
-            $wallets = PaymentMethod::all();
+            $wallets = PaymentMethod::where('is_active', true)->get();
             
             return response()->json([
                 'user_id' => $user->id,
