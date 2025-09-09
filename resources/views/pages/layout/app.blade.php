@@ -863,18 +863,18 @@ function updateTicker(data) {
                 <div>
                     <h3 class="text-lg font-semibold mb-4 text-white">Support</h3>
                     <ul class="space-y-2">
-                        <li><a href="{{ route('contact') }}#faq" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">FAQ</a></li>
+                        <li><a href="{{ route('faq') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">FAQ</a></li>
                         <li><a href="{{ route('contact') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Contact Us</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Terms of Service</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Privacy Policy</a></li>
+                        <li><a href="{{ route('terms') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Terms of Service</a></li>
+                        <li><a href="{{ route('privacy') }}" class="text-gray-400 hover:text-[#2FE6DE] transition-colors">Privacy Policy</a></li>
                     </ul>
                 </div>
             </div>
             <div class="mt-10 pt-6 border-t border-[#2FE6DE]/10 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 {{ env('APP_NAME') }}. All rights reserved.</p>
                 <div class="flex items-center space-x-4">
-                    <a href="#" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Terms</a>
-                    <a href="#" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Privacy</a>
+                    <a href="{{ route('terms') }}" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Terms</a>
+                    <a href="{{ route('privacy') }}" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Privacy</a>
                 </div>
             </div>
         </div>

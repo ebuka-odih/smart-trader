@@ -29,6 +29,9 @@ Route::view('products', 'pages.products')->name('products');
 Route::view('market', 'pages.market')->name('market');
 Route::view('about', 'pages.about')->name('about');
 Route::view('contact', 'pages.contact')->name('contact');
+Route::view('terms', 'pages.terms')->name('terms');
+Route::view('privacy', 'pages.privacy')->name('privacy');
+Route::view('faq', 'pages.faq')->name('faq');
 Route::get('loading', [UserController::class, 'loading'])->name('loading');
 
 // Email template preview route (for development/testing)
