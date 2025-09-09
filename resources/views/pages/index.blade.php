@@ -15,36 +15,36 @@
                     <!-- Slide 1 -->
                     <div class="hero-slide active" data-slide="1">
                         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                            <span class="text-white">Multiple Investment </span><br>
-                            <span class="text-[#2FE6DE]">Strategies</span>
+                            <span class="text-white">Advanced Trading </span><br>
+                            <span class="text-[#2FE6DE]">Platform</span>
                         </h1>
 
                         <p class="text-gray-300 text-lg mb-8 max-w-xl">
-                           We offer a comprehensive lineup of traditional and alternative strategies designed to help you grow your wealth, preserve your wealth and everything in between.
+                           Trade stocks, cryptocurrencies, and digital assets with professional-grade tools, AI-powered bots, and copy trading features. Join thousands of successful traders worldwide.
                         </p>
                     </div>
 
                     <!-- Slide 2 -->
                     <div class="hero-slide" data-slide="2">
                         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                            <span class="text-white">Designed To Help </span><br>
-                            <span class="text-[#2FE6DE]">You Manage Wealth</span>
+                            <span class="text-white">AI-Powered </span><br>
+                            <span class="text-[#2FE6DE]">Trading Bots</span>
                         </h1>
 
                         <p class="text-gray-300 text-lg mb-8 max-w-xl">
-                            We offer a comprehensive lineup of traditional and alternative strategies designed to help you grow your wealth, preserve your wealth and everything in between.
+                            Automate your trading with sophisticated AI algorithms that analyze market trends, execute trades 24/7, and maximize your profits while you sleep.
                         </p>
                     </div>
 
                     <!-- Slide 3 -->
                     <div class="hero-slide" data-slide="3">
                         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                            <span class="text-white">Secure & Fast</span><br>
-                            <span class="text-[#2FE6DE]">Transactions</span>
+                            <span class="text-white">Copy Trading </span><br>
+                            <span class="text-[#2FE6DE]">Success</span>
                         </h1>
 
                         <p class="text-gray-300 text-lg mb-8 max-w-xl">
-                            We offer a comprehensive lineup of traditional and alternative strategies designed to help you grow your wealth, preserve your wealth and everything in between.
+                            Follow and automatically copy the trades of top-performing traders. Learn from the best while building your own profitable portfolio with proven strategies.
                         </p>
                     </div>
                 </div>
@@ -267,35 +267,115 @@
     </div>
 </div>
 
+<!-- Why Choose Section -->
+<div class="py-16 bg-gradient-to-b from-[#0D091C] to-[#0A0714]">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Why Choose <span class="text-[#2FE6DE]">{{ config('app.name') }}</span></h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">Our platform offers a comprehensive suite of tools and features designed to enhance your trading experience.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
+                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
+                    <i class="fas fa-shield-alt text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Advanced Security</h3>
+                <p class="text-gray-400">Industry-leading security measures to protect your assets.</p>
+            </div>
+
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
+                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
+                    <i class="fas fa-chart-line text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Professional Tools</h3>
+                <p class="text-gray-400">Advanced charting and real-time market data for informed decisions.</p>
+            </div>
+
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
+                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
+                    <i class="fas fa-robot text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">AI-Powered Trading</h3>
+                <p class="text-gray-400">Utilize our AI-powered trading bots based on predefined strategies.</p>
+            </div>
+
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
+                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
+                    <i class="fas fa-bolt text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Fast Execution</h3>
+                <p class="text-gray-400">High-performance matching engine for minimal latency and slippage.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Security & Compliance Section -->
+<div class="py-16 bg-[#0A0714]">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold mb-4">Security & <span class="text-[#2FE6DE]">Compliance</span></h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">Your security and regulatory compliance are our top priorities. We maintain the highest standards to protect your investments.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 text-center">
+                <div class="w-16 h-16 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-shield-alt text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Bank-Grade Security</h3>
+                <p class="text-gray-400">Multi-layer security with cold storage, 2FA, and regular security audits to protect your funds.</p>
+            </div>
+
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 text-center">
+                <div class="w-16 h-16 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-certificate text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">Regulatory Compliance</h3>
+                <p class="text-gray-400">Fully compliant with international financial regulations and anti-money laundering standards.</p>
+            </div>
+
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 text-center">
+                <div class="w-16 h-16 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-user-shield text-[#2FE6DE] text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold mb-3">KYC Verification</h3>
+                <p class="text-gray-400">Comprehensive Know Your Customer verification process to ensure platform integrity and user safety.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Stats Counter Section -->
 <div class="py-12 bg-[#0A0714]">
     <div class="container mx-auto px-4">
         <div class="bg-[#1A1428] rounded-xl p-8 border border-[#2FE6DE]/10">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div class="counter-item">
-                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="1">
-                        <span class="counter">1</span><span>M+</span>
+                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="50">
+                        <span class="counter">50</span><span>K+</span>
                     </div>
                     <p class="text-gray-300">Active Traders</p>
                 </div>
 
                 <div class="counter-item">
-                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="150">
-                        <span class="counter">150</span><span>+</span>
+                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="120">
+                        <span class="counter">120</span><span>+</span>
                     </div>
-                    <p class="text-gray-300">Countries Served</p>
+                    <p class="text-gray-300">Trading Pairs</p>
                 </div>
 
                 <div class="counter-item">
-                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="5">
-                        <span class="counter">5</span><span>M+</span>
+                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="99">
+                        <span class="counter">99</span><span>.9%</span>
                     </div>
-                    <p class="text-gray-300">Daily Transactions</p>
+                    <p class="text-gray-300">Uptime Guarantee</p>
                 </div>
 
                 <div class="counter-item">
-                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="25">
-                        <span class="counter">25</span><span>B+</span>
+                    <div class="text-[#2FE6DE] text-2xl md:text-4xl font-bold mb-2" data-count="2">
+                        <span class="counter">2</span><span>B+</span>
                     </div>
                     <p class="text-gray-300">Trading Volume</p>
                 </div>
@@ -306,7 +386,7 @@
 
 <div class="relative rounded-2xl overflow-hidden mb-16 shadow-2xl shadow-[#2FE6DE]/10 border border-[#2FE6DE]/10 group">
                 <div class="absolute inset-0 bg-gradient-to-r from-[#2FE6DE]/20 to-purple-600/20 blur-xl opacity-30 group-hover:opacity-40 transition-opacity"></div>
-                <img src="{{ asset('front/public/images/elon-musk.jpg') }}"
+                <img src="{{ asset('front/1.jpeg') }}"
                      alt="About {{ config('app.name') }}"
                      class="w-full h-64 md:h-[500px] object-cover rounded-2xl relative z-10 transition-transform duration-700 group-hover:scale-105">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#0A0714] via-transparent to-transparent z-20 rounded-2xl"></div>
@@ -315,69 +395,53 @@
                         <div class="w-12 h-12 rounded-full bg-[#2FE6DE]/20 flex items-center justify-center">
                             <i class="fas fa-chart-line text-[#2FE6DE]"></i>
                         </div>
-                        <div>
-                            <div class="text-white font-medium">LARRY FINK</div>
-                            <div class="text-gray-300 text-sm">Chairman & Ceo</div>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-                    <P>Larry fink Co-founded {{ config('app.name') }} in 1988 and has served as its Chairman and CEO ever since, guiding its transformation into the world's largest asset manager, overseeing over $11.5 trillion in assets</P>
 
-<!-- Our Values -->
+<!-- Trading Advantages -->
     <div class="py-16 bg-gradient-to-b from-[#0D091C] to-[#0A0714]">
         <div class="container mx-auto px-4">
             <div class="text-center mb-12">
                 <div class="inline-block mb-4 px-4 py-1 bg-[#2FE6DE]/10 rounded-full border border-[#2FE6DE]/20">
-                    <span class="text-[#2FE6DE] text-sm font-medium">What We Stand For</span>
+                    <span class="text-[#2FE6DE] text-sm font-medium">Why Traders Choose Us</span>
                 </div>
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">Our <span class="text-[#2FE6DE]">Values</span></h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">The principles that guide everything we do.</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6">Trading <span class="text-[#2FE6DE]">Advantages</span></h2>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">Discover the key benefits that make our platform the preferred choice for successful traders worldwide.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div class="bg-[#1A1428] rounded-xl border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all hover:transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#2FE6DE]/5 overflow-hidden">
                     <div class="h-48 relative overflow-hidden">
-                        <img src="{{ asset('front/public/images/WhatsApp%20Image%202025-07-25%20at%2001.31.58_a689b84d.jpg') }}"
-                             alt="ELON REEVE MUSK"
+                        <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                             alt="Low Trading Fees"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1A1428]/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <div class="w-12 h-12 rounded-full bg-[#2FE6DE]/20 flex items-center justify-center">
-                                <i class="fas fa-lock text-[#2FE6DE] text-xl"></i>
+                                <i class="fas fa-percentage text-[#2FE6DE] text-xl"></i>
                             </div>
                         </div>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-xl font-semibold mb-3">Security First</h3>
-                        <p class="text-gray-300 mb-4">Founded
-1988 (by Larry Fink & team) Private Partnership with ELON REEVE MUSK
-Assets Under Management
-~$11.5–11.6 trillion (2024–25)
-Key Offerings
-iShares ETFs, Aladdin analytics, public/private market investments
-Strategic Direction
-Expanded into private markets via major acquisitions (GIP, HPS, Preqin)
-2025–2030 Ambitions
-$400B private fundraising; double market cap; increase private revenue
-Leadership Transition
-Continued focus on digital assets & ESG via new leadership roles
-Global Risk Practices
-Heightened data-security measures—especially in China</p>
+                        <h3 class="text-xl font-semibold mb-3">Low Trading Fees</h3>
+                        <p class="text-gray-300 mb-4">Maximize your profits with our competitive fee structure. We offer some of the lowest trading fees in the industry, ensuring more of your gains stay in your pocket.
+</p>
                         <ul class="text-gray-400 space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Multi-factor authentication</span>
+                                <span>0.1% trading fees</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Cold storage for 95% of assets</span>
+                                <span>No hidden charges</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Regular security audits</span>
+                                <span>Volume discounts available</span>
                             </li>
                         </ul>
                     </div>
@@ -385,31 +449,31 @@ Heightened data-security measures—especially in China</p>
 
                 <div class="bg-[#1A1428] rounded-xl border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all hover:transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#2FE6DE]/5 overflow-hidden">
                     <div class="h-48 relative overflow-hidden">
-                        <img src="{{ asset('front/public/images/WhatsApp%20Image%202025-07-27%20at%2020.44.48_f5568352.jpg') }}"
-                             alt="Innovation"
+                        <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                             alt="24/7 Support"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1A1428]/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <div class="w-12 h-12 rounded-full bg-[#F59E0B]/20 flex items-center justify-center">
-                                <i class="fas fa-lightbulb text-[#F59E0B] text-xl"></i>
+                                <i class="fas fa-headset text-[#F59E0B] text-xl"></i>
                             </div>
                         </div>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-xl font-semibold mb-3">Innovation</h3>
-                        <p class="text-gray-300 mb-4">Today, we are hosting our 2025 Investor Day, which offers a look into {{ config('app.name') }}'s long-term vision. Our leadership team shares how we're positioning the firm to be stronger, more resilient, and drive greater value for clients and stakeholders through 2030 and beyond.</p>
+                        <h3 class="text-xl font-semibold mb-3">24/7 Support</h3>
+                        <p class="text-gray-300 mb-4">Get help whenever you need it with our round-the-clock customer support. Our expert team is always ready to assist you with any trading questions or technical issues.</p>
                         <ul class="text-gray-400 space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>AI-powered trading algorithms</span>
+                                <span>Live chat support</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Advanced charting tools</span>
+                                <span>Expert trading guidance</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Continuous platform improvements</span>
+                                <span>Multilingual support</span>
                             </li>
                         </ul>
                     </div>
@@ -417,31 +481,31 @@ Heightened data-security measures—especially in China</p>
 
                 <div class="bg-[#1A1428] rounded-xl border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all hover:transform hover:-translate-y-1 hover:shadow-lg hover:shadow-[#2FE6DE]/5 overflow-hidden">
                     <div class="h-48 relative overflow-hidden">
-                        <img src="{{ asset('front/public/images/WhatsApp%20Image%202025-07-27%20at%2020.42.38_5f5e32e5.jpg') }}"
-                             alt="Community"
+                        <img src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80"
+                             alt="Global Markets"
                              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                         <div class="absolute inset-0 bg-gradient-to-t from-[#1A1428]/80 via-transparent to-transparent"></div>
                         <div class="absolute bottom-4 left-4">
                             <div class="w-12 h-12 rounded-full bg-[#10B981]/20 flex items-center justify-center">
-                                <i class="fas fa-users text-[#10B981] text-xl"></i>
+                                <i class="fas fa-globe text-[#10B981] text-xl"></i>
                             </div>
                         </div>
                     </div>
                     <div class="p-8">
-                        <h3 class="text-xl font-semibold mb-3">Community</h3>
-                        <p class="text-gray-300 mb-4">We believe in the power of community, fostering an environment where traders can learn from each other and grow together.</p>
+                        <h3 class="text-xl font-semibold mb-3">Global Markets</h3>
+                        <p class="text-gray-300 mb-4">Access global financial markets from a single platform. Trade stocks, cryptocurrencies, and other assets from major exchanges worldwide with real-time data and execution.</p>
                         <ul class="text-gray-400 space-y-2">
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Active trader forums</span>
+                                <span>120+ trading pairs</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Educational resources</span>
+                                <span>Multiple asset classes</span>
                             </li>
                             <li class="flex items-start">
                                 <i class="fas fa-check-circle text-[#2FE6DE] mt-1 mr-2"></i>
-                                <span>Community-driven feature development</span>
+                                <span>Real-time market data</span>
                             </li>
                         </ul>
                     </div>
@@ -1020,8 +1084,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="py-16 bg-[#0A0714]">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold mb-4">Investment <span class="text-[#2FE6DE]">Plans</span></h2>
-            <p class="text-gray-400 max-w-2xl mx-auto">Choose the perfect investment plan that suits your trading goals and financial objectives</p>
+            <h2 class="text-3xl font-bold mb-4">Trading <span class="text-[#2FE6DE]">Plans</span></h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">Select the trading plan that matches your experience level and investment goals. All plans include professional support and advanced trading tools.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -1030,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="text-center mb-6">
                         <h3 class="text-xl font-semibold mb-2">Gold Plan</h3>
                         <div class="text-[#2FE6DE] text-4xl font-bold mb-2">$25,000<span class="text-lg text-gray-400">/7-2days</span></div>
-                        <p class="text-gray-400">Short Investment Plan</p>
+                        <p class="text-gray-400">Beginner Trading Plan</p>
                         <p class="text-xs text-[#2FE6DE] mt-1">*Minimum $5,000</p>
                     </div>
 
@@ -1079,7 +1143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="text-center mb-6">
                         <h3 class="text-xl font-semibold mb-2">VIP Plan</h3>
                         <div class="text-[#2FE6DE] text-4xl font-bold mb-2">$100,000<span class="text-lg text-gray-400">/7-4days</span></div>
-                        <p class="text-gray-400">Medium-Term Investment Plan</p>
+                        <p class="text-gray-400">Advanced Trading Plan</p>
                         <p class="text-xs text-[#2FE6DE] mt-1">*Minimum $25,000</p>
                     </div>
 
@@ -1131,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div class="text-center mb-6">
                         <h3 class="text-xl font-semibold mb-2">Membership Card Plan</h3>
                         <div class="text-[#2FE6DE] text-4xl font-bold mb-2">$1,000,000<span class="text-lg text-gray-400">/7-4days</span></div>
-                        <p class="text-gray-400">Long Term Investment Plan</p>
+                        <p class="text-gray-400">Professional Trading Plan</p>
                         <p class="text-xs text-[#2FE6DE] mt-1">*Minimum $100,000</p>
                     </div>
 
@@ -1286,49 +1350,84 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
-<!-- Features Section -->
-<div class="py-16 bg-gradient-to-b from-[#0D091C] to-[#0A0714]">
+<!-- Testimonials Section -->
+<div class="py-16 bg-gradient-to-b from-[#0A0714] to-[#0D091C]">
     <div class="container mx-auto px-4">
         <div class="text-center mb-12">
-            <h2 class="text-3xl font-bold mb-4">Why Choose <span class="text-[#2FE6DE]">{{ config('app.name') }}</span></h2>
-            <p class="text-gray-400 max-w-2xl mx-auto">Our platform offers a comprehensive suite of tools and features designed to enhance your trading experience.</p>
+            <h2 class="text-3xl font-bold mb-4">What Our <span class="text-[#2FE6DE]">Traders Say</span></h2>
+            <p class="text-gray-400 max-w-2xl mx-auto">Join thousands of successful traders who trust our platform for their trading needs.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
-                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
-                    <i class="fas fa-shield-alt text-[#2FE6DE] text-2xl"></i>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10">
+                <div class="flex items-center mb-4">
+                    <div class="flex text-[#2FE6DE]">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
                 </div>
-                <h3 class="text-xl font-semibold mb-3">Advanced Security</h3>
-                <p class="text-gray-400">Industry-leading security measures to protect your assets.</p>
+                <p class="text-gray-300 mb-4">"The AI trading bots have completely transformed my trading strategy. I've seen consistent profits since I started using the platform."</p>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-[#2FE6DE]/20 flex items-center justify-center mr-3">
+                        <span class="text-[#2FE6DE] font-bold">MJ</span>
+                    </div>
+                    <div>
+                        <div class="font-medium text-white">Michael Johnson</div>
+                        <div class="text-gray-400 text-sm">Professional Trader</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
-                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
-                    <i class="fas fa-chart-line text-[#2FE6DE] text-2xl"></i>
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10">
+                <div class="flex items-center mb-4">
+                    <div class="flex text-[#2FE6DE]">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
                 </div>
-                <h3 class="text-xl font-semibold mb-3">Professional Tools</h3>
-                <p class="text-gray-400">Advanced charting and real-time market data for informed decisions.</p>
+                <p class="text-gray-300 mb-4">"Copy trading has been a game-changer for me. I can follow successful traders and learn from their strategies while earning profits."</p>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-[#2FE6DE]/20 flex items-center justify-center mr-3">
+                        <span class="text-[#2FE6DE] font-bold">SC</span>
+                    </div>
+                    <div>
+                        <div class="font-medium text-white">Sarah Chen</div>
+                        <div class="text-gray-400 text-sm">Copy Trader</div>
+                    </div>
+                </div>
             </div>
 
-            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
-                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
-                    <i class="fas fa-robot text-[#2FE6DE] text-2xl"></i>
+            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10">
+                <div class="flex items-center mb-4">
+                    <div class="flex text-[#2FE6DE]">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
                 </div>
-                <h3 class="text-xl font-semibold mb-3">AI-Powered Trading</h3>
-                <p class="text-gray-400">Utilize our AI-powered trading bots based on predefined strategies.</p>
-            </div>
-
-            <div class="bg-[#1A1428] rounded-xl p-6 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-all">
-                <div class="w-14 h-14 rounded-full bg-[#2FE6DE]/10 flex items-center justify-center mb-6">
-                    <i class="fas fa-bolt text-[#2FE6DE] text-2xl"></i>
+                <p class="text-gray-300 mb-4">"The security features and customer support are outstanding. I feel confident trading with my funds on this platform."</p>
+                <div class="flex items-center">
+                    <div class="w-10 h-10 rounded-full bg-[#2FE6DE]/20 flex items-center justify-center mr-3">
+                        <span class="text-[#2FE6DE] font-bold">DR</span>
+                    </div>
+                    <div>
+                        <div class="font-medium text-white">David Rodriguez</div>
+                        <div class="text-gray-400 text-sm">Portfolio Manager</div>
+                    </div>
                 </div>
-                <h3 class="text-xl font-semibold mb-3">Fast Execution</h3>
-                <p class="text-gray-400">High-performance matching engine for minimal latency and slippage.</p>
             </div>
         </div>
     </div>
 </div>
+
 
 <!-- CTA Section -->
 <div class="py-16 bg-[#0A0714] relative overflow-hidden">

@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs">
     <meta name="locale" content="en">
     <meta name="content-language" content="en">
-    <title>{{ env('APP_NAME')}} | Home</title>
+    <title>{{ env('APP_NAME')}} | Advanced Trading Platform</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{ config('app.name')[0] }}</text></svg>" type="image/svg+xml" />
     <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -849,7 +849,7 @@ function updateTicker(data) {
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                 <div class="lg:col-span-2">
                     <span class="text-2xl font-bold text-[#2FE6DE] mb-4 block">{{ config('app.name') }}</span>
-                    <p class="text-gray-400 text-sm mb-4">A modern trading platform with advanced features and real-time market data.</p>
+                    <p class="text-gray-400 text-sm mb-4">Advanced trading platform offering stocks, crypto, AI bots, copy trading, and professional tools for traders worldwide.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 rounded-full bg-[#1A1428] flex items-center justify-center text-gray-400 hover:text-[#2FE6DE] transition-colors">
                             <i class="fab fa-twitter"></i>

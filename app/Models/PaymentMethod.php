@@ -13,6 +13,13 @@ class PaymentMethod extends Model
     const CRYPTO_TYPES = [
         'bitcoin' => 'Bitcoin (BTC)',
         'ethereum' => 'Ethereum (ETH)',
+        'usdt' => 'Tether (USDT) BEP20',
+        'usdt_erc20' => 'Tether (USDT) ERC20',
+        'usdt_trc20' => 'Tether (USDT) TRC20',
+        'usdc' => 'USD Coin (USDC)',
+        'litecoin' => 'Litecoin (LTC)',
+        'bitcoin_cash' => 'Bitcoin Cash (BCH)',
+        'ethereum' => 'Ethereum (ETH)',
         'binance_coin' => 'Binance Coin (BNB)',
         'cardano' => 'Cardano (ADA)',
         'solana' => 'Solana (SOL)',

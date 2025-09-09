@@ -299,6 +299,12 @@
                     </div>
                 </div>
 
+                <!-- Honeypot Field (Hidden from users) -->
+                <div style="position: absolute; left: -9999px; opacity: 0; pointer-events: none;">
+                    <label for="website">Website (leave blank)</label>
+                    <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                </div>
+
                 <!-- Terms & Conditions -->
                 <div class="flex items-center">
                     <input 
