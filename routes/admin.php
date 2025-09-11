@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\SignalController as AdminSignalController;
 use App\Http\Controllers\Admin\CopiedTradeController;
 use App\Http\Controllers\Admin\BotTradingController;
 use App\Http\Controllers\Admin\MiningController;
+use App\Http\Controllers\Admin\NotificationController;
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -82,4 +83,14 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::post('/mining/{id}/cancel', [MiningController::class, 'cancel'])->name('mining.cancel');
     Route::delete('/mining/{id}', [MiningController::class, 'destroy'])->name('mining.destroy');
     Route::get('/mining-statistics', [MiningController::class, 'statistics'])->name('mining.statistics');
+
+    // Notification management
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/send', [NotificationController::class, 'sendNotification'])->name('notifications.send');
+    Route::get('/notifications/user-details', [NotificationController::class, 'getUserDetails'])->name('notifications.user-details');
+    Route::get('/notifications/stats', [NotificationController::class, 'getStats'])->name('notifications.stats');
+    Route::get('/notifications/history', [NotificationController::class, 'getHistory'])->name('notifications.history');
+    Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
+    Route::put('/notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 });

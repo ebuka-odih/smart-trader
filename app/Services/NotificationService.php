@@ -233,4 +233,88 @@ class NotificationService
             ]
         );
     }
+
+    /**
+     * Create an admin notification.
+     */
+    public function createAdminNotification(
+        User $user,
+        string $type,
+        string $title,
+        string $message,
+        int $adminId = null
+    ): UserNotification {
+        return $this->createNotification(
+            $user,
+            $type,
+            $title,
+            $message,
+            [
+                'type' => $type,
+                'sent_by' => 'admin',
+                'admin_id' => $adminId,
+                'is_admin_message' => true
+            ]
+        );
+    }
+
+    /**
+     * Send bulk notifications to multiple users.
+     */
+    public function sendBulkNotifications(
+        $users,
+        string $type,
+        string $title,
+        string $message,
+        int $adminId = null
+    ): array {
+        $results = [];
+        $successCount = 0;
+        $failureCount = 0;
+
+        foreach ($users as $user) {
+            try {
+                $notification = $this->createAdminNotification(
+                    $user,
+                    $type,
+                    $title,
+                    $message,
+                    $adminId
+                );
+                $results[] = [
+                    'user_id' => $user->id,
+                    'success' => true,
+                    'notification_id' => $notification->id
+                ];
+                $successCount++;
+            } catch (\Exception $e) {
+                Log::error('Failed to send bulk notification to user: ' . $e->getMessage(), [
+                    'user_id' => $user->id,
+                    'admin_id' => $adminId,
+                    'type' => $type
+                ]);
+                $results[] = [
+                    'user_id' => $user->id,
+                    'success' => false,
+                    'error' => $e->getMessage()
+                ];
+                $failureCount++;
+            }
+        }
+
+        Log::info('Bulk notification sent', [
+            'admin_id' => $adminId,
+            'total_users' => count($users),
+            'success_count' => $successCount,
+            'failure_count' => $failureCount,
+            'type' => $type
+        ]);
+
+        return [
+            'results' => $results,
+            'success_count' => $successCount,
+            'failure_count' => $failureCount,
+            'total_count' => count($users)
+        ];
+    }
 }
