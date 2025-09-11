@@ -11,7 +11,7 @@
     <meta name="csrf-token" content="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs">
     <meta name="locale" content="en">
     <meta name="content-language" content="en">
-    <title>{{ env('APP_NAME')}} | Advanced Trading Platform</title>
+    <title>{{ config('app.name') }} | Advanced Trading Platform</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{ config('app.name')[0] }}</text></svg>" type="image/svg+xml" />
     <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -871,7 +871,7 @@ function updateTicker(data) {
                 </div>
             </div>
             <div class="mt-10 pt-6 border-t border-[#2FE6DE]/10 flex flex-col md:flex-row justify-between items-center">
-                <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 {{ env('APP_NAME') }}. All rights reserved.</p>
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">&copy; 2025 {{ config('app.name') }}. All rights reserved.</p>
                 <div class="flex items-center space-x-4">
                     <a href="{{ route('terms') }}" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Terms</a>
                     <a href="{{ route('privacy') }}" class="text-gray-400 hover:text-[#2FE6DE] text-sm transition-colors">Privacy</a>
