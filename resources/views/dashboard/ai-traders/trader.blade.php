@@ -4,11 +4,15 @@
 
 @section('content')
 <!-- Trader Header -->
-<section class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-16">
-    <div class="w-full px-4">
+<section class="bg-gradient-to-br from-[#0A0714] via-[#0D091C] to-[#1A1428] text-white py-16 relative overflow-hidden">
+    <!-- Background elements -->
+    <div class="absolute top-20 right-20 w-64 h-64 bg-[#2FE6DE]/10 rounded-full filter blur-3xl"></div>
+    <div class="absolute bottom-10 left-10 w-80 h-80 bg-[#2FE6DE]/5 rounded-full filter blur-3xl"></div>
+    
+    <div class="w-full px-4 relative z-10">
         <div class="max-w-7xl mx-auto">
             <div class="flex items-center mb-4">
-                <a href="{{ route('user.aiTraders.plan', $trader->aiTraderPlan) }}" class="text-gray-300 hover:text-white mr-4">
+                <a href="{{ route('user.aiTraders.plan', $trader->aiTraderPlan) }}" class="text-gray-300 hover:text-[#2FE6DE] mr-4">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
@@ -29,22 +33,22 @@
                     <p class="text-xl text-gray-300 mb-6">Advanced AI-powered stock trading with {{ $trader->ai_model }}</p>
                     
                     <div class="flex flex-wrap gap-3 mb-6">
-                        <span class="bg-purple-600 text-white px-3 py-1 rounded-full text-sm">{{ $trader->ai_model }}</span>
-                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">{{ ucfirst($trader->trading_strategy) }}</span>
-                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">{{ ucfirst($trader->ai_confidence) }} Confidence</span>
-                        <span class="bg-orange-600 text-white px-3 py-1 rounded-full text-sm">{{ ucfirst($trader->ai_learning_mode) }} Learning</span>
+                        <span class="bg-[#2FE6DE]/20 text-[#2FE6DE] px-3 py-1 rounded-full text-sm border border-[#2FE6DE]/30">{{ $trader->ai_model }}</span>
+                        <span class="bg-blue-600/20 text-blue-400 px-3 py-1 rounded-full text-sm border border-blue-600/30">{{ ucfirst($trader->trading_strategy) }}</span>
+                        <span class="bg-green-600/20 text-green-400 px-3 py-1 rounded-full text-sm border border-green-600/30">{{ ucfirst($trader->ai_confidence) }} Confidence</span>
+                        <span class="bg-orange-600/20 text-orange-400 px-3 py-1 rounded-full text-sm border border-orange-600/30">{{ ucfirst($trader->ai_learning_mode) }} Learning</span>
                     </div>
                 </div>
                 
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
+                    <div class="bg-[#2FE6DE]/10 backdrop-blur-sm rounded-lg p-4 text-center border border-[#2FE6DE]/20">
                         <div class="text-3xl font-bold {{ $trader->current_performance >= 0 ? 'text-green-400' : 'text-red-400' }}">
                             {{ $trader->formatted_performance }}
                         </div>
                         <div class="text-gray-300 text-sm">Current Performance</div>
                     </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center">
-                        <div class="text-3xl font-bold text-blue-400">{{ $trader->formatted_win_rate }}</div>
+                    <div class="bg-[#2FE6DE]/10 backdrop-blur-sm rounded-lg p-4 text-center border border-[#2FE6DE]/20">
+                        <div class="text-3xl font-bold text-[#2FE6DE]">{{ $trader->formatted_win_rate }}</div>
                         <div class="text-gray-300 text-sm">Win Rate</div>
                     </div>
                 </div>
@@ -54,11 +58,11 @@
 </section>
 
 <!-- Performance Chart -->
-<section class="py-16 bg-white">
+<section class="py-16 bg-[#0A0714]">
     <div class="w-full px-4">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8">Performance Overview</h2>
-            <div class="bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-3xl font-bold text-white mb-8">Performance Overview</h2>
+            <div class="bg-[#1A1428] rounded-xl shadow-lg p-6 border border-[#2FE6DE]/20">
                 <canvas id="performanceChart" width="400" height="200"></canvas>
             </div>
         </div>
@@ -66,76 +70,76 @@
 </section>
 
 <!-- Trader Details -->
-<section class="py-16 bg-gray-50">
+<section class="py-16 bg-[#0D091C]">
     <div class="w-full px-4">
         <div class="max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Main Details -->
                 <div class="lg:col-span-2">
-                    <div class="bg-white rounded-xl shadow-lg p-8">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-6">Trading Configuration</h3>
+                    <div class="bg-[#1A1428] rounded-xl shadow-lg p-8 border border-[#2FE6DE]/20">
+                        <h3 class="text-2xl font-bold text-white mb-6">Trading Configuration</h3>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
-                                <h4 class="font-semibold text-gray-900 mb-3">AI Settings</h4>
+                                <h4 class="font-semibold text-white mb-3">AI Settings</h4>
                                 <div class="space-y-2">
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">AI Model:</span>
-                                        <span class="font-medium">{{ $trader->ai_model }}</span>
+                                        <span class="text-gray-400">AI Model:</span>
+                                        <span class="font-medium text-[#2FE6DE]">{{ $trader->ai_model }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">Confidence Level:</span>
-                                        <span class="font-medium">{{ ucfirst($trader->ai_confidence) }}</span>
+                                        <span class="text-gray-400">Confidence Level:</span>
+                                        <span class="font-medium text-[#2FE6DE]">{{ ucfirst($trader->ai_confidence) }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">Learning Mode:</span>
-                                        <span class="font-medium">{{ ucfirst($trader->ai_learning_mode) }}</span>
+                                        <span class="text-gray-400">Learning Mode:</span>
+                                        <span class="font-medium text-[#2FE6DE]">{{ ucfirst($trader->ai_learning_mode) }}</span>
                                     </div>
                                 </div>
                             </div>
                             
                             <div>
-                                <h4 class="font-semibold text-gray-900 mb-3">Trading Strategy</h4>
+                                <h4 class="font-semibold text-white mb-3">Trading Strategy</h4>
                                 <div class="space-y-2">
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">Strategy:</span>
-                                        <span class="font-medium">{{ ucfirst($trader->trading_strategy) }}</span>
+                                        <span class="text-gray-400">Strategy:</span>
+                                        <span class="font-medium text-[#2FE6DE]">{{ ucfirst($trader->trading_strategy) }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">Risk Tolerance:</span>
-                                        <span class="font-medium">{{ $trader->risk_tolerance }}</span>
+                                        <span class="text-gray-400">Risk Tolerance:</span>
+                                        <span class="font-medium text-[#2FE6DE]">{{ $trader->risk_tolerance }}</span>
                                     </div>
                                     <div class="flex justify-between">
-                                        <span class="text-gray-600">Max Positions:</span>
-                                        <span class="font-medium">{{ $trader->max_positions }}</span>
+                                        <span class="text-gray-400">Max Positions:</span>
+                                        <span class="font-medium text-[#2FE6DE]">{{ $trader->max_positions }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div class="mt-6">
-                            <h4 class="font-semibold text-gray-900 mb-3">Stocks Trading</h4>
+                            <h4 class="font-semibold text-white mb-3">Stocks Trading</h4>
                             <div class="flex flex-wrap gap-2">
                                 @foreach($trader->stocks_to_trade as $stock)
-                                <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{ $stock }}</span>
+                                <span class="bg-[#2FE6DE]/20 text-[#2FE6DE] px-3 py-1 rounded-full text-sm font-medium border border-[#2FE6DE]/30">{{ $stock }}</span>
                                 @endforeach
                             </div>
                         </div>
                         
                         <div class="mt-6">
-                            <h4 class="font-semibold text-gray-900 mb-3">Risk Management</h4>
+                            <h4 class="font-semibold text-white mb-3">Risk Management</h4>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                                    <div class="text-2xl font-bold text-red-600">{{ $trader->stop_loss_percentage }}%</div>
-                                    <div class="text-sm text-red-700">Stop Loss</div>
+                                <div class="bg-red-500/20 border border-red-500/30 rounded-lg p-4 text-center">
+                                    <div class="text-2xl font-bold text-red-400">{{ $trader->stop_loss_percentage }}%</div>
+                                    <div class="text-sm text-red-300">Stop Loss</div>
                                 </div>
-                                <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                                    <div class="text-2xl font-bold text-green-600">{{ $trader->take_profit_percentage }}%</div>
-                                    <div class="text-sm text-green-700">Take Profit</div>
+                                <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-4 text-center">
+                                    <div class="text-2xl font-bold text-green-400">{{ $trader->take_profit_percentage }}%</div>
+                                    <div class="text-sm text-green-300">Take Profit</div>
                                 </div>
-                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
-                                    <div class="text-2xl font-bold text-blue-600">{{ $trader->position_size_percentage }}%</div>
-                                    <div class="text-sm text-blue-700">Position Size</div>
+                                <div class="bg-[#2FE6DE]/20 border border-[#2FE6DE]/30 rounded-lg p-4 text-center">
+                                    <div class="text-2xl font-bold text-[#2FE6DE]">{{ $trader->position_size_percentage }}%</div>
+                                    <div class="text-sm text-[#2FE6DE]/80">Position Size</div>
                                 </div>
                             </div>
                         </div>
@@ -145,28 +149,28 @@
                 <!-- Stats & Actions -->
                 <div>
                     <!-- Trading Statistics -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Trading Statistics</h3>
+                    <div class="bg-[#1A1428] rounded-xl shadow-lg p-6 mb-6 border border-[#2FE6DE]/20">
+                        <h3 class="text-xl font-bold text-white mb-4">Trading Statistics</h3>
                         <div class="space-y-4">
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Total Trades:</span>
-                                <span class="font-semibold">{{ $trader->total_trades }}</span>
+                                <span class="text-gray-400">Total Trades:</span>
+                                <span class="font-semibold text-[#2FE6DE]">{{ $trader->total_trades }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Winning Trades:</span>
-                                <span class="font-semibold text-green-600">{{ $trader->winning_trades }}</span>
+                                <span class="text-gray-400">Winning Trades:</span>
+                                <span class="font-semibold text-green-400">{{ $trader->winning_trades }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Losing Trades:</span>
-                                <span class="font-semibold text-red-600">{{ $trader->total_trades - $trader->winning_trades }}</span>
+                                <span class="text-gray-400">Losing Trades:</span>
+                                <span class="font-semibold text-red-400">{{ $trader->total_trades - $trader->winning_trades }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Win Rate:</span>
-                                <span class="font-semibold">{{ $trader->formatted_win_rate }}</span>
+                                <span class="text-gray-400">Win Rate:</span>
+                                <span class="font-semibold text-[#2FE6DE]">{{ $trader->formatted_win_rate }}</span>
                             </div>
                             <div class="flex justify-between items-center">
-                                <span class="text-gray-600">Current Performance:</span>
-                                <span class="font-semibold {{ $trader->current_performance >= 0 ? 'text-green-600' : 'text-red-600' }}">
+                                <span class="text-gray-400">Current Performance:</span>
+                                <span class="font-semibold {{ $trader->current_performance >= 0 ? 'text-green-400' : 'text-red-400' }}">
                                     {{ $trader->formatted_performance }}
                                 </span>
                             </div>
@@ -174,20 +178,20 @@
                     </div>
                     
                     <!-- Plan Info -->
-                    <div class="bg-white rounded-xl shadow-lg p-6 mb-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-4">Plan Information</h3>
+                    <div class="bg-[#1A1428] rounded-xl shadow-lg p-6 mb-6 border border-[#2FE6DE]/20">
+                        <h3 class="text-xl font-bold text-white mb-4">Plan Information</h3>
                         <div class="space-y-3">
                             <div>
-                                <div class="text-sm text-gray-500">Plan Name</div>
-                                <div class="font-semibold">{{ $trader->aiTraderPlan->name }}</div>
+                                <div class="text-sm text-gray-400">Plan Name</div>
+                                <div class="font-semibold text-white">{{ $trader->aiTraderPlan->name }}</div>
                             </div>
                             <div>
-                                <div class="text-sm text-gray-500">Monthly Cost</div>
-                                <div class="font-semibold text-2xl text-blue-600">{{ $trader->aiTraderPlan->formatted_price }}</div>
+                                <div class="text-sm text-gray-400">Monthly Cost</div>
+                                <div class="font-semibold text-2xl text-[#2FE6DE]">{{ $trader->aiTraderPlan->formatted_price }}</div>
                             </div>
                             <div>
-                                <div class="text-sm text-gray-500">Minimum Investment</div>
-                                <div class="font-semibold">${{ number_format($trader->aiTraderPlan->investment_amount, 0) }}</div>
+                                <div class="text-sm text-gray-400">Minimum Investment</div>
+                                <div class="font-semibold text-white">${{ number_format($trader->aiTraderPlan->investment_amount, 0) }}</div>
                             </div>
                         </div>
                     </div>
@@ -242,28 +246,28 @@
 
 <!-- Similar Traders -->
 @if($similarTraders->count() > 0)
-<section class="py-16 bg-white">
+<section class="py-16 bg-[#0A0714]">
     <div class="w-full px-4">
         <div class="max-w-7xl mx-auto">
-            <h2 class="text-3xl font-bold text-gray-900 mb-8">Similar AI Traders</h2>
+            <h2 class="text-3xl font-bold text-white mb-8">Similar AI Traders</h2>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 @foreach($similarTraders as $similarTrader)
-                <div class="bg-gray-50 rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
+                <div class="bg-[#1A1428] rounded-xl p-6 hover:shadow-lg transition-shadow duration-300 border border-[#2FE6DE]/20 hover:border-[#2FE6DE]/40">
                     <div class="flex items-center justify-between mb-3">
-                        <h3 class="font-bold text-gray-900">{{ $similarTrader->name }}</h3>
+                        <h3 class="font-bold text-white">{{ $similarTrader->name }}</h3>
                         <span class="bg-green-500 text-white text-xs px-2 py-1 rounded-full">
                             {{ $similarTrader->formatted_performance }}
                         </span>
                     </div>
-                    <div class="flex items-center text-sm text-gray-600 mb-3">
-                        <span class="bg-purple-100 text-purple-800 px-2 py-1 rounded text-xs mr-2">{{ $similarTrader->ai_model }}</span>
-                        <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">{{ ucfirst($similarTrader->trading_strategy) }}</span>
+                    <div class="flex items-center text-sm text-gray-400 mb-3">
+                        <span class="bg-[#2FE6DE]/20 text-[#2FE6DE] px-2 py-1 rounded text-xs mr-2 border border-[#2FE6DE]/30">{{ $similarTrader->ai_model }}</span>
+                        <span class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs border border-blue-600/30">{{ ucfirst($similarTrader->trading_strategy) }}</span>
                     </div>
-                    <div class="text-sm text-gray-600 mb-4">
-                        Win Rate: <span class="font-semibold">{{ $similarTrader->formatted_win_rate }}</span>
+                    <div class="text-sm text-gray-400 mb-4">
+                        Win Rate: <span class="font-semibold text-[#2FE6DE]">{{ $similarTrader->formatted_win_rate }}</span>
                     </div>
                     <a href="{{ route('user.aiTraders.trader', $similarTrader) }}" 
-                       class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                       class="text-[#2FE6DE] hover:text-[#2FE6DE]/80 font-medium text-sm">
                         View Details →
                     </a>
                 </div>
@@ -367,12 +371,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                color: 'rgba(47, 230, 222, 0.1)'
+                            },
+                            ticks: {
+                                color: '#9CA3AF'
                             }
                         },
                         x: {
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                color: 'rgba(47, 230, 222, 0.1)'
+                            },
+                            ticks: {
+                                color: '#9CA3AF'
                             }
                         }
                     },
@@ -417,12 +427,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                color: 'rgba(47, 230, 222, 0.1)'
+                            },
+                            ticks: {
+                                color: '#9CA3AF'
                             }
                         },
                         x: {
                             grid: {
-                                color: 'rgba(0, 0, 0, 0.1)'
+                                color: 'rgba(47, 230, 222, 0.1)'
+                            },
+                            ticks: {
+                                color: '#9CA3AF'
                             }
                         }
                     },
