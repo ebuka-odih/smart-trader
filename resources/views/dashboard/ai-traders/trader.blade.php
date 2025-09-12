@@ -361,10 +361,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         legend: {
                             display: true,
                             position: 'top',
+                            labels: {
+                                color: '#9CA3AF'
+                            }
                         },
                         title: {
                             display: true,
-                            text: '8-Week Performance History'
+                            text: '8-Week Performance History',
+                            color: '#FFFFFF'
                         }
                     },
                     scales: {
@@ -417,10 +421,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         legend: {
                             display: true,
                             position: 'top',
+                            labels: {
+                                color: '#9CA3AF'
+                            }
                         },
                         title: {
                             display: true,
-                            text: '8-Week Performance History'
+                            text: '8-Week Performance History',
+                            color: '#FFFFFF'
                         }
                     },
                     scales: {
