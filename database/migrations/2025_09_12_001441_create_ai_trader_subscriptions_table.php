@@ -17,8 +17,8 @@ return new class extends Migration
             $table->foreignId('ai_trader_plan_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['active', 'paused', 'cancelled', 'expired'])->default('active');
             $table->decimal('monthly_fee', 10, 2);
-            $table->timestamp('subscribed_at');
-            $table->timestamp('expires_at');
+            $table->timestamp('subscribed_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamp('cancelled_at')->nullable();
             $table->json('payment_details')->nullable(); // Store payment method, transaction IDs, etc.
             $table->timestamps();

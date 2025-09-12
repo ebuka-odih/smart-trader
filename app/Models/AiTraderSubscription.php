@@ -58,7 +58,7 @@ class AiTraderSubscription extends Model
      */
     public function isActive()
     {
-        return $this->status === 'active' && $this->expires_at > now();
+        return $this->status === 'active' && $this->expires_at && $this->expires_at > now();
     }
 
     /**
@@ -66,7 +66,7 @@ class AiTraderSubscription extends Model
      */
     public function isExpired()
     {
-        return $this->expires_at <= now();
+        return $this->expires_at && $this->expires_at <= now();
     }
 
     /**
@@ -82,7 +82,7 @@ class AiTraderSubscription extends Model
      */
     public function getDaysRemainingAttribute()
     {
-        if ($this->isExpired()) {
+        if (!$this->expires_at || $this->isExpired()) {
             return 0;
         }
         
