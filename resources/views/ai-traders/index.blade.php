@@ -70,7 +70,7 @@
 
                     <!-- Stocks Trading -->
                     <div class="mb-4">
-                        <div class="text-sm text-gray-400 mb-2">Stocks Covered</div>
+                        <div class="text-sm text-gray-400 mb-2">Market Covered</div>
                         <div class="flex flex-wrap gap-1">
                             @foreach($plan->stocks_trading as $stock)
                             <span class="bg-[#2FE6DE]/20 text-[#2FE6DE] text-xs px-2 py-1 rounded border border-[#2FE6DE]/30">{{ $stock }}</span>
