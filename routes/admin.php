@@ -103,4 +103,11 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::resource('/ai-traders', AiTraderController::class)->names('ai-traders');
     Route::post('/ai-traders/{aiTrader}/toggle-status', [AiTraderController::class, 'toggleStatus'])->name('ai-traders.toggle-status');
     Route::get('/ai-traders/by-plan/{aiTraderPlan}', [AiTraderController::class, 'getByPlan'])->name('ai-traders.by-plan');
+    
+    // AI Trader Management & History
+    Route::get('/ai-traders-management', [AiTraderController::class, 'management'])->name('ai-traders.management');
+    Route::get('/ai-traders-history/{userAiTrader}', [AiTraderController::class, 'traderHistory'])->name('ai-traders.history');
+    Route::post('/ai-traders-performance/{userAiTrader}/update', [AiTraderController::class, 'updatePerformance'])->name('ai-traders.update-performance');
+    Route::post('/ai-traders-trade/{userAiTrader}/create', [AiTraderController::class, 'createTrade'])->name('ai-traders.create-trade');
+    Route::get('/ai-traders-performance/{userAiTrader}/data', [AiTraderController::class, 'getPerformanceData'])->name('ai-traders.performance-data');
 });

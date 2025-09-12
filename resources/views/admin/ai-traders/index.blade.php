@@ -153,15 +153,20 @@
                         <div>
                             <label for="ai_model" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">AI Model</label>
                             <select id="ai_model" name="ai_model" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                                <option value="GPT-4o">GPT-4o</option>
-                                <option value="GPT-4">GPT-4</option>
-                                <option value="GPT-4 Turbo">GPT-4 Turbo</option>
-                                <option value="Claude 3.5 Sonnet">Claude 3.5 Sonnet</option>
-                                <option value="Claude 3 Opus">Claude 3 Opus</option>
-                                <option value="Gemini Pro">Gemini Pro</option>
-                                <option value="Gemini Ultra">Gemini Ultra</option>
-                                <option value="Llama 3.1 405B">Llama 3.1 405B</option>
-                                <option value="Mixtral 8x22B">Mixtral 8x22B</option>
+                                <option value="GPT-4o-Trader">GPT-4o Trader</option>
+                                <option value="GPT-4-Trader">GPT-4 Trader</option>
+                                <option value="GPT-4-Turbo-Trader">GPT-4 Turbo Trader</option>
+                                <option value="Claude-3.5-Sonnet-Trader">Claude 3.5 Sonnet Trader</option>
+                                <option value="Claude-3-Opus-Trader">Claude 3 Opus Trader</option>
+                                <option value="Gemini-Pro-Trader">Gemini Pro Trader</option>
+                                <option value="Gemini-Ultra-Trader">Gemini Ultra Trader</option>
+                                <option value="Llama-3.1-405B-Trader">Llama 3.1 405B Trader</option>
+                                <option value="Mixtral-8x22B-Trader">Mixtral 8x22B Trader</option>
+                                <option value="Alpha-Trader-X1">Alpha Trader X1</option>
+                                <option value="Quantum-Trader-Pro">Quantum Trader Pro</option>
+                                <option value="Neural-Trader-Elite">Neural Trader Elite</option>
+                                <option value="Cyber-Trader-Max">Cyber Trader Max</option>
+                                <option value="Phoenix-Trader-AI">Phoenix Trader AI</option>
                             </select>
                         </div>
                         

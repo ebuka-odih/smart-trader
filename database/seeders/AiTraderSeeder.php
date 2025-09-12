@@ -33,7 +33,7 @@ class AiTraderSeeder extends Seeder
             [
                 'name' => 'Conservative Growth Trader',
                 'trading_strategy' => 'conservative',
-                'ai_model' => 'GPT-4',
+                'ai_model' => 'GPT-4-Trader',
                 'ai_confidence' => 'medium',
                 'ai_learning_mode' => 'conservative',
                 'stocks_to_trade' => ['AAPL', 'MSFT', 'GOOGL'],
@@ -51,7 +51,7 @@ class AiTraderSeeder extends Seeder
             [
                 'name' => 'Balanced Portfolio Trader',
                 'trading_strategy' => 'moderate',
-                'ai_model' => 'GPT-4',
+                'ai_model' => 'Gemini-Pro-Trader',
                 'ai_confidence' => 'medium',
                 'ai_learning_mode' => 'adaptive',
                 'stocks_to_trade' => ['AAPL', 'MSFT', 'AMZN', 'TSLA'],
@@ -69,7 +69,7 @@ class AiTraderSeeder extends Seeder
             [
                 'name' => 'Tech Focus Trader',
                 'trading_strategy' => 'moderate',
-                'ai_model' => 'Claude-3',
+                'ai_model' => 'Claude-3.5-Sonnet-Trader',
                 'ai_confidence' => 'high',
                 'ai_learning_mode' => 'adaptive',
                 'stocks_to_trade' => ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA'],
@@ -87,7 +87,7 @@ class AiTraderSeeder extends Seeder
             [
                 'name' => 'Steady Income Trader',
                 'trading_strategy' => 'conservative',
-                'ai_model' => 'GPT-4',
+                'ai_model' => 'Alpha-Trader-X1',
                 'ai_confidence' => 'medium',
                 'ai_learning_mode' => 'conservative',
                 'stocks_to_trade' => ['AAPL', 'MSFT', 'GOOGL'],
@@ -105,7 +105,7 @@ class AiTraderSeeder extends Seeder
             [
                 'name' => 'Growth Opportunity Trader',
                 'trading_strategy' => 'moderate',
-                'ai_model' => 'Claude-3',
+                'ai_model' => 'Quantum-Trader-Pro',
                 'ai_confidence' => 'high',
                 'ai_learning_mode' => 'adaptive',
                 'stocks_to_trade' => ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'TSLA'],
@@ -126,7 +126,7 @@ class AiTraderSeeder extends Seeder
         if ($planName === 'Professional AI Trader') {
             foreach ($baseTraders as &$trader) {
                 $trader['name'] = 'Pro ' . $trader['name'];
-                $trader['ai_model'] = 'GPT-4 Turbo';
+                $trader['ai_model'] = 'GPT-4-Turbo-Trader';
                 $trader['ai_confidence'] = 'high';
                 $trader['stocks_to_trade'] = array_merge($trader['stocks_to_trade'], ['NVDA', 'META', 'NFLX', 'AMD', 'CRM']);
                 $trader['risk_tolerance'] += 0.2;
@@ -136,7 +136,7 @@ class AiTraderSeeder extends Seeder
         } elseif ($planName === 'Enterprise AI Trader') {
             foreach ($baseTraders as &$trader) {
                 $trader['name'] = 'Enterprise ' . $trader['name'];
-                $trader['ai_model'] = 'GPT-4 Turbo';
+                $trader['ai_model'] = 'Neural-Trader-Elite';
                 $trader['ai_confidence'] = 'maximum';
                 $trader['stocks_to_trade'] = array_merge($trader['stocks_to_trade'], ['NVDA', 'META', 'NFLX', 'AMD', 'CRM', 'ADBE', 'PYPL', 'INTC', 'CSCO', 'ORCL']);
                 $trader['risk_tolerance'] += 0.3;
