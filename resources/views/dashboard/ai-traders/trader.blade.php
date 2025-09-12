@@ -17,7 +17,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </a>
-                <span class="text-gray-300">{{ $trader->aiTraderPlan->name }}</span>
+                <span class="text-gray-300">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'No Plan' }}</span>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -183,15 +183,15 @@
                         <div class="space-y-3">
                             <div>
                                 <div class="text-sm text-gray-400">Plan Name</div>
-                                <div class="font-semibold text-white">{{ $trader->aiTraderPlan->name }}</div>
+                                <div class="font-semibold text-white">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'No Plan' }}</div>
                             </div>
                             <div>
                                 <div class="text-sm text-gray-400">Monthly Cost</div>
-                                <div class="font-semibold text-2xl text-[#2FE6DE]">{{ $trader->aiTraderPlan->formatted_price }}</div>
+                                <div class="font-semibold text-2xl text-[#2FE6DE]">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->formatted_price : 'N/A' }}</div>
                             </div>
                             <div>
                                 <div class="text-sm text-gray-400">Minimum Investment</div>
-                                <div class="font-semibold text-white">${{ number_format($trader->aiTraderPlan->investment_amount, 0) }}</div>
+                                <div class="font-semibold text-white">${{ $trader->aiTraderPlan ? number_format($trader->aiTraderPlan->investment_amount, 0) : 'N/A' }}</div>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                             <h3 class="text-xl font-bold mb-2">Ready to Activate?</h3>
                             <p class="text-[#0A0714]/80 mb-4">Start using this AI trader to optimize your stock portfolio.</p>
                             <div class="flex gap-2">
-                                <button onclick="showActivationModal({{ $trader->id }}, '{{ $trader->name }}', {{ $trader->aiTraderPlan->investment_amount }})" 
+                                <button onclick="showActivationModal({{ $trader->id }}, '{{ $trader->name }}', {{ $trader->aiTraderPlan ? $trader->aiTraderPlan->investment_amount : 0 }})" 
                                         class="flex-1 bg-[#0A0714] text-[#2FE6DE] py-3 px-4 rounded-lg font-semibold hover:bg-[#0A0714]/90 transition-colors duration-300 border border-[#0A0714] hover:border-[#2FE6DE]/50">
                                     <i class="fas fa-play mr-2"></i>Activate Trader
                                 </button>
@@ -225,7 +225,7 @@
                             </div>
                         @else
                             <h3 class="text-xl font-bold mb-2">Subscription Required</h3>
-                            <p class="text-[#0A0714]/80 mb-4">You need to subscribe to the {{ $trader->aiTraderPlan->name }} plan to activate this AI trader.</p>
+                            <p class="text-[#0A0714]/80 mb-4">You need to subscribe to the {{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'required' }} plan to activate this AI trader.</p>
                             <div class="flex gap-2">
                                 <a href="{{ route('user.aiTraders.plan', $trader->aiTraderPlan) }}" 
                                    class="flex-1 bg-[#0A0714] text-[#2FE6DE] py-3 px-4 rounded-lg font-semibold hover:bg-[#0A0714]/90 transition-colors duration-300 border border-[#0A0714] hover:border-[#2FE6DE]/50 text-center">

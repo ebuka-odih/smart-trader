@@ -171,7 +171,7 @@
                                 <i class="fas fa-check-circle mr-2"></i>Activated
                             </div>
                         @elseif(auth()->user()->hasActiveAiTraderSubscription($plan->id))
-                            <button onclick="showActivationModal({{ $trader->id }}, '{{ $trader->name }}', {{ $trader->aiTraderPlan->investment_amount }})" 
+                            <button onclick="showActivationModal({{ $trader->id }}, '{{ $trader->name }}', {{ $trader->aiTraderPlan ? $trader->aiTraderPlan->investment_amount : 0 }})" 
                                     class="flex-1 bg-gradient-to-r from-green-600 to-green-500 text-white py-3 px-4 rounded-lg font-semibold hover:from-green-700 hover:to-green-600 transition-all duration-300 text-center">
                                 <i class="fas fa-play mr-2"></i>Activate
                             </button>

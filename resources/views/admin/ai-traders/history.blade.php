@@ -42,7 +42,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Plan</label>
-                                    <div class="text-sm text-gray-900 dark:text-white">{{ $userAiTrader->aiTraderPlan->name }}</div>
+                                    <div class="text-sm text-gray-900 dark:text-white">{{ $userAiTrader->aiTraderPlan ? $userAiTrader->aiTraderPlan->name : 'No Plan' }}</div>
                                 </div>
                             </div>
                             <div class="space-y-4">

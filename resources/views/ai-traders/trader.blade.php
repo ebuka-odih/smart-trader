@@ -13,7 +13,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                     </svg>
                 </a>
-                <span class="text-gray-300">{{ $trader->aiTraderPlan->name }}</span>
+                <span class="text-gray-300">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'No Plan' }}</span>
             </div>
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -172,15 +172,15 @@
                         <div class="space-y-3">
                             <div>
                                 <div class="text-sm text-gray-500">Plan Name</div>
-                                <div class="font-semibold">{{ $trader->aiTraderPlan->name }}</div>
+                                <div class="font-semibold">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'No Plan' }}</div>
                             </div>
                             <div>
                                 <div class="text-sm text-gray-500">Monthly Cost</div>
-                                <div class="font-semibold text-2xl text-blue-600">{{ $trader->aiTraderPlan->formatted_price }}</div>
+                                <div class="font-semibold text-2xl text-blue-600">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->formatted_price : 'N/A' }}</div>
                             </div>
                             <div>
                                 <div class="text-sm text-gray-500">Minimum Investment</div>
-                                <div class="font-semibold">${{ number_format($trader->aiTraderPlan->investment_amount, 0) }}</div>
+                                <div class="font-semibold">${{ $trader->aiTraderPlan ? number_format($trader->aiTraderPlan->investment_amount, 0) : 'N/A' }}</div>
                             </div>
                         </div>
                     </div>
@@ -190,7 +190,7 @@
                         <h3 class="text-xl font-bold mb-2">Ready to Subscribe?</h3>
                         <p class="text-blue-100 mb-4">Start using this AI trader to optimize your stock portfolio.</p>
                         <button class="w-full bg-white text-blue-600 py-3 px-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors duration-300">
-                            Subscribe to {{ $trader->aiTraderPlan->name }}
+                            Subscribe to {{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'Plan' }}
                         </button>
                     </div>
                 </div>
