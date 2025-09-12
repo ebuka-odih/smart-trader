@@ -31,7 +31,16 @@ return new class extends Migration
         }
 
         // Check if user_id column exists and what type it is
-        $columns = DB::select("SHOW COLUMNS FROM ai_trader_subscriptions LIKE 'user_id'");
+        $driver = DB::getDriverName();
+        if ($driver === 'mysql') {
+            $columns = DB::select("SHOW COLUMNS FROM ai_trader_subscriptions LIKE 'user_id'");
+        } else {
+            // SQLite
+            $columns = DB::select("PRAGMA table_info(ai_trader_subscriptions)");
+            $columns = array_values(array_filter($columns, function($col) {
+                return $col->name === 'user_id';
+            }));
+        }
         
         if (empty($columns)) {
             // Column doesn't exist, add it
@@ -40,22 +49,42 @@ return new class extends Migration
             });
         } else {
             // Column exists, check if it's already UUID type
-            $columnType = $columns[0]->Type;
-            if (strpos($columnType, 'char(36)') === false && strpos($columnType, 'varchar(36)') === false) {
-                // It's not a UUID, we need to modify it
-                DB::statement('ALTER TABLE ai_trader_subscriptions MODIFY COLUMN user_id CHAR(36) NOT NULL');
+            $column = reset($columns); // Get first element
+            $isUuid = false;
+            
+            if ($driver === 'mysql') {
+                $isUuid = strpos($column->Type, 'char(36)') !== false || strpos($column->Type, 'varchar(36)') !== false;
+                if (!$isUuid) {
+                    DB::statement('ALTER TABLE ai_trader_subscriptions MODIFY COLUMN user_id CHAR(36) NOT NULL');
+                }
+            } else {
+                // SQLite - just recreate the table if needed
+                $isUuid = $column->type === 'TEXT';
+                if (!$isUuid) {
+                    Schema::table('ai_trader_subscriptions', function (Blueprint $table) {
+                        $table->uuid('user_id')->change();
+                    });
+                }
             }
         }
 
         // Check if foreign key already exists
-        $foreignKeys = DB::select("
-            SELECT CONSTRAINT_NAME 
-            FROM information_schema.KEY_COLUMN_USAGE 
-            WHERE TABLE_SCHEMA = DATABASE() 
-            AND TABLE_NAME = 'ai_trader_subscriptions' 
-            AND COLUMN_NAME = 'user_id' 
-            AND REFERENCED_TABLE_NAME IS NOT NULL
-        ");
+        if ($driver === 'mysql') {
+            $foreignKeys = DB::select("
+                SELECT CONSTRAINT_NAME 
+                FROM information_schema.KEY_COLUMN_USAGE 
+                WHERE TABLE_SCHEMA = DATABASE() 
+                AND TABLE_NAME = 'ai_trader_subscriptions' 
+                AND COLUMN_NAME = 'user_id' 
+                AND REFERENCED_TABLE_NAME IS NOT NULL
+            ");
+        } else {
+            // SQLite - check if foreign key exists
+            $foreignKeys = DB::select("PRAGMA foreign_key_list(ai_trader_subscriptions)");
+            $foreignKeys = array_filter($foreignKeys, function($fk) {
+                return $fk->from === 'user_id' && $fk->table === 'users';
+            });
+        }
 
         if (empty($foreignKeys)) {
             Schema::table('ai_trader_subscriptions', function (Blueprint $table) {
@@ -65,20 +94,29 @@ return new class extends Migration
         }
 
         // Check if index exists and add it if it doesn't
-        $indexes = DB::select("SHOW INDEX FROM ai_trader_subscriptions WHERE Column_name = 'user_id'");
-        $hasUserStatusIndex = false;
-        
-        foreach ($indexes as $index) {
-            if ($index->Key_name === 'ai_trader_subscriptions_user_id_status_index') {
-                $hasUserStatusIndex = true;
-                break;
+        if ($driver === 'mysql') {
+            $indexes = DB::select("SHOW INDEX FROM ai_trader_subscriptions WHERE Column_name = 'user_id'");
+            $hasUserStatusIndex = false;
+            
+            foreach ($indexes as $index) {
+                if ($index->Key_name === 'ai_trader_subscriptions_user_id_status_index') {
+                    $hasUserStatusIndex = true;
+                    break;
+                }
             }
+        } else {
+            // SQLite - just add the index
+            $hasUserStatusIndex = false;
         }
 
         if (!$hasUserStatusIndex) {
-            Schema::table('ai_trader_subscriptions', function (Blueprint $table) {
-                $table->index(['user_id', 'status']);
-            });
+            try {
+                Schema::table('ai_trader_subscriptions', function (Blueprint $table) {
+                    $table->index(['user_id', 'status']);
+                });
+            } catch (Exception $e) {
+                // Index might already exist, continue
+            }
         }
     }
 

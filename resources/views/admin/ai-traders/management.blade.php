@@ -226,7 +226,7 @@
 
 <!-- Edit Performance Modal -->
 <div id="editPerformanceModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800 max-w-2xl">
         <div class="mt-3">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">Edit Trader Performance</h3>
@@ -281,7 +281,7 @@
 
 <!-- Create Trade Modal -->
 <div id="createTradeModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800">
+    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-lg rounded-md bg-white dark:bg-gray-800 max-w-2xl">
         <div class="mt-3">
             <div class="flex items-center justify-between mb-4">
                 <h3 id="createTradeModalTitle" class="text-lg font-medium text-gray-900 dark:text-white">Create New Trade</h3>

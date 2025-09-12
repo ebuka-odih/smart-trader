@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\MiningController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\AiTraderPlanController;
 use App\Http\Controllers\Admin\AiTraderController;
+use App\Http\Controllers\Admin\AdminSettingsController;
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -110,4 +111,9 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::post('/ai-traders-performance/{userAiTrader}/update', [AiTraderController::class, 'updatePerformance'])->name('ai-traders.update-performance');
     Route::post('/ai-traders-trade/{userAiTrader}/create', [AiTraderController::class, 'createTrade'])->name('ai-traders.create-trade');
     Route::get('/ai-traders-performance/{userAiTrader}/data', [AiTraderController::class, 'getPerformanceData'])->name('ai-traders.performance-data');
+    
+    // Admin Settings
+    Route::get('/settings', [AdminSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/profile/update', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/settings/system/update', [AdminSettingsController::class, 'updateSystemSettings'])->name('settings.system.update');
 });

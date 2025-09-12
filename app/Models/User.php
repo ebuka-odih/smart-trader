@@ -37,6 +37,7 @@ class User extends Authenticatable
         'staking_balance',
         'profit',
         'phone',
+        'profile_image',
         'country',
         'telegram',
         'avatar',
