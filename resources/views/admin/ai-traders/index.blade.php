@@ -39,7 +39,7 @@
                             <td class="px-6 py-4">
                                 <div>
                                     <div class="font-medium text-gray-900 dark:text-white">{{ $trader->name }}</div>
-                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ $trader->aiTraderPlan->name }}</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ $trader->aiTraderPlan ? $trader->aiTraderPlan->name : 'No Plan' }}</div>
                                 </div>
                             </td>
                             <td class="px-6 py-4">
