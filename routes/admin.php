@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\CopiedTradeController;
 use App\Http\Controllers\Admin\BotTradingController;
 use App\Http\Controllers\Admin\MiningController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\AiTraderPlanController;
+use App\Http\Controllers\Admin\AiTraderController;
 
 Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'admin.'], function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
@@ -93,4 +95,12 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::get('/notifications/{id}', [NotificationController::class, 'show'])->name('notifications.show');
     Route::put('/notifications/{id}', [NotificationController::class, 'update'])->name('notifications.update');
     Route::delete('/notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
+
+    // AI Trader Management
+    Route::resource('/ai-trader-plans', AiTraderPlanController::class)->names('ai-trader-plans');
+    Route::post('/ai-trader-plans/{aiTraderPlan}/toggle-status', [AiTraderPlanController::class, 'toggleStatus'])->name('ai-trader-plans.toggle-status');
+    
+    Route::resource('/ai-traders', AiTraderController::class)->names('ai-traders');
+    Route::post('/ai-traders/{aiTrader}/toggle-status', [AiTraderController::class, 'toggleStatus'])->name('ai-traders.toggle-status');
+    Route::get('/ai-traders/by-plan/{aiTraderPlan}', [AiTraderController::class, 'getByPlan'])->name('ai-traders.by-plan');
 });

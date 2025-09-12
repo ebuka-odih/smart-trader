@@ -757,6 +757,9 @@ function updateTicker(data) {
                                 <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Copy Trading</a>
                             </div>
                         </div>
+                        <a href="{{ route('ai-traders.index') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 flex items-center">
+                            <i class="fas fa-robot mr-2"></i>AI Traders
+                        </a>
                         <a href="{{ route('about') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">About</a>
                         <a href="{{ route('contact') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
                     </nav>
@@ -800,6 +803,9 @@ function updateTicker(data) {
                 </a>
                 <a href="{{ route('market') }}" class="block py-3 px-4 rounded-lg text-white">
                     <i class="fas fa-chart-bar mr-2"></i> Markets
+                </a>
+                <a href="{{ route('ai-traders.index') }}" class="block py-3 px-4 rounded-lg text-white">
+                    <i class="fas fa-robot mr-2"></i> AI Traders
                 </a>
                 <div class="mobile-dropdown">
                     <button class="w-full text-left py-3 px-4 rounded-lg flex items-center justify-between text-white">

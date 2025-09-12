@@ -22,6 +22,7 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\LiveTradingController;
 use App\Http\Controllers\OverviewController;
+use App\Http\Controllers\AiTraderController;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'pages.index')->name('index');
@@ -32,6 +33,13 @@ Route::view('contact', 'pages.contact')->name('contact');
 Route::view('terms', 'pages.terms')->name('terms');
 Route::view('privacy', 'pages.privacy')->name('privacy');
 Route::view('faq', 'pages.faq')->name('faq');
+
+// AI Trader Routes (Public)
+Route::get('ai-traders', [AiTraderController::class, 'index'])->name('ai-traders.index');
+Route::get('ai-traders/plan/{plan}', [AiTraderController::class, 'showPlan'])->name('ai-traders.plan');
+Route::get('ai-traders/trader/{trader}', [AiTraderController::class, 'showTrader'])->name('ai-traders.trader');
+Route::get('ai-traders/trader/{trader}/performance', [AiTraderController::class, 'getPerformanceData'])->name('ai-traders.performance');
+Route::get('ai-traders/trader/{trader}/stats', [AiTraderController::class, 'getTraderStats'])->name('ai-traders.stats');
 Route::get('loading', [UserController::class, 'loading'])->name('loading');
 
 // Email template preview route (for development/testing)
@@ -356,6 +364,15 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     Route::get('bot-trading/{bot}/trades', [BotTradingController::class, 'trades'])->name('botTrading.trades');
     Route::get('bot-trading/{bot}/performance', [BotTradingController::class, 'performance'])->name('botTrading.performance');
     Route::post('bot-trading/{bot}/execute', [BotTradingController::class, 'execute'])->name('botTrading.execute');
+
+    // AI Trader Routes
+    Route::get('ai-traders', [\App\Http\Controllers\User\AiTraderController::class, 'index'])->name('aiTraders.index');
+    Route::get('ai-traders/plan/{plan}', [\App\Http\Controllers\User\AiTraderController::class, 'showPlan'])->name('aiTraders.plan');
+    Route::get('ai-traders/trader/{trader}', [\App\Http\Controllers\User\AiTraderController::class, 'showTrader'])->name('aiTraders.trader');
+    Route::get('ai-traders/trader/{trader}/performance', [\App\Http\Controllers\User\AiTraderController::class, 'getPerformanceData'])->name('aiTraders.performance');
+    Route::get('ai-traders/trader/{trader}/stats', [\App\Http\Controllers\User\AiTraderController::class, 'getTraderStats'])->name('aiTraders.stats');
+    Route::post('ai-traders/trader/{trader}/activate', [\App\Http\Controllers\User\AiTraderController::class, 'activateTrader'])->name('aiTraders.activate');
+    Route::post('ai-traders/plan/{plan}/subscribe', [\App\Http\Controllers\User\AiTraderController::class, 'subscribeToPlan'])->name('aiTraders.subscribe');
 
     // Live Trading Routes
     Route::get("live-trading", [LiveTradingController::class, "index"])->name("liveTrading.index");

@@ -339,6 +339,53 @@ class User extends Authenticatable
     }
 
     /**
+     * Get AI Trader subscriptions for this user
+     */
+    public function aiTraderSubscriptions()
+    {
+        return $this->hasMany(AiTraderSubscription::class);
+    }
+
+    /**
+     * Get active AI Trader subscriptions for this user
+     */
+    public function activeAiTraderSubscriptions()
+    {
+        return $this->hasMany(AiTraderSubscription::class)
+            ->where('status', 'active')
+            ->where('expires_at', '>', now());
+    }
+
+    /**
+     * Get AI Trader activations for this user
+     */
+    public function aiTraderActivations()
+    {
+        return $this->hasMany(UserAiTrader::class);
+    }
+
+    /**
+     * Check if user has active subscription to a specific AI Trader Plan
+     */
+    public function hasActiveAiTraderSubscription($planId)
+    {
+        return $this->activeAiTraderSubscriptions()
+            ->where('ai_trader_plan_id', $planId)
+            ->exists();
+    }
+
+    /**
+     * Check if user has already activated a specific AI Trader
+     */
+    public function hasActivatedAiTrader($traderId)
+    {
+        return $this->aiTraderActivations()
+            ->where('ai_trader_id', $traderId)
+            ->where('status', 'active')
+            ->exists();
+    }
+
+    /**
      * Get currency symbol for the user's preferred currency
      */
     public function getCurrencySymbolAttribute()

@@ -89,18 +89,16 @@
                         </div>
                     </div>
 
-                    <!-- User Selection (shown when "Selected Users" is chosen) -->
-                    <div id="user-selection" class="mb-6">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Select Users</label>
-                        <div class="relative">
-                            <input type="text" id="user-search" placeholder="Search users by name or email..." 
-                                   class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                            <div id="user-search-results" class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg hidden max-h-60 overflow-y-auto"></div>
-                        </div>
-                        
-                        <!-- Selected Users Display -->
-                        <div id="selected-users" class="mt-4 space-y-2"></div>
-                    </div>
+            <!-- User Selection (shown when "Selected Users" is chosen) -->
+            <div id="user-selection" class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Select Users</label>
+                <select id="user-select" multiple class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white" size="8">
+                    @foreach($users as $user)
+                        <option value="{{ $user->id }}">{{ $user->name }} ({{ $user->email }})</option>
+                    @endforeach
+                </select>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Hold Ctrl (or Cmd on Mac) to select multiple users</p>
+            </div>
 
                     <!-- Notification Type -->
                     <div class="mb-6">
@@ -575,9 +573,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Original send notification functionality (keeping existing code)
     const recipientTypeRadios = document.querySelectorAll('input[name="recipient_type"]');
     const userSelection = document.getElementById('user-selection');
-    const userSearch = document.getElementById('user-search');
-    const userSearchResults = document.getElementById('user-search-results');
-    const selectedUsers = document.getElementById('selected-users');
+    const userSelect = document.getElementById('user-select');
     const messageTextarea = document.getElementById('message');
     const charCount = document.getElementById('char-count');
     const previewBtn = document.getElementById('preview-btn');
@@ -597,8 +593,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 userSelection.style.display = 'block';
             } else {
                 userSelection.style.display = 'none';
+                // Clear selections when switching to "All Users"
+                userSelect.selectedIndex = -1;
                 selectedUserIds = [];
-                updateSelectedUsersDisplay();
             }
         });
     });
@@ -608,80 +605,11 @@ document.addEventListener('DOMContentLoaded', function() {
         charCount.textContent = this.value.length;
     });
 
-    // User search functionality
-    userSearch.addEventListener('input', function() {
-        const query = this.value.toLowerCase();
-        if (query.length < 2) {
-            userSearchResults.classList.add('hidden');
-            return;
-        }
-
-        const filteredUsers = users.filter(user => 
-            user.name.toLowerCase().includes(query) || 
-            user.email.toLowerCase().includes(query)
-        );
-
-        if (filteredUsers.length === 0) {
-            userSearchResults.innerHTML = '<div class="p-3 text-gray-500 dark:text-gray-400">No users found</div>';
-        } else {
-            userSearchResults.innerHTML = filteredUsers.map(user => `
-                <div class="p-3 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer border-b border-gray-200 dark:border-gray-600 last:border-b-0" 
-                     onclick="selectUser(${user.id}, '${user.name}', '${user.email}')">
-                    <div class="font-medium text-gray-900 dark:text-white">${user.name}</div>
-                    <div class="text-sm text-gray-500 dark:text-gray-400">${user.email}</div>
-                </div>
-            `).join('');
-        }
-        userSearchResults.classList.remove('hidden');
+    // Handle user selection from dropdown
+    userSelect.addEventListener('change', function() {
+        selectedUserIds = Array.from(this.selectedOptions).map(option => parseInt(option.value));
+        console.log('Selected user IDs:', selectedUserIds);
     });
-
-    // Hide search results when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!userSearch.contains(e.target) && !userSearchResults.contains(e.target)) {
-            userSearchResults.classList.add('hidden');
-        }
-    });
-
-    // Select user function
-    window.selectUser = function(userId, userName, userEmail) {
-        if (!selectedUserIds.includes(userId)) {
-            selectedUserIds.push(userId);
-            updateSelectedUsersDisplay();
-        }
-        userSearch.value = '';
-        userSearchResults.classList.add('hidden');
-    };
-
-    // Remove user function
-    window.removeUser = function(userId) {
-        selectedUserIds = selectedUserIds.filter(id => id !== userId);
-        updateSelectedUsersDisplay();
-    };
-
-    // Update selected users display
-    function updateSelectedUsersDisplay() {
-        if (selectedUserIds.length === 0) {
-            selectedUsers.innerHTML = '<p class="text-gray-500 dark:text-gray-400 text-sm">No users selected</p>';
-            return;
-        }
-
-        selectedUsers.innerHTML = selectedUserIds.map(userId => {
-            const user = users.find(u => u.id === userId);
-            return `
-                <div class="flex items-center justify-between bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                    <div>
-                        <div class="font-medium text-gray-900 dark:text-white">${user.name}</div>
-                        <div class="text-sm text-gray-500 dark:text-gray-400">${user.email}</div>
-                    </div>
-                    <button onclick="removeUser(${userId})" class="text-red-500 hover:text-red-700 dark:hover:text-red-400">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            `;
-        }).join('');
-    }
 
     // Preview functionality
     previewBtn.addEventListener('click', function() {
@@ -751,9 +679,6 @@ document.addEventListener('DOMContentLoaded', function() {
         // Submit form
         this.submit();
     });
-
-    // Initialize display
-    updateSelectedUsersDisplay();
 });
 </script>
 @endpush
