@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_notifications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('user_id');
             $table->string('type'); // deposit, withdrawal, trading, copy_trade, bot_trade, system
             $table->string('title');
             $table->text('message');
@@ -21,6 +21,7 @@ return new class extends Migration
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
 
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->index(['user_id', 'read_at']);
             $table->index(['user_id', 'type']);
             $table->index('created_at');
