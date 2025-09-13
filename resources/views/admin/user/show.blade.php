@@ -264,15 +264,15 @@
                         <span class="text-sm text-gray-600 dark:text-gray-400">Staking Balance</span>
                         <span class="font-semibold text-gray-900 dark:text-white">${{ number_format($user->staking_balance, 2) }}</span>
                     </div>
-                    <div class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
-                        <span class="text-sm font-medium text-gray-900 dark:text-white">Total Balance</span>
-                        <span class="text-lg font-bold text-green-600 dark:text-green-400">${{ number_format($user->total_balance, 2) }}</span>
-                    </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-sm text-gray-600 dark:text-gray-400">Profit</span>
+                        <span class="text-sm text-gray-600 dark:text-gray-400">Profit Balance</span>
                         <span class="font-semibold {{ $user->profit >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">
                             {{ $user->profit >= 0 ? '+' : '' }}${{ number_format($user->profit, 2) }}
                         </span>
+                    </div>
+                    <div class="flex justify-between items-center border-t border-gray-200 dark:border-gray-700 pt-4">
+                        <span class="text-sm font-medium text-gray-900 dark:text-white">Total Balance</span>
+                        <span class="text-lg font-bold text-green-600 dark:text-green-400">${{ number_format($user->total_balance, 2) }}</span>
                     </div>
                 </div>
      </div>
@@ -300,26 +300,56 @@
                 @endif
 
                 <form action="{{ route('admin.updateBalance', $user->id) }}" method="POST" class="space-y-4">
-                 @csrf
+                    @csrf
+                    
+                    <!-- Wallet Type Selection -->
                     <div>
-                        <label for="balance" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Main Balance</label>
-                        <input type="number" step="0.01" name="balance" id="balance" value="{{ old('balance') }}"
+                        <label for="wallet_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Wallet Type</label>
+                        <select name="wallet_type" id="wallet_type" 
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Enter amount">
+                            onchange="updateCurrentBalance()">
+                            <option value="balance">Main Balance</option>
+                            <option value="trading_balance">Trading Balance</option>
+                            <option value="mining_balance">Mining Balance</option>
+                            <option value="referral_balance">Referral Balance</option>
+                            <option value="holding_balance">Holding Balance</option>
+                            <option value="staking_balance">Staking Balance</option>
+                            <option value="profit">Profit</option>
+                        </select>
                     </div>
+
+                    <!-- Current Balance Display -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Current Balance:</span>
+                            <span id="current-balance" class="text-lg font-bold text-gray-900 dark:text-white">
+                                ${{ number_format($user->balance, 2) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Amount Input -->
                     <div>
-                        <label for="profit" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Profit</label>
-                        <input type="number" step="0.01" name="profit" id="profit" value="{{ old('profit') }}"
+                        <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Amount</label>
+                        <input type="number" step="0.01" name="amount" id="amount" value="{{ old('amount') }}"
                             class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                            placeholder="Enter amount">
+                            placeholder="Enter amount" required>
                     </div>
+
+                    <!-- Action Buttons -->
                     <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                         <button type="submit" name="action_type" value="add" 
-                            class="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors">
+                            class="flex-1 bg-green-600 hover:bg-green-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
                             Add Funds
                         </button>
-                        <button type="submit" name="action_type" value="defund" 
-                            class="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors">
+                        <button type="submit" name="action_type" value="remove" 
+                            class="flex-1 bg-red-600 hover:bg-red-700 text-white text-sm font-medium py-2 px-3 rounded-md transition-colors flex items-center justify-center">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4m16 0l-4-4m4 4l-4 4"></path>
+                            </svg>
                             Remove Funds
                         </button>
                     </div>
@@ -398,6 +428,31 @@
 </div>
 
 <script>
+// User balance data for JavaScript
+const userBalances = {
+    balance: {{ $user->balance }},
+    trading_balance: {{ $user->trading_balance }},
+    mining_balance: {{ $user->mining_balance }},
+    referral_balance: {{ $user->referral_balance }},
+    holding_balance: {{ $user->holding_balance }},
+    staking_balance: {{ $user->staking_balance }},
+    profit: {{ $user->profit }}
+};
+
+function updateCurrentBalance() {
+    const walletType = document.getElementById('wallet_type').value;
+    const currentBalance = userBalances[walletType];
+    const balanceElement = document.getElementById('current-balance');
+    
+    if (balanceElement) {
+        balanceElement.textContent = '$' + currentBalance.toLocaleString('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+}
+
+
 function confirmDelete() {
     document.getElementById('deleteModal').classList.remove('hidden');
 }
@@ -405,5 +460,10 @@ function confirmDelete() {
 function closeDeleteModal() {
     document.getElementById('deleteModal').classList.add('hidden');
 }
+
+// Initialize the balance display on page load
+document.addEventListener('DOMContentLoaded', function() {
+    updateCurrentBalance();
+});
 </script>
 @endsection

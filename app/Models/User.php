@@ -182,7 +182,7 @@ class User extends Authenticatable
      */
     public function getTotalBalanceAttribute()
     {
-        return $this->balance + $this->trading_balance + $this->mining_balance + $this->referral_balance + $this->holding_balance + $this->staking_balance;
+        return $this->balance + $this->trading_balance + $this->mining_balance + $this->referral_balance + $this->holding_balance + $this->staking_balance + $this->profit;
     }
 
     /**
@@ -218,6 +218,11 @@ class User extends Authenticatable
         return '$' . number_format($this->staking_balance, 2);
     }
 
+    public function getFormattedProfitAttribute()
+    {
+        return '$' . number_format($this->profit, 2);
+    }
+
     /**
      * Get the user's avatar URL
      */
@@ -251,6 +256,9 @@ class User extends Authenticatable
             case 'referral':
                 $this->increment('referral_balance', $amount);
                 break;
+            case 'profit':
+                $this->increment('profit', $amount);
+                break;
             case 'holding':
             default:
                 $this->increment('balance', $amount);
@@ -269,6 +277,9 @@ class User extends Authenticatable
                 break;
             case 'referral':
                 $this->decrement('referral_balance', $amount);
+                break;
+            case 'profit':
+                $this->decrement('profit', $amount);
                 break;
             case 'holding':
             default:
@@ -289,6 +300,8 @@ class User extends Authenticatable
                 return $this->mining_balance >= $amount;
             case 'referral':
                 return $this->referral_balance >= $amount;
+            case 'profit':
+                return $this->profit >= $amount;
             case 'holding':
             default:
                 return $this->balance >= $amount;

@@ -9,7 +9,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::user()->fresh();
         
         // Get user's trades
         $trades = \App\Models\Trade::whereUserId($user->id)->latest()->get();

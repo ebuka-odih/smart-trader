@@ -390,6 +390,20 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
 
 Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
 
+// Debug route to check profit balance
+Route::get('/debug-profit', function() {
+    $user = auth()->user();
+    $freshUser = $user->fresh();
+    
+    return response()->json([
+        'user_id' => $user->id,
+        'cached_profit' => $user->profit,
+        'fresh_profit' => $freshUser->profit,
+        'raw_profit' => $freshUser->getRawOriginal('profit'),
+        'database_profit' => \DB::table('users')->where('id', $user->id)->value('profit')
+    ]);
+})->middleware(['auth']);
+
     // Test email route
     Route::get('/test-email', function () {
         try {

@@ -21,6 +21,9 @@
                     <button onclick="showTab('system')" id="system-tab" class="tab-button py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
                         System Settings
                     </button>
+                    <button onclick="showTab('livechat')" id="livechat-tab" class="tab-button py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                        Livechat Settings
+                    </button>
                 </nav>
             </div>
         </div>
@@ -33,7 +36,8 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400">Update your personal information and profile picture</p>
                 </div>
                 
-                <form id="profileForm" class="p-6 space-y-6">
+                <form id="profileForm" method="POST" action="{{ route('admin.settings.profile.update') }}" class="p-6 space-y-6">
+                    @csrf
                     <div class="flex items-center space-x-6">
                         <!-- Profile Image -->
                         <div class="flex-shrink-0">
@@ -120,7 +124,8 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400">Configure general system settings and preferences</p>
                 </div>
                 
-                <form id="systemForm" class="p-6 space-y-6">
+                <form id="systemForm" method="POST" action="{{ route('admin.settings.system.update') }}" class="p-6 space-y-6">
+                    @csrf
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="site_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Name</label>
@@ -216,12 +221,167 @@
                 </form>
             </div>
         </div>
+
+        <!-- Livechat Settings Tab -->
+        <div id="livechat-settings" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Livechat Configuration</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Configure your livechat widget settings and appearance</p>
+                </div>
+                
+                <form id="livechatForm" method="POST" action="{{ route('admin.settings.livechat.update') }}" class="p-6 space-y-6">
+                    @csrf
+                    <!-- Provider Settings -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Provider Configuration</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="provider" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Livechat Provider</label>
+                                <select id="provider" name="provider" required
+                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                    <option value="jivochat" {{ $livechatSettings['provider'] == 'jivochat' ? 'selected' : '' }}>JivoChat</option>
+                                    <option value="tawk" {{ $livechatSettings['provider'] == 'tawk' ? 'selected' : '' }}>Tawk.to</option>
+                                    <option value="intercom" {{ $livechatSettings['provider'] == 'intercom' ? 'selected' : '' }}>Intercom</option>
+                                    <option value="zendesk" {{ $livechatSettings['provider'] == 'zendesk' ? 'selected' : '' }}>Zendesk Chat</option>
+                                    <option value="other" {{ $livechatSettings['provider'] == 'other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="widget_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Widget ID / Code</label>
+                                <input type="text" id="widget_id" name="widget_id" value="{{ $livechatSettings['widget_id'] }}" required
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                       placeholder="e.g., dSWQAcZ9zr">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Enter your livechat widget ID or embed code</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Display Settings -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Display Settings</h4>
+                        
+                        <!-- Enable/Disable Toggle -->
+                        <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                            <div>
+                                <h5 class="text-sm font-medium text-gray-900 dark:text-white">Enable Livechat</h5>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Show livechat widget on the website</p>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="is_enabled" name="is_enabled" value="1" {{ $livechatSettings['is_enabled'] ? 'checked' : '' }} class="sr-only peer">
+                                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                            </label>
+                        </div>
+
+                        <!-- Page Visibility Settings -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-900 dark:text-white">Dashboard</h5>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Show on user dashboard</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="show_on_dashboard" name="show_on_dashboard" value="1" {{ $livechatSettings['show_on_dashboard'] ? 'checked' : '' }} class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-900 dark:text-white">Support Page</h5>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Show on support page</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="show_on_support_page" name="show_on_support_page" value="1" {{ $livechatSettings['show_on_support_page'] ? 'checked' : '' }} class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-900 dark:text-white">Contact Page</h5>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Show on contact page</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="show_on_contact_page" name="show_on_contact_page" value="1" {{ $livechatSettings['show_on_contact_page'] ? 'checked' : '' }} class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                <div>
+                                    <h5 class="text-sm font-medium text-gray-900 dark:text-white">Homepage</h5>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Show on homepage</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="show_on_homepage" name="show_on_homepage" value="1" {{ $livechatSettings['show_on_homepage'] ? 'checked' : '' }} class="sr-only peer">
+                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Widget Position and Color -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="widget_position" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Widget Position</label>
+                                <select id="widget_position" name="widget_position" required
+                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                                    <option value="bottom-right" {{ $livechatSettings['widget_position'] == 'bottom-right' ? 'selected' : '' }}>Bottom Right</option>
+                                    <option value="bottom-left" {{ $livechatSettings['widget_position'] == 'bottom-left' ? 'selected' : '' }}>Bottom Left</option>
+                                    <option value="top-right" {{ $livechatSettings['widget_position'] == 'top-right' ? 'selected' : '' }}>Top Right</option>
+                                    <option value="top-left" {{ $livechatSettings['widget_position'] == 'top-left' ? 'selected' : '' }}>Top Left</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label for="widget_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Widget Color</label>
+                                <div class="flex items-center space-x-3">
+                                    <input type="color" id="widget_color" name="widget_color" value="{{ $livechatSettings['widget_color'] }}" required
+                                           class="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer">
+                                    <input type="text" value="{{ $livechatSettings['widget_color'] }}" readonly
+                                           class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Messages -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Messages</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="welcome_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Welcome Message</label>
+                                <textarea id="welcome_message" name="welcome_message" rows="3"
+                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                          placeholder="Hello! How can we help you today?">{{ $livechatSettings['welcome_message'] }}</textarea>
+                            </div>
+                            
+                            <div>
+                                <label for="offline_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Offline Message</label>
+                                <textarea id="offline_message" name="offline_message" rows="3"
+                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                          placeholder="Our support team is currently offline. Please leave a message and we'll get back to you soon.">{{ $livechatSettings['offline_message'] }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="flex justify-end">
+                        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                            Save Livechat Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 
 @push('scripts')
 <script>
+document.addEventListener('DOMContentLoaded', function() {
 // Tab switching functionality
 function showTab(tabName) {
     // Hide all tab contents
@@ -342,6 +502,65 @@ document.getElementById('systemForm').addEventListener('submit', function(e) {
         } else {
             alert('Error updating system settings');
         }
+    });
+
+    // Livechat form submission
+    document.getElementById('livechatForm').addEventListener('submit', function(e) {
+        console.log('Livechat form submitted');
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Convert checkbox values to boolean
+        data.is_enabled = document.getElementById('is_enabled').checked;
+        data.show_on_dashboard = document.getElementById('show_on_dashboard').checked;
+        data.show_on_support_page = document.getElementById('show_on_support_page').checked;
+        data.show_on_contact_page = document.getElementById('show_on_contact_page').checked;
+        data.show_on_homepage = document.getElementById('show_on_homepage').checked;
+        
+        console.log('Sending data:', data);
+        
+        fetch('{{ route("admin.settings.livechat.update") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (typeof Swal !== 'undefined') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: data.message
+                    });
+                } else {
+                    alert(data.message);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'An error occurred while updating livechat settings'
+                });
+            } else {
+                alert('Error updating livechat settings');
+            }
+        });
+    });
+
+    // Color picker synchronization
+    document.getElementById('widget_color').addEventListener('input', function(e) {
+        const textInput = e.target.nextElementSibling;
+        textInput.value = e.target.value;
     });
 });
 </script>

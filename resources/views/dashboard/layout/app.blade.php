@@ -1040,6 +1040,61 @@
 @yield('scripts')
 </script>
 
+<!-- Global Livechat Widget -->
+@php
+    $livechatService = app(\App\Services\LivechatService::class);
+    $showGlobalLivechat = $livechatService->shouldShowOnPage('dashboard');
+    $livechatConfig = $livechatService->getWidgetConfig();
+    $widgetScript = $livechatService->getWidgetScript();
+    $positionClass = $livechatService->getPositionClass();
+@endphp
+
+@if($showGlobalLivechat && $widgetScript)
+<script src="{{ $widgetScript }}" async></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    @if($livechatConfig['provider'] === 'jivochat')
+    // Initialize JivoChat widget
+    if (typeof jivo_api !== 'undefined') {
+        jivo_api.setUserToken('{{ auth()->user()->id }}');
+        jivo_api.setContactInfo({
+            name: '{{ auth()->user()->name }}',
+            email: '{{ auth()->user()->email }}'
+        });
+    }
+    @elseif($livechatConfig['provider'] === 'tawk')
+    // Initialize Tawk.to widget
+    if (typeof Tawk_API !== 'undefined') {
+        Tawk_API.setAttributes({
+            name: '{{ auth()->user()->name }}',
+            email: '{{ auth()->user()->email }}',
+            hash: '{{ auth()->user()->id }}'
+        });
+    }
+    @elseif($livechatConfig['provider'] === 'intercom')
+    // Initialize Intercom widget
+    if (typeof Intercom !== 'undefined') {
+        Intercom('boot', {
+            user_id: '{{ auth()->user()->id }}',
+            name: '{{ auth()->user()->name }}',
+            email: '{{ auth()->user()->email }}'
+        });
+    }
+    @endif
+
+    @if($livechatConfig['custom_js'])
+    {!! $livechatConfig['custom_js'] !!}
+    @endif
+});
+</script>
+
+@if($livechatConfig['custom_css'])
+<style>
+{!! $livechatConfig['custom_css'] !!}
+</style>
+@endif
+@endif
+
 <script src="{{ asset('front/livewire/livewire5dd3.js') }}"   data-csrf="QHTgDfeSDEhGixs61ktyfaAnqYfyNU0Xv8qcvRbs" data-update-uri="/livewire/update" data-navigate-once="true"></script>
 
 </body>

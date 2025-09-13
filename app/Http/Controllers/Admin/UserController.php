@@ -67,23 +67,49 @@ class UserController extends Controller
     public function updateBalance(Request $request, $id)
     {
         $request->validate([
-            'balance' => 'nullable|numeric|min:0',
-            'profit' => 'nullable|numeric|min:0',
-            'action_type' => 'required|in:add,defund',
+            'wallet_type' => 'required|in:balance,trading_balance,mining_balance,referral_balance,holding_balance,staking_balance,profit',
+            'amount' => 'required|numeric|min:0',
+            'action_type' => 'required|in:add,remove,reset',
         ]);
 
         $user = User::findOrFail($id);
-        if ($request->action_type == 'add')
-        {
-            $user->balance += $request->balance;
-            $user->profit += $request->profit;
-            $user->save();
-            return redirect()->back()->with('success', 'User Account Updated Successfully');
+        $walletType = $request->wallet_type;
+        $amount = $request->amount;
+        $actionType = $request->action_type;
+
+        // Get current balance
+        $currentBalance = $user->$walletType;
+
+        // Validate that we don't go below zero when removing funds
+        if ($actionType === 'remove' && $currentBalance < $amount) {
+            return redirect()->back()->with('error', 'Insufficient balance. Cannot remove more than the current balance.');
         }
-         $user->balance -= $request->balance;
-         $user->profit -= $request->profit;
-         $user->save();
-        return redirect()->back()->with('success', 'User Account Updated Successfully');
+
+        // Update the balance
+        if ($actionType === 'add') {
+            $user->$walletType += $amount;
+            $message = "Successfully added $" . number_format($amount, 2) . " to " . ucwords(str_replace('_', ' ', $walletType));
+        } elseif ($actionType === 'remove') {
+            $user->$walletType -= $amount;
+            $message = "Successfully removed $" . number_format($amount, 2) . " from " . ucwords(str_replace('_', ' ', $walletType));
+        } elseif ($actionType === 'reset') {
+            $user->$walletType = $amount;
+            $message = "Successfully reset " . ucwords(str_replace('_', ' ', $walletType)) . " to $" . number_format($amount, 2);
+        }
+
+        $user->save();
+        
+        // Debug: Log the update
+        \Log::info('Admin Profit Balance Update', [
+            'user_id' => $user->id,
+            'wallet_type' => $walletType,
+            'action_type' => $actionType,
+            'amount' => $amount,
+            'new_profit_balance' => $user->fresh()->profit,
+            'updated_by' => auth()->id()
+        ]);
+
+        return redirect()->back()->with('success', $message);
     }
 
    public function deleteUser($id)
