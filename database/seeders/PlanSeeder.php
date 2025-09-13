@@ -12,8 +12,8 @@ class PlanSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear existing plans
-        Plan::truncate();
+        // Clear existing plans (use delete instead of truncate to avoid foreign key issues)
+        Plan::query()->delete();
 
         // Trading Plans
         Plan::create([
