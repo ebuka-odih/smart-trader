@@ -34,7 +34,8 @@ return new class extends Migration
             $table->timestamp('completed_at')->nullable();
             $table->decimal('profit_loss', 15, 8)->nullable();
             $table->decimal('profit_loss_percentage', 5, 2)->nullable();
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->uuid('created_by');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->boolean('is_premium')->default(false);
             $table->json('tags')->nullable(); // array of tags
             $table->enum('market_conditions', ['bullish', 'bearish', 'sideways'])->nullable();

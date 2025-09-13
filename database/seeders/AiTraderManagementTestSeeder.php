@@ -58,4 +58,5 @@ class AiTraderManagementTestSeeder extends Seeder
         $this->command->info("Total Investment: $" . number_format($totalInvestment, 2));
         $this->command->info("Total P&L: $" . number_format($totalProfitLoss, 2));
     }
+    
 }

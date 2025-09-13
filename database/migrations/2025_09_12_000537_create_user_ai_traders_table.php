@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('user_ai_traders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('ai_trader_id')->constrained()->onDelete('cascade');
             $table->foreignId('ai_trader_plan_id')->constrained()->onDelete('cascade');
             $table->decimal('investment_amount', 15, 2);

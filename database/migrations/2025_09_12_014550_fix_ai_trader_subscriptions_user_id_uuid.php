@@ -143,8 +143,8 @@ return new class extends Migration
         }
 
         Schema::table('ai_trader_subscriptions', function (Blueprint $table) {
-            // Add back the integer user_id column
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            // Add back the UUID user_id column
+            $table->foreignUuid('user_id')->constrained()->onDelete('cascade');
             $table->index(['user_id', 'status']);
         });
     }

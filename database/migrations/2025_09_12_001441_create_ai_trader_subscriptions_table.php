@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('ai_trader_subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('ai_trader_plan_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['active', 'paused', 'cancelled', 'expired'])->default('active');
             $table->decimal('monthly_fee', 10, 2);
