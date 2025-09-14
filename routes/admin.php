@@ -117,4 +117,5 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::post('/settings/profile/update', [AdminSettingsController::class, 'updateProfile'])->name('settings.profile.update');
     Route::post('/settings/system/update', [AdminSettingsController::class, 'updateSystemSettings'])->name('settings.system.update');
     Route::post('/settings/livechat/update', [AdminSettingsController::class, 'updateLivechatSettings'])->name('settings.livechat.update');
+    Route::post('/settings/website/update', [AdminSettingsController::class, 'updateWebsiteSettings'])->name('settings.website.update');
 });

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ env('APP_NAME') }} - Dashboard</title>
+    <title>{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }} - Dashboard</title>
   <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
     
     <!-- Tailwind CSS CDN for immediate styling -->
@@ -463,7 +463,24 @@
                                 <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                             </svg>
                         </button>
-                        <h1 class="text-xl font-semibold text-white">{{ env('APP_NAME') }}</h1>
+                        <div class="flex items-center">
+                            @if(\App\Helpers\WebsiteSettingsHelper::hasTextLogo())
+                                <!-- Text Logo -->
+                                <div class="h-16 flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
+                                    <span class="text-white font-bold text-xl">{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}</span>
+                                </div>
+                            @elseif(\App\Helpers\WebsiteSettingsHelper::hasImageLogo())
+                                <!-- Image Logo -->
+                                <img src="{{ \App\Helpers\WebsiteSettingsHelper::getLogoUrl() }}" 
+                                     alt="{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}" 
+                                     class="h-16 w-auto object-contain">
+                            @else
+                                <!-- Site Name as Logo (fallback) -->
+                                <div class="h-16 flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg">
+                                    <span class="text-white font-bold text-xl">{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}</span>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                     
                     <!-- Right side - Notification and user profile -->

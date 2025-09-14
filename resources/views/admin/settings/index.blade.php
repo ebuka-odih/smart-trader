@@ -11,6 +11,19 @@
             <p class="text-gray-600 dark:text-gray-400">Manage your profile and system settings</p>
         </div>
 
+        <!-- Session Messages -->
+        @if(session('success'))
+            <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('success') }}</span>
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <span class="block sm:inline">{{ session('error') }}</span>
+            </div>
+        @endif
+
         <!-- Settings Tabs -->
         <div class="mb-6">
             <div class="border-b border-gray-200 dark:border-gray-700">
@@ -23,6 +36,9 @@
                     </button>
                     <button onclick="showTab('livechat')" id="livechat-tab" class="tab-button py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
                         Livechat Settings
+                    </button>
+                    <button onclick="showTab('website')" id="website-tab" class="tab-button py-2 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                        Website Settings
                     </button>
                 </nav>
             </div>
@@ -375,35 +391,180 @@
                 </form>
             </div>
         </div>
+
+        <!-- Website Settings Tab -->
+        <div id="website-settings" class="tab-content hidden">
+            <div class="bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">Website Configuration</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Manage your website appearance and branding settings</p>
+                </div>
+                
+                <form id="websiteForm" method="POST" action="{{ route('admin.settings.website.update') }}" class="p-6 space-y-6" enctype="multipart/form-data">
+                    @csrf
+                    
+                    <!-- Site Logo Section -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Site Logo</h4>
+                        
+                        <!-- Current Logo Display -->
+                        <div class="flex items-center space-x-6">
+                            <div class="flex-shrink-0">
+                                <div class="relative">
+                                    <img id="logo-preview" src="{{ \App\Helpers\WebsiteSettingsHelper::getLogoUrl() }}" 
+                                         alt="Site Logo" class="w-24 h-24 object-contain border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700">
+                                    <div class="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 rounded-lg transition-all duration-200 flex items-center justify-center">
+                                        <span class="text-white text-xs opacity-0 hover:opacity-100 transition-opacity">Change</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <label for="site_logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Upload New Logo</label>
+                                <input type="file" id="site_logo" name="site_logo" accept="image/*" 
+                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-700 dark:file:text-gray-300">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Recommended size: 200x60px. Supported formats: PNG, JPG, SVG</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Site Information Section -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Site Information</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="website_site_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Name</label>
+                                <input type="text" id="website_site_name" name="site_name" value="{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}" 
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label for="site_tagline" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Site Tagline</label>
+                                <input type="text" id="site_tagline" name="site_tagline" value="{{ \App\Helpers\WebsiteSettingsHelper::getSiteTagline() }}" 
+                                       placeholder="Your site tagline or description"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            </div>
+                        </div>
+                        
+                        <!-- Text Logo Field -->
+                        <div class="mt-6">
+                            <label for="text_logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Text Logo</label>
+                            <input type="text" id="text_logo" name="text_logo" value="{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}" 
+                                   placeholder="Enter text logo (e.g., CB, CryptoBroker, etc.)"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">If set, this text will be used as logo instead of image logo. Leave empty to use image logo or site name.</p>
+                        </div>
+                    </div>
+
+                    <!-- Branding Colors Section -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Branding Colors</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="primary_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Primary Color</label>
+                                <div class="flex items-center space-x-3">
+                                    <input type="color" id="primary_color" name="primary_color" value="{{ \App\Helpers\WebsiteSettingsHelper::getPrimaryColor() }}" 
+                                           class="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer">
+                                    <input type="text" value="{{ \App\Helpers\WebsiteSettingsHelper::getPrimaryColor() }}" readonly
+                                           class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label for="secondary_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Secondary Color</label>
+                                <div class="flex items-center space-x-3">
+                                    <input type="color" id="secondary_color" name="secondary_color" value="{{ \App\Helpers\WebsiteSettingsHelper::getSecondaryColor() }}" 
+                                           class="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer">
+                                    <input type="text" value="{{ \App\Helpers\WebsiteSettingsHelper::getSecondaryColor() }}" readonly
+                                           class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Social Media Links Section -->
+                    <div class="space-y-6">
+                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Social Media Links</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="facebook_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Facebook URL</label>
+                                <input type="url" id="facebook_url" name="facebook_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['facebook_url'] ?? '' }}" 
+                                       placeholder="https://facebook.com/yourpage"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label for="twitter_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Twitter URL</label>
+                                <input type="url" id="twitter_url" name="twitter_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['twitter_url'] ?? '' }}" 
+                                       placeholder="https://twitter.com/yourhandle"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label for="linkedin_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn URL</label>
+                                <input type="url" id="linkedin_url" name="linkedin_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['linkedin_url'] ?? '' }}" 
+                                       placeholder="https://linkedin.com/company/yourcompany"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            </div>
+                            
+                            <div>
+                                <label for="instagram_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Instagram URL</label>
+                                <input type="url" id="instagram_url" name="instagram_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['instagram_url'] ?? '' }}" 
+                                       placeholder="https://instagram.com/yourhandle"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <div class="flex justify-end">
+                        <button type="submit" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+                            Save Website Settings
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 
+<script>
+// Tab switching functionality - Global function (defined immediately)
+function showTab(tabName) {
+    try {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.add('hidden');
+        });
+        
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.classList.remove('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+            button.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
+        });
+        
+        // Show selected tab content
+        const tabContent = document.getElementById(tabName + '-settings');
+        if (tabContent) {
+            tabContent.classList.remove('hidden');
+        }
+        
+        // Add active class to selected tab
+        const activeTab = document.getElementById(tabName + '-tab');
+        if (activeTab) {
+            activeTab.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
+            activeTab.classList.add('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
+        }
+    } catch (error) {
+        console.error('Error switching tab:', error);
+    }
+}
+</script>
+
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-// Tab switching functionality
-function showTab(tabName) {
-    // Hide all tab contents
-    document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.add('hidden');
-    });
-    
-    // Remove active class from all tabs
-    document.querySelectorAll('.tab-button').forEach(button => {
-        button.classList.remove('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
-        button.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
-    });
-    
-    // Show selected tab content
-    document.getElementById(tabName + '-settings').classList.remove('hidden');
-    
-    // Add active class to selected tab
-    const activeTab = document.getElementById(tabName + '-tab');
-    activeTab.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'hover:border-gray-300', 'dark:text-gray-400', 'dark:hover:text-gray-300');
-    activeTab.classList.add('border-blue-500', 'text-blue-600', 'dark:text-blue-400');
-}
 
+document.addEventListener('DOMContentLoaded', function() {
 // Profile image preview
 document.getElementById('profile_image').addEventListener('change', function(e) {
     const file = e.target.files[0];
@@ -562,6 +723,32 @@ document.getElementById('systemForm').addEventListener('submit', function(e) {
         const textInput = e.target.nextElementSibling;
         textInput.value = e.target.value;
     });
+
+    // Website logo preview
+    document.getElementById('site_logo').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('logo-preview').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Website color picker synchronization
+    document.getElementById('primary_color').addEventListener('input', function(e) {
+        const textInput = e.target.nextElementSibling;
+        textInput.value = e.target.value;
+    });
+
+    document.getElementById('secondary_color').addEventListener('input', function(e) {
+        const textInput = e.target.nextElementSibling;
+        textInput.value = e.target.value;
+    });
+
+    // Website form submission - Let it submit normally for redirect
+    // No need to prevent default or handle with AJAX since we're redirecting
 });
 </script>
 @endpush

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\WebsiteSettingsHelper;
 
 class DashboardController extends Controller
 {
@@ -90,6 +91,7 @@ class DashboardController extends Controller
             'recentTransactions' => $recentTransactions,
             'copyTrades' => $copyTrades,
             'activeCopyTrades' => $activeCopyTrades,
+            'websiteSettings' => WebsiteSettingsHelper::getSettings(),
         ];
         
         return view('dashboard.index', $dashboardData);

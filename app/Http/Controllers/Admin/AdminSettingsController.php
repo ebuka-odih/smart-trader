@@ -101,6 +101,51 @@ class AdminSettingsController extends Controller
         }
     }
 
+    public function updateWebsiteSettings(Request $request)
+    {
+        $request->validate([
+            'site_name' => 'required|string|max:255',
+            'site_tagline' => 'nullable|string|max:500',
+            'site_logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'primary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'secondary_color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'facebook_url' => 'nullable|url|max:255',
+            'twitter_url' => 'nullable|url|max:255',
+            'linkedin_url' => 'nullable|url|max:255',
+            'instagram_url' => 'nullable|url|max:255',
+        ]);
+
+        $settings = $request->except(['site_logo', '_token']);
+        
+        // Handle logo upload
+        if ($request->hasFile('site_logo')) {
+            // Delete old logo if exists
+            $oldSettings = \App\Helpers\WebsiteSettingsHelper::getSettings();
+            if (isset($oldSettings['site_logo']) && Storage::disk('public')->exists($oldSettings['site_logo'])) {
+                Storage::disk('public')->delete($oldSettings['site_logo']);
+            }
+            
+            $settings['site_logo'] = $request->file('site_logo')->store('website', 'public');
+        }
+        
+        // Store website settings in JSON file
+        $settingsFile = 'website_settings.json';
+        
+        // Add timestamp
+        $settings['updated_at'] = now()->toISOString();
+        $settings['updated_by'] = auth()->user()->id;
+        
+        try {
+            Storage::put($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
+            
+            return redirect()->back()->with('success', 'Website settings updated successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error saving website settings', ['error' => $e->getMessage()]);
+            
+            return redirect()->back()->with('error', 'Error saving settings: ' . $e->getMessage());
+        }
+    }
+
     private function getSystemSettings()
     {
         return [
@@ -157,4 +202,5 @@ class AdminSettingsController extends Controller
         
         return $settings;
     }
+
 }
