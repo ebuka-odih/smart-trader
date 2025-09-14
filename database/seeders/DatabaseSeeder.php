@@ -20,5 +20,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CopyTraderSeeder::class);
         $this->call(AssetSeeder::class);
         $this->call(PlanSeeder::class);
+        $this->call(AiTraderPlanSeeder::class);
+        $this->call(AiTraderSeeder::class);
     }
 }
