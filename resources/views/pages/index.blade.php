@@ -1288,67 +1288,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
-<!-- Mobile App Section -->
-<div class="py-16 bg-[#0A0714]">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-col lg:flex-row items-center">
-            <div class="lg:w-1/2 mb-10 lg:mb-0 order-2 lg:order-1">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6">Trade on the go.<br><span class="text-[#2FE6DE]">Anywhere, anytime.</span></h2>
-                <p class="text-gray-300 text-lg mb-8 max-w-xl">
-                    Download our mobile app to trade stocks, manage your portfolio, and stay updated with market trends on the go.
-                </p>
-
-                <div class="flex flex-row gap-4 mb-8 justify-center sm:justify-start">
-                    <a href="#" class="flex items-center justify-center bg-[#1A1428] rounded-xl px-4 py-3 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-colors w-1/2 sm:w-auto">
-                        <i class="fab fa-apple text-xl sm:text-2xl mr-2 sm:mr-3"></i>
-                        <div class="text-left">
-                            <div class="text-xs text-gray-400">Download on the</div>
-                            <div class="text-sm sm:text-base font-medium">App Store</div>
-                        </div>
-                    </a>
-                    <a href="#" class="flex items-center justify-center bg-[#1A1428] rounded-xl px-4 py-3 border border-[#2FE6DE]/10 hover:border-[#2FE6DE]/30 transition-colors w-1/2 sm:w-auto">
-                        <i class="fab fa-google-play text-xl sm:text-2xl mr-2 sm:mr-3"></i>
-                        <div class="text-left">
-                            <div class="text-xs text-gray-400">Get it on</div>
-                            <div class="text-sm sm:text-base font-medium">Google Play</div>
-                        </div>
-                    </a>
-                </div>
-
-                <div class="flex items-center">
-                    <div class="flex -space-x-2">
-                        <div class="w-10 h-10 rounded-full border-2 border-[#0A0714] bg-[#1A1428] flex items-center justify-center overflow-hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#2FE6DE">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                            </svg>
-                        </div>
-                        <div class="w-10 h-10 rounded-full border-2 border-[#0A0714] bg-[#1A1428] flex items-center justify-center overflow-hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#2FE6DE">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                            </svg>
-                        </div>
-                        <div class="w-10 h-10 rounded-full border-2 border-[#0A0714] bg-[#1A1428] flex items-center justify-center overflow-hidden">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#2FE6DE">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                            </svg>
-                        </div>
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-[#2FE6DE] font-medium">1M+ Active Users</div>
-                        <div class="text-gray-400 text-sm">Join our growing community</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="lg:w-1/2 relative order-1 lg:order-2">
-                <div class="relative z-10 animate-float">
-                                           <img src="{{ asset('front/images/default.svg') }}" alt="Mobile App Mockup" class="mx-auto max-w-xs h-auto w-full">
-                </div>
-                <div class="absolute top-1/4 right-1/4 w-64 h-64 bg-[#2FE6DE]/10 rounded-full filter blur-3xl -z-10"></div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Testimonials Section -->
 <div class="py-16 bg-gradient-to-b from-[#0A0714] to-[#0D091C]">
