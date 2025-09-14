@@ -13,8 +13,13 @@ class AiTraderPlanSeeder extends Seeder
      */
     public function run(): void
     {
-        // Disable foreign key checks temporarily (SQLite syntax)
-        \DB::statement('PRAGMA foreign_keys = OFF;');
+        // Disable foreign key checks temporarily
+        $driver = \DB::getDriverName();
+        if ($driver === 'mysql') {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        } elseif ($driver === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = OFF;');
+        }
         
         // Clear existing plans and related data
         // We need to delete in order due to foreign key constraints
@@ -24,7 +29,11 @@ class AiTraderPlanSeeder extends Seeder
         AiTraderPlan::truncate();
         
         // Re-enable foreign key checks
-        \DB::statement('PRAGMA foreign_keys = ON;');
+        if ($driver === 'mysql') {
+            \DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        } elseif ($driver === 'sqlite') {
+            \DB::statement('PRAGMA foreign_keys = ON;');
+        }
 
         $plans = [
             [
