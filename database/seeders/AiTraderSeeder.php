@@ -11,7 +11,7 @@ class AiTraderSeeder extends Seeder
 {
     public function run(): void
     {
-        AiTrader::truncate();
+        // AiTrader::truncate(); // Already handled by AiTraderPlanSeeder
 
         $plans = AiTraderPlan::all();
 

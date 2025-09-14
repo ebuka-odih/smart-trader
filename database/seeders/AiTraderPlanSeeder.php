@@ -13,7 +13,11 @@ class AiTraderPlanSeeder extends Seeder
      */
     public function run(): void
     {
-        // Clear existing plans
+        // Clear existing plans and related data
+        // We need to delete in order due to foreign key constraints
+        \App\Models\UserAiTrader::truncate();
+        \App\Models\AiTraderSubscription::truncate();
+        \App\Models\AiTrader::truncate();
         AiTraderPlan::truncate();
 
         $plans = [
