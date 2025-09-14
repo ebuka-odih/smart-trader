@@ -738,7 +738,20 @@ function updateTicker(data) {
             <div class="flex justify-between items-center h-16">
                 <div class="flex items-center">
                     <a href="{{ route('index') }}" class="flex items-center">
-                        <span class="text-xl font-bold text-[#2FE6DE]">{{ config('app.name') }}</span>
+                        @if(\App\Helpers\WebsiteSettingsHelper::hasTextLogo())
+                            <!-- Text Logo -->
+                            <div class="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg mr-3" style="height: 5rem;">
+                                <span class="text-white font-bold text-2xl">{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}</span>
+                            </div>
+                        @elseif(\App\Helpers\WebsiteSettingsHelper::hasImageLogo())
+                            <!-- Image Logo -->
+                            <img src="{{ \App\Helpers\WebsiteSettingsHelper::getLogoUrl() }}" 
+                                 alt="{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}" 
+                                 class="w-auto object-contain mr-3" style="height: 5rem;">
+                        @else
+                            <!-- Site Name as Logo (fallback) -->
+                            <span class="text-xl font-bold text-[#2FE6DE]">{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}</span>
+                        @endif
                     </a>
                     <nav class="hidden lg:flex ml-10 space-x-6">
                         <a href="{{ route('index') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 active">Home</a>
@@ -755,11 +768,11 @@ function updateTicker(data) {
                                 <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Margin</a>
                                 <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Bot Trading</a>
                                 <a href="{{ route('login') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE]">Copy Trading</a>
+                                <a href="{{ route('ai-traders.index') }}" class="block px-4 py-2 hover:bg-[#1A1428] text-white hover:text-[#2FE6DE] flex items-center">
+                                    <i class="fas fa-robot mr-2"></i>AI Traders
+                                </a>
                             </div>
                         </div>
-                        <a href="{{ route('ai-traders.index') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 flex items-center">
-                            <i class="fas fa-robot mr-2"></i>AI Traders
-                        </a>
                         <a href="{{ route('about') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">About</a>
                         <a href="{{ route('contact') }}" class="navbar-item text-white hover:text-[#2FE6DE] transition-colors py-2 ">Contact</a>
                     </nav>
