@@ -13,12 +13,18 @@ class AiTraderPlanSeeder extends Seeder
      */
     public function run(): void
     {
+        // Disable foreign key checks temporarily (SQLite syntax)
+        \DB::statement('PRAGMA foreign_keys = OFF;');
+        
         // Clear existing plans and related data
         // We need to delete in order due to foreign key constraints
         \App\Models\UserAiTrader::truncate();
         \App\Models\AiTraderSubscription::truncate();
         \App\Models\AiTrader::truncate();
         AiTraderPlan::truncate();
+        
+        // Re-enable foreign key checks
+        \DB::statement('PRAGMA foreign_keys = ON;');
 
         $plans = [
             [
