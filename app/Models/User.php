@@ -46,6 +46,7 @@ class User extends Authenticatable
         'currency',
         'trader',
         'trade_count',
+        'email_verified_at',
         'verification_code',
         'verification_code_expires_at',
         // KYC fields

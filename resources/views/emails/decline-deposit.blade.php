@@ -58,6 +58,20 @@
 </head>
 <body>
     <div class="header">
+        @if(\App\Helpers\WebsiteSettingsHelper::hasTextLogo())
+            <!-- Text Logo -->
+            <div style="display: inline-block; background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%); color: white; padding: 12px 24px; border-radius: 8px; margin-bottom: 16px;">
+                <span style="font-size: 24px; font-weight: bold;">{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}</span>
+            </div>
+        @elseif(\App\Helpers\WebsiteSettingsHelper::hasImageLogo())
+            <!-- Image Logo -->
+            <img src="{{ \App\Helpers\WebsiteSettingsHelper::getLogoUrl() }}" 
+                 alt="{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}" 
+                 style="height: 60px; width: auto; margin-bottom: 16px;">
+        @else
+            <!-- Site Name as Logo (fallback) -->
+            <h1>{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}</h1>
+        @endif
         <h1>Deposit Declined</h1>
     </div>
     

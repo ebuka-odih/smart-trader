@@ -79,6 +79,19 @@
                                 </svg>
                                 Verified
                             </span>
+                            <div class="mt-2">
+                                <form method="POST" action="{{ route('admin.user.unverifyEmail', $user->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            onclick="return confirm('Are you sure you want to remove email verification for this user?')"
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                        </svg>
+                                        Remove Verification
+                                    </button>
+                                </form>
+                            </div>
                         @else
                             <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300 mt-1">
                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -86,6 +99,19 @@
                                 </svg>
                                 Unverified
                             </span>
+                            <div class="mt-2">
+                                <form method="POST" action="{{ route('admin.user.verifyEmail', $user->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit" 
+                                            onclick="return confirm('Are you sure you want to manually verify this user\\'s email?')"
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-600 hover:text-green-800 dark:text-green-400 dark:hover:text-green-300">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Verify Email
+                                    </button>
+                                </form>
+                            </div>
                         @endif
                     </div>
                     <div>

@@ -133,4 +133,30 @@ class UserController extends Controller
        return redirect()->back()->with('success', "User account has been {$statusText} successfully");
    }
 
+   public function verifyEmail($id)
+   {
+       $user = User::findOrFail($id);
+       
+       // Mark email as verified
+       $user->update([
+           'email_verified_at' => now(),
+           'verification_code' => null,
+           'verification_code_expires_at' => null,
+       ]);
+       
+       return redirect()->back()->with('success', 'User email has been manually verified successfully.');
+   }
+
+   public function unverifyEmail($id)
+   {
+       $user = User::findOrFail($id);
+       
+       // Remove email verification
+       $user->update([
+           'email_verified_at' => null,
+       ]);
+       
+       return redirect()->back()->with('success', 'User email verification has been removed.');
+   }
+
 }

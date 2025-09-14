@@ -18,7 +18,23 @@
     <div class="container my-5">
         <div class="card shadow-sm">
             <div class="card-header bg-black text-white">
-                <h2 class="text-center">New Deposit</h2>
+                <div class="text-center mb-3">
+                    @if(\App\Helpers\WebsiteSettingsHelper::hasTextLogo())
+                        <!-- Text Logo -->
+                        <div style="display: inline-block; background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%); color: white; padding: 8px 16px; border-radius: 6px;">
+                            <span style="font-size: 20px; font-weight: bold;">{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}</span>
+                        </div>
+                    @elseif(\App\Helpers\WebsiteSettingsHelper::hasImageLogo())
+                        <!-- Image Logo -->
+                        <img src="{{ \App\Helpers\WebsiteSettingsHelper::getLogoUrl() }}" 
+                             alt="{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}" 
+                             style="height: 40px; width: auto;">
+                    @else
+                        <!-- Site Name as Logo (fallback) -->
+                        <h3 style="margin: 0; color: white;">{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}</h3>
+                    @endif
+                </div>
+                <h2 class="text-center">New Withdrawal</h2>
             </div>
             <div class="card-body">
                 <p>Withdrawal Details</p>
