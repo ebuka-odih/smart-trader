@@ -457,7 +457,10 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Max Open Trades</label>
-                                <input type="number" name="max_open_trades" min="1" max="50" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5">
+                                <input type="number" name="max_open_trades" min="1" max="50" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="5" oninput="if(this.value > 50) this.value = 50; if(this.value < 1) this.value = 1;">
+                                <div class="mt-1 text-xs text-yellow-400">
+                                    ⚠️ Maximum allowed: 50 trades
+                                </div>
                             </div>
                             <div class="flex items-center space-x-4">
                                 <label class="flex items-center">
@@ -759,6 +762,17 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        // Validate max open trades
+        const maxOpenTrades = parseInt(formData.get('max_open_trades'));
+        if (maxOpenTrades > 50) {
+            showErrorModal('Validation Error', 'Max Open Trades cannot exceed 50.');
+            return;
+        }
+        if (maxOpenTrades < 1) {
+            showErrorModal('Validation Error', 'Max Open Trades must be at least 1.');
+            return;
+        }
+
         // Validate investment amount
         const maxInvestment = parseFloat(formData.get('max_investment'));
         if (maxInvestment < maxTradeAmount) {
@@ -787,12 +801,22 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Response status:', response.status);
             console.log('Response headers:', response.headers);
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             const result = await response.json();
             console.log('Response result:', result);
+
+            if (!response.ok) {
+                let errorMessage = 'Failed to create bot';
+                
+                if (result.message) {
+                    errorMessage = result.message;
+                } else if (result.errors) {
+                    const errorList = Object.values(result.errors).flat();
+                    errorMessage = errorList.join(', ');
+                }
+                
+                showErrorModal('Validation Error', errorMessage);
+                return;
+            }
 
             if (result.success) {
                 showSuccessModal('Bot Created!', result.message);

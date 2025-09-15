@@ -76,6 +76,7 @@ class BotTradingController extends Controller
             \Log::error('Bot creation validation failed:', $validator->errors()->toArray());
             return response()->json([
                 'success' => false,
+                'message' => 'Validation failed. Please check your input values.',
                 'errors' => $validator->errors()
             ], 422);
         }

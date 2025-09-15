@@ -740,8 +740,8 @@ function updateTicker(data) {
                     <a href="{{ route('index') }}" class="flex items-center">
                         @if(\App\Helpers\WebsiteSettingsHelper::hasTextLogo())
                             <!-- Text Logo -->
-                            <div class="flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg mr-3" style="height: 5rem;">
-                                <span class="text-white font-bold text-2xl">{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}</span>
+                            <div class="flex items-center mr-3" style="height: 5rem;">
+                                <span class="text-white font-extrabold text-3xl tracking-wide">{{ \App\Helpers\WebsiteSettingsHelper::getTextLogo() }}</span>
                             </div>
                         @elseif(\App\Helpers\WebsiteSettingsHelper::hasImageLogo())
                             <!-- Image Logo -->
@@ -750,7 +750,7 @@ function updateTicker(data) {
                                  class="w-auto object-contain mr-3" style="height: 5rem;">
                         @else
                             <!-- Site Name as Logo (fallback) -->
-                            <span class="text-xl font-bold text-[#2FE6DE]">{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}</span>
+                            <span class="text-2xl font-extrabold text-[#2FE6DE] tracking-wide">{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }}</span>
                         @endif
                     </a>
                     <nav class="hidden lg:flex ml-10 space-x-6">

@@ -17,7 +17,6 @@ class UpdateLivechatSettingsRequest extends FormRequest
             'provider' => 'required|string|in:jivochat,tawk,intercom,zendesk,other',
             'widget_id' => 'required|string|max:255',
             'is_enabled' => 'boolean',
-            'show_on_dashboard' => 'boolean',
             'show_on_support_page' => 'boolean',
             'show_on_contact_page' => 'boolean',
             'show_on_homepage' => 'boolean',

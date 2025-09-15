@@ -292,16 +292,6 @@
 
                         <!-- Page Visibility Settings -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                                <div>
-                                    <h5 class="text-sm font-medium text-gray-900 dark:text-white">Dashboard</h5>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Show on user dashboard</p>
-                                </div>
-                                <label class="relative inline-flex items-center cursor-pointer">
-                                    <input type="checkbox" id="show_on_dashboard" name="show_on_dashboard" value="1" {{ $livechatSettings['show_on_dashboard'] ? 'checked' : '' }} class="sr-only peer">
-                                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                                </label>
-                            </div>
                             
                             <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                 <div>
@@ -481,39 +471,6 @@
                         </div>
                     </div>
 
-                    <!-- Social Media Links Section -->
-                    <div class="space-y-6">
-                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Social Media Links</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="facebook_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Facebook URL</label>
-                                <input type="url" id="facebook_url" name="facebook_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['facebook_url'] ?? '' }}" 
-                                       placeholder="https://facebook.com/yourpage"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                            </div>
-                            
-                            <div>
-                                <label for="twitter_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Twitter URL</label>
-                                <input type="url" id="twitter_url" name="twitter_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['twitter_url'] ?? '' }}" 
-                                       placeholder="https://twitter.com/yourhandle"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                            </div>
-                            
-                            <div>
-                                <label for="linkedin_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">LinkedIn URL</label>
-                                <input type="url" id="linkedin_url" name="linkedin_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['linkedin_url'] ?? '' }}" 
-                                       placeholder="https://linkedin.com/company/yourcompany"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                            </div>
-                            
-                            <div>
-                                <label for="instagram_url" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Instagram URL</label>
-                                <input type="url" id="instagram_url" name="instagram_url" value="{{ \App\Helpers\WebsiteSettingsHelper::getSettings()['instagram_url'] ?? '' }}" 
-                                       placeholder="https://instagram.com/yourhandle"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Save Button -->
                     <div class="flex justify-end">
@@ -675,7 +632,6 @@ document.getElementById('systemForm').addEventListener('submit', function(e) {
         
         // Convert checkbox values to boolean
         data.is_enabled = document.getElementById('is_enabled').checked;
-        data.show_on_dashboard = document.getElementById('show_on_dashboard').checked;
         data.show_on_support_page = document.getElementById('show_on_support_page').checked;
         data.show_on_contact_page = document.getElementById('show_on_contact_page').checked;
         data.show_on_homepage = document.getElementById('show_on_homepage').checked;

@@ -25,7 +25,6 @@ class LivechatService
                 'provider' => 'jivochat',
                 'widget_id' => 'dSWQAcZ9zr',
                 'is_enabled' => true,
-                'show_on_dashboard' => true,
                 'show_on_support_page' => true,
                 'show_on_contact_page' => true,
                 'show_on_homepage' => false,
@@ -71,8 +70,6 @@ class LivechatService
         }
 
         switch ($page) {
-            case 'dashboard':
-                return $this->settings['show_on_dashboard'] ?? false;
             case 'support':
                 return $this->settings['show_on_support_page'] ?? false;
             case 'contact':

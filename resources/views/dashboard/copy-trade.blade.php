@@ -214,10 +214,10 @@
                     <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
                         <td class="py-4 px-4">
                             <div class="flex items-center space-x-3">
-                                <img src="{{ $trade->copy_trader->avatar_url }}" alt="" 
+                                <img src="{{ $trade->copy_trader?->avatar_url ?? asset('img/trader.jpg') }}" alt="" 
                                      class="w-8 h-8 rounded-full object-cover"
                                      onerror="this.src='{{ asset('img/trader.jpg') }}'">
-                                <span class="text-white">{{ $trade->copy_trader->name ?? 'Unknown' }}</span>
+                                <span class="text-white">{{ $trade->copy_trader?->name ?? 'Unknown' }}</span>
                             </div>
                         </td>
                         <td class="py-4 px-4 text-white">${{ number_format($trade->amount, 2) }}</td>

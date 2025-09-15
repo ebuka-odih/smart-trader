@@ -172,7 +172,6 @@ class AdminSettingsController extends Controller
                 'provider' => 'jivochat',
                 'widget_id' => 'dSWQAcZ9zr',
                 'is_enabled' => true,
-                'show_on_dashboard' => true,
                 'show_on_support_page' => true,
                 'show_on_contact_page' => true,
                 'show_on_homepage' => false,
