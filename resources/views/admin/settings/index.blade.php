@@ -265,11 +265,11 @@
                             </div>
                             
                             <div>
-                                <label for="widget_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Widget ID / Code</label>
-                                <input type="text" id="widget_id" name="widget_id" value="{{ $livechatSettings['widget_id'] }}" required
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                       placeholder="e.g., dSWQAcZ9zr">
-                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Enter your livechat widget ID or embed code</p>
+                                <label for="widget_script" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Livechat Script</label>
+                                <textarea id="widget_script" name="widget_script" rows="6" required
+                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                          placeholder="Paste your complete livechat JavaScript code here...">{{ $livechatSettings['widget_script'] ?? '' }}</textarea>
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Paste the complete livechat script (including &lt;script&gt; tags) from your provider</p>
                             </div>
                         </div>
                     </div>
@@ -292,7 +292,6 @@
 
                         <!-- Page Visibility Settings -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            
                             <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                                 <div>
                                     <h5 class="text-sm font-medium text-gray-900 dark:text-white">Support Page</h5>
@@ -327,7 +326,7 @@
                             </div>
                         </div>
 
-                        <!-- Widget Position and Color -->
+                        <!-- Widget Position -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="widget_position" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Widget Position</label>
@@ -339,38 +338,9 @@
                                     <option value="top-left" {{ $livechatSettings['widget_position'] == 'top-left' ? 'selected' : '' }}>Top Left</option>
                                 </select>
                             </div>
-                            
-                            <div>
-                                <label for="widget_color" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Widget Color</label>
-                                <div class="flex items-center space-x-3">
-                                    <input type="color" id="widget_color" name="widget_color" value="{{ $livechatSettings['widget_color'] }}" required
-                                           class="w-12 h-10 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer">
-                                    <input type="text" value="{{ $livechatSettings['widget_color'] }}" readonly
-                                           class="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <!-- Messages -->
-                    <div class="space-y-6">
-                        <h4 class="text-md font-medium text-gray-900 dark:text-white">Messages</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="welcome_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Welcome Message</label>
-                                <textarea id="welcome_message" name="welcome_message" rows="3"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                          placeholder="Hello! How can we help you today?">{{ $livechatSettings['welcome_message'] }}</textarea>
-                            </div>
-                            
-                            <div>
-                                <label for="offline_message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Offline Message</label>
-                                <textarea id="offline_message" name="offline_message" rows="3"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
-                                          placeholder="Our support team is currently offline. Please leave a message and we'll get back to you soon.">{{ $livechatSettings['offline_message'] }}</textarea>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- Save Button -->
                     <div class="flex justify-end">
@@ -674,11 +644,6 @@ document.getElementById('systemForm').addEventListener('submit', function(e) {
         });
     });
 
-    // Color picker synchronization
-    document.getElementById('widget_color').addEventListener('input', function(e) {
-        const textInput = e.target.nextElementSibling;
-        textInput.value = e.target.value;
-    });
 
     // Website logo preview
     document.getElementById('site_logo').addEventListener('change', function(e) {

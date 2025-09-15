@@ -23,13 +23,12 @@ class LivechatService
             // Default settings
             $this->settings = [
                 'provider' => 'jivochat',
-                'widget_id' => 'dSWQAcZ9zr',
+                'widget_script' => '',
                 'is_enabled' => true,
                 'show_on_support_page' => true,
                 'show_on_contact_page' => true,
                 'show_on_homepage' => false,
                 'widget_position' => 'bottom-right',
-                'widget_color' => '#2FE6DE',
                 'welcome_message' => 'Hello! How can we help you today?',
                 'offline_message' => 'Our support team is currently offline. Please leave a message and we\'ll get back to you soon.',
                 'business_hours' => [
@@ -83,30 +82,19 @@ class LivechatService
 
     public function getWidgetScript()
     {
-        $provider = $this->settings['provider'] ?? 'jivochat';
-        $widgetId = $this->settings['widget_id'] ?? '';
-
-        switch ($provider) {
-            case 'jivochat':
-                return "//code.jivosite.com/widget/{$widgetId}";
-            case 'tawk':
-                return "//embed.tawk.to/{$widgetId}/default";
-            case 'intercom':
-                return "//js.intercomcdn.com/frame.js";
-            case 'zendesk':
-                return "//static.zdassets.com/ekr/sdk.js?key={$widgetId}";
-            default:
-                return null;
+        if (!$this->isEnabled()) {
+            return null;
         }
+
+        return $this->settings['widget_script'] ?? null;
     }
 
     public function getWidgetConfig()
     {
         return [
             'provider' => $this->settings['provider'] ?? 'jivochat',
-            'widget_id' => $this->settings['widget_id'] ?? '',
+            'widget_script' => $this->settings['widget_script'] ?? '',
             'position' => $this->settings['widget_position'] ?? 'bottom-right',
-            'color' => $this->settings['widget_color'] ?? '#2FE6DE',
             'welcome_message' => $this->settings['welcome_message'] ?? '',
             'offline_message' => $this->settings['offline_message'] ?? '',
             'custom_css' => $this->settings['custom_css'] ?? '',

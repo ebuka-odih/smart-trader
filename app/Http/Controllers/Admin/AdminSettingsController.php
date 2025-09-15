@@ -170,15 +170,12 @@ class AdminSettingsController extends Controller
             // Default settings
             $settings = [
                 'provider' => 'jivochat',
-                'widget_id' => 'dSWQAcZ9zr',
+                'widget_script' => '',
                 'is_enabled' => true,
                 'show_on_support_page' => true,
                 'show_on_contact_page' => true,
                 'show_on_homepage' => false,
                 'widget_position' => 'bottom-right',
-                'widget_color' => '#2FE6DE',
-                'welcome_message' => 'Hello! How can we help you today?',
-                'offline_message' => 'Our support team is currently offline. Please leave a message and we\'ll get back to you soon.',
                 'business_hours' => [
                     'enabled' => false,
                     'timezone' => 'UTC',
