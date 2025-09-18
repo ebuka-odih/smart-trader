@@ -564,7 +564,7 @@ function setButtonProcessing(isProcessing, buttonType = 'withdraw') {
 
 // Check if user is still authenticated
 function checkAuthentication() {
-    return fetch('/user/debug-simple', {
+    return fetch('{{ route("user.debug.simple") }}', {
         method: 'GET',
         headers: {
             'Accept': 'application/json',
@@ -610,9 +610,9 @@ function processWithdrawal() {
     const form = document.getElementById('withdrawForm');
     const formData = new FormData(form);
     
-    // Debug: Log the exact URL being requested
-    const withdrawalUrl = '/user/store/withdrawal/';
-    console.log('Making withdrawal request to:', window.location.origin + withdrawalUrl);
+    // Use Laravel route helper to get the correct URL
+    const withdrawalUrl = '{{ route("user.withdrawalStore") }}';
+    console.log('Making withdrawal request to:', withdrawalUrl);
     console.log('Form data entries:');
     for (let [key, value] of formData.entries()) {
         console.log(key + ':', value);
@@ -691,7 +691,7 @@ function testAjax() {
     console.log('Testing AJAX request...');
     
     // First test simple GET request
-    fetch('/user/debug-simple')
+    fetch('{{ route("user.debug.simple") }}')
     .then(response => {
         console.log('Simple GET response:', response.status, response.statusText);
         return response.json();
@@ -700,7 +700,7 @@ function testAjax() {
         console.log('Simple GET data:', data);
         
         // Now test POST request
-        return fetch('/user/test-ajax', {
+        return fetch('{{ route("user.test.ajax") }}', {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
