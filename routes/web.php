@@ -255,6 +255,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
 
     Route::get('withdrawal/', [WithdrawalController::class, 'withdrawal'])->name('withdrawal');
     Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'])->name('withdrawalStore');
+    Route::get('store/withdrawal/', function() {
+        return redirect()->route('user.withdrawal')->with('error', 'Invalid request method. Please use the withdrawal form.');
+    })->name('withdrawalStore.get');
     Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds');
     Route::get('withdrawal/history', [WithdrawalController::class, 'getWithdrawalHistory'])->name('withdrawal.history');
     Route::get('transfer/history', [WithdrawalController::class, 'getTransferHistory'])->name('transfer.history');

@@ -29,8 +29,6 @@ class LivechatService
                 'show_on_contact_page' => true,
                 'show_on_homepage' => false,
                 'widget_position' => 'bottom-right',
-                'welcome_message' => 'Hello! How can we help you today?',
-                'offline_message' => 'Our support team is currently offline. Please leave a message and we\'ll get back to you soon.',
                 'business_hours' => [
                     'enabled' => false,
                     'timezone' => 'UTC',
@@ -95,8 +93,6 @@ class LivechatService
             'provider' => $this->settings['provider'] ?? 'jivochat',
             'widget_script' => $this->settings['widget_script'] ?? '',
             'position' => $this->settings['widget_position'] ?? 'bottom-right',
-            'welcome_message' => $this->settings['welcome_message'] ?? '',
-            'offline_message' => $this->settings['offline_message'] ?? '',
             'custom_css' => $this->settings['custom_css'] ?? '',
             'custom_js' => $this->settings['custom_js'] ?? '',
         ];
