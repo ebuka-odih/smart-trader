@@ -29,7 +29,17 @@ class EnsureEmailIsVerified
                 $request->session()->invalidate();
                 $request->session()->regenerateToken();
                 
-                // Redirect to verification page with error message
+                // Return JSON for AJAX requests
+                if ($request->expectsJson() || $request->ajax()) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Email verification required. Please verify your email address.',
+                        'redirect' => route('verification.show', ['email' => $user->email]),
+                        'requires_verification' => true
+                    ], 401);
+                }
+                
+                // Redirect to verification page with error message for regular requests
                 return redirect()->route('verification.show', ['email' => $user->email])
                     ->with('error', 'Please verify your email address before accessing your account.');
             }
