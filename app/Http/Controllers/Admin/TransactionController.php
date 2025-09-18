@@ -6,6 +6,8 @@ use App\Events\DepositApproved;
 use App\Events\WithdrawalApproved;
 use App\Http\Controllers\Controller;
 use App\Mail\DepositApprovalMail;
+use App\Mail\ApproveWithdrawalMail;
+use App\Mail\RejectWithdrawalMail;
 use App\Models\Deposit;
 use App\Models\User;
 use App\Models\Withdrawal;
@@ -249,7 +251,7 @@ class TransactionController extends Controller
         $user->save();
 
             try {
-        Mail::to($withdraw->user->email)->send(new ApproveWithdrawalMail($withdraw));
+        Mail::to($withdraw->user->email)->send(new RejectWithdrawalMail($withdraw));
             } catch (\Exception $e) {
                 \Log::error('Failed to send withdrawal decline email: ' . $e->getMessage());
             }
@@ -282,7 +284,7 @@ class TransactionController extends Controller
             $user->save();
 
             try {
-                Mail::to($withdrawal->user->email)->send(new ApproveWithdrawalMail($withdrawal));
+                Mail::to($withdrawal->user->email)->send(new RejectWithdrawalMail($withdrawal));
             } catch (\Exception $e) {
                 \Log::error('Failed to send withdrawal decline email: ' . $e->getMessage());
             }
