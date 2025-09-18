@@ -562,6 +562,22 @@ function setButtonProcessing(isProcessing, buttonType = 'withdraw') {
     }
 }
 
+// Check if user is still authenticated
+function checkAuthentication() {
+    return fetch('/user/debug-simple', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+        }
+    })
+    .then(response => {
+        if (response.redirected || response.url.includes('login')) {
+            throw new Error('Session expired');
+        }
+        return response.ok;
+    });
+}
+
 // Withdrawal form submission
 document.getElementById('withdrawForm').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -569,9 +585,40 @@ document.getElementById('withdrawForm').addEventListener('submit', function(e) {
     // Set button to processing state
     setButtonProcessing(true, 'withdraw');
     
-    const formData = new FormData(this);
+    // Check authentication first
+    checkAuthentication()
+    .then(isAuthenticated => {
+        if (!isAuthenticated) {
+            throw new Error('Session expired. Please refresh the page and log in again.');
+        }
+        return processWithdrawal();
+    })
+    .catch(error => {
+        setButtonProcessing(false, 'withdraw');
+        if (error.message.includes('Session expired')) {
+            showModal('Session Expired', 'Your session has expired. Please refresh the page and log in again.');
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        } else {
+            showModal('Error', error.message);
+        }
+    });
+});
+
+function processWithdrawal() {
+    const form = document.getElementById('withdrawForm');
+    const formData = new FormData(form);
     
-    fetch('/user/store/withdrawal/', {
+    // Debug: Log the exact URL being requested
+    const withdrawalUrl = '/user/store/withdrawal/';
+    console.log('Making withdrawal request to:', window.location.origin + withdrawalUrl);
+    console.log('Form data entries:');
+    for (let [key, value] of formData.entries()) {
+        console.log(key + ':', value);
+    }
+    
+    return fetch(withdrawalUrl, {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -583,6 +630,13 @@ document.getElementById('withdrawForm').addEventListener('submit', function(e) {
     .then(async response => {
         // Reset button state
         setButtonProcessing(false, 'withdraw');
+        
+        // Debug: Log response details
+        console.log('Response received:');
+        console.log('Status:', response.status, response.statusText);
+        console.log('Headers:', Object.fromEntries(response.headers.entries()));
+        console.log('URL:', response.url);
+        console.log('Redirected:', response.redirected);
         
         // Check if response is ok
         if (!response.ok) {
@@ -630,20 +684,31 @@ document.getElementById('withdrawForm').addEventListener('submit', function(e) {
         
                         showModal('Error', errorMessage);
     });
-});
+}
 
 // Test AJAX function for debugging
 function testAjax() {
     console.log('Testing AJAX request...');
     
-    fetch('/user/test-ajax', {
-        method: 'POST',
-        headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'test=data'
+    // First test simple GET request
+    fetch('/user/debug-simple')
+    .then(response => {
+        console.log('Simple GET response:', response.status, response.statusText);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Simple GET data:', data);
+        
+        // Now test POST request
+        return fetch('/user/test-ajax', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'test=data'
+        });
     })
     .then(async response => {
         console.log('Test response status:', response.status);

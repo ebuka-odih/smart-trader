@@ -260,6 +260,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     })->name('withdrawalStore.get');
     Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds')->middleware('force.json');
     
+    // Simple debug route
+    Route::get('debug-simple', function() {
+        return response()->json(['status' => 'working', 'time' => now()]);
+    })->name('debug.simple');
+    
     // Test route for debugging AJAX requests
     Route::post('test-ajax', function(Request $request) {
         \Log::info('Test AJAX request received', [
