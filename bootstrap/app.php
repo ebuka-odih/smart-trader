@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
        $middleware->alias([
             'admin' => \App\Http\Middleware\isAdmin::class,
             'honeypot' => \App\Http\Middleware\HoneypotMiddleware::class,
+            'force.json' => \App\Http\Middleware\ForceJsonResponse::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

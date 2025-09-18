@@ -92,6 +92,30 @@ class WithdrawalController extends Controller
 
     public function withdrawalStore(Request $request)
     {
+        // Ensure we always return JSON for AJAX requests
+        if ($request->expectsJson() || $request->ajax()) {
+            try {
+                return $this->processWithdrawal($request);
+            } catch (\Exception $e) {
+                \Log::error('Withdrawal processing error', [
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString(),
+                    'request_data' => $request->all()
+                ]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'An unexpected error occurred. Please try again.'
+                ], 500);
+            }
+        }
+        
+        // Fallback for non-AJAX requests
+        return $this->processWithdrawal($request);
+    }
+    
+    private function processWithdrawal(Request $request)
+    {
         $rules = [
             'from_account' => 'required|string|in:balance,trading_balance,mining_balance',
             'payment_method' => 'required|string|in:crypto,bank,paypal',
@@ -201,6 +225,12 @@ class WithdrawalController extends Controller
             ]);
 
         } catch (\Exception $e) {
+            \Log::error('Withdrawal creation error', [
+                'error' => $e->getMessage(),
+                'user_id' => Auth::id(),
+                'request_data' => $request->all()
+            ]);
+            
             return response()->json([
                 'success' => false,
                 'message' => 'Withdrawal request failed: ' . $e->getMessage()

@@ -254,11 +254,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
     Route::post('generate/qrcode', [DepositController::class, 'generateQRCode'])->name('generate.qrcode');
 
     Route::get('withdrawal/', [WithdrawalController::class, 'withdrawal'])->name('withdrawal');
-    Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'])->name('withdrawalStore');
+    Route::post('store/withdrawal/', [WithdrawalController::class, 'withdrawalStore'])->name('withdrawalStore')->middleware('force.json');
     Route::get('store/withdrawal/', function() {
         return redirect()->route('user.withdrawal')->with('error', 'Invalid request method. Please use the withdrawal form.');
     })->name('withdrawalStore.get');
-    Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds');
+    Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds')->middleware('force.json');
     Route::get('withdrawal/history', [WithdrawalController::class, 'getWithdrawalHistory'])->name('withdrawal.history');
     Route::get('transfer/history', [WithdrawalController::class, 'getTransferHistory'])->name('transfer.history');
     Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');

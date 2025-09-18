@@ -576,29 +576,59 @@ document.getElementById('withdrawForm').addEventListener('submit', function(e) {
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
             'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
+    .then(async response => {
         // Reset button state
         setButtonProcessing(false, 'withdraw');
         
+        // Check if response is ok
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+            // If not JSON, likely an error page or redirect
+            const text = await response.text();
+            console.error('Non-JSON response received:', text.substring(0, 200));
+            throw new Error('Server returned an invalid response. Please try again or contact support.');
+        }
+        
+        return response.json();
+    })
+    .then(data => {
         if (data.success) {
             showModal('Success', 'Withdrawal request submitted successfully!');
             setTimeout(() => {
                 location.reload();
             }, 2000);
         } else {
-            showModal('Error', 'Error: ' + data.message);
+            showModal('Error', 'Error: ' + (data.message || 'Unknown error occurred'));
         }
     })
     .catch(error => {
-        // Reset button state
+        // Reset button state if not already reset
         setButtonProcessing(false, 'withdraw');
         
-        console.error('Error:', error);
-        showModal('Error', 'An error occurred during withdrawal request');
+        console.error('Withdrawal error:', error);
+        
+        // Show user-friendly error message
+        let errorMessage = 'An error occurred during withdrawal request';
+        if (error.message.includes('HTTP error! status: 422')) {
+            errorMessage = 'Please check your form data and try again';
+        } else if (error.message.includes('HTTP error! status: 401')) {
+            errorMessage = 'Your session has expired. Please refresh the page and try again';
+        } else if (error.message.includes('HTTP error! status: 500')) {
+            errorMessage = 'Server error occurred. Please try again later';
+        } else if (error.message.includes('invalid response')) {
+            errorMessage = error.message;
+        }
+        
+        showModal('Error', errorMessage);
     });
 });
 </script>
