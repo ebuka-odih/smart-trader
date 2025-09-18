@@ -259,6 +259,27 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'user', 'as' => 'user.'], fu
         return redirect()->route('user.withdrawal')->with('error', 'Invalid request method. Please use the withdrawal form.');
     })->name('withdrawalStore.get');
     Route::post('transfer-funds', [WithdrawalController::class, 'transferFunds'])->name('transfer.funds')->middleware('force.json');
+    
+    // Test route for debugging AJAX requests
+    Route::post('test-ajax', function(Request $request) {
+        \Log::info('Test AJAX request received', [
+            'headers' => $request->headers->all(),
+            'expects_json' => $request->expectsJson(),
+            'ajax' => $request->ajax(),
+            'data' => $request->all()
+        ]);
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'AJAX test successful',
+            'debug' => [
+                'expects_json' => $request->expectsJson(),
+                'ajax' => $request->ajax(),
+                'accept_header' => $request->header('Accept'),
+                'content_type' => $request->header('Content-Type')
+            ]
+        ]);
+    })->name('test.ajax')->middleware('force.json');
     Route::get('withdrawal/history', [WithdrawalController::class, 'getWithdrawalHistory'])->name('withdrawal.history');
     Route::get('transfer/history', [WithdrawalController::class, 'getTransferHistory'])->name('transfer.history');
     Route::get('transactions', [TransactionController::class, 'index'])->name('transactions.index');

@@ -628,8 +628,55 @@ document.getElementById('withdrawForm').addEventListener('submit', function(e) {
             errorMessage = error.message;
         }
         
-        showModal('Error', errorMessage);
+                        showModal('Error', errorMessage);
     });
 });
+
+// Test AJAX function for debugging
+function testAjax() {
+    console.log('Testing AJAX request...');
+    
+    fetch('/user/test-ajax', {
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'test=data'
+    })
+    .then(async response => {
+        console.log('Test response status:', response.status);
+        console.log('Test response headers:', response.headers);
+        
+        const contentType = response.headers.get('content-type');
+        console.log('Content-Type:', contentType);
+        
+        if (!contentType || !contentType.includes('application/json')) {
+            const text = await response.text();
+            console.error('Non-JSON test response:', text.substring(0, 200));
+            throw new Error('Test failed: Non-JSON response');
+        }
+        
+        return response.json();
+    })
+    .then(data => {
+        console.log('Test AJAX success:', data);
+        showModal('Test Success', 'AJAX test passed: ' + JSON.stringify(data.debug));
+    })
+    .catch(error => {
+        console.error('Test AJAX error:', error);
+        showModal('Test Error', 'AJAX test failed: ' + error.message);
+    });
+}
+
+// Add test button (temporary for debugging)
+if (window.location.search.includes('debug=1')) {
+    const testBtn = document.createElement('button');
+    testBtn.textContent = 'Test AJAX';
+    testBtn.className = 'px-4 py-2 bg-yellow-600 text-white rounded';
+    testBtn.onclick = testAjax;
+    document.querySelector('.space-y-6').prepend(testBtn);
+}
 </script>
 @endsection

@@ -92,6 +92,20 @@ class WithdrawalController extends Controller
 
     public function withdrawalStore(Request $request)
     {
+        \Log::info('Withdrawal request received', [
+            'url' => $request->fullUrl(),
+            'method' => $request->method(),
+            'headers' => [
+                'accept' => $request->header('Accept'),
+                'content_type' => $request->header('Content-Type'),
+                'x_requested_with' => $request->header('X-Requested-With'),
+            ],
+            'expects_json' => $request->expectsJson(),
+            'ajax' => $request->ajax(),
+            'user_id' => auth()->id(),
+            'request_data' => $request->except(['_token'])
+        ]);
+        
         // Ensure we always return JSON for AJAX requests
         if ($request->expectsJson() || $request->ajax()) {
             try {
@@ -111,6 +125,11 @@ class WithdrawalController extends Controller
         }
         
         // Fallback for non-AJAX requests
+        \Log::warning('Non-AJAX withdrawal request received', [
+            'user_id' => auth()->id(),
+            'request_data' => $request->except(['_token'])
+        ]);
+        
         return $this->processWithdrawal($request);
     }
     
