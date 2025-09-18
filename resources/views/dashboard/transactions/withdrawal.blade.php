@@ -135,7 +135,7 @@
             <div id="withdrawContent" class="tab-content">
                 <div class="max-w-md mx-auto">
                     <h3 class="text-lg font-medium text-white mb-4">Withdraw Funds</h3>
-                    <form id="withdrawForm" class="space-y-4">
+                    <form action="{{ route('user.withdrawalStore') }}" method="POST" class="space-y-4">
                         @csrf
                         <div>
                             <label class="block text-sm font-medium text-gray-300 mb-2">From Account</label>
@@ -207,15 +207,8 @@
                             <p class="text-xs text-gray-400 mt-1">Available: $<span id="withdrawAvailableAmount">0.00</span></p>
                         </div>
 
-                        <button type="submit" id="withdrawSubmitBtn" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                            <span id="withdrawBtnText">Request Withdrawal</span>
-                            <span id="withdrawBtnSpinner" class="hidden">
-                                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Processing...
-                            </span>
+                        <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                            Request Withdrawal
                         </button>
                     </form>
                 </div>
@@ -618,12 +611,17 @@ function processWithdrawal() {
         console.log(key + ':', value);
     }
     
+    // Debug CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    console.log('CSRF Token:', csrfToken);
+    console.log('CSRF Token length:', csrfToken.length);
+    
     return fetch(withdrawalUrl, {
         method: 'POST',
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            'X-CSRF-TOKEN': csrfToken,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
+            // Don't set Content-Type for FormData - let browser set it with boundary
         },
         body: formData
     })
@@ -672,7 +670,9 @@ function processWithdrawal() {
         
         // Show user-friendly error message
         let errorMessage = 'An error occurred during withdrawal request';
-        if (error.message.includes('HTTP error! status: 422')) {
+        if (error.message.includes('HTTP error! status: 403')) {
+            errorMessage = 'Access denied. Your session may have expired or there was a security token issue. Please refresh the page and try again.';
+        } else if (error.message.includes('HTTP error! status: 422')) {
             errorMessage = 'Please check your form data and try again';
         } else if (error.message.includes('HTTP error! status: 401')) {
             errorMessage = 'Your session has expired. Please refresh the page and try again';
@@ -686,62 +686,62 @@ function processWithdrawal() {
     });
 }
 
-// Test AJAX function for debugging
-function testAjax() {
-    console.log('Testing AJAX request...');
-    
-    // First test simple GET request
-    fetch('{{ route("user.debug.simple") }}')
-    .then(response => {
-        console.log('Simple GET response:', response.status, response.statusText);
-        return response.json();
-    })
-    .then(data => {
-        console.log('Simple GET data:', data);
-        
-        // Now test POST request
-        return fetch('{{ route("user.test.ajax") }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: 'test=data'
+// Simple form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const withdrawForm = document.querySelector('form[action*="withdrawalStore"]');
+    if (withdrawForm) {
+        withdrawForm.addEventListener('submit', function(e) {
+            const fromAccount = this.querySelector('[name="from_account"]').value;
+            const paymentMethod = this.querySelector('[name="payment_method"]:checked')?.value;
+            const amount = this.querySelector('[name="amount"]').value;
+            
+            if (!fromAccount) {
+                alert('Please select an account to withdraw from');
+                e.preventDefault();
+                return;
+            }
+            
+            if (!paymentMethod) {
+                alert('Please select a payment method');
+                e.preventDefault();
+                return;
+            }
+            
+            if (!amount || amount <= 0) {
+                alert('Please enter a valid withdrawal amount');
+                e.preventDefault();
+                return;
+            }
+            
+            // Additional validation based on payment method
+            if (paymentMethod === 'crypto') {
+                const wallet = this.querySelector('[name="wallet"]').value;
+                const address = this.querySelector('[name="address"]').value;
+                if (!wallet || !address) {
+                    alert('Please fill in wallet type and address for crypto withdrawal');
+                    e.preventDefault();
+                    return;
+                }
+            } else if (paymentMethod === 'bank') {
+                const bankName = this.querySelector('[name="bank_name"]').value;
+                const acctName = this.querySelector('[name="acct_name"]').value;
+                const acctNumber = this.querySelector('[name="acct_number"]').value;
+                if (!bankName || !acctName || !acctNumber) {
+                    alert('Please fill in all bank details');
+                    e.preventDefault();
+                    return;
+                }
+            } else if (paymentMethod === 'paypal') {
+                const paypal = this.querySelector('[name="paypal"]').value;
+                if (!paypal || !paypal.includes('@')) {
+                    alert('Please enter a valid PayPal email address');
+                    e.preventDefault();
+                    return;
+                }
+            }
         });
-    })
-    .then(async response => {
-        console.log('Test response status:', response.status);
-        console.log('Test response headers:', response.headers);
-        
-        const contentType = response.headers.get('content-type');
-        console.log('Content-Type:', contentType);
-        
-        if (!contentType || !contentType.includes('application/json')) {
-            const text = await response.text();
-            console.error('Non-JSON test response:', text.substring(0, 200));
-            throw new Error('Test failed: Non-JSON response');
-        }
-        
-        return response.json();
-    })
-    .then(data => {
-        console.log('Test AJAX success:', data);
-        showModal('Test Success', 'AJAX test passed: ' + JSON.stringify(data.debug));
-    })
-    .catch(error => {
-        console.error('Test AJAX error:', error);
-        showModal('Test Error', 'AJAX test failed: ' + error.message);
-    });
-}
+    }
+});
 
-// Add test button (temporary for debugging)
-if (window.location.search.includes('debug=1')) {
-    const testBtn = document.createElement('button');
-    testBtn.textContent = 'Test AJAX';
-    testBtn.className = 'px-4 py-2 bg-yellow-600 text-white rounded';
-    testBtn.onclick = testAjax;
-    document.querySelector('.space-y-6').prepend(testBtn);
-}
 </script>
 @endsection

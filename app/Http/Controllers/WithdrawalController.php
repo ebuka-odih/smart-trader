@@ -93,44 +93,41 @@ class WithdrawalController extends Controller
     public function withdrawalStore(Request $request)
     {
         \Log::info('Withdrawal request received', [
-            'url' => $request->fullUrl(),
-            'method' => $request->method(),
-            'headers' => [
-                'accept' => $request->header('Accept'),
-                'content_type' => $request->header('Content-Type'),
-                'x_requested_with' => $request->header('X-Requested-With'),
-            ],
-            'expects_json' => $request->expectsJson(),
-            'ajax' => $request->ajax(),
             'user_id' => auth()->id(),
-            'request_data' => $request->except(['_token'])
+            'amount' => $request->amount,
+            'payment_method' => $request->payment_method,
+            'from_account' => $request->from_account
         ]);
         
-        // Ensure we always return JSON for AJAX requests
-        if ($request->expectsJson() || $request->ajax()) {
-            try {
-                return $this->processWithdrawal($request);
-            } catch (\Exception $e) {
-                \Log::error('Withdrawal processing error', [
-                    'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString(),
-                    'request_data' => $request->all()
-                ]);
-                
+        try {
+            $result = $this->processWithdrawal($request);
+            
+            // For AJAX requests, return JSON
+            if ($request->expectsJson() || $request->ajax()) {
+                return $result;
+            }
+            
+            // For regular form submissions, redirect with success message
+            return redirect()->route('user.withdrawal')->with('success', 'Withdrawal request submitted successfully!');
+            
+        } catch (\Exception $e) {
+            \Log::error('Withdrawal processing error', [
+                'error' => $e->getMessage(),
+                'user_id' => auth()->id(),
+                'request_data' => $request->except(['_token'])
+            ]);
+            
+            // For AJAX requests, return JSON error
+            if ($request->expectsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'An unexpected error occurred. Please try again.'
                 ], 500);
             }
+            
+            // For regular form submissions, redirect with error message
+            return redirect()->route('user.withdrawal')->with('error', 'Withdrawal request failed: ' . $e->getMessage());
         }
-        
-        // Fallback for non-AJAX requests
-        \Log::warning('Non-AJAX withdrawal request received', [
-            'user_id' => auth()->id(),
-            'request_data' => $request->except(['_token'])
-        ]);
-        
-        return $this->processWithdrawal($request);
     }
     
     private function processWithdrawal(Request $request)
@@ -160,10 +157,19 @@ class WithdrawalController extends Controller
                 'errors' => $validator->errors()->toArray(),
                 'request_data' => $request->all()
             ]);
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first()
-            ], 422);
+            
+            // For AJAX requests, return JSON
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first()
+                ], 422);
+            }
+            
+            // For regular form submissions, redirect with validation errors
+            return redirect()->route('user.withdrawal')
+                ->withErrors($validator)
+                ->withInput();
         }
 
         $user = Auth::user();
@@ -172,19 +178,31 @@ class WithdrawalController extends Controller
 
         // Check if user has sufficient balance
         if ($user->$fromAccount < $amount) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Insufficient balance in ' . str_replace('_', ' ', $fromAccount)
-            ], 422);
+            $message = 'Insufficient balance in ' . str_replace('_', ' ', $fromAccount);
+            
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $message
+                ], 422);
+            }
+            
+            return redirect()->route('user.withdrawal')->with('error', $message);
         }
 
         // Check minimum withdrawal amount
         $minWithdrawal = 10; // $10 minimum
         if ($amount < $minWithdrawal) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Minimum withdrawal amount is $' . $minWithdrawal
-            ], 422);
+            $message = 'Minimum withdrawal amount is $' . $minWithdrawal;
+            
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $message
+                ], 422);
+            }
+            
+            return redirect()->route('user.withdrawal')->with('error', $message);
         }
 
         try {

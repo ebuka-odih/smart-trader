@@ -18,6 +18,16 @@ class ForceJsonResponse
         // Force JSON response for AJAX requests
         if ($request->expectsJson() || $request->ajax()) {
             $request->headers->set('Accept', 'application/json');
+            
+            // Log CSRF token for debugging
+            \Log::info('AJAX request CSRF debug', [
+                'url' => $request->fullUrl(),
+                'method' => $request->method(),
+                'has_csrf_header' => $request->hasHeader('X-CSRF-TOKEN'),
+                'csrf_header' => $request->header('X-CSRF-TOKEN') ? 'present' : 'missing',
+                'session_token' => $request->session()->token() ? 'present' : 'missing',
+                'tokens_match' => $request->header('X-CSRF-TOKEN') === $request->session()->token()
+            ]);
         }
 
         try {
@@ -37,6 +47,20 @@ class ForceJsonResponse
                         'message' => 'Session expired or unauthorized. Please refresh the page.',
                         'redirect' => $response->getTargetUrl()
                     ], 401);
+                }
+
+                // Check for 403 Forbidden responses
+                if ($response->getStatusCode() === 403) {
+                    \Log::warning('403 Forbidden for AJAX request', [
+                        'request_url' => $request->fullUrl(),
+                        'content_type' => $response->headers->get('content-type', ''),
+                        'user_id' => auth()->id()
+                    ]);
+                    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Access denied. This could be due to an expired session or invalid security token. Please refresh the page and try again.'
+                    ], 403);
                 }
 
                 // Check if we're getting an HTML response for AJAX requests
