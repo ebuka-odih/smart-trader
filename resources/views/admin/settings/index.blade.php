@@ -246,7 +246,7 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400">Configure your livechat widget settings and appearance</p>
                 </div>
                 
-                <form id="livechatForm" method="POST" action="{{ route('admin.settings.livechat.update') }}" class="p-6 space-y-6">
+                <form method="POST" action="{{ route('admin.settings.livechat.update') }}" class="p-6 space-y-6">
                     @csrf
                     <!-- Provider Settings -->
                     <div class="space-y-6">
@@ -592,57 +592,7 @@ document.getElementById('systemForm').addEventListener('submit', function(e) {
         }
     });
 
-    // Livechat form submission
-    document.getElementById('livechatForm').addEventListener('submit', function(e) {
-        console.log('Livechat form submitted');
-        e.preventDefault();
-        
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-        
-        // Convert checkbox values to boolean
-        data.is_enabled = document.getElementById('is_enabled').checked;
-        data.show_on_support_page = document.getElementById('show_on_support_page').checked;
-        data.show_on_contact_page = document.getElementById('show_on_contact_page').checked;
-        data.show_on_homepage = document.getElementById('show_on_homepage').checked;
-        
-        console.log('Sending data:', data);
-        
-        fetch('{{ route("admin.settings.livechat.update") }}', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success!',
-                        text: data.message
-                    });
-                } else {
-                    alert(data.message);
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'An error occurred while updating livechat settings'
-                });
-            } else {
-                alert('Error updating livechat settings');
-            }
-        });
-    });
+    // Livechat form now uses traditional form submission
 
 
     // Website logo preview

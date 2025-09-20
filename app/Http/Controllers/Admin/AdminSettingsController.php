@@ -87,17 +87,26 @@ class AdminSettingsController extends Controller
         try {
             Storage::put($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
             
-            return response()->json([
-                'success' => true,
-                'message' => 'Livechat settings updated successfully!'
-            ]);
+            // Return JSON for AJAX requests, redirect for regular form submissions
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Livechat settings updated successfully!'
+                ]);
+            }
+            
+            return redirect()->back()->with('success', 'Livechat settings updated successfully!');
         } catch (\Exception $e) {
             \Log::error('Error saving livechat settings', ['error' => $e->getMessage()]);
             
-            return response()->json([
-                'success' => false,
-                'message' => 'Error saving settings: ' . $e->getMessage()
-            ], 500);
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error saving settings: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->back()->with('error', 'Error saving settings: ' . $e->getMessage());
         }
     }
 
