@@ -20,6 +20,7 @@ class WebsiteSettingsHelper
             $settings = [
                 'site_name' => config('app.name'),
                 'site_tagline' => 'Your trusted cryptocurrency trading platform',
+                'site_email' => config('mail.from.address', 'admin@' . str_replace(['http://', 'https://', 'www.'], '', config('app.url'))),
                 'site_logo' => null,
                 'text_logo' => '',
                 'primary_color' => '#3B82F6',
@@ -85,6 +86,15 @@ class WebsiteSettingsHelper
     {
         $settings = self::getSettings();
         return $settings['site_tagline'] ?? '';
+    }
+
+    /**
+     * Get the site email
+     */
+    public static function getSiteEmail()
+    {
+        $settings = self::getSettings();
+        return $settings['site_email'] ?? config('mail.from.address', 'admin@' . str_replace(['http://', 'https://', 'www.'], '', config('app.url')));
     }
 
     /**
