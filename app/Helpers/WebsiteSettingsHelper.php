@@ -18,7 +18,7 @@ class WebsiteSettingsHelper
         } else {
             // Default website settings
             $settings = [
-                'site_name' => config('app.name', 'CryptBroker'),
+                'site_name' => config('app.name'),
                 'site_tagline' => 'Your trusted cryptocurrency trading platform',
                 'site_logo' => null,
                 'text_logo' => '',
@@ -75,7 +75,7 @@ class WebsiteSettingsHelper
     public static function getSiteName()
     {
         $settings = self::getSettings();
-        return $settings['site_name'] ?? config('app.name', 'CryptBroker');
+        return $settings['site_name'] ?? config('app.name');
     }
 
     /**

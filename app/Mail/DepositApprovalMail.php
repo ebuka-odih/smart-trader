@@ -30,7 +30,7 @@ class DepositApprovalMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Deposit Approved - CryptBroker',
+            subject: 'Deposit Approved - ' . config('app.name'),
         );
     }
 

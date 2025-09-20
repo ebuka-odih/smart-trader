@@ -230,7 +230,7 @@
         </div>
         
         <div class="footer">
-            <p><strong>CryptBroker</strong></p>
+            <p><strong>{{ config('app.name') }}</strong></p>
             <p>Your trusted cryptocurrency trading platform</p>
             <p>This is an automated message. Please do not reply to this email.</p>
         </div>

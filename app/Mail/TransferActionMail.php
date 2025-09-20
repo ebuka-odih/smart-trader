@@ -30,7 +30,7 @@ class TransferActionMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Fund Transfer Confirmation - CryptBroker',
+            subject: 'Fund Transfer Confirmation - ' . config('app.name'),
         );
     }
 

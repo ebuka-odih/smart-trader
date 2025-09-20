@@ -149,8 +149,8 @@ class AdminSettingsController extends Controller
     private function getSystemSettings()
     {
         return [
-            'site_name' => config('app.name', 'CryptBroker'),
-            'site_email' => config('mail.from.address', 'admin@cryptbroker.com'),
+            'site_name' => config('app.name'),
+            'site_email' => config('mail.from.address', 'admin@' . str_replace(['http://', 'https://', 'www.'], '', config('app.url'))),
             'maintenance_mode' => config('app.maintenance_mode', false),
             'registration_enabled' => config('auth.registration_enabled', true),
             'email_verification_required' => config('auth.email_verification_required', true),

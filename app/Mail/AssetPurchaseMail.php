@@ -32,7 +32,7 @@ class AssetPurchaseMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Asset Purchase Confirmation - CryptBroker',
+            subject: 'Asset Purchase Confirmation - ' . config('app.name'),
         );
     }
 

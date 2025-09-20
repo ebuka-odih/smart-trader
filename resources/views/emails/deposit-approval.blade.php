@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deposit Approved - CryptBroker</title>
+    <title>Deposit Approved - {{ config('app.name') }}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -201,7 +201,7 @@
         </div>
         
         <div class="footer">
-            <p><strong>CryptBroker</strong></p>
+            <p><strong>{{ config('app.name') }}</strong></p>
             <p>Your trusted cryptocurrency trading platform</p>
             <p>This is an automated message. Please do not reply to this email.</p>
         </div>

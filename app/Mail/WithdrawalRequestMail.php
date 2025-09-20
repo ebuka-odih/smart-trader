@@ -30,7 +30,7 @@ class WithdrawalRequestMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Withdrawal Request Confirmation - CryptBroker',
+            subject: 'Withdrawal Request Confirmation - ' . config('app.name'),
         );
     }
 

@@ -180,7 +180,7 @@
         </div>
         
         <div class="footer">
-            <p><strong>CryptBroker Admin Panel</strong></p>
+            <p><strong>{{ config('app.name') }} Admin Panel</strong></p>
             <p>This is an automated notification. Please review the deposit in your admin dashboard.</p>
         </div>
     </div>

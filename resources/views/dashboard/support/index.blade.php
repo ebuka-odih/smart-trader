@@ -32,7 +32,7 @@
                         </div>
                         <div>
                             <h3 class="text-white font-medium">Email Support</h3>
-                            <p class="text-gray-400 text-sm">support@cryptbroker.com</p>
+                            <p class="text-gray-400 text-sm">{{ \App\Helpers\WebsiteSettingsHelper::getSiteEmail() }}</p>
                         </div>
                     </div>
                     
