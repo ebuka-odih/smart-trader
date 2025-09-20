@@ -85,31 +85,35 @@
                 <p class="text-gray-400 text-sm mb-4">Chat with our support team in real-time for immediate assistance.</p>
                 
                 <!-- Live Chat Widget Container -->
-                <div id="livechat-widget" class="min-h-[400px] bg-gray-700 rounded-lg flex items-center justify-center">
+                <div id="livechat-widget" class="min-h-[400px] bg-gray-700 rounded-lg">
                     @php
                         $widgetScript = $livechatService->getWidgetScript();
                     @endphp
                     @if($widgetScript)
                     <!-- Livechat widget will load here -->
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
+                    <div class="h-full flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-green-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-medium mb-2">Live Chat Available</h3>
+                            <p class="text-gray-400 text-sm">Chat widget is loading. Look for the chat button on the page.</p>
                         </div>
-                        <h3 class="text-white font-medium mb-2">Live Chat Loading...</h3>
-                        <p class="text-gray-400 text-sm">Chat widget is initializing. Please wait a moment.</p>
                     </div>
                     @else
                     <!-- Default JivoChat demo -->
-                    <div class="text-center">
-                        <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
+                    <div class="h-full flex items-center justify-center">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-white font-medium mb-2">Demo Live Chat</h3>
+                            <p class="text-gray-400 text-sm">Using JivoChat demo widget. Configure your own widget in admin settings.</p>
                         </div>
-                        <h3 class="text-white font-medium mb-2">Demo Live Chat</h3>
-                        <p class="text-gray-400 text-sm">Using JivoChat demo widget. Configure your own widget in admin settings.</p>
                     </div>
                     @endif
                 </div>
@@ -139,6 +143,44 @@
 })(document, "script", "jivosite-script");
 </script>
 @endif
+
+<!-- Hide loading message when widget loads -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Hide loading message after 3 seconds to show widget has loaded
+    setTimeout(function() {
+        var loadingDiv = document.querySelector('#livechat-widget .animate-pulse');
+        if (loadingDiv) {
+            loadingDiv.style.display = 'none';
+        }
+    }, 3000);
+    
+    // Also hide loading message when JivoChat widget appears
+    var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.addedNodes.length > 0) {
+                // Check if JivoChat widget was added
+                for (var i = 0; i < mutation.addedNodes.length; i++) {
+                    var node = mutation.addedNodes[i];
+                    if (node.nodeType === 1) { // Element node
+                        if (node.classList && (node.classList.contains('jivo-widget') || node.id === 'jivosite-script')) {
+                            var loadingDiv = document.querySelector('#livechat-widget .animate-pulse');
+                            if (loadingDiv) {
+                                loadingDiv.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+    
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+});
+</script>
 
 @if($livechatConfig['custom_css'])
 <style>
