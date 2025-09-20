@@ -73,16 +73,22 @@ class AdminSettingsController extends Controller
     public function updateLivechatSettings(UpdateLivechatSettingsRequest $request)
     {
         \Log::info('Livechat settings update request', $request->all());
-        $settings = $request->validated();
-        \Log::info('Validated settings', $settings);
+        $requestData = $request->validated();
+        \Log::info('Validated settings', $requestData);
         
-        // Store livechat settings in config or database
-        // For now, we'll store them in a JSON file in storage
-        $settingsFile = 'livechat_settings.json';
+        // Get current settings to merge with new data
+        $currentSettings = $this->getLivechatSettings();
+        
+        // Merge new data with current settings
+        $settings = array_merge($currentSettings, $requestData);
         
         // Add timestamp
         $settings['updated_at'] = now()->toISOString();
         $settings['updated_by'] = auth()->user()->id;
+        
+        // Store livechat settings in config or database
+        // For now, we'll store them in a JSON file in storage
+        $settingsFile = 'livechat_settings.json';
         
         try {
             Storage::put($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
@@ -173,36 +179,40 @@ class AdminSettingsController extends Controller
     {
         $settingsFile = 'livechat_settings.json';
         
+        // Default settings
+        $defaultSettings = [
+            'provider' => 'jivochat',
+            'widget_script' => '',
+            'is_enabled' => true,
+            'show_on_support_page' => true,
+            'show_on_contact_page' => true,
+            'show_on_homepage' => false,
+            'widget_position' => 'bottom-right',
+            'business_hours' => [
+                'enabled' => false,
+                'timezone' => 'UTC',
+                'schedule' => [
+                    'monday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
+                    'tuesday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
+                    'wednesday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
+                    'thursday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
+                    'friday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
+                    'saturday' => ['start' => '10:00', 'end' => '15:00', 'enabled' => false],
+                    'sunday' => ['start' => '10:00', 'end' => '15:00', 'enabled' => false],
+                ]
+            ],
+            'custom_css' => '',
+            'custom_js' => '',
+            'updated_at' => null,
+            'updated_by' => null
+        ];
+        
         if (Storage::exists($settingsFile)) {
-            $settings = json_decode(Storage::get($settingsFile), true);
+            $savedSettings = json_decode(Storage::get($settingsFile), true);
+            // Merge saved settings with defaults to ensure all keys exist
+            $settings = array_merge($defaultSettings, $savedSettings);
         } else {
-            // Default settings
-            $settings = [
-                'provider' => 'jivochat',
-                'widget_script' => '',
-                'is_enabled' => true,
-                'show_on_support_page' => true,
-                'show_on_contact_page' => true,
-                'show_on_homepage' => false,
-                'widget_position' => 'bottom-right',
-                'business_hours' => [
-                    'enabled' => false,
-                    'timezone' => 'UTC',
-                    'schedule' => [
-                        'monday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
-                        'tuesday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
-                        'wednesday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
-                        'thursday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
-                        'friday' => ['start' => '09:00', 'end' => '17:00', 'enabled' => true],
-                        'saturday' => ['start' => '10:00', 'end' => '15:00', 'enabled' => false],
-                        'sunday' => ['start' => '10:00', 'end' => '15:00', 'enabled' => false],
-                    ]
-                ],
-                'custom_css' => '',
-                'custom_js' => '',
-                'updated_at' => null,
-                'updated_by' => null
-            ];
+            $settings = $defaultSettings;
         }
         
         return $settings;
