@@ -6,6 +6,8 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="manifest" href="/manifest.webmanifest">
+        <meta name="theme-color" content="#0b1020">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -16,6 +18,22 @@
 
     </head>
     <body  class="font-sans text-gray-900 antialiased">
+        <div id="pwaPrompt" class="hidden fixed inset-0 z-50 items-end justify-center">
+            <div class="fixed inset-0 bg-black/50"></div>
+            <div class="relative m-4 w-full max-w-sm bg-white text-gray-900 rounded-xl shadow-xl p-4">
+                <div class="flex items-start">
+                    <img src="/static/android-chrome-192x192.png" alt="App Icon" class="w-10 h-10 mr-3 rounded">
+                    <div class="flex-1">
+                        <div class="font-semibold">Add 100x TAD to Home Screen</div>
+                        <div class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
+                    </div>
+                </div>
+                <div class="mt-4 flex gap-2 justify-end">
+                    <button id="pwaPromptDismiss" class="px-3 py-2 text-sm rounded border border-gray-300">Maybe later</button>
+                    <button id="pwaPromptInstall" class="px-3 py-2 text-sm rounded bg-blue-600 text-white">Install</button>
+                </div>
+            </div>
+        </div>
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100 dark:bg-gray-900">
             <div>
                 <a href="{{ route('index') }}">
@@ -43,5 +61,68 @@
                 {{ $slot }}
             </div>
         </div>
+        <script>
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/service-worker.js').catch(function(e){
+                        console.error('Service worker registration failed', e);
+                    });
+                });
+            }
+
+            (function() {
+                var promptEvent = null;
+                var promptEl = document.getElementById('pwaPrompt');
+                var installBtn = document.getElementById('pwaPromptInstall');
+                var dismissBtn = document.getElementById('pwaPromptDismiss');
+
+                if (!promptEl) return;
+
+                function showPrompt() {
+                    if (!promptEvent) return;
+                    promptEl.classList.remove('hidden');
+                    promptEl.classList.add('flex');
+                }
+
+                function hidePrompt() {
+                    promptEl.classList.add('hidden');
+                    promptEl.classList.remove('flex');
+                }
+
+                var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+                if (isStandalone || localStorage.getItem('pwaInstalled') === '1') {
+                    return;
+                }
+
+                window.addEventListener('beforeinstallprompt', function(e) {
+                    e.preventDefault();
+                    promptEvent = e;
+                    setTimeout(showPrompt, 6000);
+                });
+
+                installBtn && installBtn.addEventListener('click', async function() {
+                    if (!promptEvent) return;
+                    try {
+                        promptEvent.prompt();
+                        var res = await promptEvent.userChoice;
+                        if (res && res.outcome === 'accepted') hidePrompt();
+                    } catch (err) {
+                        console.error('Install failed', err);
+                    } finally {
+                        promptEvent = null;
+                    }
+                });
+
+                dismissBtn && dismissBtn.addEventListener('click', function() {
+                    hidePrompt();
+                    localStorage.setItem('pwaPromptDismissed', '1');
+                });
+
+                window.addEventListener('appinstalled', function() {
+                    localStorage.setItem('pwaInstalled', '1');
+                    hidePrompt();
+                });
+            })();
+        </script>
     </body>
 </html>

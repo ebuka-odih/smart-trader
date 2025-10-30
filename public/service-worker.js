@@ -1,12 +1,15 @@
-const CACHE_NAME = 'st-dashboard-cache-v1';
-const DASHBOARD_PREFIX = '/user/';
+const CACHE_NAME = 'st-app-cache-v2';
+const SCOPES = ['/', '/user/', '/login', '/register', '/forgot-password', '/reset-password'];
 
-// Precache minimal shell for dashboard
+// Precache minimal shell for app (front + auth + dashboard)
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
     try {
       await cache.addAll([
+        '/',
+        '/login',
+        '/register',
         '/user/dashboard',
         '/build/assets/app.css',
         '/build/assets/app.js',
@@ -31,7 +34,7 @@ self.addEventListener('activate', (event) => {
   })());
 });
 
-// Network-first for dashboard API/data, cache-first for static assets
+// Network-first for app pages/API, cache-first for static assets
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   if (request.method !== 'GET') return;
@@ -41,11 +44,12 @@ self.addEventListener('fetch', (event) => {
   // Only handle requests within our origin
   if (url.origin !== self.location.origin) return;
 
-  // Only handle dashboard scope to avoid affecting public/admin
-  const isInDashboard = url.pathname.startsWith(DASHBOARD_PREFIX);
-  const isStaticAsset = url.pathname.startsWith('/build/') || url.pathname.startsWith('/assets/') || url.pathname.startsWith('/static/');
+  // Limit to our app/public scopes (exclude explicit /admin)
+  const isAdmin = url.pathname.startsWith('/admin');
+  const isScoped = SCOPES.some((p) => url.pathname === p || url.pathname.startsWith(p));
+  const isStaticAsset = url.pathname.startsWith('/build/') || url.pathname.startsWith('/assets/') || url.pathname.startsWith('/static/') || url.pathname.endsWith('.css') || url.pathname.endsWith('.js');
 
-  if (!isInDashboard && !isStaticAsset) return;
+  if ((isAdmin && !isStaticAsset) || (!isScoped && !isStaticAsset)) return;
 
   if (isStaticAsset) {
     event.respondWith(cacheFirst(request));
@@ -72,8 +76,8 @@ async function networkFirst(request) {
   } catch (e) {
     const cached = await cache.match(request);
     if (cached) return cached;
-    // Fallback to dashboard root if available
-    return cache.match('/user/dashboard');
+    // Fallback to app root if available
+    return cache.match('/') || cache.match('/user/dashboard');
   }
 }
 

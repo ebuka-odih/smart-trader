@@ -1,8 +1,8 @@
 {
   "name": "100x TAD",
   "short_name": "100x TAD",
-  "start_url": "/user/dashboard",
-  "scope": "/user/",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#0b1020",
   "theme_color": "#0b1020",
@@ -19,4 +19,3 @@
     }
   ]
 }
-
