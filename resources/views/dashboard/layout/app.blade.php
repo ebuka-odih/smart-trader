@@ -10,6 +10,7 @@
   <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
   <link rel="manifest" href="/manifest.webmanifest?v=2">
   <link rel="apple-touch-icon" sizes="180x180" href="/img/100x2.png?v=2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0b1020">
     
     <!-- Tailwind CSS CDN for immediate styling -->
@@ -635,7 +636,7 @@
                 <img src="/img/100x2.png?v=2" alt="App Icon" class="w-10 h-10 mr-3 rounded">
                 <div class="flex-1">
                     <div class="font-semibold">Add 100x to Home Screen</div>
-                    <div class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
+                    <div id="pwaPromptText" class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
                 </div>
             </div>
             <div class="mt-4 flex gap-2 justify-end">
@@ -654,17 +655,17 @@
         }
     </script>
     <script>
-        // Delayed install dialog for PWA
+        // Delayed install dialog for PWA (with iOS support)
         (function() {
             var promptEvent = null;
             var promptEl = document.getElementById('pwaPrompt');
             var installBtn = document.getElementById('pwaPromptInstall');
             var dismissBtn = document.getElementById('pwaPromptDismiss');
+            var promptText = document.getElementById('pwaPromptText');
 
             if (!promptEl) return;
 
             function showPrompt() {
-                if (!promptEvent) return;
                 promptEl.classList.remove('hidden');
                 promptEl.classList.add('flex');
             }
@@ -675,6 +676,7 @@
             }
 
             var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
             if (isStandalone || localStorage.getItem('pwaInstalled') === '1') {
                 return;
             }
@@ -685,16 +687,29 @@
                 setTimeout(showPrompt, 6000);
             });
 
+            if (isIOS && !isStandalone && localStorage.getItem('pwaPromptDismissed') !== '1') {
+                if (promptText) {
+                    promptText.textContent = "On iPhone/iPad: tap the Share button, then 'Add to Home Screen'.";
+                }
+                if (installBtn) {
+                    installBtn.textContent = 'OK, Got it';
+                }
+                setTimeout(showPrompt, 6000);
+            }
+
             installBtn && installBtn.addEventListener('click', async function() {
-                if (!promptEvent) return;
-                try {
-                    promptEvent.prompt();
-                    var res = await promptEvent.userChoice;
-                    if (res && res.outcome === 'accepted') hidePrompt();
-                } catch (err) {
-                    console.error('Install failed', err);
-                } finally {
-                    promptEvent = null;
+                if (promptEvent) {
+                    try {
+                        promptEvent.prompt();
+                        var res = await promptEvent.userChoice;
+                        if (res && res.outcome === 'accepted') hidePrompt();
+                    } catch (err) {
+                        console.error('Install failed', err);
+                    } finally {
+                        promptEvent = null;
+                    }
+                } else {
+                    hidePrompt();
                 }
             });
 

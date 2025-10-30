@@ -15,6 +15,7 @@
     <link rel="manifest" href="/manifest.webmanifest?v=2">
     <link rel="apple-touch-icon" sizes="180x180" href="/img/100x2.png?v=2">
     <meta name="theme-color" content="#0b1020">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>{{ config('app.name')[0] }}</text></svg>" type="image/svg+xml" />
     <script src="https://cdn.tailwindcss.com/"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -245,7 +246,7 @@
                 <img src="/img/100x2.png?v=2" alt="App Icon" class="w-10 h-10 mr-3 rounded">
                 <div class="flex-1">
                     <div class="font-semibold">Add 100x to Home Screen</div>
-                    <div class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
+                    <div id="pwaPromptText" class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
                 </div>
             </div>
             <div class="mt-4 flex gap-2 justify-end">
@@ -929,17 +930,17 @@ function updateTicker(data) {
             });
         }
 
-        // Delayed install dialog for PWA
+        // Delayed install dialog for PWA (with iOS support)
         (function() {
             var promptEvent = null;
             var promptEl = document.getElementById('pwaPrompt');
             var installBtn = document.getElementById('pwaPromptInstall');
             var dismissBtn = document.getElementById('pwaPromptDismiss');
+            var promptText = document.getElementById('pwaPromptText');
 
             if (!promptEl) return;
 
             function showPrompt() {
-                if (!promptEvent) return;
                 promptEl.classList.remove('hidden');
                 promptEl.classList.add('flex');
             }
@@ -950,6 +951,7 @@ function updateTicker(data) {
             }
 
             var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
             if (isStandalone || localStorage.getItem('pwaInstalled') === '1') {
                 return;
             }
@@ -960,16 +962,31 @@ function updateTicker(data) {
                 setTimeout(showPrompt, 6000);
             });
 
+            // iOS: show guidance even without beforeinstallprompt
+            if (isIOS && !isStandalone && localStorage.getItem('pwaPromptDismissed') !== '1') {
+                if (promptText) {
+                    promptText.textContent = "On iPhone/iPad: tap the Share button, then 'Add to Home Screen'.";
+                }
+                if (installBtn) {
+                    installBtn.textContent = 'OK, Got it';
+                }
+                setTimeout(showPrompt, 6000);
+            }
+
             installBtn && installBtn.addEventListener('click', async function() {
-                if (!promptEvent) return;
-                try {
-                    promptEvent.prompt();
-                    var res = await promptEvent.userChoice;
-                    if (res && res.outcome === 'accepted') hidePrompt();
-                } catch (err) {
-                    console.error('Install failed', err);
-                } finally {
-                    promptEvent = null;
+                if (promptEvent) {
+                    try {
+                        promptEvent.prompt();
+                        var res = await promptEvent.userChoice;
+                        if (res && res.outcome === 'accepted') hidePrompt();
+                    } catch (err) {
+                        console.error('Install failed', err);
+                    } finally {
+                        promptEvent = null;
+                    }
+                } else {
+                    // iOS fallback: just close after showing guidance
+                    hidePrompt();
                 }
             });
 
