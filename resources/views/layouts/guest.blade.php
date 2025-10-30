@@ -22,9 +22,9 @@
             <div class="fixed inset-0 bg-black/50"></div>
             <div class="relative m-4 w-full max-w-sm bg-white text-gray-900 rounded-xl shadow-xl p-4">
                 <div class="flex items-start">
-                    <img src="/static/android-chrome-192x192.png" alt="App Icon" class="w-10 h-10 mr-3 rounded">
+                    <img src="/img/100x.png" alt="App Icon" class="w-10 h-10 mr-3 rounded">
                     <div class="flex-1">
-                        <div class="font-semibold">Add 100x TAD to Home Screen</div>
+                        <div class="font-semibold">Add 100x to Home Screen</div>
                         <div class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
                     </div>
                 </div>

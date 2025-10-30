@@ -1,6 +1,6 @@
 {
-  "name": "100x TAD",
-  "short_name": "100x TAD",
+  "name": "100x",
+  "short_name": "100x",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -8,12 +8,12 @@
   "theme_color": "#0b1020",
   "icons": [
     {
-      "src": "/static/android-chrome-192x192.png",
+      "src": "/img/100x.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/static/android-chrome-512x512.png",
+      "src": "/img/100x.png",
       "sizes": "512x512",
       "type": "image/png"
     }
