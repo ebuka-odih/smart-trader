@@ -110,9 +110,10 @@ class LiveTradingController extends Controller
             'symbol' => 'required|string|max:20',
             'order_type' => 'required|string|in:limit,market',
             'side' => 'required|string|in:buy,sell',
-            'quantity' => 'nullable|numeric|min:0.00000001',
-            'price' => 'nullable|numeric|min:0.00000001',
-            'amount' => 'required|numeric|min:1',
+            // For limit orders, price and quantity are required; for market orders, amount is required
+            'quantity' => 'required_if:order_type,limit|nullable|numeric|min:0.00000001',
+            'price' => 'required_if:order_type,limit|nullable|numeric|min:0.00000001',
+            'amount' => 'required_if:order_type,market|nullable|numeric|min:1',
             'leverage' => 'nullable|numeric|min:1|max:100',
         ]);
 
@@ -125,24 +126,29 @@ class LiveTradingController extends Controller
 
         $user = Auth::user();
         
-        // Check if user has sufficient trading balance
-        if ($request->amount > $user->trading_balance) {
+        // Determine debit amount based on order type
+        $orderAmount = $request->order_type === 'limit'
+            ? (float) $request->quantity * (float) $request->price
+            : (float) $request->amount;
+
+        // Ensure order amount is valid
+        if ($orderAmount <= 0) {
             return response()->json([
                 'success' => false,
-                'message' => 'Insufficient trading balance. You need at least $' . number_format($request->amount, 2) . ' in your trading balance.'
+                'message' => 'Invalid order amount.'
+            ], 400);
+        }
+
+        // Check if user has sufficient trading balance
+        if ($orderAmount > (float) $user->trading_balance) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Insufficient trading balance. You need at least $' . number_format($orderAmount, 2) . ' in your trading balance.'
             ], 400);
         }
 
         try {
-            // For limit orders, validate quantity and price
-            if ($request->order_type === 'limit') {
-                if (!$request->quantity || !$request->price) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Price and quantity are required for limit orders.'
-                    ], 400);
-                }
-            }
+            // Additional guard already handled by validator; keep for clarity
 
             $liveTrade = LiveTrade::create([
                 'user_id' => $user->id,
@@ -152,13 +158,13 @@ class LiveTradingController extends Controller
                 'side' => $request->side,
                 'quantity' => $request->quantity,
                 'price' => $request->price,
-                'amount' => $request->amount,
+                'amount' => $orderAmount,
                 'leverage' => $request->leverage ?? 1.00,
                 'status' => 'pending'
             ]);
 
             // Deduct amount from trading balance
-            $user->decrement('trading_balance', $request->amount);
+            $user->decrement('trading_balance', $orderAmount);
 
             return response()->json([
                 'success' => true,

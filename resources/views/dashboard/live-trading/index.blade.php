@@ -6,7 +6,7 @@
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
             <h1 class="text-2xl font-bold text-white">Live Trading</h1>
-            <p class="text-gray-400 mt-1">Trade crypto, stocks, and forex in real-time</p>
+            <p class="text-gray-400 mt-1">Trade crypto and stocks in real-time</p>
         </div>
     </div>
 
@@ -26,12 +26,7 @@
                     </svg>
                     Stocks
                 </button>
-                <button type="button" class="asset-tab border-b-2 border-transparent py-4 px-1 text-sm font-medium text-gray-400 hover:text-gray-300 hover:border-gray-300" data-type="forex">
-                    <svg class="w-5 h-5 inline mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-                    </svg>
-                    Forex
-                </button>
+                
             </nav>
             
             <!-- Refresh Button -->
@@ -76,8 +71,8 @@
                         <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
                             <td class="py-4 px-4">
                                 <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                                        <span class="text-white text-xs font-bold">{{ substr($asset->symbol, 0, 2) }}</span>
+                                    <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background-color: {{ $asset->getIconColor() }}">
+                                        <span class="text-white text-xs font-bold">{{ $asset->getShortSymbol() }}</span>
                                     </div>
                                     <div>
                                         <div class="text-white font-medium">{{ $asset->name }}</div>
@@ -181,73 +176,7 @@
             </div>
         </div>
 
-        <!-- Forex Tab Content -->
-        <div id="forex-content" class="asset-content hidden p-6">
-            <!-- Search Bar -->
-            <div class="mb-6">
-                <div class="relative">
-                    <input type="text" id="forex-search" placeholder="Search forex pairs..." 
-                           class="w-full px-4 py-3 pl-12 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-gray-700">
-                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-400">Asset</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-400">Price</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-400">24h Change</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-400">7d Change</th>
-                            <th class="text-center py-3 px-4 text-sm font-medium text-gray-400">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($forexAssets as $asset)
-                        <tr class="border-b border-gray-700 hover:bg-gray-700/50 transition-colors">
-                            <td class="py-4 px-4">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-8 h-8 bg-purple-600 rounded-lg flex items-center justify-center">
-                                        <span class="text-white text-xs font-bold">{{ substr($asset['symbol'], 0, 2) }}</span>
-                                    </div>
-                                    <div>
-                                        <div class="text-white font-medium">{{ $asset['name'] }}</div>
-                                        <div class="text-gray-400 text-sm">{{ $asset['symbol'] }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="text-right py-4 px-4">
-                                <div class="text-white font-medium">{{ number_format(rand(100, 200) / 100, 4) }}</div>
-                            </td>
-                            <td class="text-right py-3 px-4">
-                                <div class="text-{{ rand(0, 1) ? 'green' : 'red' }}-400 font-medium">
-                                    {{ rand(0, 1) ? '+' : '' }}{{ number_format(rand(10, 50) / 10, 2) }}%
-                                </div>
-                            </td>
-                            <td class="text-right py-4 px-4">
-                                <div class="text-gray-400 text-sm">--</div>
-                            </td>
-                            <td class="text-center py-4 px-4">
-                                <a href="{{ route('user.liveTrading.trade', ['asset_type' => 'forex', 'symbol' => $asset['symbol']]) }}" 
-                                   class="inline-flex items-center px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors">
-                                    Trade
-                                </a>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="text-center py-8 text-gray-400">No forex assets available</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        
     </div>
 
     <!-- Recent Trades -->
@@ -408,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Search functionality
     initializeSearch('crypto-search', 'crypto-content');
     initializeSearch('stock-search', 'stock-content');
-    initializeSearch('forex-search', 'forex-content');
+    
 });
 
 function initializeSearch(searchId, contentId) {

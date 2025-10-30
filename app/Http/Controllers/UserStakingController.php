@@ -76,10 +76,17 @@ class UserStakingController extends Controller
                 ->withInput();
         }
 
+        // Check if staking_currency is set
+        if (!$plan->staking_currency) {
+            return redirect()->back()
+                ->with('error', 'This staking plan is not properly configured. Please contact support.')
+                ->withInput();
+        }
+
         // Check minimum amount
         if ($plan->minimum_amount && $request->amount_staked < $plan->minimum_amount) {
             return redirect()->back()
-                ->with('error', 'Amount must be at least ' . number_format($plan->minimum_amount, 8) . ' ' . $plan->staking_currency)
+                ->with('error', 'Amount must be at least ' . number_format($plan->minimum_amount, 8) . ' ' . ($plan->staking_currency ?? 'USD'))
                 ->withInput();
         }
 

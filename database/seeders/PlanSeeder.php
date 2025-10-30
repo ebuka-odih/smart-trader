@@ -206,6 +206,7 @@ class PlanSeeder extends Seeder
             'reward_frequency' => 'Monthly',
             'lock_period' => 7,
             'staking_duration' => 90,
+            'staking_currency' => 'USD',
         ]);
 
         Plan::create([
@@ -224,6 +225,7 @@ class PlanSeeder extends Seeder
             'reward_frequency' => 'Weekly',
             'lock_period' => 15,
             'staking_duration' => 180,
+            'staking_currency' => 'USD',
         ]);
 
         Plan::create([
@@ -242,6 +244,7 @@ class PlanSeeder extends Seeder
             'reward_frequency' => 'Daily',
             'lock_period' => 30,
             'staking_duration' => 365,
+            'staking_currency' => 'USD',
         ]);
     }
 }

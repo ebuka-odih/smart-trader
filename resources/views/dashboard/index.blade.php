@@ -175,148 +175,63 @@
         </div>
     </div>
 
-    <!-- Second Row: My Subscriptions -->
-    <div class="mb-6 lg:hidden">
-        <!-- User Subscriptions Card -->
-        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-white">My Subscriptions</h3>
-                <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Trading Plans</span>
-                    <span class="text-blue-400 font-semibold">{{ $tradingPlans }} Active</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Signal Plans</span>
-                    <span class="text-green-400 font-semibold">{{ $signalPlans }} Active</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Staking Plans</span>
-                    <span class="text-purple-400 font-semibold">{{ $stakingPlans }} Active</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Mining Plans</span>
-                    <span class="text-orange-400 font-semibold">{{ $miningPlans }} Active</span>
-                </div>
-            </div>
-            <div class="mt-4 pt-3 border-t border-gray-700">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Total Subscriptions</span>
-                    <span class="text-white font-semibold">{{ $totalPlans }} Active</span>
-                </div>
-            </div>
-        </div>
-    </div>
+	<!-- Second Row: My Subscriptions moved to Portfolio page -->
 
-    <!-- Second Row: Additional Insights -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <!-- Holdings Overview -->
-        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-white">Holdings Overview</h3>
-                <div class="w-8 h-8 bg-yellow-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Total Value</span>
-                    <span class="text-white font-semibold">{{ auth()->user()->formatAmount($totalHoldingsValue) }}</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Assets Held</span>
-                    <span class="text-white">{{ $holdings->count() }}</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Recent Activity</span>
-                    <span class="text-white">{{ $recentTransactions->count() }}</span>
-                </div>
-            </div>
-            @if($holdings->count() > 0)
-            <div class="mt-4 pt-3 border-t border-gray-700">
-                <a href="{{ route('user.holding.index') }}" class="text-blue-400 hover:text-blue-300 text-sm font-medium">
-                    View All Holdings →
-                </a>
-            </div>
-            @endif
-        </div>
+	<!-- Second Row: Market Heatmap -->
+	<div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
+		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px;">
+			<div class="tradingview-widget-container__widget" style="height: 100%;"></div>
+			<div class="tradingview-widget-copyright px-6 py-3">
+				<a href="https://www.tradingview.com/heatmap/stock/" rel="noopener nofollow" target="_blank"><span class="blue-text">Stock Heatmap</span></a><span class="trademark"> by TradingView</span>
+			</div>
+			<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+			{
+				"dataSource": "SPX500",
+				"blockSize": "market_cap_basic",
+				"blockColor": "change",
+				"grouping": "sector",
+				"locale": "en",
+				"symbolUrl": "",
+				"colorTheme": "dark",
+				"exchanges": [],
+				"hasTopBar": false,
+				"isDataSetEnabled": false,
+				"isZoomEnabled": true,
+				"hasSymbolTooltip": true,
+				"isMonoSize": false,
+				"width": "100%",
+				"height": "720"
+			}
+			</script>
+		</div>
+	</div>
 
-        <!-- Bot Trading Overview -->
-        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-white">Bot Trading</h3>
-                <div class="w-8 h-8 bg-purple-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Active Bots</span>
-                    <span class="text-white font-semibold">{{ $activeBots }}</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Total Profit</span>
-                    <span class="{{ $totalBotProfit >= 0 ? 'text-green-400' : 'text-red-400' }} font-semibold">
-                        {{ $totalBotProfit >= 0 ? '+' : '' }}{{ auth()->user()->formatAmount($totalBotProfit) }}
-                    </span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Total Bots</span>
-                    <span class="text-white">{{ $botTradings->count() }}</span>
-                </div>
-            </div>
-            @if($botTradings->count() > 0)
-            <div class="mt-4 pt-3 border-t border-gray-700">
-                <a href="{{ route('user.botTrading.index') }}" class="text-purple-400 hover:text-purple-300 text-sm font-medium">
-                    Manage Bots →
-                </a>
-            </div>
-            @endif
-        </div>
-
-        <!-- Copy Trading Overview -->
-        <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-white">Copy Trading</h3>
-                <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
-                    <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="space-y-3">
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Active Copies</span>
-                    <span class="text-white font-semibold">{{ $activeCopyTrades }}</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Total Copies</span>
-                    <span class="text-white">{{ $copyTrades->count() }}</span>
-                </div>
-                <div class="flex justify-between text-sm">
-                    <span class="text-gray-400">Status</span>
-                    <span class="text-green-400 font-semibold">{{ $activeCopyTrades > 0 ? 'Active' : 'Inactive' }}</span>
-                </div>
-            </div>
-            @if($copyTrades->count() > 0)
-            <div class="mt-4 pt-3 border-t border-gray-700">
-                <a href="{{ route('user.copyTrading.index') }}" class="text-green-400 hover:text-green-300 text-sm font-medium">
-                    View Copy Trades →
-                </a>
-            </div>
-            @endif
-        </div>
-    </div>
+	<!-- Crypto Heatmap -->
+	<div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
+		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px;">
+			<div class="tradingview-widget-container__widget" style="height: 100%;"></div>
+			<div class="tradingview-widget-copyright px-6 py-3">
+				<a href="https://www.tradingview.com/heatmap/crypto/" rel="noopener nofollow" target="_blank"><span class="blue-text">Crypto Heatmap</span></a><span class="trademark"> by TradingView</span>
+			</div>
+			<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js" async>
+			{
+				"dataSource": "Crypto",
+				"blockSize": "market_cap_calc",
+				"blockColor": "24h_close_change|5",
+				"locale": "en",
+				"symbolUrl": "",
+				"colorTheme": "dark",
+				"hasTopBar": false,
+				"isDataSetEnabled": false,
+				"isZoomEnabled": true,
+				"hasSymbolTooltip": true,
+				"isMonoSize": false,
+				"width": "100%",
+				"height": "720"
+			}
+			</script>
+		</div>
+	</div>
 
     <!-- Third Row: Trades Tabs -->
     <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">

@@ -8,6 +8,8 @@
   <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ \App\Helpers\WebsiteSettingsHelper::getSiteName() }} - Dashboard</title>
   <link rel="icon" href="{{ asset('assets/img/favicon.png') }}" type="image/x-icon">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="theme-color" content="#0b1020">
     
     <!-- Tailwind CSS CDN for immediate styling -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -483,8 +485,12 @@
                         </div>
                     </div>
                     
-                    <!-- Right side - Notification and user profile -->
+                    <!-- Right side - Install PWA, Notification and user profile -->
                     <div class="flex items-center space-x-1 sm:space-x-2 ml-auto -mr-2 sm:-mr-4">
+                        <!-- Install PWA Button (shown when installable) -->
+                        <button id="installPwaBtn" class="hidden px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-500 transition-colors">
+                            Install App
+                        </button>
                         
 
                         <!-- Theme Toggle -->
@@ -621,6 +627,59 @@
 
 
 @livewireScripts
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js').catch(function(e){
+                    console.error('Service worker registration failed', e);
+                });
+            });
+        }
+    </script>
+    <script>
+        // PWA install prompt handling
+        (function() {
+            var installBtn = document.getElementById('installPwaBtn');
+            if (!installBtn) return;
+
+            // Hide if already installed or running as standalone
+            var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+            if (isStandalone || localStorage.getItem('pwaInstalled') === '1') {
+                installBtn.classList.add('hidden');
+                return;
+            }
+
+            var deferredPrompt = null;
+            window.addEventListener('beforeinstallprompt', function(e) {
+                e.preventDefault();
+                deferredPrompt = e;
+                installBtn.classList.remove('hidden');
+            });
+
+            installBtn.addEventListener('click', async function() {
+                if (!deferredPrompt) return;
+                installBtn.disabled = true;
+                try {
+                    deferredPrompt.prompt();
+                    var choice = await deferredPrompt.userChoice;
+                    if (choice && choice.outcome === 'accepted') {
+                        installBtn.classList.add('hidden');
+                    } else {
+                        installBtn.disabled = false;
+                    }
+                } catch (err) {
+                    installBtn.disabled = false;
+                    console.error('Install prompt error:', err);
+                }
+                deferredPrompt = null;
+            });
+
+            window.addEventListener('appinstalled', function() {
+                localStorage.setItem('pwaInstalled', '1');
+                installBtn.classList.add('hidden');
+            });
+        })();
+    </script>
     
     <!-- User Dropdown Script -->
     
@@ -848,6 +907,7 @@
         });
 
         // Notification dropdown functionality
+        @auth
         const notificationDropdown = document.getElementById('notificationDropdown');
         const notificationButton = document.getElementById('notificationButton');
         const notificationDropdownMenu = document.getElementById('notificationDropdownMenu');
@@ -1053,6 +1113,7 @@
             // Refresh unread count every 30 seconds
             setInterval(loadUnreadCount, 30000);
         }
+        @endauth
 
 @yield('scripts')
 </script>

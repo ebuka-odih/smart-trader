@@ -30,18 +30,19 @@ class AssetPriceService
                 return;
             }
             
-            // Group assets by chunks to avoid rate limits
-            $chunks = $cryptoAssets->chunk(100); // CoinMarketCap allows up to 100 symbols per request
-            
-            foreach ($chunks as $chunk) {
-                $symbols = $chunk->pluck('symbol')->toArray();
-                $this->updateCryptoBatch($symbols);
-                
-                // Rate limiting - be conservative with CoinMarketCap
-                sleep(1);
+            // Prefer CoinMarketCap if API key is configured; otherwise, fall back to CoinGecko (no key required)
+            if ($this->coinmarketcapApiKey) {
+                $chunks = $cryptoAssets->chunk(100);
+                foreach ($chunks as $chunk) {
+                    $symbols = $chunk->pluck('symbol')->toArray();
+                    $this->updateCryptoBatch($symbols);
+                    sleep(1);
+                }
+                Log::info('Crypto prices updated successfully via CoinMarketCap', ['count' => $cryptoAssets->count()]);
+            } else {
+                $this->updateCryptoViaCoinGecko($cryptoAssets);
+                Log::info('Crypto prices updated successfully via CoinGecko', ['count' => $cryptoAssets->count()]);
             }
-            
-            Log::info('Crypto prices updated successfully', ['count' => $cryptoAssets->count()]);
         } catch (\Exception $e) {
             Log::error('Failed to update crypto prices: ' . $e->getMessage());
         }
@@ -78,6 +79,78 @@ class AssetPriceService
         } catch (\Exception $e) {
             Log::error('Error updating stock prices: ' . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * Update crypto prices using CoinGecko public API (no API key required).
+     * Strategy: fetch top 250 coins and map by symbol to local assets.
+     */
+    private function updateCryptoViaCoinGecko($cryptoAssets): void
+    {
+        try {
+            $response = Http::timeout(30)
+                ->get('https://api.coingecko.com/api/v3/coins/markets', [
+                    'vs_currency' => 'usd',
+                    'order' => 'market_cap_desc',
+                    'per_page' => 250,
+                    'page' => 1,
+                    'sparkline' => 'false',
+                    'price_change_percentage' => '24h'
+                ]);
+
+            if (!$response->successful()) {
+                Log::warning('CoinGecko API request failed', [
+                    'status' => $response->status(),
+                    'body' => $response->body(),
+                ]);
+                return;
+            }
+
+            $data = $response->json();
+
+            // Build a map of SYMBOL => market data for quick lookup
+            $symbolToData = [];
+            foreach ($data as $coin) {
+                $symbol = strtoupper($coin['symbol'] ?? '');
+                if ($symbol) {
+                    // Prefer first occurrence (highest market cap)
+                    if (!isset($symbolToData[$symbol])) {
+                        $symbolToData[$symbol] = $coin;
+                    }
+                }
+            }
+
+            foreach ($cryptoAssets as $asset) {
+                $symbol = strtoupper($asset->symbol);
+                if (!isset($symbolToData[$symbol])) {
+                    continue;
+                }
+
+                $coin = $symbolToData[$symbol];
+                $newPrice = (float)($coin['current_price'] ?? 0);
+                $changePct = (float)($coin['price_change_percentage_24h'] ?? 0);
+                $marketCap = (float)($coin['market_cap'] ?? 0);
+                $volume24h = (float)($coin['total_volume'] ?? 0);
+
+                $oldPrice = $asset->current_price;
+
+                $asset->update([
+                    'current_price' => $newPrice,
+                    'price_change_24h' => $changePct,
+                    'price_change_percentage_24h' => $changePct,
+                    'market_cap' => $marketCap,
+                    'volume_24h' => $volume24h,
+                    'last_updated' => now(),
+                ]);
+
+                if ($oldPrice != $newPrice) {
+                    broadcast(new PriceUpdated($asset, $newPrice, $changePct))->toOthers();
+                    Log::info("Crypto price updated (CG): {$asset->symbol} - {$oldPrice} -> {$newPrice}");
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error('Error updating crypto via CoinGecko: ' . $e->getMessage());
         }
     }
 

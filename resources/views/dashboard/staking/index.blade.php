@@ -46,7 +46,7 @@
                                         <div class="bg-gray-700 rounded-lg p-4 border border-gray-600">
                                             <div class="flex items-center justify-between mb-3">
                                                 <h3 class="text-white font-semibold">{{ $plan->name }}</h3>
-                                                <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800">{{ $plan->staking_currency }}</span>
+                                                <span class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800">{{ $plan->staking_currency ?? 'N/A' }}</span>
                                             </div>
                                             
                                             <div class="space-y-2 mb-4">
@@ -60,7 +60,7 @@
                                                 @if($plan->minimum_amount)
                                                     <div class="flex justify-between">
                                                         <span class="text-gray-400 text-sm">Min Amount:</span>
-                                                        <span class="text-white">{{ number_format($plan->minimum_amount, 8) }} {{ $plan->staking_currency }}</span>
+                                                        <span class="text-white">{{ number_format($plan->minimum_amount, 2) }} {{ $plan->staking_currency ?? 'USD' }}</span>
                                                     </div>
                                                 @endif
                                                 

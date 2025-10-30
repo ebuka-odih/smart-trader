@@ -62,13 +62,20 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="py-4 px-4">Market</td>
-                                <td class="py-4 px-4">Buy</td>
-                                <td class="text-right py-4 px-4">$100.00</td>
-                                <td class="text-right py-4 px-4">1x</td>
-                                <td class="py-4 px-4">Today</td>
+                                <td class="py-4 px-4">{{ ucfirst($trade->order_type) }}</td>
+                                <td class="py-4 px-4">{{ ucfirst($trade->side) }}</td>
+                                <td class="text-right py-4 px-4">${{ number_format((float) $trade->amount, 2) }}</td>
+                                <td class="text-right py-4 px-4">{{ rtrim(rtrim(number_format((float) $trade->leverage, 2, '.', ''), '0'), '.') }}x</td>
+                                <td class="py-4 px-4">{{ $trade->created_at?->diffForHumans() }}</td>
                                 <td class="text-center py-4 px-4">
-                                    <button class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded">Cancel</button>
+                                    @if($trade->order_type === 'limit' && $trade->status === 'pending')
+                                        <form method="POST" action="{{ route('user.liveTrading.cancel', $trade) }}">
+                                            @csrf
+                                            <button type="submit" class="px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm rounded">Cancel</button>
+                                        </form>
+                                    @else
+                                        <span class="text-gray-400 text-sm">—</span>
+                                    @endif
                                 </td>
                             </tr>
                             @endforeach

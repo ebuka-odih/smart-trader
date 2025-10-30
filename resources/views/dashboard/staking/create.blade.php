@@ -45,7 +45,7 @@
                                     <option value="">Choose a staking plan</option>
                                     @foreach($stakingPlans as $plan)
                                         <option value="{{ $plan->id }}" {{ request('plan') == $plan->id ? 'selected' : '' }}>
-                                            {{ $plan->name }} - {{ $plan->staking_currency }} ({{ number_format($plan->apy_rate, 2) }}% APY)
+                                            {{ $plan->name }} - {{ $plan->staking_currency ?? 'N/A' }} ({{ number_format($plan->apy_rate, 2) }}% APY)
                                         </option>
                                     @endforeach
                                 </select>
@@ -58,7 +58,7 @@
                             <div>
                                 <label for="amount_staked" class="block text-sm font-medium text-gray-300 mb-2">Amount to Stake <span class="text-red-500">*</span></label>
                                 <div class="relative">
-                                    <input type="number" id="amount_staked" name="amount_staked" step="0.00000001" min="0" required 
+                                    <input type="number" id="amount_staked" name="amount_staked" step="0.01" min="0" required 
                                            class="w-full bg-white border border-gray-600 text-gray-900 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
                                            placeholder="Enter amount to stake">
                                     <div class="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const plan = stakingPlans.find(p => p.id == planId);
         
         if (plan) {
-            currencyDisplay.textContent = plan.staking_currency;
+            currencyDisplay.textContent = plan.staking_currency || 'N/A';
             
             planDetails.innerHTML = `
                 <div class="space-y-4">
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <div class="flex justify-between">
                         <span class="text-gray-400">Currency:</span>
-                        <span class="text-white">${plan.staking_currency}</span>
+                        <span class="text-white">${plan.staking_currency || 'N/A'}</span>
                     </div>
                     ${plan.apy_rate ? `
                     <div class="flex justify-between">
@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     ${plan.minimum_amount ? `
                     <div class="flex justify-between">
                         <span class="text-gray-400">Min Amount:</span>
-                        <span class="text-white">${parseFloat(plan.minimum_amount).toFixed(8)} ${plan.staking_currency}</span>
+                        <span class="text-white">${parseFloat(plan.minimum_amount).toFixed(2)} ${plan.staking_currency || 'USD'}</span>
                     </div>
                     ` : ''}
                     ${plan.lock_period ? `

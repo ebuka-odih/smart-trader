@@ -159,7 +159,7 @@ class UserStaking extends Model
      */
     public function getFormattedAmountStakedAttribute()
     {
-        return number_format($this->amount_staked, 8) . ' ' . $this->currency;
+        return number_format($this->amount_staked, 2) . ' ' . $this->currency;
     }
 
     /**
@@ -167,7 +167,7 @@ class UserStaking extends Model
      */
     public function getFormattedTotalRewardsAttribute()
     {
-        return number_format($this->total_rewards, 8) . ' ' . $this->currency;
+        return number_format($this->total_rewards, 2) . ' ' . $this->currency;
     }
 
     /**
@@ -176,7 +176,7 @@ class UserStaking extends Model
     public function getFormattedCurrentValueAttribute()
     {
         $currentValue = $this->current_value ?? $this->calculateCurrentValue();
-        return number_format($currentValue, 8) . ' ' . $this->currency;
+        return number_format($currentValue, 2) . ' ' . $this->currency;
     }
 
     /**
