@@ -34,6 +34,14 @@ class WebsiteSettingsHelper
             ];
         }
         
+        $systemSettings = self::getSystemSettings();
+        if (!empty($systemSettings['site_name'])) {
+            $settings['site_name'] = $systemSettings['site_name'];
+        }
+        if (!empty($systemSettings['site_email'])) {
+            $settings['site_email'] = $systemSettings['site_email'];
+        }
+        
         return $settings;
     }
 
@@ -127,5 +135,16 @@ class WebsiteSettingsHelper
             'linkedin' => $settings['linkedin_url'] ?? '',
             'instagram' => $settings['instagram_url'] ?? '',
         ];
+    }
+
+    protected static function getSystemSettings()
+    {
+        $settingsFile = 'system_settings.json';
+        
+        if (Storage::exists($settingsFile)) {
+            return json_decode(Storage::get($settingsFile), true);
+        }
+        
+        return [];
     }
 }
