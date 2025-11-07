@@ -11,6 +11,16 @@ class UpdateSystemSettingsRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        // Convert checkbox values to boolean (unchecked checkboxes don't send a value)
+        $this->merge([
+            'maintenance_mode' => $this->has('maintenance_mode') ? (bool) $this->maintenance_mode : false,
+            'registration_enabled' => $this->has('registration_enabled') ? (bool) $this->registration_enabled : false,
+            'email_verification_required' => $this->has('email_verification_required') ? (bool) $this->email_verification_required : false,
+        ]);
+    }
+
     public function rules()
     {
         return [

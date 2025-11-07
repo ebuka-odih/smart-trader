@@ -545,52 +545,8 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     });
 });
 
-// System settings form submission
-document.getElementById('systemForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Convert checkbox values to boolean
-    data.maintenance_mode = document.getElementById('maintenance_mode').checked;
-    data.registration_enabled = document.getElementById('registration_enabled').checked;
-    data.email_verification_required = document.getElementById('email_verification_required').checked;
-    
-    fetch('{{ route("admin.settings.system.update") }}', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            if (typeof Swal !== 'undefined') {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: data.message
-                });
-            } else {
-                alert(data.message);
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: 'An error occurred while updating system settings'
-            });
-        } else {
-            alert('Error updating system settings');
-        }
-    });
+// System settings form submission - now uses traditional form submission
+// No AJAX interception needed - form will submit normally and redirect
 
     // Livechat form now uses traditional form submission
 

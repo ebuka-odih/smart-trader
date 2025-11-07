@@ -55,19 +55,45 @@ class AdminSettingsController extends Controller
 
     public function updateSystemSettings(UpdateSystemSettingsRequest $request)
     {
-        $settings = $request->validated();
+        $requestData = $request->validated();
         
-        // Update system settings in config or database
-        foreach ($settings as $key => $value) {
-            // You can store these in a settings table or config files
-            // For now, we'll use a simple approach with config
-            config([$key => $value]);
+        // Get current settings to merge with new data
+        $currentSettings = $this->getSystemSettings();
+        
+        // Merge new data with current settings
+        $settings = array_merge($currentSettings, $requestData);
+        
+        // Add timestamp
+        $settings['updated_at'] = now()->toISOString();
+        $settings['updated_by'] = auth()->user()->id;
+        
+        // Store system settings in JSON file
+        $settingsFile = 'system_settings.json';
+        
+        try {
+            Storage::put($settingsFile, json_encode($settings, JSON_PRETTY_PRINT));
+            
+            // Return JSON for AJAX requests, redirect for regular form submissions
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'System settings updated successfully!'
+                ]);
+            }
+            
+            return redirect()->back()->with('success', 'System settings updated successfully!');
+        } catch (\Exception $e) {
+            \Log::error('Error saving system settings', ['error' => $e->getMessage()]);
+            
+            if ($request->expectsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error saving settings: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return redirect()->back()->with('error', 'Error saving settings: ' . $e->getMessage());
         }
-        
-        return response()->json([
-            'success' => true,
-            'message' => 'System settings updated successfully!'
-        ]);
     }
 
     public function updateLivechatSettings(UpdateLivechatSettingsRequest $request)
@@ -163,7 +189,10 @@ class AdminSettingsController extends Controller
 
     private function getSystemSettings()
     {
-        return [
+        $settingsFile = 'system_settings.json';
+        
+        // Default settings from config
+        $defaultSettings = [
             'site_name' => config('app.name'),
             'site_email' => config('mail.from.address', 'admin@' . str_replace(['http://', 'https://', 'www.'], '', config('app.url'))),
             'maintenance_mode' => config('app.maintenance_mode', false),
@@ -173,6 +202,16 @@ class AdminSettingsController extends Controller
             'default_currency' => config('app.default_currency', 'USD'),
             'timezone' => config('app.timezone', 'UTC'),
         ];
+        
+        if (Storage::exists($settingsFile)) {
+            $savedSettings = json_decode(Storage::get($settingsFile), true);
+            // Merge saved settings with defaults to ensure all keys exist
+            $settings = array_merge($defaultSettings, $savedSettings);
+        } else {
+            $settings = $defaultSettings;
+        }
+        
+        return $settings;
     }
 
     private function getLivechatSettings()
