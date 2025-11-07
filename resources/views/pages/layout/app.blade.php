@@ -12,7 +12,6 @@
     <meta name="locale" content="en">
     <meta name="content-language" content="en">
     <title>{{ config('app.name') }} | Advanced Trading Platform</title>
-    <link rel="manifest" href="/manifest.webmanifest?v=2">
     <link rel="apple-touch-icon" sizes="180x180" href="/img/100x2.png?v=2">
     <meta name="theme-color" content="#0b1020">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -239,22 +238,6 @@
 </head>
 
 <body>
-    <div id="pwaPrompt" class="hidden fixed inset-0 z-50 items-end justify-center">
-        <div class="fixed inset-0 bg-black/50"></div>
-        <div class="relative m-4 w-full max-w-sm bg-white text-gray-900 rounded-xl shadow-xl p-4">
-            <div class="flex items-start">
-                <img src="/img/100x2.png?v=2" alt="App Icon" class="w-10 h-10 mr-3 rounded">
-                <div class="flex-1">
-                    <div class="font-semibold">Add 100x to Home Screen</div>
-                    <div id="pwaPromptText" class="text-sm text-gray-600 mt-1">Install the app for faster access and an app-like experience.</div>
-                </div>
-            </div>
-            <div class="mt-4 flex gap-2 justify-end">
-                <button id="pwaPromptDismiss" class="px-3 py-2 text-sm rounded border border-gray-300">Maybe later</button>
-                <button id="pwaPromptInstall" class="px-3 py-2 text-sm rounded bg-blue-600 text-white">Install</button>
-            </div>
-        </div>
-    </div>
 
     <!-- Advanced Stock Market Ticker -->
 <div class="bg-gradient-to-r from-[#0A0714] via-[#0D091C] to-[#0A0714] py-3 overflow-hidden border-b border-[#2FE6DE]/20 shadow-lg">
@@ -920,87 +903,6 @@ function updateTicker(data) {
     </footer>
 
     <script src="{{ asset('front/js/crypto-api.js') }}"></script>
-    <script>
-        // Register SW globally for public pages
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', function() {
-                navigator.serviceWorker.register('/service-worker.js').catch(function(e){
-                    console.error('Service worker registration failed', e);
-                });
-            });
-        }
-
-        // Delayed install dialog for PWA (with iOS support)
-        (function() {
-            var promptEvent = null;
-            var promptEl = document.getElementById('pwaPrompt');
-            var installBtn = document.getElementById('pwaPromptInstall');
-            var dismissBtn = document.getElementById('pwaPromptDismiss');
-            var promptText = document.getElementById('pwaPromptText');
-
-            if (!promptEl) return;
-
-            function showPrompt() {
-                promptEl.classList.remove('hidden');
-                promptEl.classList.add('flex');
-            }
-
-            function hidePrompt() {
-                promptEl.classList.add('hidden');
-                promptEl.classList.remove('flex');
-            }
-
-            var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-            var isIOS = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
-            if (isStandalone || localStorage.getItem('pwaInstalled') === '1') {
-                return;
-            }
-
-            window.addEventListener('beforeinstallprompt', function(e) {
-                e.preventDefault();
-                promptEvent = e;
-                setTimeout(showPrompt, 6000);
-            });
-
-            // iOS: show guidance even without beforeinstallprompt
-            if (isIOS && !isStandalone && localStorage.getItem('pwaPromptDismissed') !== '1') {
-                if (promptText) {
-                    promptText.textContent = "On iPhone/iPad: tap the Share button, then 'Add to Home Screen'.";
-                }
-                if (installBtn) {
-                    installBtn.textContent = 'OK, Got it';
-                }
-                setTimeout(showPrompt, 6000);
-            }
-
-            installBtn && installBtn.addEventListener('click', async function() {
-                if (promptEvent) {
-                    try {
-                        promptEvent.prompt();
-                        var res = await promptEvent.userChoice;
-                        if (res && res.outcome === 'accepted') hidePrompt();
-                    } catch (err) {
-                        console.error('Install failed', err);
-                    } finally {
-                        promptEvent = null;
-                    }
-                } else {
-                    // iOS fallback: just close after showing guidance
-                    hidePrompt();
-                }
-            });
-
-            dismissBtn && dismissBtn.addEventListener('click', function() {
-                hidePrompt();
-                localStorage.setItem('pwaPromptDismissed', '1');
-            });
-
-            window.addEventListener('appinstalled', function() {
-                localStorage.setItem('pwaInstalled', '1');
-                hidePrompt();
-            });
-        })();
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             lucide.createIcons();
