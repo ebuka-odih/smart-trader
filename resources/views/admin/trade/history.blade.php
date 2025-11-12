@@ -42,6 +42,40 @@
         </div>
     </div>
 
+    @if(session('success'))
+        <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg dark:bg-green-800 dark:border-green-600 dark:text-green-300">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg dark:bg-red-800 dark:border-red-600 dark:text-red-300">
+            {{ session('error') }}
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg dark:bg-red-800 dark:border-red-600 dark:text-red-300">
+            <ul class="list-disc list-inside">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    <!-- Navigation Bar -->
+    <div class="mb-6 flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <a href="{{ route('admin.trade.history') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 {{ request()->routeIs('admin.trade.history') ? 'bg-blue-50 border-blue-500 text-blue-700 dark:bg-blue-900 dark:border-blue-700 dark:text-blue-300' : '' }}">
+                Trade History
+            </a>
+            <a href="{{ route('admin.trade.place') }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 {{ request()->routeIs('admin.trade.place') ? 'bg-blue-50 border-blue-500 text-blue-700 dark:bg-blue-900 dark:border-blue-700 dark:text-blue-300' : '' }}">
+                Place Trade
+            </a>
+        </div>
+    </div>
+
     <!-- Tabs -->
     <div class="mb-6">
         <div class="border-b border-gray-200 dark:border-gray-700">
@@ -606,5 +640,6 @@ function updateSummaryTotals() {
     // For now, we'll just note that totals need updating
     console.log('Summary totals updated');
 }
+
 </script>
 @endpush

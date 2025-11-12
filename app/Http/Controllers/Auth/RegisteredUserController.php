@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Referral;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -54,7 +55,7 @@ class RegisteredUserController extends Controller
                 ->withErrors(['email' => 'Registration failed. Please try again.']);
         }
 
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
@@ -62,7 +63,13 @@ class RegisteredUserController extends Controller
             'country' => ['required', 'string', 'max:100'],
             'currency' => ['required', 'string', 'in:USD,EUR,GBP,JPY,CAD,AUD,CHF,CNY,INR,BRL'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'referral_code' => ['nullable', 'string', 'exists:users,referral_code'],
         ]);
+
+        $referrer = null;
+        if (!empty($validatedData['referral_code'])) {
+            $referrer = User::where('referral_code', strtoupper($validatedData['referral_code']))->first();
+        }
 
         $user = User::create([
             'name' => $request->name,
@@ -72,7 +79,15 @@ class RegisteredUserController extends Controller
             'country' => $request->country,
             'currency' => $request->currency,
             'password' => Hash::make($request->password),
+            'referred_by' => $referrer?->id,
         ]);
+
+        if ($referrer) {
+            Referral::create([
+                'referrer_id' => $referrer->id,
+                'referred_user_id' => $user->id,
+            ]);
+        }
 
         // Generate verification code
         $verificationCode = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);

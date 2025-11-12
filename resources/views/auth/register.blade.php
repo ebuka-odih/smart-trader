@@ -226,6 +226,31 @@
                     @enderror
                 </div>
 
+            <!-- Referral Code Field -->
+            <div>
+                    <label for="referral_code" class="block text-sm font-medium text-gray-300 mb-2">Referral Code <span class="text-gray-500">(Optional)</span></label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M15 7h-1V5a4 4 0 10-8 0v2H5a1 1 0 00-1 1v9a2 2 0 002 2h8a2 2 0 002-2V8a1 1 0 00-1-1zM8 5a2 2 0 114 0v2H8V5z"></path>
+                            </svg>
+                        </div>
+                        <input
+                            id="referral_code"
+                            name="referral_code"
+                            type="text"
+                            value="{{ old('referral_code', request('ref')) }}"
+                            class="uppercase block w-full pl-10 pr-3 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors @error('referral_code') border-red-500 focus:ring-red-500 @enderror"
+                            placeholder="Enter a referral code"
+                            autocomplete="off"
+                        >
+                    </div>
+                    @error('referral_code')
+                        <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-xs text-gray-500">Have a friend invite you? Add their code here to connect accounts.</p>
+                </div>
+
                 <!-- Password Field -->
                 <div>
                     <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Password</label>

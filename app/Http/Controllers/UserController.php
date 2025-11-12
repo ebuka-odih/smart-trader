@@ -16,6 +16,11 @@ class UserController extends Controller
     {
         $user = Auth::user();
         
+        $user->loadMissing([
+            'referrals.referredUser',
+            'referrer',
+        ]);
+
         // Get user's trades
         $trades = Trade::whereUserId($user->id)->latest()->get();
         $openTrades = $trades->filter(function($trade) {
@@ -72,6 +77,10 @@ class UserController extends Controller
             return $copy->status == 1;
         })->count();
         
+        $referrals = $user->referrals()->with('referredUser')->latest()->get();
+        $referralCount = $referrals->count();
+        $referralEarnings = $referrals->sum('reward_amount');
+
         $dashboardData = [
             'user' => $user,
             'trades' => $trades,
@@ -95,6 +104,9 @@ class UserController extends Controller
             'recentTransactions' => $recentTransactions,
             'copyTrades' => $copyTrades,
             'activeCopyTrades' => $activeCopyTrades,
+            'referrals' => $referrals,
+            'referralCount' => $referralCount,
+            'referralEarnings' => $referralEarnings,
         ];
         
         return view('dashboard.index', $dashboardData);

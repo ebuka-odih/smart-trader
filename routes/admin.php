@@ -24,7 +24,9 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::get('/open-trades', [AdminTradeController::class, 'openTrades'])->name('openTrades');
     Route::get('/closed-trades', [AdminTradeController::class, 'closedTrades'])->name('closedTrades');
     Route::get('/trade-history', [AdminTradeController::class, 'tradeHistory'])->name('trade.history');
+    Route::get('/place-trade', [AdminTradeController::class, 'placeTrade'])->name('trade.place');
     Route::get('/trade-room', [AdminTradeController::class, 'index'])->name('trade.index');
+    Route::post('/trade', [AdminTradeController::class, 'store'])->name('trade.store');
     Route::post('/trade/{id}/edit-pnl', [AdminTradeController::class, 'editPnl'])->name('trade.edit-pnl');
     Route::post('/trade/{id}/close', [AdminTradeController::class, 'closeTrade'])->name('trade.close');
     Route::delete('/trade/{id}', [AdminTradeController::class, 'destroy'])->name('trade.destroy');
@@ -37,6 +39,7 @@ Route::group(['middleware' => ['auth', 'admin'], 'prefix' => 'admin', 'as' => 'a
     Route::post('/user/{id}/update-status', [AdminUserController::class, 'updateStatus'])->name('updateStatus');
     Route::post('/user/{id}/verify-email', [AdminUserController::class, 'verifyEmail'])->name('user.verifyEmail');
     Route::post('/user/{id}/unverify-email', [AdminUserController::class, 'unverifyEmail'])->name('user.unverifyEmail');
+    Route::post('/user/{id}/update-trading-strength', [AdminUserController::class, 'updateTradingStrength'])->name('updateTradingStrength');
 
     Route::resource('/payment-method', AdminPaymentMethodController::class);
     Route::get('/security', [AdminController::class, 'security'])->name('security');

@@ -159,4 +159,26 @@ class UserController extends Controller
        return redirect()->back()->with('success', 'User email verification has been removed.');
    }
 
+   public function updateTradingStrength(Request $request, $id)
+   {
+       $request->validate([
+           'trading_strength' => 'required|numeric|min:0|max:100',
+       ]);
+
+       $user = User::findOrFail($id);
+       $tradingStrength = $request->trading_strength;
+
+       $user->trading_strength = $tradingStrength;
+       $user->save();
+       
+       // Debug: Log the update
+       \Log::info('Admin Trading Strength Update', [
+           'user_id' => $user->id,
+           'trading_strength' => $tradingStrength,
+           'updated_by' => auth()->id()
+       ]);
+
+       return redirect()->back()->with('trading_strength_success', "Successfully updated trading strength to " . number_format($tradingStrength, 2));
+   }
+
 }

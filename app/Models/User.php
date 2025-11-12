@@ -46,6 +46,7 @@ class User extends Authenticatable
         'currency',
         'trader',
         'trade_count',
+        'trading_strength',
         'email_verified_at',
         'verification_code',
         'verification_code_expires_at',
@@ -61,6 +62,8 @@ class User extends Authenticatable
         'id_front',
         'id_back',
         'selfie',
+        'referral_code',
+        'referred_by',
     ];
 
     /**
@@ -91,7 +94,26 @@ class User extends Authenticatable
             'holding_balance' => 'decimal:2',
             'staking_balance' => 'decimal:2',
             'profit' => 'decimal:2',
+            'trading_strength' => 'decimal:2',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::creating(function (self $user) {
+            if (empty($user->referral_code)) {
+                $user->referral_code = static::generateUniqueReferralCode();
+            }
+        });
+    }
+
+    protected static function generateUniqueReferralCode(): string
+    {
+        do {
+            $code = Str::upper(Str::random(8));
+        } while (static::where('referral_code', $code)->exists());
+
+        return $code;
     }
 
     public function fullname()
@@ -430,6 +452,21 @@ class User extends Authenticatable
     public function formatAmount($amount, $decimals = 2)
     {
         return $this->currency_symbol . number_format($amount, $decimals);
+    }
+
+    public function referrals()
+    {
+        return $this->hasMany(Referral::class, 'referrer_id');
+    }
+
+    public function referredUsers()
+    {
+        return $this->hasManyThrough(self::class, Referral::class, 'referrer_id', 'id', 'id', 'referred_user_id');
+    }
+
+    public function referrer()
+    {
+        return $this->belongsTo(self::class, 'referred_by');
     }
 
     /**

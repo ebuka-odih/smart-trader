@@ -1,12 +1,79 @@
 @extends('dashboard.layout.app')
 @section('content')
 
+@php
+    /** @var \App\Models\User $user */
+    $user = $user ?? auth()->user()->fresh();
+@endphp
+
 <div class="space-y-6">
     <!-- Page Header -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
             <h1 class="text-2xl font-bold text-white">Dashboard</h1>
-            <p class="text-gray-400 mt-1">Welcome back, {{ auth()->user()->name }}!</p>
+            <p class="text-gray-400 mt-1">Welcome back, {{ $user->name }}!</p>
+        </div>
+    </div>
+
+    <!-- Referral Program -->
+    <div class="bg-gray-800 rounded-lg p-6 border border-gray-700">
+        <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+            <div class="lg:flex-1">
+                <h3 class="text-lg font-semibold text-white flex items-center space-x-2">
+                    <svg class="w-5 h-5 text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M15 7h-1V5a4 4 0 00-7.912-1H6a4 4 0 00-3.995 3.8L2 8v7a2 2 0 001.85 1.995L4 17h3.101a5.002 5.002 0 009.773-.216L17 16V8a1 1 0 00-1-1zM9 15H4v-2h5v2zm7 0a3 3 0 01-5.995.176L10 15v-2h6v2zm0-4H4V8a2 2 0 011.85-1.995L6 6h8a1 1 0 011 1v4z"></path>
+                    </svg>
+                    <span>Referral Program</span>
+                </h3>
+                <p class="text-sm text-gray-400 mt-2 max-w-xl">Share your unique code with friends. When they join, you will see them listed below instantly.</p>
+
+                <div class="mt-4 space-y-4">
+                    <div>
+                        <span class="text-xs uppercase tracking-wide text-gray-500">Your Referral Code</span>
+                        <div class="mt-2 flex items-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                            <div class="flex-1 px-4 py-3 font-mono text-lg text-blue-300 tracking-widest">
+                                {{ $user->referral_code }}
+                            </div>
+                            <button type="button" class="copy-button px-4 py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold transition-colors" data-copy="{{ $user->referral_code }}" data-feedback-target="#referral-code-feedback">
+                                Copy
+                            </button>
+                        </div>
+                        <p id="referral-code-feedback" class="mt-1 text-xs text-green-400 hidden">Copied to clipboard!</p>
+                    </div>
+
+                    <div>
+                        @php
+                            $referralLink = url('/register?ref=' . $user->referral_code);
+                        @endphp
+                        <span class="text-xs uppercase tracking-wide text-gray-500">Referral Link</span>
+                        <div class="mt-2 flex items-center bg-gray-900 rounded-lg border border-gray-700 overflow-hidden">
+                            <input type="text" readonly value="{{ $referralLink }}" class="flex-1 px-4 py-3 bg-transparent text-sm text-gray-200 focus:outline-none">
+                            <button type="button" class="copy-button px-4 py-3 bg-cyan-600 hover:bg-cyan-500 text-white text-sm font-semibold transition-colors" data-copy="{{ $referralLink }}" data-feedback-target="#referral-link-feedback">
+                                Copy Link
+                            </button>
+                        </div>
+                        <p id="referral-link-feedback" class="mt-1 text-xs text-green-400 hidden">Link copied!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-gray-900 rounded-lg border border-gray-700 p-4">
+                    <p class="text-xs uppercase tracking-wide text-gray-500">Total Referrals</p>
+                    <p class="mt-2 text-2xl font-bold text-white">{{ $referralCount }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Friends joined with your code</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg border border-gray-700 p-4">
+                    <p class="text-xs uppercase tracking-wide text-gray-500">Referral Balance</p>
+                    <p class="mt-2 text-2xl font-bold text-green-400">{{ $user->formatAmount($user->referral_balance) }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Available rewards</p>
+                </div>
+                <div class="bg-gray-900 rounded-lg border border-gray-700 p-4">
+                    <p class="text-xs uppercase tracking-wide text-gray-500">Lifetime Rewards</p>
+                    <p class="mt-2 text-2xl font-bold text-purple-400">{{ $user->formatAmount($referralEarnings) }}</p>
+                    <p class="text-xs text-gray-400 mt-1">Earned from invites</p>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -120,10 +187,17 @@
                     </div>
                 </div>
                 <div class="mb-4">
-                    <div class="text-3xl font-bold text-purple-400">{{ number_format($winRate, 1) }}%</div>
-                    <div class="text-sm text-gray-400">{{ $winRate >= 70 ? 'Strong Performance' : ($winRate >= 50 ? 'Good Performance' : 'Learning Phase') }}</div>
+                    @php
+                        $tradingStrength = $user->trading_strength ?? 0;
+                    @endphp
+                    <div class="text-3xl font-bold text-purple-400">{{ number_format($tradingStrength, 2) }}%</div>
+                    <div class="text-sm text-gray-400">{{ $tradingStrength >= 70 ? 'Strong Performance' : ($tradingStrength >= 50 ? 'Good Performance' : ($tradingStrength > 0 ? 'Developing' : 'Not Set')) }}</div>
                 </div>
                 <div class="space-y-3">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-gray-400">Trading Strength</span>
+                        <span class="text-white">{{ number_format($user->trading_strength ?? 0, 2) }}%</span>
+                    </div>
                     <div class="flex justify-between text-sm">
                         <span class="text-gray-400">Win Rate</span>
                         <span class="text-white">{{ number_format($winRate, 1) }}%</span>
@@ -232,6 +306,63 @@
 			</script>
 		</div>
 	</div>
+
+    <!-- Referral Activity -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
+        <div class="px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-white">Referral Activity</h3>
+                <p class="text-sm text-gray-400">Track everyone who joined using your referral code.</p>
+            </div>
+        </div>
+
+        <div class="p-6">
+            @if($referrals->isEmpty())
+                <div class="text-center py-10">
+                    <svg class="mx-auto h-12 w-12 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v2a3 3 0 11-6 0V9m0 0V7a3 3 0 116 0v2m-6 0H6m6 4v2a3 3 0 11-6 0v-2m0 0v-2a3 3 0 116 0v2"></path>
+                    </svg>
+                    <p class="mt-4 text-gray-300 font-medium">No referrals yet</p>
+                    <p class="text-sm text-gray-500">Share your code to start earning rewards.</p>
+                </div>
+            @else
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-700">
+                        <thead class="bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">User</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Joined</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Reward</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-gray-800 divide-y divide-gray-700">
+                            @foreach($referrals as $referral)
+                                <tr>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
+                                                <span class="text-sm font-semibold text-blue-300">{{ strtoupper(substr($referral->referredUser->name ?? 'N/A', 0, 1)) }}</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-sm font-medium text-white">{{ $referral->referredUser->name ?? 'Pending User' }}</p>
+                                                <p class="text-xs text-gray-400">{{ $referral->referredUser->email ?? 'Awaiting registration' }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
+                                        {{ optional($referral->created_at)->format('M d, Y') ?? '—' }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-400">
+                                        {{ $user->formatAmount($referral->reward_amount) }}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
+        </div>
+    </div>
 
     <!-- Third Row: Trades Tabs -->
     <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
@@ -481,6 +612,28 @@
             });
 
 
+            document.querySelectorAll('.copy-button').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const value = button.getAttribute('data-copy');
+                    const feedbackSelector = button.getAttribute('data-feedback-target');
+                    try {
+                        await navigator.clipboard.writeText(value);
+                        if (feedbackSelector) {
+                            const feedbackElement = document.querySelector(feedbackSelector);
+                            if (feedbackElement) {
+                                feedbackElement.classList.remove('hidden');
+                                feedbackElement.classList.add('animate-pulse');
+                                setTimeout(() => {
+                                    feedbackElement.classList.add('hidden');
+                                    feedbackElement.classList.remove('animate-pulse');
+                                }, 2000);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Failed to copy', error);
+                    }
+                });
+            });
         });
     </script>
 @endsection

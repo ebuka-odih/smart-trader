@@ -20,12 +20,27 @@ class TradeController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'amount' => 'required|numeric|min:0.01',
+            'trade_pair_id' => 'required|exists:trade_pairs,id',
+            'leverage' => 'required|integer|min:1|max:100',
+            'duration' => 'required|integer|min:1',
+            'action_type' => 'required|in:buy,sell',
+        ]);
 
-        $user = $request->get('user_id');
+        $userId = $request->get('user_id');
         $amount = $request->input('amount');
 
+        $user = User::findOrFail($userId);
+        
+        // Check if user has sufficient balance
+        if ($user->balance < $amount) {
+            return redirect()->back()->with('error', 'Insufficient balance. User balance: $' . number_format($user->balance, 2));
+        }
+
         $trade = Trade::create([
-            'user_id' => $user,
+            'user_id' => $userId,
             'amount' => $amount,
             'status' => 'open',
             'trade_pair_id' => $request->get('trade_pair_id'),
@@ -34,11 +49,11 @@ class TradeController extends Controller
             'action_type' => $request->get('action_type'),
         ]);
 
-        $user = User::findOrFail($user);
         $user->balance -= $trade->amount;
         $user->save();
 
-        return redirect()->route('admin.openTrades')->with('success', 'Trade placed successfully!');
+        $redirectRoute = $request->get('redirect_to') === 'place' ? 'admin.trade.place' : ($request->get('redirect_to') === 'history' ? 'admin.trade.history' : 'admin.openTrades');
+        return redirect()->route($redirectRoute)->with('success', 'Trade placed successfully!');
     }
 
     public function openTrades(){
@@ -51,8 +66,8 @@ class TradeController extends Controller
     }
 
     public function tradeHistory(){
-        $openTrades = Trade::where('status', 'open')->latest()->get();
-        $closedTrades = Trade::where('status', 'closed')->orderBy('updated_at', 'desc')->get();
+        $openTrades = Trade::where('status', 'open')->with(['user', 'trade_pair'])->latest()->get();
+        $closedTrades = Trade::where('status', 'closed')->with(['user', 'trade_pair'])->orderBy('updated_at', 'desc')->get();
         
         \Log::info('Trade History Data:', [
             'open_trades_count' => $openTrades->count(),
@@ -62,6 +77,13 @@ class TradeController extends Controller
         ]);
         
         return view('admin.trade.history', compact('openTrades', 'closedTrades'));
+    }
+
+    public function placeTrade(){
+        $users = User::where('role', 'user')->get();
+        $pairs = TradePair::all();
+        
+        return view('admin.trade.place', compact('users', 'pairs'));
     }
 
 

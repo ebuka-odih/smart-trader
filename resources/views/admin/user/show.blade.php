@@ -382,6 +382,70 @@
                 </form>
             </div>
 
+            <!-- Trading Strength Management -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Trading Strength</h3>
+                
+                @if (session('trading_strength_success'))
+                    <div class="mb-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-green-600 dark:text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div>
+                                <p class="text-sm text-green-800 dark:text-green-200">{{ session('trading_strength_success') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                @if ($errors->has('trading_strength'))
+                    <div class="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                        <div class="flex">
+                            <svg class="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div>
+                                <p class="text-sm text-red-800 dark:text-red-200">{{ $errors->first('trading_strength') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('admin.updateTradingStrength', $user->id) }}" method="POST" class="space-y-4">
+                    @csrf
+                    
+                    <!-- Current Trading Strength Display -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Current Trading Strength:</span>
+                            <span class="text-lg font-bold text-purple-600 dark:text-purple-400">
+                                {{ number_format($user->trading_strength ?? 0, 2) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Trading Strength Input -->
+                    <div>
+                        <label for="trading_strength" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Set Trading Strength</label>
+                        <input type="number" step="0.01" min="0" max="100" name="trading_strength" id="trading_strength" 
+                            value="{{ old('trading_strength', $user->trading_strength ?? 0) }}"
+                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 dark:bg-gray-700 dark:text-white"
+                            placeholder="Enter trading strength (0-100)" required>
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Enter a value between 0 and 100</p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" 
+                        class="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-lg transition-colors flex items-center justify-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Update Trading Strength
+                    </button>
+                </form>
+            </div>
+
             <!-- Account Status Management -->
             <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Account Status</h3>

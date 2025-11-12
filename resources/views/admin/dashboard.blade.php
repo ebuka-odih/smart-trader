@@ -160,6 +160,34 @@
                 </div>
             </div>
         </div>
+
+        <!-- Referral Overview Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Referral Overview</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Total Referrals</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">{{ number_format($totalReferrals) }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">New Today</span>
+                    <span class="font-semibold text-gray-900 dark:text-white">{{ number_format($referralsToday) }}</span>
+                </div>
+                <div>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Top Referrers</span>
+                    <ul class="mt-2 space-y-2">
+                        @forelse($topReferrers as $referrer)
+                            <li class="flex items-center justify-between text-sm text-gray-700 dark:text-gray-300">
+                                <span>{{ $referrer->name }}</span>
+                                <span class="font-semibold text-blue-600 dark:text-blue-400">{{ $referrer->referrals_count }}</span>
+                            </li>
+                        @empty
+                            <li class="text-sm text-gray-400 dark:text-gray-500">No referral data yet</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Advanced Features Grid -->
@@ -219,7 +247,7 @@
     </div>
 
     <!-- Recent Activity Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Recent Users -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
@@ -275,6 +303,37 @@
                 </div>
                 @empty
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent deposits</p>
+                @endforelse
+            </div>
+        </div>
+
+        <!-- Recent Referrals -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Recent Referrals</h3>
+                <a href="{{ route('admin.user.index') }}" class="text-sm text-blue-600 hover:text-blue-700 dark:text-blue-400">Manage Users</a>
+            </div>
+            <div class="space-y-3">
+                @forelse($recentReferrals as $referral)
+                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center">
+                                <svg class="w-4 h-4 text-purple-600 dark:text-purple-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3a3 3 0 01-6 0V9m0 0V7a3 3 0 016 0v2m-6 0H6m6 4v3a3 3 0 01-6 0v-3m0 0v-2a3 3 0 016 0v2"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ $referral->referrer->name ?? 'Unknown' }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Invited {{ $referral->referredUser->name ?? 'New User' }}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-gray-500 dark:text-gray-400 block">{{ $referral->created_at->diffForHumans() }}</span>
+                            <span class="text-xs font-semibold text-green-600 dark:text-green-400">${{ number_format($referral->reward_amount, 2) }}</span>
+                        </div>
+                    </div>
+                @empty
+                    <p class="text-gray-500 dark:text-gray-400 text-center py-4">No referral activity yet</p>
                 @endforelse
             </div>
         </div>

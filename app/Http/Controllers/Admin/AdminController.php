@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Deposit;
+use App\Models\Referral;
 use App\Models\Trade;
 use App\Models\User;
 use App\Models\Withdrawal;
@@ -49,6 +50,16 @@ class AdminController extends Controller
         $totalBotTrades = \App\Models\BotTrade::count();
         $activeBotTrades = \App\Models\BotTrade::where('status', 'open')->count();
 
+        // Referral statistics
+        $totalReferrals = Referral::count();
+        $referralsToday = Referral::whereDate('created_at', today())->count();
+        $recentReferrals = Referral::with(['referrer', 'referredUser'])->latest()->take(5)->get();
+        $topReferrers = User::where('role', 'user')
+            ->withCount('referrals')
+            ->orderByDesc('referrals_count')
+            ->take(5)
+            ->get();
+
         // Recent Activity
         $recentUsers = User::where('role', 'user')->latest()->take(5)->get();
         $recentDeposits = Deposit::with('user')->latest()->take(5)->get();
@@ -73,6 +84,7 @@ class AdminController extends Controller
             'totalCopyTraders', 'activeCopyTraders', 'totalCopiedTrades',
             'totalBotTrades', 'activeBotTrades',
             'recentUsers', 'recentDeposits', 'recentWithdrawals', 'recentTrades',
+            'totalReferrals', 'referralsToday', 'recentReferrals', 'topReferrers',
             'userGrowthPercentage', 'depositGrowthPercentage', 'tradeGrowthPercentage'
         ));
     }
