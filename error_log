@@ -1,0 +1,2 @@
+[07-Nov-2025 02:06:34 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/shirruik/texnesselite.com/vendor/composer/platform_check.php on line 28
+[08-Nov-2025 20:23:56 UTC] PHP Fatal error:  Composer detected issues in your platform: Your Composer dependencies require a PHP version ">= 8.2.0". You are running 7.4.33. in /home/shirruik/texnesselite.com/vendor/composer/platform_check.php on line 28

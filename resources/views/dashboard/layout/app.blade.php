@@ -245,16 +245,16 @@
 <body class="bg-gray-900 text-white min-h-screen dark">
     <div class="h-screen bg-gray-900">
         <!-- Sidebar Backdrop -->
-        <div id="sidebarBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+        <div id="sidebarBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
         
         <!-- Sidebar -->
-        <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-gray-800 border-r border-gray-700 flex flex-col transform transition-transform duration-300 ease-in-out z-50">
+        <div id="sidebar" class="fixed top-0 left-0 w-64 h-full bg-gray-800 border-r border-gray-700 flex flex-col transform transition-transform duration-300 ease-in-out z-50 -translate-x-full lg:translate-x-0">
             <!-- User Profile Section -->
             <div class="p-3 border-b border-gray-700">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="text-white font-semibold">Menu</h3>
-                    <!-- Close button -->
-                    <button id="sidebarClose" class="p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors">
+                    <!-- Close button (only visible on mobile) -->
+                    <button id="sidebarClose" class="lg:hidden p-1 text-gray-400 hover:text-white hover:bg-gray-700 rounded transition-colors">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
@@ -459,8 +459,8 @@
                 <div class="flex items-center">
                     <!-- Left side - Brand and menu -->
                     <div class="flex items-center space-x-4 px-4 sm:px-6">
-                        <!-- Menu Toggle Button -->
-                        <button id="sidebarToggle" class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
+                        <!-- Menu Toggle Button (only visible on mobile) -->
+                        <button id="sidebarToggle" class="lg:hidden p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition-colors">
                             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
                             </svg>
@@ -627,6 +627,97 @@
 
 
 @livewireScripts
+
+<script>
+    // Sidebar toggle functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('sidebar');
+        const sidebarBackdrop = document.getElementById('sidebarBackdrop');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const sidebarClose = document.getElementById('sidebarClose');
+        
+        if (!sidebar || !sidebarBackdrop) return;
+        
+        function isSidebarOpen() {
+            return sidebar.classList.contains('translate-x-0') && !sidebar.classList.contains('-translate-x-full');
+        }
+        
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            sidebar.classList.add('translate-x-0');
+            sidebarBackdrop.classList.remove('hidden');
+            document.body.style.overflow = 'hidden'; // Prevent body scroll when sidebar is open
+        }
+        
+        function closeSidebar() {
+            sidebar.classList.remove('translate-x-0');
+            sidebar.classList.add('-translate-x-full');
+            sidebarBackdrop.classList.add('hidden');
+            document.body.style.overflow = ''; // Restore body scroll
+        }
+        
+        // Toggle sidebar when hamburger button is clicked
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isSidebarOpen()) {
+                    closeSidebar();
+                } else {
+                    openSidebar();
+                }
+            });
+        }
+        
+        // Close sidebar when close button is clicked
+        if (sidebarClose) {
+            sidebarClose.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeSidebar();
+            });
+        }
+        
+        // Close sidebar when backdrop is clicked
+        if (sidebarBackdrop) {
+            sidebarBackdrop.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                closeSidebar();
+            });
+        }
+        
+        // Close sidebar on escape key (only on mobile)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && window.innerWidth < 1024 && isSidebarOpen()) {
+                closeSidebar();
+            }
+        });
+        
+        // Handle window resize - show sidebar on desktop, hide on mobile
+        let resizeTimer;
+        function handleResize() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                if (window.innerWidth >= 1024) {
+                    // Desktop: always show sidebar
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.add('translate-x-0');
+                    sidebarBackdrop.classList.add('hidden');
+                    document.body.style.overflow = '';
+                } else {
+                    // Mobile: ensure sidebar is closed
+                    if (isSidebarOpen()) {
+                        closeSidebar();
+                    }
+                }
+            }, 100);
+        }
+        
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Initial check
+    });
+</script>
 
 </body>
 </html>
