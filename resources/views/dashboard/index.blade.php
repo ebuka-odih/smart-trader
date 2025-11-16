@@ -177,8 +177,8 @@
 
 	<!-- Second Row: My Subscriptions moved to Portfolio page -->
 
-	<!-- Second Row: Market Heatmap -->
-	<div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
+	{{-- Second Row: Market Heatmap --}}
+	{{-- <div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
 		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px; touch-action: pan-y;">
 			<div class="tradingview-widget-container__widget" style="height: 100%; touch-action: pan-y;"></div>
 			<div class="tradingview-widget-copyright px-6 py-3">
@@ -204,10 +204,10 @@
 			}
 			</script>
 		</div>
-	</div>
+	</div> --}}
 
-	<!-- Crypto Heatmap -->
-	<div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
+	{{-- Crypto Heatmap --}}
+	{{-- <div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
 		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px; touch-action: pan-y;">
 			<div class="tradingview-widget-container__widget" style="height: 100%; touch-action: pan-y;"></div>
 			<div class="tradingview-widget-copyright px-6 py-3">
@@ -231,7 +231,7 @@
 			}
 			</script>
 		</div>
-	</div>
+	</div> --}}
 
     <!-- Third Row: Trades Tabs -->
     <div class="bg-gray-800 rounded-lg border border-gray-700 mb-8">
