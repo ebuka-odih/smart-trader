@@ -2,6 +2,12 @@
 
 use Illuminate\Support\Str;
 
+// Resolve SQLite database path: if DB_DATABASE is relative, make it absolute from base_path
+$sqliteEnvDatabase = env('DB_DATABASE');
+$resolvedSqliteDatabasePath = $sqliteEnvDatabase
+	? (Str::startsWith($sqliteEnvDatabase, ['/']) ? $sqliteEnvDatabase : base_path($sqliteEnvDatabase))
+	: database_path('database.sqlite');
+
 return [
 
     /*
@@ -34,7 +40,7 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DB_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+			'database' => $resolvedSqliteDatabasePath,
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
             'busy_timeout' => null,
