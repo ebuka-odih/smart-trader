@@ -179,8 +179,8 @@
 
 	<!-- Second Row: Market Heatmap -->
 	<div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
-		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px;">
-			<div class="tradingview-widget-container__widget" style="height: 100%;"></div>
+		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px; touch-action: pan-y;">
+			<div class="tradingview-widget-container__widget" style="height: 100%; touch-action: pan-y;"></div>
 			<div class="tradingview-widget-copyright px-6 py-3">
 				<a href="https://www.tradingview.com/heatmap/stock/" rel="noopener nofollow" target="_blank"><span class="blue-text">Stock Heatmap</span></a><span class="trademark"> by TradingView</span>
 			</div>
@@ -196,7 +196,7 @@
 				"exchanges": [],
 				"hasTopBar": false,
 				"isDataSetEnabled": false,
-				"isZoomEnabled": true,
+				"isZoomEnabled": false,
 				"hasSymbolTooltip": true,
 				"isMonoSize": false,
 				"width": "100%",
@@ -208,8 +208,8 @@
 
 	<!-- Crypto Heatmap -->
 	<div class="bg-gray-800 rounded-lg p-0 border border-gray-700 mb-8">
-		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px;">
-			<div class="tradingview-widget-container__widget" style="height: 100%;"></div>
+		<div class="tradingview-widget-container" style="height: 720px; min-height: 720px; touch-action: pan-y;">
+			<div class="tradingview-widget-container__widget" style="height: 100%; touch-action: pan-y;"></div>
 			<div class="tradingview-widget-copyright px-6 py-3">
 				<a href="https://www.tradingview.com/heatmap/crypto/" rel="noopener nofollow" target="_blank"><span class="blue-text">Crypto Heatmap</span></a><span class="trademark"> by TradingView</span>
 			</div>
@@ -223,7 +223,7 @@
 				"colorTheme": "dark",
 				"hasTopBar": false,
 				"isDataSetEnabled": false,
-				"isZoomEnabled": true,
+				"isZoomEnabled": false,
 				"hasSymbolTooltip": true,
 				"isMonoSize": false,
 				"width": "100%",
